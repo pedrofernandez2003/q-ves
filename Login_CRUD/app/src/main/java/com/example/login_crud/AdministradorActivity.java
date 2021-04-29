@@ -1,0 +1,47 @@
+package com.example.login_crud;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+
+public class AdministradorActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_administrador);
+        Button crearJuego = (Button) findViewById(R.id.crearJuego);
+        Button iniciarJuego = (Button) findViewById(R.id.iniciarJuego);
+        Button administrarElementos = (Button) findViewById(R.id.adminElementos);
+        crearJuego.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AdministradorActivity.this, CrearJuegoActivity.class);
+                startActivity(i);
+            }
+        });
+        iniciarJuego.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(AdministradorActivity.this, IniciarJuegoActivity.class);
+                        startActivity(i);
+                    }
+         });
+         administrarElementos.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         Intent i = new Intent(AdministradorActivity.this, AdminElementosActivity.class);
+                         startActivity(i);
+                     }
+          });
+              
+    }
+
+
+
+
+}

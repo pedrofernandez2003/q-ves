@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Login_CRUD</string>
+    <string name="codigo">Codigo</string>
+    <string name="iniciar_sesion">Inicar Sesion</string>
+    <string name="iniciar">Inicar</string>
+    <string name="me_olvide_la_contrasenia">Me olvide la contrasenia</string>
+    <string name="invalid_mail">mail incorreto</string>
+    <string name="invalid_password">contrasenia incorreta</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="mail">mail</string>
+    <string name="contrasenia">contrasenia</string>
+    <string name="gmail">gmail</string>
+    <string name="facebook">facebook</string>
+    <string name="iniciarr">iniciar</string>
+    <string name="registrarse_con_mail">registrarse con mail</string>
+</resources>
