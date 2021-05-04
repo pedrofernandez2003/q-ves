@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         iniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                Intent login = new Intent(MainActivity.this, TarjetasYCategoriasActivity.class);
                 startActivity(login);
             }
         });
