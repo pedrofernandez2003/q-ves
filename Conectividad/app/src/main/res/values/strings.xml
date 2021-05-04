@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Conectividad</string>
+    <string name="botonDiscover">Discover</string>
+    <string name="botonWifi">Wifi on</string>
+    <string name="estadoWifi">estadoWifi</string>
+    <string name="peerListView">lista</string>
+    <string name="textoDiscover">textoDiscover</string>
+</resources>
