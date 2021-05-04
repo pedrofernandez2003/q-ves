@@ -41,7 +41,7 @@
         <com.google.android.gms.common.SignInButton
             android:id="@+id/gmail"
             android:layout_width="157dp"
-            android:layout_height="0dp"
+            android:layout_height="60dp"
             android:layout_marginTop="164dp" />
 
         <Button

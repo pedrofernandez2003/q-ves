@@ -1,6 +1,7 @@
 package com.example.login_crud;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +30,7 @@ public class RegistrarseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_registrarse);
         // aca defino las dos variables para hacer el registro firebaseAuth que es la comunicacion con firebase donde lo registro
         // y awasomeValidation para que no se repitan mal y otras cosas
         firebaseAuth= FirebaseAuth.getInstance();
@@ -39,7 +40,8 @@ public class RegistrarseActivity extends AppCompatActivity {
 
         mailIngresado = (EditText) findViewById(R.id.mailRegistro);
         contraseniaIngresada = (EditText) findViewById(R.id.contraseniaRegistro);
-        botonRegistrarse = (Button) findViewById(R.id.registrarse);
+        botonRegistrarse = findViewById(R.id.registrarse);
+
 
         botonRegistrarse.setOnClickListener(new View.OnClickListener() {
             @Override
