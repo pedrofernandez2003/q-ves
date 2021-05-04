@@ -66,16 +66,37 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(registrarse);
             }
         });
+
+        botonIngresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String mail=mailIngresado.getText().toString();
+                String pass=contraseniaIngresada.getText().toString();
+
+                firebaseAuth.signInWithEmailAndPassword(mail,pass)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Intent i = new Intent(LoginActivity.this,AdministradorActivity.class);
+                                    startActivity(i);
+                                } else {
+                                    Toast.makeText(LoginActivity.this,"Todo mal",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
     }
 
     private View.OnClickListener handleGoogleLogin = new View.OnClickListener() {
         @Override
         public void onClick(View v){
-            signIn();
+            signInGoogle();
         }
     };
 
-    private void signIn() {
+    private void signInGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -115,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             System.out.println(user.getEmail());
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
                             startActivity(intent);
 
                         } else {
