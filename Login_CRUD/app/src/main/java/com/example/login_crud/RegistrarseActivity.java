@@ -30,6 +30,9 @@ public class RegistrarseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // aca defino las dos variables para hacer el registro firebaseAuth que es la comunicacion con firebase donde lo registro
+        // y awasomeValidation para que no se repitan mal y otras cosas
+        firebaseAuth= FirebaseAuth.getInstance();
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         awesomeValidation.addValidation(this,R.id.mail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
         awesomeValidation.addValidation(this,R.id.contrasenia,".{6,}",R.string.invalid_password);
@@ -73,13 +76,6 @@ public class RegistrarseActivity extends AppCompatActivity {
 
         switch (error) {
 
-            case "ERROR_INVALID_CUSTOM_TOKEN":
-                Toast.makeText(RegistrarseActivity.this, "El formato del token personalizado es incorrecto. Por favor revise la documentación", Toast.LENGTH_LONG).show();
-                break;
-
-            case "ERROR_CUSTOM_TOKEN_MISMATCH":
-                Toast.makeText(RegistrarseActivity.this, "El token personalizado corresponde a una audiencia diferente.", Toast.LENGTH_LONG).show();
-                break;
 
             case "ERROR_INVALID_CREDENTIAL":
                 Toast.makeText(RegistrarseActivity.this, "La credencial de autenticación proporcionada tiene un formato incorrecto o ha caducado.", Toast.LENGTH_LONG).show();
