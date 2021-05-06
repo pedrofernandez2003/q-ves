@@ -8,24 +8,29 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.InetAddresses;
 import android.net.wifi.WifiManager;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     Button botonWifi, botonDiscover;
-    TextView estadoWifi,textoDiscover;
+    TextView estadoWifi, textoDiscover;
     ListView peerListView;
 
     WifiManager wifiManager;
@@ -35,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     BroadcastReceiver mReceiver;
     IntentFilter mIntentFilter;
 
-    List<WifiP2pDevice> peers=new ArrayList<WifiP2pDevice>();
+    List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
     String[] deviceNameArray;
     WifiP2pDevice[] deviceArray;
 
@@ -61,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Context context=this.getApplicationContext();
+        Context context = this.getApplicationContext();
         botonDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +90,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        peerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final WifiP2pDevice device = deviceArray[position];
+                WifiP2pConfig config = new WifiP2pConfig();
+                config.deviceAddress = device.deviceAddress;
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(getApplicationContext(), "connected to " + device.deviceName, Toast.LENGTH_SHORT).show();
+                        }
 
+                        @Override
+                        public void onFailure(int reason) {
+                            Toast.makeText(getApplicationContext(), "not connected", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        });
     }
     public void initialWork(){
         botonWifi=(Button)findViewById(R.id.botonWifi);
@@ -125,6 +150,15 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"No Device Found", Toast.LENGTH_SHORT).show();
                 return;
             }
+        }
+    };
+
+    WifiP2pManager.ConnectionInfoListener connectionInfoListener = new WifiP2pManager.ConnectionInfoListener() {
+        @Override
+        public void onConnectionInfoAvailable(WifiP2pInfo info) {
+            final InetAddress groupOwnerAddress = info.groupOwnerAddress;
+            if(info.groupFormed && info.isGroupOwner) textoDiscover.setText("Host");
+            else if (info.groupFormed) textoDiscover.setText("Client");
         }
     };
 
