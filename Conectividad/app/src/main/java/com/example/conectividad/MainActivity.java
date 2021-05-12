@@ -1,5 +1,6 @@
 package com.example.conectividad;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -16,6 +17,9 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.format.Formatter;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,7 +28,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     String[] deviceNameArray;
     WifiP2pDevice[] deviceArray;
 
+    static final int MESSAGE_READ=1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +62,16 @@ public class MainActivity extends AppCompatActivity {
         exqListener();
     }
 
+//    Handler handler=new Handler(new Handler.Callback() {
+//        @Override
+//        public boolean handleMessage(@NonNull Message msg) {
+//            switch (msg.what){
+//                case MESSAGE_READ:
+//                    byte[] readBuff= msg.obj
+//            }
+//            return true;
+//        }
+//    })
     public void exqListener() {
         botonWifi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,11 +116,13 @@ public class MainActivity extends AppCompatActivity {
                 final WifiP2pDevice device = deviceArray[position];
                 WifiP2pConfig config = new WifiP2pConfig();
                 config.deviceAddress = device.deviceAddress;
+                WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+                String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
                         @Override
                         public void onSuccess() {
-                            Toast.makeText(getApplicationContext(), "connected to " + device.deviceName, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "connected to " + ip, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
@@ -172,5 +194,36 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(mReceiver);
+    }
+    public class ServerClass extends Thread{
+        Socket socket;
+        ServerSocket serverSocket;
+
+        @Override
+        public void run() {
+            try {
+                serverSocket=new ServerSocket(88888);
+                socket=serverSocket.accept();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public class ClientClass extends Thread{
+        Socket socket;
+        String hostAdd;
+        public ClientClass(InetAddress hostAddress){
+          hostAdd=hostAddress.getHostAddress();
+          socket=new Socket();
+        }
+
+        @Override
+        public void run() {
+            try {
+                socket.connect(new InetSocketAddress(hostAdd,8888),500);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
