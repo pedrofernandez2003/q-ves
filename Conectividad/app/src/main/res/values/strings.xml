@@ -5,4 +5,5 @@
     <string name="estadoWifi">estadoWifi</string>
     <string name="peerListView">lista</string>
     <string name="textoDiscover">textoDiscover</string>
+    <string name="send">send</string>
 </resources>
