@@ -231,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         unregisterReceiver(mReceiver);
     }
+
     public class ServerClass extends Thread{
         Socket socket;
         ServerSocket serverSocket;
@@ -238,12 +239,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                System.out.println("entre al run");
+                System.out.println("entre al run server");
                 serverSocket=new ServerSocket(7028);
                 socket=serverSocket.accept();
                 sendReceive=new SendReceive(socket);
                 sendReceive.start();
-            } catch (IOException e) {
+            } catch (Exception e) {
+                System.out.println("entre al catch");
                 e.printStackTrace();
             }
         }
@@ -253,12 +255,16 @@ public class MainActivity extends AppCompatActivity {
         private Socket socket;
         private InputStream inputStream;
         private OutputStream outputStream;
+
         public SendReceive(Socket skt){
+            System.out.println("entre al constructor");
             socket=skt;
             try {
+                System.out.println("se construyo el sendReceive");
                 inputStream=socket.getInputStream();
                 outputStream=socket.getOutputStream();
             } catch (IOException e) {
+                System.out.println("entre al catch");
                 e.printStackTrace();
             }
         }
@@ -292,16 +298,18 @@ public class MainActivity extends AppCompatActivity {
         String hostAdd;
         public ClientClass(InetAddress hostAddress){
           hostAdd=hostAddress.getHostAddress();
+//          hostAdd="192.168.1.159";
           socket=new Socket();
         }
 
         @Override
         public void run() {
             try {
-                socket.connect(new InetSocketAddress(hostAdd,7028),500);
+                System.out.println("entre al run client");
+                socket.connect(new InetSocketAddress(hostAdd,7028),5000);
                 sendReceive=new SendReceive(socket);
                 sendReceive.start();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
