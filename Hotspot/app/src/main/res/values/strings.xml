@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Hotspot</string>
+    <string name="IP_dispositivo">IP dispositivo</string>
+    <string name="botonServer">Server</string>
+    <string name="botonCliente">Cliente</string>
+    <string name="inputIP">IP del server</string>
+    <string name="botonSend">Enviar</string>
+    <string name="inputMensaje">Mensaje</string>
+</resources>

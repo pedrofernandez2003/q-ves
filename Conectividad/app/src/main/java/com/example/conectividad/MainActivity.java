@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
         String hostAdd;
         public ClientClass(InetAddress hostAddress){
           hostAdd=hostAddress.getHostAddress();
-//          hostAdd="192.168.1.159";
+//          hostAdd="192.168.1.157";
           socket=new Socket();
         }
 
