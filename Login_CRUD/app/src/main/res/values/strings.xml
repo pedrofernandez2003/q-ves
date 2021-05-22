@@ -13,4 +13,7 @@
     <string name="facebook">facebook</string>
     <string name="iniciarr">iniciar</string>
     <string name="registrarse_con_mail">registrarse con mail</string>
+    <string name="subir_imagen">Subir Imagen</string>
+    <string name="seleccionar_foto">Seleccionar Foto</string>
+    <string name="subir_foto">subir Foto</string>
 </resources>

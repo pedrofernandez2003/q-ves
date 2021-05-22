@@ -18,8 +18,12 @@ public class MainActivity extends AppCompatActivity {
         iniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+<<<<<<< Updated upstream
                 System.out.println("On click");
                 Intent login = new Intent(MainActivity.this, TarjetasYCategoriasActivity.class);
+=======
+                Intent login = new Intent(MainActivity.this, LoginActivity.class);
+>>>>>>> Stashed changes
                 startActivity(login);
             }
         });
