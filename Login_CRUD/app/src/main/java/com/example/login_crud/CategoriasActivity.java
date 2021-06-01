@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -51,34 +52,51 @@ public class CategoriasActivity extends FragmentActivity {
     public void aniadirCategoria(View view, ArrayList<String> colores) {
 
         LayoutInflater inflater = LayoutInflater.from(CategoriasActivity.this);
-        View dialog_layout = inflater.inflate(R.layout.activity_aniadir_categoria,null);
+        View dialog_layout = inflater.inflate(R.layout.activity_aniadir_categoria, null);
         AlertDialog.Builder db = new AlertDialog.Builder(this);
         db.setView(dialog_layout);
-        EditText nombre = dialog_layout.findViewById(R.id.nombreCategoria);;
+        EditText nombre = dialog_layout.findViewById(R.id.nombreCategoria);
         EditText color = dialog_layout.findViewById(R.id.colorCategoria);
+        TextView colorRepetido = dialog_layout.findViewById(R.id.colorRepetido);
         db.setTitle("Nueva categoria");
-        db.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int i) {
-                String nombreCategoria = nombre.getText().toString();
-                String colorCategoria = color.getText().toString();
-                System.out.println("nombre: "+ nombreCategoria);
-                if (!colores.contains(colorCategoria)) {
-                    insertarCategoria(nombreCategoria, colorCategoria);
-                    finish();
-                }
-                else{
-                    Toast.makeText(CategoriasActivity.this,"Ingrese otro nombre",Toast.LENGTH_SHORT).show();
+        db.setPositiveButton("Añadir", null);
+        final AlertDialog a = db.create();
+        a.show();
+        a.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String nombreCategoria = nombre.getText().toString();
+                        String colorCategoria = color.getText().toString();
+                        System.out.println("nombreCategoria: " + nombreCategoria);
+                        System.out.println("colorCategoria: " + colorCategoria);
+                        if (!colores.contains(colorCategoria) && nombreCategoria != "" && colorCategoria != "") {
+                            insertarCategoria(nombreCategoria, colorCategoria);
+                            System.out.println("Entre porq esta todo bien");
+                            a.dismiss();
+                        } else {
+                            System.out.println("Entre algo mal");
+                            if (nombreCategoria == null || colorCategoria == null) {
+                                Toast.makeText(CategoriasActivity.this, "Ningún campo puede quedar vacío", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(CategoriasActivity.this, "El color ya está siendo usado", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
 
-                }
+                });
+                a.show();
+//            public void onClick(DialogInterface dialog, int i) {
+//
+//        });
 
             }
         });
-        AlertDialog dialog = db.show();
     }
 
-    private void coloresUsados(){
-
-    }
     private void insertarCategoria(String nombre, String color){
         System.out.println("Inserto categoria");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -127,4 +145,5 @@ public class CategoriasActivity extends FragmentActivity {
 
         return colores;
     }
+
 }
