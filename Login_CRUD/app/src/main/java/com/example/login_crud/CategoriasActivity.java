@@ -30,27 +30,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TarjetasYCategoriasActivity extends FragmentActivity {
+public class CategoriasActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Context context = this.getApplicationContext();
+        ArrayList<String> coloresUsados = traerDatos(context);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tarjetas_y_categorias);
         Button aniadirCategoria = (Button) findViewById(R.id.aniadirCategoria);
         aniadirCategoria.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 System.out.println("on click nueva categoria");
-                aniadirCategoria(v);
+                aniadirCategoria(v, coloresUsados);
             }
         });
-        traerDatos(context);
     }
 
-    public void aniadirCategoria(View view) {
+    public void aniadirCategoria(View view, ArrayList<String> colores) {
 
-        LayoutInflater inflater = LayoutInflater.from(TarjetasYCategoriasActivity.this);
+        LayoutInflater inflater = LayoutInflater.from(CategoriasActivity.this);
         View dialog_layout = inflater.inflate(R.layout.activity_aniadir_categoria,null);
         AlertDialog.Builder db = new AlertDialog.Builder(this);
         db.setView(dialog_layout);
@@ -69,6 +68,9 @@ public class TarjetasYCategoriasActivity extends FragmentActivity {
         AlertDialog dialog = db.show();
     }
 
+    private void coloresUsados(){
+
+    }
     private void insertarCategoria(String nombre, String color){
         System.out.println("Inserto categoria");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -90,7 +92,8 @@ public class TarjetasYCategoriasActivity extends FragmentActivity {
                 });
     }
 
-    private void traerDatos(Context context)  {
+    private ArrayList<String> traerDatos(Context context)  {
+        ArrayList<String> colores = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("categorias").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -100,7 +103,7 @@ public class TarjetasYCategoriasActivity extends FragmentActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
                                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
-                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                colores.add((String) document.getData().get("color"));
                                 List<Map<String, String>> tarjetas = (List<Map<String, String>>) document.getData().get("tarjeta");
                                 Button button = new Button(context);
                                 button.setLayoutParams(lp);
@@ -114,5 +117,6 @@ public class TarjetasYCategoriasActivity extends FragmentActivity {
                     }
                 });
 
+        return colores;
     }
     }

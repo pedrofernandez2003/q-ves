@@ -25,7 +25,7 @@
         <activity android:name=".AdministradorActivity" />
         <activity android:name=".CrearJuegoActivity" />
 <<<<<<< Updated upstream
-        <activity android:name=".TarjetasYCategoriasActivity">
+        <activity android:name=".CategoriasActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
@@ -33,7 +33,7 @@
         </intent-filter>
         </activity>
 =======
-        <activity android:name=".TarjetasYCategoriasActivity"/>
+        <activity android:name=".CategoriasActivity"/>
         <activity android:name=".PersonajesActivity"/>
 
 >>>>>>> Stashed changes

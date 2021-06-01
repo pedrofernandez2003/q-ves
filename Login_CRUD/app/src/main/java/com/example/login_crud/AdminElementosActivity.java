@@ -18,7 +18,7 @@ public class AdminElementosActivity extends AppCompatActivity  {
         tarjetasYCategorias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(AdminElementosActivity.this, TarjetasYCategoriasActivity.class);
+                Intent i = new Intent(AdminElementosActivity.this, CategoriasActivity.class);
                 startActivity(i);
             }
         });
