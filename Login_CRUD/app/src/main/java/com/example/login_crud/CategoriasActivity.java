@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -61,7 +62,14 @@ public class CategoriasActivity extends FragmentActivity {
                 String nombreCategoria = nombre.getText().toString();
                 String colorCategoria = color.getText().toString();
                 System.out.println("nombre: "+ nombreCategoria);
-                insertarCategoria(nombreCategoria,colorCategoria);
+                if (!colores.contains(colorCategoria)) {
+                    insertarCategoria(nombreCategoria, colorCategoria);
+                    finish();
+                }
+                else{
+                    Toast.makeText(CategoriasActivity.this,"Ingrese otro nombre",Toast.LENGTH_SHORT).show();
+
+                }
 
             }
         });
@@ -96,27 +104,27 @@ public class CategoriasActivity extends FragmentActivity {
         ArrayList<String> colores = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("categorias").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        String TAG = "";
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
-                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
-                                colores.add((String) document.getData().get("color"));
-                                List<Map<String, String>> tarjetas = (List<Map<String, String>>) document.getData().get("tarjeta");
-                                Button button = new Button(context);
-                                button.setLayoutParams(lp);
-                                button.setText((String) document.getData().get("nombre") + " " + tarjetas.size());
-                                button.setBackgroundColor(939393);
-                                llBotonera.addView(button);
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String TAG = "";
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
+                        colores.add((String) document.getData().get("color"));
+                        List<Map<String, String>> tarjetas = (List<Map<String, String>>) document.getData().get("tarjeta");
+                        Button button = new Button(context);
+                        button.setLayoutParams(lp);
+                        button.setText((String) document.getData().get("nombre") + " " + tarjetas.size());
+                        button.setBackgroundColor(939393);
+                        llBotonera.addView(button);
                     }
-                });
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
 
         return colores;
     }
-    }
+}
