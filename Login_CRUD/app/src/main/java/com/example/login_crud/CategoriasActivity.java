@@ -61,7 +61,7 @@ public class CategoriasActivity extends FragmentActivity {
         db.setTitle("Nueva categoria");
         db.setPositiveButton("Añadir", null);
         final AlertDialog a = db.create();
-        a.show();
+//        a.show();
         a.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
@@ -69,32 +69,29 @@ public class CategoriasActivity extends FragmentActivity {
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        System.out.println("Entre onClick");
                         String nombreCategoria = nombre.getText().toString();
                         String colorCategoria = color.getText().toString();
                         System.out.println("nombreCategoria: " + nombreCategoria);
                         System.out.println("colorCategoria: " + colorCategoria);
-                        if (!colores.contains(colorCategoria) && nombreCategoria != "" && colorCategoria != "") {
+                        if (!colores.contains(colorCategoria) && !nombreCategoria.equals("") && !colorCategoria.equals("")) {
                             insertarCategoria(nombreCategoria, colorCategoria);
                             System.out.println("Entre porq esta todo bien");
                             a.dismiss();
                         } else {
                             System.out.println("Entre algo mal");
-                            if (nombreCategoria == null || colorCategoria == null) {
+                            if (nombreCategoria.equals("") || colorCategoria.equals("")) {
                                 Toast.makeText(CategoriasActivity.this, "Ningún campo puede quedar vacío", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(CategoriasActivity.this, "El color ya está siendo usado", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
-
                 });
-                a.show();
-//            public void onClick(DialogInterface dialog, int i) {
-//
-//        });
-
             }
         });
+        a.show();
+
     }
 
     private void insertarCategoria(String nombre, String color){
