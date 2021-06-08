@@ -1,16 +1,16 @@
 package com.example.Objetos;
 
-public enum Categoria {
-    CARACTERISTICAS("Caracteristicas",Color.AMARILLO), VIVIENDA("Vivienda",Color.VERDE),
+public class Categoria {
+    /*CARACTERISTICAS("Caracteristicas",Color.AMARILLO), VIVIENDA("Vivienda",Color.VERDE),
     SEXUALIDAD("Sexualidad",Color.CELESTE), PASATIEMPO("Pasatiempo",Color.TURQUESA),
     CUERPO("Cuerpo", Color.AZUL), INFANCIA("Infancia", Color.AZULFRANCIA), MEDIOS("Medios", Color.VIOLETA),
     CALLE("Calle",Color.ROJO), TRABAJO("Trabajo", Color.ROSA), EMOCIONES("Emociones", Color.NARANJA),
-    ;
+    ANULADA("Anulada",Color.NEGRO);*/
 
     private String nombre;
-    private Color color;
+    private String color;
 
-    private Categoria (String nombre, Color color){
+    public Categoria(String nombre, String color){
         this.nombre = nombre;
         this.color=color;
     }
@@ -19,7 +19,7 @@ public enum Categoria {
         return nombre;
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 }
