@@ -1,0 +1,25 @@
+com/example/login_crud/RegistrarseActivity.java
+ com.example.login_crud.RegistrarseActivity
+ com.example.login_crud.RegistrarseActivity$1
+ com.example.login_crud.RegistrarseActivity$1$1
+com/example/login_crud/IniciarJuegoActivity.java
+ com.example.login_crud.IniciarJuegoActivity
+com/example/login_crud/CrearJuegoActivity.java
+ com.example.login_crud.CrearJuegoActivity
+com/example/login_crud/BuildConfig.java
+ com.example.login_crud.BuildConfig
+com/example/login_crud/AdministradorActivity.java
+ com.example.login_crud.AdministradorActivity
+ com.example.login_crud.AdministradorActivity$1
+ com.example.login_crud.AdministradorActivity$2
+ com.example.login_crud.AdministradorActivity$3
+com/example/login_crud/AdminElementosActivity.java
+ com.example.login_crud.AdminElementosActivity
+ com.example.login_crud.AdminElementosActivity$1
+ com.example.login_crud.AdminElementosActivity$2
+com/example/login_crud/LoginActivity.java
+ com.example.login_crud.LoginActivity
+ com.example.login_crud.LoginActivity$1
+com/example/login_crud/MainActivity.java
+ com.example.login_crud.MainActivity
+ com.example.login_crud.MainActivity$1

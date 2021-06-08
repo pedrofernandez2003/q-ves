@@ -35,6 +35,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "";
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     WifiConfiguration currentConfig;
     WifiManager.LocalOnlyHotspotReservation hotspotReservation;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
         getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         currentConfig=new WifiConfiguration();
-        currentConfig.SSID="\"queves\"";
-        turnOnHotspot();
         IPDispositivo = findViewById(R.id.IPDispositivo);
         inputIP = findViewById(R.id.inputIPServer);
         inputMensaje = findViewById(R.id.inputMensaje);
@@ -70,8 +69,10 @@ public class MainActivity extends AppCompatActivity {
         IPDispositivo.setText(getIPAddress(true));
 
         botonServer.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
+                turnOnHotspot();
                 System.out.println("tocaste server");
                 serverClass = new ServerClass();
                 serverClass.start();
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         botonCliente.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//aca agregamos la conexion automatica a la red?
                 System.out.println("tocaste cliente");
                 String ipServer = inputIP.getText().toString();
                 System.out.println(ipServer);
@@ -100,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("tocaste send 1" + msg);
                 Write escribir = new Write();
                 escribir.execute(bytesMsg);
-//                sendReceive.write("hola".getBytes());
             }
         });
     }
@@ -247,7 +247,6 @@ public class MainActivity extends AppCompatActivity {
         Log.v(TAG, this.getApplicationContext().getString(R.string.hotspot_details_message) + "\n" + this.getApplicationContext().getString(
                 R.string.hotspot_ssid_label) + " " + currentConfig.SSID + "\n" + this.getApplicationContext().getString(
                 R.string.hotspot_pass_label) + " " + currentConfig.preSharedKey);
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -261,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
                     currentConfig = hotspotReservation.getWifiConfiguration();
                     Log.v("DANG", "THE PASSWORD IS: " + currentConfig.preSharedKey + " \n SSID is : " + currentConfig.SSID);
                     hotspotDetailsDialog();
+                    IPDispositivo.setText(getIPAddress(true)); //agrego esto porque sino se queda con la ip de la red de mi casa
                 }
 
                 @Override
