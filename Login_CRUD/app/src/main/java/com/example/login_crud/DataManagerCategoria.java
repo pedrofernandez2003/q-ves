@@ -1,8 +1,11 @@
 package com.example.login_crud;
 
+import android.graphics.ColorSpace;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.example.Objetos.Categoria;
 import com.example.Objetos.Color;
@@ -25,13 +28,14 @@ public  abstract class DataManagerCategoria {
         ArrayList<Categoria> categorias=new ArrayList<Categoria>();
         FirebaseFirestore db=FirebaseFirestore.getInstance();
         db.collection("categorias").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String TAG = "";
-                if (task.isSuccessful()) {
+                if (task.isSuccessful()) { //ver como guardamos el tema del rgb, si como esta clase colorspace.rgc o como un hexadecimal
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        System.out.println(document.getId() + " => " + document.getData());
-                        Categoria categoria=new Categoria((String) document.getData().get("nombre"), (String) document.getData().get("color"));
+                        Color color = new Color((String) document.getData().get("nombreColor"), (ColorSpace.Rgb) document.getData().get("rgbColor"));
+                        Categoria categoria=new Categoria((String) document.getData().get("nombre"),color);
                         categorias.add(categoria);
                     }
                     listener.onComplete(categorias);
