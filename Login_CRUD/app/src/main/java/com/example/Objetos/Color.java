@@ -1,12 +1,11 @@
 package com.example.Objetos;
 
-import android.graphics.ColorSpace;
 
 public class Color {
     private String nombre;
-    private ColorSpace.Rgb rgb;
+    private String rgb;
 
-    public Color(String nombre, ColorSpace.Rgb rgb) {
+    public Color(String nombre, String rgb) {
         this.nombre = nombre;
         this.rgb = rgb;
     }
@@ -19,11 +18,11 @@ public class Color {
         this.nombre = nombre;
     }
 
-    public ColorSpace.Rgb getRgb() {
+    public String getRgb() {
         return rgb;
     }
 
-    public void setRgb(ColorSpace.Rgb rgb) {
+    public void setRgb(String rgb) {
         this.rgb = rgb;
     }
 

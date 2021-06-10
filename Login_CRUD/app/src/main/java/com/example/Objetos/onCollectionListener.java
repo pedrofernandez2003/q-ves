@@ -1,7 +1,7 @@
 package com.example.Objetos;
 
-import java.util.ArrayList;
-
 public interface onCollectionListener {
-    public void onComplete(ArrayList<Categoria> categorias);
+    //void traeTodasLasColecciones(ArrayList<Categoria> categorias);
+    void traerIdCategoria(String id);
+
 }

@@ -1,14 +1,9 @@
 package com.example.login_crud;
 
-import android.graphics.ColorSpace;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
-import com.example.Objetos.Categoria;
-import com.example.Objetos.Color;
 import com.example.Objetos.onCollectionListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -16,38 +11,55 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
+public  abstract class DataManagerCategoria  {
 
-public  abstract class DataManagerCategoria {
+//    public DataManagerCategoria() {
+//        super();
+//    }
 
-    /*public DataManagerCategoria() {
-        super();
-    }*/
-
-    public static void traerCategorias(onCollectionListener listener) {
-        ArrayList<Categoria> categorias=new ArrayList<Categoria>();
+//    public  static void traerCategorias(onCollectionListener listener) {
+//        ArrayList<Categoria> categorias=new ArrayList<Categoria>();
+//        FirebaseFirestore db=FirebaseFirestore.getInstance();
+//        db.collection("categorias").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @RequiresApi(api = Build.VERSION_CODES.O)
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                String TAG = "";
+//                if (task.isSuccessful()) { //ver como guardamos el tema del rgb, si como esta clase colorspace.rgc o como un hexadecimal
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        HashMap<String, String> colorInfo = (HashMap<String, String>) document.getData().get("color");
+//                        Color color = new Color((String) colorInfo.get("nombre"), (String) colorInfo.get("codigo"));
+//                        Categoria categoria=new Categoria((String) document.getData().get("nombre"),color);
+//                        categorias.add(categoria);
+//                    }
+//                    listener.traeTodasLasColecciones(categorias);
+//                } else {
+//                    Log.d(TAG, "Error getting documents: ", task.getException());
+//                }
+//            }
+//        });
+//    }
+    public static void traerIdCategoria(String nombre, onCollectionListener listener){
         FirebaseFirestore db=FirebaseFirestore.getInstance();
-        db.collection("categorias").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
+        db.collection("categorias").whereEqualTo("nombre", nombre).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String TAG = "";
+                String id= "";
                 if (task.isSuccessful()) { //ver como guardamos el tema del rgb, si como esta clase colorspace.rgc o como un hexadecimal
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Color color = new Color((String) document.getData().get("nombreColor"), (ColorSpace.Rgb) document.getData().get("rgbColor"));
-                        Categoria categoria=new Categoria((String) document.getData().get("nombre"),color);
-                        categorias.add(categoria);
+                        System.out.println("Documento: " +document);
+                        id=document.getId();
+                        System.out.println(id);
                     }
-                    listener.onComplete(categorias);
+                    listener.traerIdCategoria(id);
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }});
-
     }
 
 }
-
 
 
 
