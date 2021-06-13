@@ -4,11 +4,16 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.Objetos.Categoria;
 import com.example.Objetos.Tarjeta;
 import com.example.Objetos.onCollectionListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -44,6 +49,35 @@ public  abstract class DataManagerCategoria  {
 //            }
 //        });
 //    }
+    public static void insertarCategoria(Categoria categoriaAInsertar, onCollectionListener listener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("categorias")
+                .add(categoriaAInsertar)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        listener.insertarCategoria();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+    }
+    public static void insertarTarjeta(Tarjeta tarjetaAInsertar,String id, onCollectionListener listener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("categorias")
+                .document(id)
+                .update("tarjeta", FieldValue.arrayUnion(tarjetaAInsertar))
+                .addOnSuccessListener((OnSuccessListener) o -> listener.insertarTarjeta())
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+    }
+
     public static void traerIdCategoria(String nombre, onCollectionListener listener){
         FirebaseFirestore db=FirebaseFirestore.getInstance();
         db.collection("categorias").whereEqualTo("nombre", nombre).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

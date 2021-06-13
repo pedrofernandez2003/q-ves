@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/*public class TarjetasActivity extends FragmentActivity {
+public class TarjetasActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Context context = this.getApplicationContext();
@@ -120,4 +120,4 @@ import java.util.Map;
 
         return colores;
     }
-}*/
+}

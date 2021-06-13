@@ -6,6 +6,8 @@ import java.util.Map;
 public interface onCollectionListener {
     void traeTodasLasColecciones(ArrayList<Categoria> categorias);
     void traerIdCategoria(String id);
-    void traerTarjetasCategoria(ArrayList<Tarjeta> xd);
+    void traerTarjetasCategoria(ArrayList<Tarjeta> tarjetas);
+    void insertarCategoria();
+    void insertarTarjeta();
 
 }
