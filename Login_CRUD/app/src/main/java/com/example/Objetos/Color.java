@@ -1,29 +1,24 @@
 package com.example.Objetos;
 
 
-public class Color {
-    private String nombre;
-    private String rgb;
+public  enum Color {
+    AMARILLO("HOLA"), VERDE(""), CELESTE("F"), TURQUESA(""),
+    AZUL(""),  VIOLETA(""),GRIS(""), ROJO(""), ROSA(""), NARANJA(""),
+    NEGRO("");
 
-    public Color(String nombre, String rgb) {
-        this.nombre = nombre;
-        this.rgb = rgb;
+//    private String nombre;
+    private String codigo;
+
+    Color(String codigo) {
+        this.codigo = codigo;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getRgb() {
-        return rgb;
-    }
-
-    public void setRgb(String rgb) {
-        this.rgb = rgb;
+    public void setCodigo(java.lang.String codigo) {
+        this.codigo = codigo;
     }
 
 }

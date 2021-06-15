@@ -20,8 +20,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nueva tarjeta"
-                app:background="@color/white"
-                app:backgroundTint="@color/black" />
+                app:background="@string/white"
+                app:backgroundTint="@string/black" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

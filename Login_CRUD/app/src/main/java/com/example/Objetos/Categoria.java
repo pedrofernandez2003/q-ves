@@ -3,18 +3,18 @@ package com.example.Objetos;
 public class Categoria {
 
     private String nombre;
-    private Color color;
+    private String color;
 
-    public Categoria(String nombre, Color color){
+    public Categoria(String nombre, String color){
         this.nombre = nombre;
-        this.color=color;
+        this.color = color;
     }
 
-    public String getnombre() {
+    public String getNombre() {
         return nombre;
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 }

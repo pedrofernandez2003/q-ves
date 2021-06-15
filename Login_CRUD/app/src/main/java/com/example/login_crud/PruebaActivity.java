@@ -4,112 +4,106 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.Listeners.onModificarListener;
 import com.example.Objetos.Categoria;
 import com.example.Objetos.Color;
 import com.example.Objetos.Tarjeta;
-import com.example.Objetos.onCollectionListener;
+import com.example.Listeners.onTraerDatoListener;
+import com.example.Listeners.onTraerDatosListener;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class PruebaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prueba);
-        /*DataManagerCategoria.traerCategorias(new onCollectionListener() {
+        DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
-            public void traeTodasLasColecciones(ArrayList<Categoria> categorias) {
-                for (Categoria categoria:categorias) {
-                    System.out.println("rgb color: " + categoria.getColor().getRgb() + categoria.getnombre());
+            public void traerDatos( ArrayList<Object> datos) {
+            //casteo a categoria
+                for (Object categoria:datos) {
+                    Categoria pruebacategoria=(Categoria) categoria;
+                    System.out.println("rgb color: " + Color.valueOf(pruebacategoria.getColor()).getCodigo() + pruebacategoria.getNombre());
                 }
             }
+        });
 
-        });*/
-
-      /*DataManagerCategoria.traerIdCategoria("calle", new onCollectionListener() {
+      DataManagerCategoria.traerIdCategoria("calle", new onTraerDatoListener() {
           @Override
-          public void traeTodasLasColecciones(ArrayList<Categoria> categorias) {
-
+          public void traer(Object id) {
+              System.out.println("el id es: "+ (String) id);
           }
-
-          @Override
-          public void traerIdCategoria(String id) {
-              System.out.println("el id es: "+ id);
-          }
-      });*/
-      /*DataManagerCategoria.traerTarjetasCategoria("1", new onCollectionListener() {
-          @Override
-          public void traeTodasLasColecciones(ArrayList<Categoria> categorias) {
-
-          }
-
-          @Override
-          public void traerIdCategoria(String id) {
-
-          }
-
-          @Override
-          public void traerTarjetasCategoria(ArrayList<Tarjeta> Tarjetas) {
-              System.out.println("Hola");
-          } //Funciono, tengo el arrayList de Tarjetas :))))))
       });
-    *//*
-      Color color= new Color("verde","#2d572c");
-      Categoria categoria = new Categoria("Hola",color);
-      DataManagerCategoria.insertarCategoria(categoria, new onCollectionListener() {
+
+      DataManagerCategoria.traerTarjetasCategoria("1", new onTraerDatosListener() {
           @Override
-          public void traeTodasLasColecciones(ArrayList<Categoria> categorias) {
-
+          public void traerDatos(ArrayList<Object> datos) {
+              for (Object tarjetas:datos) {
+                  Tarjeta tarjeta=(Tarjeta) tarjetas;
+                  System.out.println("Contenido: " + tarjeta.getContenido() + "Yapa: " + tarjeta.getYapa());
+              }
           }
+      });
+      Categoria categoria = new Categoria("Hola","VIOLETA");
 
-          @Override
-          public void traerIdCategoria(String id) {
 
-          }
+        DataManagerCategoria.modificarDatosCategoria(categoria, new onModificarListener() {
+            @Override
+            public void modificar(boolean modificado) {
+                System.out.println("Se modifico? " + modificado);
+            }
+        });
 
-          @Override
-          public void traerTarjetasCategoria(ArrayList<Tarjeta> tarjetas) {
-
-          }
-
-          @Override
-          public void insertarCategoria() {
-              System.out.println("Hola");
-          }
-
-          @Override
-          public void insertarTarjeta() {
-
-          }
-      });*/
-    Tarjeta tarjeta= new Tarjeta("Le hacian bullying","hola");
-    DataManagerCategoria.insertarTarjeta(tarjeta, "1", new onCollectionListener() {
-        @Override
-        public void traeTodasLasColecciones(ArrayList<Categoria> categorias) {
-
-        }
-
-        @Override
-        public void traerIdCategoria(String id) {
-
-        }
-
-        @Override
-        public void traerTarjetasCategoria(ArrayList<Tarjeta> tarjetas) {
-
-        }
-
-        @Override
-        public void insertarCategoria() {
-
-        }
-
-        @Override
-        public void insertarTarjeta() {
-            System.out.println("Hola :D");
-        }
-    });
+//      Color color= new Color("verde","#2d572c");
+//      DataManagerCategoria.insertarCategoria(categoria, new onCollectionListener() {
+//          @Override
+//          public void traeTodasLasColecciones(ArrayList<Categoria> categorias) {
+//
+//          }
+//
+//          @Override
+//          public void traerIdCategoria(String id) {
+//
+//          }
+//
+//          @Override
+//          public void insertarCategoria() {
+//              System.out.println("Hola");
+//          }
+//
+//          @Override
+//          public void insertarTarjeta() {
+//
+//          }
+//      });
+//    Tarjeta tarjeta= new Tarjeta("Le hacian bullying","hola");
+//    DataManagerCategoria.insertarTarjeta(tarjeta, "1", new onCollectionListener() {
+//        @Override
+//        public void traeTodasLasColecciones(ArrayList<Categoria> categorias) {
+//
+//        }
+//
+//        @Override
+//        public void traerIdCategoria(String id) {
+//
+//        }
+//
+//        @Override
+//        public void traerTarjetasCategoria(ArrayList<Tarjeta> tarjetas) {
+//
+//        }
+//
+//        @Override
+//        public void insertarCategoria() {
+//
+//        }
+//
+//        @Override
+//        public void insertarTarjeta() {
+//            System.out.println("Hola :D");
+//        }
+//    });
 
     }
 }
