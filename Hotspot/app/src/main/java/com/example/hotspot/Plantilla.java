@@ -8,7 +8,7 @@ public class Plantilla {
     private ArrayList<Personaje> personajes;
     private String nombre;
     private int cantPartidas;
-    private Moderador moderador;
+//    private Moderador moderador;
     private int cantEquipos;
     private PlantillaBuilder plantillaBuilder;
 
@@ -28,9 +28,9 @@ public class Plantilla {
         this.categorias = categorias;
     }
 
-    public void setModerador(Moderador moderador) {
-        this.moderador = moderador;
-    }
+//    public void setModerador(Moderador moderador) {
+//        this.moderador = moderador;
+//    }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -56,9 +56,9 @@ public class Plantilla {
         return cantPartidas;
     }
 
-    public Moderador getModerador() {
-        return moderador;
-    }
+//    public Moderador getModerador() {
+//        return moderador;
+//    }
 
     public String getNombre() {
         return nombre;

@@ -34,6 +34,7 @@ import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,10 +52,12 @@ public class MainActivity extends AppCompatActivity {
     private WifiManager wifiManager;
     WifiConfiguration currentConfig;
     WifiManager.LocalOnlyHotspotReservation hotspotReservation;
+    Controlador controlador;
 
     //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        controlador=new Controlador();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -112,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_READ:
                     byte[] readBuff = (byte[]) msg.obj;
                     String tempMsg = new String(readBuff, 0, msg.arg1);
+                    HashMap<String, Object> mensaje=new HashMap<String, Object>();
+                    mensaje.put("ACCION",tempMsg);
+                    controlador.elegirAccion(mensaje);
                     Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                     break;
             }
