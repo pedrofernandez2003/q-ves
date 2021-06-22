@@ -6,11 +6,6 @@ public class Controlador {
     private Juego juego;
     private String id;
 
-    public Controlador(){
-        juego=new Juego();
-        id="0";
-    }
-
     public void elegirAccion(HashMap <String, Object> mensaje){ //
         switch(mensaje.get("ACCION").toString()){
             case "TURNO":
@@ -29,7 +24,6 @@ public class Controlador {
             case "LEVANTAR_TARJETA":
                 break;
             case "PING":
-                System.out.println("entre ping");
                 break;
             case "ACK":
                 break;

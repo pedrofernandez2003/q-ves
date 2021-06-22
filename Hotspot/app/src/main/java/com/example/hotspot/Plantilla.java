@@ -3,7 +3,7 @@ package com.example.hotspot;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class Plantilla {
+public class Plantilla extends Serializador{
     private ArrayList<Categoria> categorias;
     private ArrayList<Personaje> personajes;
     private String nombre;

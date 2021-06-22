@@ -40,19 +40,19 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "";
-    Button botonServer, botonCliente, botonSend;
-    TextView IPDispositivo;
-    TextInputEditText inputIP, inputMensaje;
+    private Button botonServer, botonCliente, botonSend;
+    private TextView IPDispositivo;
+    private TextInputEditText inputIP, inputMensaje;
 
     static final int MESSAGE_READ=1;
-    ServerClass serverClass;
-    ClientClass clientClass;
-    SendReceive sendReceive;
+    private ServerClass serverClass;
+    private ClientClass clientClass;
+    private SendReceive sendReceive;
 
     private WifiManager wifiManager;
-    WifiConfiguration currentConfig;
-    WifiManager.LocalOnlyHotspotReservation hotspotReservation;
-    Controlador controlador;
+    private WifiConfiguration currentConfig;
+    private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
+    private Controlador controlador;
 
     //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     byte[] readBuff = (byte[]) msg.obj;
                     String tempMsg = new String(readBuff, 0, msg.arg1);
                     HashMap<String, Object> mensaje=new HashMap<String, Object>();
-                    mensaje.put("ACCION",tempMsg);
+                    mensaje.put("ACCION","COMENZAR");
                     controlador.elegirAccion(mensaje);
                     Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                     break;
