@@ -4,7 +4,7 @@
     <string name="botonServer">Server</string>
     <string name="botonCliente">Cliente</string>
     <string name="inputIP">IP del server</string>
-    <string name="botonSend">Enviar</string>
+    <string name="botonComenzar">Comenzar</string>
     <string name="inputMensaje">Mensaje</string>
     <string name="hotspot_details_message">detalleMensaje</string>
     <string name="hotspot_ssid_label">ssidLabel</string>

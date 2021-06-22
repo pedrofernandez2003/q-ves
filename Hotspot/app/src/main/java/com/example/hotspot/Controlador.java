@@ -6,6 +6,11 @@ public class Controlador {
     private Juego juego;
     private String id;
 
+    public Controlador(){
+        juego=new Juego();
+        id="";
+    }
+
     public void elegirAccion(HashMap <String, Object> mensaje){ //
         switch(mensaje.get("ACCION").toString()){
             case "TURNO":

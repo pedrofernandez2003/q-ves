@@ -1,6 +1,10 @@
 package com.example.hotspot;
 
-public class Tarjeta {
+import com.google.gson.Gson;
+
+import java.util.HashMap;
+
+public class Tarjeta implements Serializable {
     private Categoria categoria;
     private String contenido;
     private String yapa;
@@ -9,6 +13,12 @@ public class Tarjeta {
         this.categoria = categoria;
         this.contenido = contenido;
         this.yapa = yapa;
+    }
+
+    public Tarjeta(){
+        this.categoria = new Categoria();
+        this.contenido = "cosas";
+        this.yapa = "cosas yapa";
     }
 
     public Categoria getCategoria() {
@@ -33,5 +43,14 @@ public class Tarjeta {
 
     public void setYapa(String yapa) {
         this.yapa = yapa;
+    }
+
+    @Override
+    public String serializar() {
+        Gson serializador=new Gson();
+        HashMap<String, Object> informacion=new HashMap<>();
+        informacion.put("Tarjeta",this);
+        String json = serializador.toJson(informacion);
+        return json;
     }
 }

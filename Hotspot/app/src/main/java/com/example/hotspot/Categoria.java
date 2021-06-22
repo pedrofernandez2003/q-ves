@@ -1,6 +1,10 @@
 package com.example.hotspot;
 
-public class Categoria {
+import com.google.gson.Gson;
+
+import java.util.HashMap;
+
+public class Categoria implements Serializable {
 //    CARACTERISTICAS("Caracteristicas",Color.AMARILLO), VIVIENDA("Vivienda",Color.VERDE),
 //    SEXUALIDAD("Sexualidad",Color.CELESTE), PASATIEMPO("Pasatiempo",Color.TURQUESA),
 //    CUERPO("Cuerpo", Color.AZUL), INFANCIA("Infancia", Color.AZULFRANCIA), MEDIOS("Medios", Color.VIOLETA),
@@ -10,9 +14,13 @@ public class Categoria {
     private String nombre;
     private Color color;
 
-    private Categoria(String nombre, Color color){
+    public Categoria(String nombre, Color color){
         this.nombre = nombre;
         this.color=color;
+    }
+    public Categoria(){
+        this.nombre="Vivienda";
+        this.color=new Color();
     }
 
     public String getnombre() {
@@ -21,5 +29,21 @@ public class Categoria {
 
     public Color getColor() {
         return color;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+    @Override
+    public String serializar() {
+        Gson serializador=new Gson();
+        HashMap<String, Object> informacion=new HashMap<>();
+        informacion.put("Categoria",this);
+        String json = serializador.toJson(informacion);
+        return json;
     }
 }

@@ -22,12 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
@@ -36,13 +36,12 @@ import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "";
-    private Button botonServer, botonCliente, botonSend;
+    private Button botonServer, botonCliente, botonComenzar;
     private TextView IPDispositivo;
-    private TextInputEditText inputIP, inputMensaje;
+    private TextInputEditText inputIP;
 
     static final int MESSAGE_READ=1;
     private ServerClass serverClass;
@@ -54,10 +53,12 @@ public class MainActivity extends AppCompatActivity {
     private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
     private Controlador controlador;
 
+
     //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         controlador=new Controlador();
+        Juego juego=new Juego();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -65,9 +66,8 @@ public class MainActivity extends AppCompatActivity {
         currentConfig=new WifiConfiguration();
         IPDispositivo = findViewById(R.id.IPDispositivo);
         inputIP = findViewById(R.id.inputIPServer);
-        inputMensaje = findViewById(R.id.inputMensaje);
         botonServer = findViewById(R.id.botonServer);
-        botonSend = findViewById(R.id.botonSend);
+        botonComenzar = findViewById(R.id.botonComenzar);
         botonCliente = findViewById(R.id.botonCliente);
         IPDispositivo.setText(getIPAddress(true));
 
@@ -93,15 +93,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        botonSend.setOnClickListener(new View.OnClickListener() {
+        botonComenzar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String msg = inputMensaje.getText().toString();
+                Mensaje mensaje=new Mensaje("comenzar",juego.serializar());
+                String msg=mensaje.serializar();
+                System.out.println(msg);
                 byte[] bytesMsg = msg.getBytes();
                 for (int i = 0; i < bytesMsg.length; i++) {
                     System.out.println(bytesMsg[i]);
                 }
-                System.out.println("tocaste send 1" + msg);
+                System.out.println("tocaste comenzar");
                 Write escribir = new Write();
                 escribir.execute(bytesMsg);
             }
@@ -115,9 +117,13 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_READ:
                     byte[] readBuff = (byte[]) msg.obj;
                     String tempMsg = new String(readBuff, 0, msg.arg1);
-                    HashMap<String, Object> mensaje=new HashMap<String, Object>();
-                    mensaje.put("ACCION","COMENZAR");
-                    controlador.elegirAccion(mensaje);
+                    Gson json = new Gson();
+                    Mensaje mensaje= json.fromJson(tempMsg, Mensaje.class);
+                    System.out.println(tempMsg);
+                    System.out.println(mensaje.getDatos());
+                    System.out.println(mensaje.getAccion());
+                    Juego juego= json.fromJson(mensaje.getAccion(), Juego.class);
+                    System.out.println(juego.getCodigo());
                     Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                     break;
             }

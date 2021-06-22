@@ -1,19 +1,26 @@
 package com.example.hotspot;
 
+import com.google.gson.Gson;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class Plantilla extends Serializador{
+public class Plantilla implements Serializable {
     private ArrayList<Categoria> categorias;
     private ArrayList<Personaje> personajes;
     private String nombre;
     private int cantPartidas;
-//    private Moderador moderador;
+    private Moderador moderador;
     private int cantEquipos;
-    private PlantillaBuilder plantillaBuilder;
 
     public Plantilla(){
-        
+        this.categorias = new ArrayList<>();
+        this.personajes = new ArrayList<>();
+        this.nombre = "prueba";
+        this.cantPartidas = 3;
+        this.moderador = new Moderador();
+        this.cantEquipos = 4;
     }
 
     public void setCantEquipos(int cantEquipos) {
@@ -28,9 +35,9 @@ public class Plantilla extends Serializador{
         this.categorias = categorias;
     }
 
-//    public void setModerador(Moderador moderador) {
-//        this.moderador = moderador;
-//    }
+    public void setModerador(Moderador moderador) {
+        this.moderador = moderador;
+    }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -56,11 +63,20 @@ public class Plantilla extends Serializador{
         return cantPartidas;
     }
 
-//    public Moderador getModerador() {
-//        return moderador;
-//    }
+    public Moderador getModerador() {
+        return moderador;
+    }
 
     public String getNombre() {
         return nombre;
+    }
+
+    @Override
+    public String serializar() {
+        Gson serializador=new Gson();
+        HashMap<String, Object> informacion=new HashMap<>();
+        informacion.put("Partida",this);
+        String json = serializador.toJson(informacion);
+        return json;
     }
 }
