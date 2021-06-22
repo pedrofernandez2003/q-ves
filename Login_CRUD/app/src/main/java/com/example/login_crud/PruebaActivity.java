@@ -18,7 +18,7 @@ public class PruebaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prueba);
-        DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
+        /*DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
             public void traerDatos( ArrayList<Object> datos) {
             //casteo a categoria
@@ -44,16 +44,20 @@ public class PruebaActivity extends AppCompatActivity {
                   System.out.println("Contenido: " + tarjeta.getContenido() + "Yapa: " + tarjeta.getYapa());
               }
           }
-      });
-      Categoria categoria = new Categoria("Hola","VIOLETA");
-
-
-        DataManagerCategoria.modificarDatosCategoria(categoria, new onModificarListener() {
-            @Override
-            public void modificar(boolean modificado) {
-                System.out.println("Se modifico? " + modificado);
-            }
+      });*/
+      Categoria categoria = new Categoria("Lol",Color.AMARILLO);
+      DataManagerCategoria.traerIdCategoria("Juan",new onTraerDatoListener() {
+                @Override
+                public void traer(Object id) {
+                    DataManagerCategoria.modificarDatosCategoria((String) id,categoria, new onModificarListener() {
+                        @Override
+                        public void modificar(boolean modificado) {
+                            System.out.println("Se modifico? " + modificado);
+                        }
+                    });
+                }
         });
+
 
 //      Color color= new Color("verde","#2d572c");
 //      DataManagerCategoria.insertarCategoria(categoria, new onCollectionListener() {

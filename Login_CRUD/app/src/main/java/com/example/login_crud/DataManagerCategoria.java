@@ -32,7 +32,7 @@ public  abstract class DataManagerCategoria extends DataManager {
         super();
     }
 
-    public static void traerCategorias(onTraerDatosListener listener) {
+    /*public static void traerCategorias(onTraerDatosListener listener) {
         ArrayList<Object> categorias = new ArrayList<Object>();
         DataManager.getDb().collection("categorias").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -52,7 +52,7 @@ public  abstract class DataManagerCategoria extends DataManager {
                 }
             }
         });
-    }
+    }*/  //revisar, quilomnbo con los colores
 
     public static void traerIdCategoria(String nombre, onTraerDatoListener listener) {
         DataManager.getDb().collection("categorias").whereEqualTo("nombre", nombre).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -158,25 +158,21 @@ public  abstract class DataManagerCategoria extends DataManager {
     }
 
 
-    public static void modificarDatosCategoria(Categoria categoriaModificada, onModificarListener listener) {
-        DataManagerCategoria.traerIdCategoria(categoriaModificada.getNombre(), new onTraerDatoListener() {
-            @Override
-            public void traer(Object id) {
-                DataManager.getDb().collection("users").document((String) id).update(
-                        "nombre", categoriaModificada.getNombre(),
-                        "color", categoriaModificada.getColor()
-                ).addOnSuccessListener((OnSuccessListener) o -> listener.modificar(true))
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                listener.modificar(false);
-                            }
-                        });
-            }
-        });
-
+    public static void modificarDatosCategoria(String id, Categoria categoriaModificada, onModificarListener listener) {
+        DataManager.getDb().collection("categorias").document(id)
+                .update(
+                "nombre", categoriaModificada.getNombre(),
+                "color",categoriaModificada.getColor().toString()
+        ).addOnSuccessListener((OnSuccessListener) o -> listener.modificar(true))
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.modificar(false);
+                    }
+                });
     }
 }
+
 
 
 
