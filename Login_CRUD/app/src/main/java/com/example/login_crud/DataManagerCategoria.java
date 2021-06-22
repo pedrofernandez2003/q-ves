@@ -32,7 +32,7 @@ public  abstract class DataManagerCategoria extends DataManager {
         super();
     }
 
-    /*public static void traerCategorias(onTraerDatosListener listener) {
+    public static void traerCategorias(onTraerDatosListener listener) {
         ArrayList<Object> categorias = new ArrayList<Object>();
         DataManager.getDb().collection("categorias").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -41,9 +41,14 @@ public  abstract class DataManagerCategoria extends DataManager {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         HashMap<String, String> colorInfo = (HashMap<String, String>) document.getData().get("color");
-//                        Color color = new Color((String) colorInfo.get("nombre"), (String) colorInfo.get("codigo"));
-//                        System.out.println("codigo de amarillo es: "+ String.valueOf(string).getCodigo());
-                        Categoria categoria = new Categoria((String) document.getData().get("nombre"), (String) document.getData().get("color"));
+                        Color color_a_utilizar=Color.AMARILLO;
+                        for(Color color:Color.values()){
+                            if (document.getData().get("color").equals(color.toString())){
+                                color_a_utilizar=color;
+                            }
+                        }
+
+                        Categoria categoria = new Categoria((String) document.getData().get("nombre"), color_a_utilizar);
                         categorias.add(categoria);
                     }
                     listener.traerDatos(categorias);
@@ -52,9 +57,9 @@ public  abstract class DataManagerCategoria extends DataManager {
                 }
             }
         });
-    }*/  //revisar, quilomnbo con los colores
+    }
 
-    public static void traerIdCategoria(String nombre, onTraerDatoListener listener) {
+    public static void traerIdCategoria( String nombre, onTraerDatoListener listener) {
         DataManager.getDb().collection("categorias").whereEqualTo("nombre", nombre).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -119,7 +124,7 @@ public  abstract class DataManagerCategoria extends DataManager {
                         for (Map.Entry<String, Object> atributosCategoria : categoria.entrySet()) {
                             if (atributosCategoria.getKey().equals("tarjeta")) {
                                 for (HashMap<String, Object> atributosTarjeta : (ArrayList<HashMap<String, Object>>) atributosCategoria.getValue()) {
-                                    Tarjeta tarjeta = new Tarjeta((Color) atributosTarjeta.get("contenido"), (Color) atributosTarjeta.get("yapa"));
+                                    Tarjeta tarjeta = new Tarjeta((String ) atributosTarjeta.get("contenido"), (String ) atributosTarjeta.get("yapa"));
                                     tarjetas.add(tarjeta);
                                 }
                             }
@@ -135,7 +140,12 @@ public  abstract class DataManagerCategoria extends DataManager {
         DataManager.getDb().collection("categorias")
                 .document(id)
                 .update("tarjeta", FieldValue.arrayUnion(tarjetaAInsertar))
-                .addOnSuccessListener((OnSuccessListener) o -> listener.insertar(true))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.insertar(true);
+                    }
+                })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -148,7 +158,12 @@ public  abstract class DataManagerCategoria extends DataManager {
         DataManager.getDb().collection("categorias")
                 .document(id)
                 .update("tarjeta", FieldValue.arrayRemove(tarjetaAInsertar))
-                .addOnSuccessListener((OnSuccessListener) o -> listener.eliminar(true))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.eliminar(true);
+                    }
+                })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -162,8 +177,45 @@ public  abstract class DataManagerCategoria extends DataManager {
         DataManager.getDb().collection("categorias").document(id)
                 .update(
                 "nombre", categoriaModificada.getNombre(),
-                "color",categoriaModificada.getColor().toString()
-        ).addOnSuccessListener((OnSuccessListener) o -> listener.modificar(true))
+                "color",categoriaModificada.getColor().toString())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.modificar(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.modificar(false);
+                    }
+                });
+    }
+
+    public static void modificarDatosTarjeta(String idCategoria, Tarjeta tarjetaModificada,Tarjeta tarjetaAntigua, onModificarListener listener) {
+        DataManager.getDb().collection("categorias")
+                .document(idCategoria)
+                .update("tarjeta", FieldValue.arrayRemove(tarjetaAntigua))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        DataManager.getDb().collection("categorias")
+                                .document(idCategoria)
+                                .update("tarjeta", FieldValue.arrayUnion(tarjetaModificada))
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        listener.modificar(true);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        listener.modificar(false);
+                                    }
+                                });
+                    }
+                })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {

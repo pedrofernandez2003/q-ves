@@ -1,10 +1,10 @@
 package com.example.Objetos;
 
 public class Tarjeta {
-    private Color contenido;
-    private Color yapa;
+    private String contenido;
+    private String  yapa;
 
-    public Tarjeta(Color contenido, Color yapa) {
+    public Tarjeta(String  contenido, String  yapa) {
         this.contenido = contenido;
         this.yapa = yapa;
     }
@@ -12,19 +12,20 @@ public class Tarjeta {
     public Tarjeta() {
     }
 
-    public Color getContenido() {
+
+    public String  getContenido() {
         return contenido;
     }
 
-    public void setContenido(Color contenido) {
+    public void setContenido(String  contenido) {
         this.contenido = contenido;
     }
 
-    public Color getYapa() {
+    public String  getYapa() {
         return yapa;
     }
 
-    public void setYapa(Color yapa) {
+    public void setYapa(String  yapa) {
         this.yapa = yapa;
     }
 }

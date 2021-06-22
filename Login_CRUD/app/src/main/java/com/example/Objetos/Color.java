@@ -2,9 +2,9 @@ package com.example.Objetos;
 
 
 public  enum Color {
-    AMARILLO("HOLA"), VERDE(""), CELESTE("F"), TURQUESA(""),
-    AZUL(""),  VIOLETA(""),GRIS(""), ROJO(""), ROSA(""), NARANJA(""),
-    NEGRO("");
+    AMARILLO("HOLA"), VERDE("1"), CELESTE("F"), TURQUESA("2"),
+    AZUL("3"),  VIOLETA("4"),GRIS("5"), ROJO("6"), ROSA("7"), NARANJA("8"),
+    NEGRO("9");
 
 //    private String nombre;
     private String codigo;

@@ -18,6 +18,17 @@ public class PruebaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prueba);
+
+        Tarjeta tarjetaAntigua= new Tarjeta("J","K");
+        Tarjeta tarjetaModificada= new Tarjeta("A","B");
+
+        DataManagerCategoria.modificarDatosTarjeta("3", tarjetaModificada, tarjetaAntigua, new onModificarListener() {
+            @Override
+            public void modificar(boolean modificado) {
+                System.out.println("Se actualizo?"+modificado);
+            }
+        });
+
         /*DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
             public void traerDatos( ArrayList<Object> datos) {
@@ -45,69 +56,22 @@ public class PruebaActivity extends AppCompatActivity {
               }
           }
       });*/
-      Categoria categoria = new Categoria("Lol",Color.AMARILLO);
-      DataManagerCategoria.traerIdCategoria("Juan",new onTraerDatoListener() {
+      /*String color="AMARILLO";
+      Categoria categoria = new Categoria("Lol",Color.VIOLETA);
+      DataManagerCategoria.traerIdCategoria("Lol",new onTraerDatoListener() {
                 @Override
                 public void traer(Object id) {
                     DataManagerCategoria.modificarDatosCategoria((String) id,categoria, new onModificarListener() {
                         @Override
                         public void modificar(boolean modificado) {
                             System.out.println("Se modifico? " + modificado);
+
                         }
                     });
                 }
-        });
+        });*/
 
 
-//      Color color= new Color("verde","#2d572c");
-//      DataManagerCategoria.insertarCategoria(categoria, new onCollectionListener() {
-//          @Override
-//          public void traeTodasLasColecciones(ArrayList<Categoria> categorias) {
-//
-//          }
-//
-//          @Override
-//          public void traerIdCategoria(String id) {
-//
-//          }
-//
-//          @Override
-//          public void insertarCategoria() {
-//              System.out.println("Hola");
-//          }
-//
-//          @Override
-//          public void insertarTarjeta() {
-//
-//          }
-//      });
-//    Tarjeta tarjeta= new Tarjeta("Le hacian bullying","hola");
-//    DataManagerCategoria.insertarTarjeta(tarjeta, "1", new onCollectionListener() {
-//        @Override
-//        public void traeTodasLasColecciones(ArrayList<Categoria> categorias) {
-//
-//        }
-//
-//        @Override
-//        public void traerIdCategoria(String id) {
-//
-//        }
-//
-//        @Override
-//        public void traerTarjetasCategoria(ArrayList<Tarjeta> tarjetas) {
-//
-//        }
-//
-//        @Override
-//        public void insertarCategoria() {
-//
-//        }
-//
-//        @Override
-//        public void insertarTarjeta() {
-//            System.out.println("Hola :D");
-//        }
-//    });
 
     }
 }
