@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         controlador=new Controlador();
         Juego juego=new Juego();
+        Equipo equipo=new Equipo();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -117,12 +118,10 @@ public class MainActivity extends AppCompatActivity {
                 case MESSAGE_READ:
                     byte[] readBuff = (byte[]) msg.obj;
                     String tempMsg = new String(readBuff, 0, msg.arg1);
+                    System.out.println(tempMsg);
                     Gson json = new Gson();
                     Mensaje mensaje= json.fromJson(tempMsg, Mensaje.class);
-                    System.out.println(tempMsg);
-                    System.out.println(mensaje.getDatos());
-                    System.out.println(mensaje.getAccion());
-                    Juego juego= json.fromJson(mensaje.getAccion(), Juego.class);
+                    Juego juego= json.fromJson(mensaje.getDatos(), Juego.class);
                     System.out.println(juego.getCodigo());
                     Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                     break;

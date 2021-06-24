@@ -41,9 +41,7 @@ public class Categoria implements Serializable {
     @Override
     public String serializar() {
         Gson serializador=new Gson();
-        HashMap<String, Object> informacion=new HashMap<>();
-        informacion.put("Categoria",this);
-        String json = serializador.toJson(informacion);
+        String json = serializador.toJson(this);
         return json;
     }
 }

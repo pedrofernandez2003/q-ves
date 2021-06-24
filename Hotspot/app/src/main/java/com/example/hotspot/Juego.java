@@ -73,8 +73,6 @@ public class Juego implements Serializable {
     @Override
     public String serializar() {
         Gson serializador=new Gson();
-//        HashMap<String, String>informacion=new HashMap<>();
-//        informacion.put("Juego",this);
         String json = serializador.toJson(this);
         return json;
     }

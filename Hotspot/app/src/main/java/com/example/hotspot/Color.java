@@ -38,9 +38,7 @@ public class Color implements Serializable{
     @Override
     public String serializar() {
         Gson serializador=new Gson();
-        HashMap<String, Object> informacion=new HashMap<>();
-        informacion.put("Color",this);
-        String json = serializador.toJson(informacion);
+        String json = serializador.toJson(this);
         return json;
     }
 }

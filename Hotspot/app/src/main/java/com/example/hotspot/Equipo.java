@@ -1,8 +1,10 @@
 package com.example.hotspot;
 
+import com.google.gson.Gson;
+
 import java.util.HashSet;
 
-public class Equipo {
+public class Equipo implements Serializable {
     private HashSet<Tarjeta>tarjetas;
     private String nombre;
     private int id;
@@ -41,5 +43,12 @@ public class Equipo {
 
     public void setTarjetas(HashSet<Tarjeta> tarjetas) {
         this.tarjetas = tarjetas;
+    }
+
+    @Override
+    public String serializar() {
+        Gson serializador=new Gson();
+        String json = serializador.toJson(this);
+        return json;
     }
 }
