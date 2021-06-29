@@ -2,13 +2,14 @@ package com.example.hotspot;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Mensaje implements Serializable {
     private String accion;
-    private String datos;
+    private ArrayList<String> datos;
 
-    public Mensaje(String accion, String datos){
+    public Mensaje(String accion, ArrayList<String> datos){
          this.accion=accion;
          this.datos=datos;
     }
@@ -17,7 +18,7 @@ public class Mensaje implements Serializable {
         return accion;
     }
 
-    public String getDatos() {
+    public ArrayList<String> getDatos() {
         return datos;
     }
 
@@ -25,10 +26,9 @@ public class Mensaje implements Serializable {
         this.accion = accion;
     }
 
-    public void setDatos(String datos) {
+    public void setDatos(ArrayList<String> datos) {
         this.datos = datos;
     }
-
 
     @Override
     public String serializar() {

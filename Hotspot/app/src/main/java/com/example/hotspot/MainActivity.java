@@ -33,6 +33,7 @@ import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -97,7 +98,11 @@ public class MainActivity extends AppCompatActivity {
         botonComenzar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Mensaje mensaje=new Mensaje("comenzar",juego.serializar());
+                ArrayList<String> datos=new ArrayList<>();
+                datos.add(juego.serializar());
+//                datos.add("\"turno\":1");
+                datos.add(equipo.serializar());
+                Mensaje mensaje=new Mensaje("comenzar",datos);
                 String msg=mensaje.serializar();
                 System.out.println(msg);
                 byte[] bytesMsg = msg.getBytes();
@@ -121,8 +126,10 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(tempMsg);
                     Gson json = new Gson();
                     Mensaje mensaje= json.fromJson(tempMsg, Mensaje.class);
-                    Juego juego= json.fromJson(mensaje.getDatos(), Juego.class);
+                    Juego juego= json.fromJson(mensaje.getDatos().get(0), Juego.class);
+                    Equipo equipo= json.fromJson(mensaje.getDatos().get(1), Equipo.class);
                     System.out.println(juego.getCodigo());
+                    System.out.println(equipo.getNombre());
                     Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                     break;
             }
