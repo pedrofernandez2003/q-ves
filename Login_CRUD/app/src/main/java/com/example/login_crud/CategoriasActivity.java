@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.Listeners.onTraerDatosListener;
+import com.example.Objetos.Categoria;
+import com.example.Objetos.Tarjeta;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -117,29 +121,31 @@ public class CategoriasActivity extends FragmentActivity {
 
     private ArrayList<String> traerDatos(Context context)  {
         ArrayList<String> colores = new ArrayList<>();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("categorias").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                String TAG = "";
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
-                        colores.add((String) document.getData().get("color"));
-                        List<Map<String, String>> tarjetas = (List<Map<String, String>>) document.getData().get("tarjeta");
-                        Button button = new Button(context);
-                        button.setLayoutParams(lp);
-                        button.setText((String) document.getData().get("nombre") + " " + tarjetas.size());
-                        button.setBackgroundColor(939393);
-                        llBotonera.addView(button);
-                    }
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
+            public void traerDatos(ArrayList<Object> datos) {
+                for (Object CategoriaObject:datos) {
+                    Categoria categoria= (Categoria) CategoriaObject;
+                    LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
+                    colores.add(categoria.getColor().toString());
+                    Button button = new Button(context);
+                    button.setLayoutParams(lp);
+                    button.setText(categoria.getNombre()+" "+categoria.getCantidadTarjetas());
+                    button.setBackgroundColor(939393);
+                    llBotonera.addView(button);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent irATarjetas = new Intent(CategoriasActivity.this, TarjetasActivity.class);
+                            irATarjetas.putExtra("Color",categoria.getColor().getCodigo());
+                            irATarjetas.putExtra("Nombre",categoria.getNombre());
+                            startActivity(irATarjetas);
+                        }
+                    });
                 }
             }
         });
-
         return colores;
     }
 

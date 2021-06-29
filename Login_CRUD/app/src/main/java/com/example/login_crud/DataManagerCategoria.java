@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public  abstract class DataManagerCategoria extends DataManager {
@@ -47,8 +48,8 @@ public  abstract class DataManagerCategoria extends DataManager {
                                 color_a_utilizar=color;
                             }
                         }
-
-                        Categoria categoria = new Categoria((String) document.getData().get("nombre"), color_a_utilizar);
+                        List<Map<String, String>> tarjetas = (List<Map<String, String>>) document.getData().get("tarjeta");
+                        Categoria categoria = new Categoria((String) document.getData().get("nombre"), color_a_utilizar,tarjetas.size());
                         categorias.add(categoria);
                     }
                     listener.traerDatos(categorias);
