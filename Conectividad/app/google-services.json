@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "592667538670",
+    "project_id": "qves-ddf27",
+    "storage_bucket": "qves-ddf27.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592667538670:android:a672b2dcd1f9ac90606fff",
+        "android_client_info": {
+          "package_name": "com.example.login_crud"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592667538670-6mmpojtq2tet7s5fk25j4dlr2debcjea.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.login_crud",
+            "certificate_hash": "53c6e663beb5af1b6b40da736e7e368deb8dd917"
+          }
+        },
+        {
+          "client_id": "592667538670-hs9bgtldt9eirarniccdcqsc230pfjap.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.login_crud",
+            "certificate_hash": "1de0415e7d96e2bde0ecfed5b522dae59ee24412"
+          }
+        },
+        {
+          "client_id": "592667538670-okgbj8jhbltgnujvacgvrikf3jnoo68f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.login_crud",
+            "certificate_hash": "f0b9353f65dd0f525489ecb23f44ea603f94f022"
+          }
+        },
+        {
+          "client_id": "592667538670-4nse2fm8juq7ffldfp2e2118patfcsa2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1JSxp1kCGz4t9-iqD1cSugW1Wp21P6b8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592667538670-4nse2fm8juq7ffldfp2e2118patfcsa2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

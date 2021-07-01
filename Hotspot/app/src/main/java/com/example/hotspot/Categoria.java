@@ -5,22 +5,26 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 
 public class Categoria implements Serializable {
-//    CARACTERISTICAS("Caracteristicas",Color.AMARILLO), VIVIENDA("Vivienda",Color.VERDE),
-//    SEXUALIDAD("Sexualidad",Color.CELESTE), PASATIEMPO("Pasatiempo",Color.TURQUESA),
-//    CUERPO("Cuerpo", Color.AZUL), INFANCIA("Infancia", Color.AZULFRANCIA), MEDIOS("Medios", Color.VIOLETA),
-//    CALLE("Calle",Color.ROJO), TRABAJO("Trabajo", Color.ROSA), EMOCIONES("Emociones", Color.NARANJA),
-//    ANULADA("Anulada",Color.NEGRO);
-
+    private int cantidadTarjetas;
     private String nombre;
     private Color color;
 
-    public Categoria(String nombre, Color color){
+    public Categoria(String nombre, Color color, int cantidadTarjetas){
         this.nombre = nombre;
         this.color=color;
+        this.cantidadTarjetas=cantidadTarjetas;
     }
     public Categoria(){
         this.nombre="Vivienda";
-        this.color=new Color();
+        this.color=Color.AMARILLO;
+    }
+
+    public int getCantidadTarjetas() {
+        return cantidadTarjetas;
+    }
+
+    public void setCantidadTarjetas(int cantidadTarjetas) {
+        this.cantidadTarjetas = cantidadTarjetas;
     }
 
     public String getnombre() {

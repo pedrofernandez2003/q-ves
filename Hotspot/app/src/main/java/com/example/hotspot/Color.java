@@ -6,34 +6,25 @@ import com.google.gson.Gson;
 
 import java.util.HashMap;
 
-public class Color implements Serializable{
-    private String nombre;
-    private ColorSpace.Rgb rgb;
+public  enum Color implements Serializable{
+    AMARILLO("HOLA"), VERDE("1"), CELESTE("F"), TURQUESA("2"),
+    AZUL("3"),  VIOLETA("4"),GRIS("5"), ROJO("6"), ROSA("7"), NARANJA("8"),
+    NEGRO("9");
 
-    public Color(String nombre, ColorSpace.Rgb rgb) {
-        this.nombre = nombre;
-        this.rgb = rgb;
-    }
-    public Color(){
-        this.nombre="rojo";
-//        this.rgb=new ColorSpace.Rgb();
-    }
+    //    private String nombre;
+    private String codigo;
 
-    public String getNombre() {
-        return nombre;
+    Color(String codigo) {
+        this.codigo = codigo;
     }
 
-//    public ColorSpace.Rgb getRgb() {
-//        return rgb;
-//    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public String getCodigo() {
+        return codigo;
     }
 
-//    public void setRgb(ColorSpace.Rgb rgb) {
-//        this.rgb = rgb;
-//    }
+    public void setCodigo(java.lang.String codigo) {
+        this.codigo = codigo;
+    }
 
     @Override
     public String serializar() {
@@ -41,4 +32,5 @@ public class Color implements Serializable{
         String json = serializador.toJson(this);
         return json;
     }
+
 }

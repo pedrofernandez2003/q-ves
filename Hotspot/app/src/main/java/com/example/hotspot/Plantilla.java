@@ -11,15 +11,23 @@ public class Plantilla implements Serializable {
     private ArrayList<Personaje> personajes;
     private String nombre;
     private int cantPartidas;
-    private Moderador moderador;
+    private String mailModerador;
     private int cantEquipos;
 
+    public Plantilla(ArrayList<Categoria>categorias, ArrayList<Personaje>personajes,String nombre, int cantPartidas, int cantEquipos,String mailModerador){
+        this.cantEquipos=cantEquipos;
+        this.cantPartidas=cantPartidas;
+        this.personajes=personajes;
+        this.categorias=categorias;
+        this.mailModerador=mailModerador;
+        this.nombre=nombre;
+    }
     public Plantilla(){
         this.categorias = new ArrayList<>();
         this.personajes = new ArrayList<>();
         this.nombre = "prueba";
         this.cantPartidas = 3;
-        this.moderador = new Moderador();
+        this.mailModerador = "jose@gmail.com";
         this.cantEquipos = 4;
     }
 
@@ -35,8 +43,8 @@ public class Plantilla implements Serializable {
         this.categorias = categorias;
     }
 
-    public void setModerador(Moderador moderador) {
-        this.moderador = moderador;
+    public void setModerador(String mailModerador) {
+        this.mailModerador = mailModerador;
     }
 
     public void setNombre(String nombre) {
@@ -63,8 +71,8 @@ public class Plantilla implements Serializable {
         return cantPartidas;
     }
 
-    public Moderador getModerador() {
-        return moderador;
+    public String getModerador() {
+        return mailModerador;
     }
 
     public String getNombre() {

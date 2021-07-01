@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent irJuegos = new Intent(this, TraerJuegos.class);
+        startActivity(irJuegos);
         controlador=new Controlador();
         Juego juego=new Juego();
         Equipo equipo=new Equipo();
