@@ -14,8 +14,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.Listeners.onInsertarListener;
+import com.example.Listeners.onTraerDatoListener;
 import com.example.Listeners.onTraerDatosListener;
 import com.example.Objetos.Tarjeta;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,20 +37,21 @@ public class TarjetasActivity extends FragmentActivity {
         setContentView(R.layout.activity_tarjetas);
         Bundle extras=getIntent().getExtras();
         String color= extras.getString("Color");
-        String nombre= extras.getString("Nombre");
-        /*
+        String nombreCategoria= extras.getString("Nombre");
+        System.out.println(color+nombreCategoria);
+
         Button aniadirTarjeta = (Button) findViewById(R.id.aniadirTarjeta);
         aniadirTarjeta.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                aniadirTarjeta(v);
+                aniadirTarjeta(v,nombreCategoria);
             }
         });
-        traerTarjetas(context);*/
+        traerTarjetas(context,nombreCategoria,color);
     }
 
-    public void aniadirTarjeta(View view) {
+    public void aniadirTarjeta(View view,String nombreCategoria) {
 
         LayoutInflater inflater = LayoutInflater.from(TarjetasActivity.this);
         View dialog_layout = inflater.inflate(R.layout.activity_aniadir_tarjeta, null);
@@ -62,10 +65,15 @@ public class TarjetasActivity extends FragmentActivity {
                 String contenidoTarjeta = contenido.getText().toString();
                 String yapaTarjeta = yapa.getText().toString();
                 Tarjeta tarjeta= new Tarjeta(contenidoTarjeta,yapaTarjeta);
-                DataManagerCategoria.insertarTarjeta(tarjeta, "1", new onInsertarListener() {
+                DataManagerCategoria.insertarTarjeta(tarjeta,nombreCategoria, new onInsertarListener() {
                     @Override
                     public void insertar(boolean insertado) {
-
+                        if (insertado){
+                            Toast.makeText(TarjetasActivity.this, "Insertado!", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(TarjetasActivity.this, "Error al insertar :(", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
@@ -73,49 +81,32 @@ public class TarjetasActivity extends FragmentActivity {
         AlertDialog dialog = db.show();
     }
 
-    private void coloresUsados() {
 
-    }
 
-    /*private void insertarCategoria(String nombre, String color) {
-        System.out.println("Inserto categoria");
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> categoria = new HashMap<>();
-        categoria.put("color", color);
-        categoria.put("nombre", nombre);
-        categoria.put("tarjeta", new ArrayList<>());
-        db.collection("categorias")
-                .add(categoria)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
-                });
-    }*/
-
-   private void traerTarjetas(Context context) {
+   private void traerTarjetas(Context context,String nombreCategoria,String color) {
         ArrayList<String> colores = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DataManagerCategoria.traerTarjetasCategoria("1", new onTraerDatosListener() {
+        DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
             @Override
-            public void traerDatos(ArrayList<Object> datos) {
-                for (Object tarjetaObject:datos) {
-                    Tarjeta tarjeta= (Tarjeta) tarjetaObject;
-                    System.out.println(tarjeta.getContenido()+" "+tarjeta.getYapa());
-                    LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera2);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
-                    Button button = new Button(context);
-                    button.setLayoutParams(lp);
-                    button.setText(tarjeta.getContenido() + " " + tarjeta.getYapa());
-                    button.setBackgroundColor(939393);
-                    llBotonera.addView(button);
-                }
+            public void traer(Object dato) {
+                DataManagerCategoria.traerTarjetasCategoria((String) dato, new onTraerDatosListener() {
+                    @Override
+                    public void traerDatos(ArrayList<Object> datos) {
+                        for (Object tarjetaObject:datos) {
+                            Tarjeta tarjeta= (Tarjeta) tarjetaObject;
+                            System.out.println(tarjeta.getContenido()+" "+tarjeta.getYapa());
+                            LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera2);
+                            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
+                            Button button = new Button(context);
+                            button.setLayoutParams(lp);
+                            button.setText(tarjeta.getContenido() + " " + tarjeta.getYapa());
+                            button.setBackgroundColor(939393); //aca iria el string color pero por ahora no hay nada
+                            llBotonera.addView(button);
+                        }
+                    }
+                });
             }
         });
+
     }
 }

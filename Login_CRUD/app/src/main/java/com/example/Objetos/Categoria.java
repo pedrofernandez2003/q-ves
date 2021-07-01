@@ -11,6 +11,9 @@ public class Categoria {
         this.color = color;
         this.cantidadTarjetas=cantidadTarjetas;
     }
+    public Categoria(){
+
+    }
 
     public int getCantidadTarjetas() {
         return cantidadTarjetas;

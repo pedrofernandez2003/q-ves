@@ -25,17 +25,16 @@
         <activity android:name=".AdministradorActivity" />
         <activity android:name=".CrearJuegoActivity" />
         <activity android:name=".CategoriasActivity">
-
-        </activity>
-        <activity android:name=".PersonajesActivity"/>
-        <activity android:name=".PruebaActivity">
-        </activity>
-        <activity android:name=".TarjetasActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".PersonajesActivity"/>
+        <activity android:name=".PruebaActivity">
+        </activity>
+        <activity android:name=".TarjetasActivity">
         </activity>
 
     </application>
