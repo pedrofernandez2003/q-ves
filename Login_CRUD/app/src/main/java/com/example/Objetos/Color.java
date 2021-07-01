@@ -17,7 +17,7 @@ public  enum Color {
         return codigo;
     }
 
-    public void setCodigo(java.lang.String codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 
