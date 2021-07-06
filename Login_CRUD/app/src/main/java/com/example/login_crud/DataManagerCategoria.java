@@ -35,12 +35,14 @@ public  abstract class DataManagerCategoria extends DataManager {
 
     public static void traerCategorias(onTraerDatosListener listener) {
         ArrayList<Object> categorias = new ArrayList<Object>();
+        //Preguntar por que corno me duplica los datos este get ...
         DataManager.getDb().collection("categorias").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String TAG = "";
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
+                        System.out.println(document.getData());
                         Color color_a_utilizar=Color.AMARILLO;
                         for(Color color:Color.values()){
                             if (document.getData().get("color").equals(color.toString())){
