@@ -14,11 +14,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.Listeners.onInsertarListener;
+import com.example.Listeners.onModificarListener;
 import com.example.Listeners.onTraerDatoListener;
 import com.example.Listeners.onTraerDatosListener;
+import com.example.Objetos.Color;
 import com.example.Objetos.Tarjeta;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,6 +33,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TarjetasActivity extends FragmentActivity {
+
+    public boolean ModoModificar=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Context context = this.getApplicationContext();
@@ -48,6 +54,14 @@ public class TarjetasActivity extends FragmentActivity {
                 aniadirTarjeta(v,nombreCategoria);
             }
         });
+        Button modificarTarjeta= (Button) findViewById(R.id.modificarTarjeta);
+        modificarTarjeta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ModoModificar=!ModoModificar;
+
+            }
+        });
         traerTarjetas(context,nombreCategoria,color);
     }
 
@@ -59,26 +73,43 @@ public class TarjetasActivity extends FragmentActivity {
         db.setView(dialog_layout);
         EditText contenido = dialog_layout.findViewById(R.id.contenido);
         EditText yapa = dialog_layout.findViewById(R.id.yapa);
-        db.setTitle("Nueva categoria");
-        db.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int i) {
-                String contenidoTarjeta = contenido.getText().toString();
-                String yapaTarjeta = yapa.getText().toString();
-                Tarjeta tarjeta= new Tarjeta(contenidoTarjeta,yapaTarjeta);
-                DataManagerCategoria.insertarTarjeta(tarjeta,nombreCategoria, new onInsertarListener() {
+        db.setTitle("Nueva Tarjeta");
+        db.setPositiveButton("Añadir", null);
+        final AlertDialog a = db.create();
+        a.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void insertar(boolean insertado) {
-                        if (insertado){
-                            Toast.makeText(TarjetasActivity.this, "Insertado!", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Toast.makeText(TarjetasActivity.this, "Error al insertar :(", Toast.LENGTH_SHORT).show();
-                        }
+                    public void onClick(View view) {
+                        String contenidoTarjeta = contenido.getText().toString();
+                        String yapaTarjeta = yapa.getText().toString();
+                        Tarjeta tarjeta= new Tarjeta(contenidoTarjeta,yapaTarjeta);
+                        DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
+                            @Override
+                            public void traer(Object dato) {
+                                DataManagerCategoria.insertarTarjeta(tarjeta,(String) dato, new onInsertarListener() {
+                                    @Override
+                                    public void insertar(boolean insertado) {
+                                        if (insertado){
+                                            Toast.makeText(TarjetasActivity.this, "Insertado!", Toast.LENGTH_SHORT).show();
+                                            a.dismiss();
+                                        }
+                                        else {
+                                            Toast.makeText(TarjetasActivity.this, "Error al insertar :(", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+
                     }
                 });
             }
         });
-        AlertDialog dialog = db.show();
+        a.show();
+
     }
 
 
@@ -102,12 +133,63 @@ public class TarjetasActivity extends FragmentActivity {
                             button.setText(tarjeta.getContenido() + " " + tarjeta.getYapa());
                             button.setBackgroundColor(939393); //aca iria el string color pero por ahora no hay nada
                             llBotonera.addView(button);
+                            button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (ModoModificar){
+                                        LayoutInflater inflater = LayoutInflater.from(TarjetasActivity.this);
+                                        View dialog_layout = inflater.inflate(R.layout.activity_aniadir_tarjeta, null);
+                                        AlertDialog.Builder db = new AlertDialog.Builder(TarjetasActivity.this);
+                                        db.setView(dialog_layout);
+                                        EditText contenido = dialog_layout.findViewById(R.id.contenido);
+                                        contenido.setText(tarjeta.getContenido());
+                                        EditText yapa = dialog_layout.findViewById(R.id.yapa);
+                                        yapa.setText(tarjeta.getYapa());
+                                        db.setTitle("Nueva Tarjeta");
+                                        db.setPositiveButton("Modificar", null);
+                                        final AlertDialog a = db.create();
+                                        a.setOnShowListener(new DialogInterface.OnShowListener() {
+                                            @Override
+                                            public void onShow(DialogInterface dialog) {
+                                                Button b = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                                                b.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        String contenidoTarjeta = contenido.getText().toString();
+                                                        String yapaTarjeta = yapa.getText().toString();
+                                                        Tarjeta tarjetaNueva= new Tarjeta(contenidoTarjeta,yapaTarjeta);
+                                                        DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
+                                                            @Override
+                                                            public void traer(Object dato) {
+                                                                DataManagerCategoria.modificarDatosTarjeta((String) dato, tarjetaNueva, tarjeta, new onModificarListener() {
+                                                                    @Override
+                                                                    public void modificar(boolean modificado) {
+                                                                        if (modificado){
+                                                                            Toast.makeText(TarjetasActivity.this, "Todo bien!", Toast.LENGTH_SHORT).show();
+                                                                            a.dismiss();
+                                                                        }
+                                                                        else{
+                                                                            Toast.makeText(TarjetasActivity.this, "Problemas en la base, disculpa", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+
+
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        a.show();
+                                    }
+                                }
+                            });
                         }
                     }
                 });
             }
         });
-
     }
 }
 

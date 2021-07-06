@@ -30,4 +30,12 @@ public class Categoria {
     public Color getColor() {
         return color;
     }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
 }

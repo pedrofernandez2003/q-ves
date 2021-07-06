@@ -16,8 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.Listeners.onModificarListener;
+import com.example.Listeners.onTraerDatoListener;
 import com.example.Listeners.onTraerDatosListener;
 import com.example.Objetos.Categoria;
+import com.example.Objetos.Color;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -50,7 +53,6 @@ public class CategoriasActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 ModoModificar=!ModoModificar;
-                System.out.println(ModoModificar);
             }
         });
         traerDatos(context);
@@ -78,8 +80,6 @@ public class CategoriasActivity extends FragmentActivity {
                         System.out.println("Entre onClick");
                         String nombreCategoria = nombre.getText().toString();
                         String colorCategoria = color.getText().toString();
-                        System.out.println("nombreCategoria: " + nombreCategoria);
-                        System.out.println("colorCategoria: " + colorCategoria);
                         if (!colores.contains(colorCategoria) && !nombreCategoria.equals("") && !colorCategoria.equals("")) {
                             insertarCategoria(nombreCategoria, colorCategoria);
                             System.out.println("Entre porq esta todo bien");
@@ -146,12 +146,14 @@ public class CategoriasActivity extends FragmentActivity {
                                 startActivity(irATarjetas);
                             }
                             else{
-                                /*LayoutInflater inflater = LayoutInflater.from(CategoriasActivity.this);
+                                LayoutInflater inflater = LayoutInflater.from(CategoriasActivity.this);
                                 View dialog_layout = inflater.inflate(R.layout.activity_aniadir_categoria, null);
-                                AlertDialog.Builder db = new AlertDialog.Builder(context);
+                                AlertDialog.Builder db = new AlertDialog.Builder(CategoriasActivity.this);
                                 db.setView(dialog_layout);
                                 EditText nombre = dialog_layout.findViewById(R.id.nombreCategoria);
+                                nombre.setText(categoria.getNombre());
                                 EditText color = dialog_layout.findViewById(R.id.colorCategoria);
+                                color.setText(categoria.getColor().toString());
                                 TextView colorRepetido = dialog_layout.findViewById(R.id.colorRepetido);
                                 db.setTitle("Modificar Categoria");
                                 db.setPositiveButton("Modificar", null);
@@ -164,27 +166,37 @@ public class CategoriasActivity extends FragmentActivity {
                                             @Override
                                             public void onClick(View view) {
                                                 System.out.println("Entre onClick");
-                                                String nombreCategoria = nombre.getText().toString();
-                                                String colorCategoria = color.getText().toString();
-                                                System.out.println("nombreCategoria: " + nombreCategoria);
-                                                System.out.println("colorCategoria: " + colorCategoria);
-                                                if (!colores.contains(colorCategoria) && !nombreCategoria.equals("") && !colorCategoria.equals("")) {
-                                                    insertarCategoria(nombreCategoria, colorCategoria);
-                                                    System.out.println("Entre porq esta todo bien");
-                                                    a.dismiss();
-                                                } else {
-                                                    System.out.println("Entre algo mal");
-                                                    if (nombreCategoria.equals("") || colorCategoria.equals("")) {
-                                                        Toast.makeText(CategoriasActivity.this, "Ningún campo puede quedar vacío", Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        Toast.makeText(CategoriasActivity.this, "El color ya está siendo usado", Toast.LENGTH_SHORT).show();
+                                                DataManagerCategoria.traerIdCategoria(categoria.getNombre(), new onTraerDatoListener() {
+                                                    @Override
+                                                    public void traer(Object dato) {
+                                                        String nombreCategoria = nombre.getText().toString();
+                                                        String colorCategoria = color.getText().toString();
+                                                        for(Color color:Color.values()){
+                                                            if (colorCategoria.equals(color.toString())){
+                                                                categoria.setColor(color);
+                                                            }
+                                                        }
+                                                        categoria.setNombre(nombreCategoria);
+                                                        DataManagerCategoria.modificarDatosCategoria((String) dato, categoria, new onModificarListener() {
+                                                            @Override
+                                                            public void modificar(boolean modificado) {
+                                                                if (modificado){
+                                                                    Toast.makeText(CategoriasActivity.this, "Todo bien!", Toast.LENGTH_SHORT).show();
+                                                                    a.dismiss();
+                                                                }
+                                                                else{
+                                                                    Toast.makeText(CategoriasActivity.this, "Problemas en la base, disculpa", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        });
                                                     }
-                                                }
+                                                });
+
                                             }
                                         });
                                     }
                                 });
-                                a.show();*/
+                                a.show();
                             }
 
                         }
@@ -196,3 +208,5 @@ public class CategoriasActivity extends FragmentActivity {
     }
 
 }
+
+//CHARLAR CON TINCHO TEMA COLORES
