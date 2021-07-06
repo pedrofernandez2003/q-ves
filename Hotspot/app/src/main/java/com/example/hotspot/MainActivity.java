@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         Equipo equipo=new Equipo();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+//        getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         currentConfig=new WifiConfiguration();
         IPDispositivo = findViewById(R.id.IPDispositivo);
