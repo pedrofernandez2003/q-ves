@@ -23,14 +23,16 @@
         <activity android:name=".RegistrarseActivity" />
         <activity android:name=".AdminElementosActivity" />
         <activity android:name=".AdministradorActivity" />
-        <activity android:name=".CrearJuegoActivity" />
-        <activity android:name=".CategoriasActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".CrearJuegoActivity" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
+
+        <activity android:name=".CategoriasActivity" />
+
         <activity android:name=".PersonajesActivity"/>
         <activity android:name=".PruebaActivity">
         </activity>
