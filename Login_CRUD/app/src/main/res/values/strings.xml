@@ -23,17 +23,5 @@
     <string name="dialog_title">Items available in a shop</string>
     <string name="ok_label">OK</string>
     <string name="dismiss_label">Dismiss</string>
-    <string-array name="shopping_item">
-        <item>Onion</item>
-        <item>Sausage</item>
-        <item>Milk</item>
-        <item>Garlic</item>
-        <item>Beef</item>
-        <item>Veggies</item>
-        <item>Olive</item>
-        <item>Cheese</item>
-        <item>Tuna</item>
-        <item>Mushrooms</item>
-    </string-array>
 
 </resources>
