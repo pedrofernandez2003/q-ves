@@ -1,5 +1,4 @@
 package com.example.hotspot;
-import com.example.hotspot.EchoThread;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
@@ -45,7 +44,7 @@ public class TraerJuegos extends AppCompatActivity {
     static final int MESSAGE_READ=1;
 //    private ServerClass serverClass;
     private ClientClass clientClass;
-//    private SendReceive sendReceive;
+    private SendReceive sendReceive;
     private TextView textoCargando, IPDispositivo;
 
 
@@ -55,18 +54,41 @@ public class TraerJuegos extends AppCompatActivity {
     private Controlador controlador;
     private Juego juego;
     private Equipo equipo;
+    private Button botonMandar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_traer_juegos);
         textoCargando = findViewById(R.id.textoCargando);
+        botonMandar = findViewById(R.id.botonMandar);
         IPDispositivo = findViewById(R.id.ipDispositivo);
         wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         currentConfig=new WifiConfiguration();
         juego=new Juego();
         equipo=new Equipo();
         mostrarPlantillas(this.getApplicationContext());
+
+        botonMandar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("tocaste mandar");
+                ArrayList<String> datos=new ArrayList<>();
+                datos.add(juego.serializar());
+//                datos.add("\"turno\":1");
+                datos.add(equipo.serializar());
+                Mensaje mensaje=new Mensaje("comenzar",datos);
+                String msg=mensaje.serializar();
+                System.out.println(msg);
+                byte[] bytesMsg = msg.getBytes();
+//                for (int i = 0; i < bytesMsg.length; i++) {
+//                    System.out.println(bytesMsg[i]);
+//                }
+                System.out.println("tocaste comenzar");
+                Write escribir = new Write();
+                escribir.execute(bytesMsg);
+            }
+        });
     }
 
     private void mostrarPlantillas(Context context)  {
@@ -78,10 +100,14 @@ public class TraerJuegos extends AppCompatActivity {
                     LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
                     Button button = new Button(context);
+                    TextView nombrePlantilla = new TextView(context);
                     button.setLayoutParams(lp);
-                    button.setText(plantilla.getNombre());
-                    button.setBackgroundColor(939393);
+                    nombrePlantilla.setLayoutParams(lp);
+                    nombrePlantilla.setText(plantilla.getNombre());
+                    button.setText(">");
+                    button.setBackgroundColor(999999);
                     llBotonera.addView(button);
+                    llBotonera.addView(nombrePlantilla);
                     button.setOnClickListener(new View.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
@@ -94,20 +120,6 @@ public class TraerJuegos extends AppCompatActivity {
 //                            clientClass = new ClientClass("192.168.43.1");
 //                            clientClass.start();
                             textoCargando.setVisibility(View.VISIBLE);
-//                            ArrayList<String> datos=new ArrayList<>();
-//                            datos.add(juego.serializar());
-////                datos.add("\"turno\":1");
-//                            datos.add(equipo.serializar());
-//                            Mensaje mensaje=new Mensaje("comenzar",datos);
-//                            String msg=mensaje.serializar();
-//                            System.out.println(msg);
-//                            byte[] bytesMsg = msg.getBytes();
-//                            for (int i = 0; i < bytesMsg.length; i++) {
-//                                System.out.println(bytesMsg[i]);
-//                            }
-//                            System.out.println("tocaste comenzar");
-//                            Write escribir = new Write();
-//                            escribir.execute(bytesMsg);
                         }
                     });
                 }
@@ -122,20 +134,95 @@ public class TraerJuegos extends AppCompatActivity {
                 case MESSAGE_READ:
                     byte[] readBuff = (byte[]) msg.obj;
                     String tempMsg = new String(readBuff, 0, msg.arg1);
-                    System.out.println(tempMsg);
-                    Gson json = new Gson();
-                    Mensaje mensaje= json.fromJson(tempMsg, Mensaje.class);
-                    Juego juego= json.fromJson(mensaje.getDatos().get(0), Juego.class);
-                    Equipo equipo= json.fromJson(mensaje.getDatos().get(1), Equipo.class);
-                    System.out.println(juego.getCodigo());
-                    System.out.println(equipo.getNombre());
-                    Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
+                    System.out.println("mensaje recibido "+tempMsg);
+                    if(!tempMsg.contains("�")) {
+                        Gson json = new Gson();
+                        Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
+                        Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
+                        Equipo equipo = json.fromJson(mensaje.getDatos().get(1), Equipo.class);
+                        System.out.println(juego.getCodigo());
+                        System.out.println(equipo.getNombre());
+                        Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
+                    }
                     break;
             }
             return true;
         }
     });
 
+    private class SendReceive extends Thread {
+        private Socket socket;
+        private InputStream inputStream;
+        private OutputStream outputStream;
+
+        public SendReceive(Socket skt) {
+            System.out.println("entre al constructor");
+            socket = skt;
+            try {
+                System.out.println("se construyo el sendReceive");
+                inputStream = socket.getInputStream();
+                outputStream = socket.getOutputStream();
+            } catch (IOException e) {
+                System.out.println("entre al catch");
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void run() {
+            byte[] buffer = new byte[1024];
+            int bytes;
+            while (socket != null) {
+                try {
+                    bytes = inputStream.read(buffer);
+                    if (bytes > 0) {
+                        handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        public void write(byte[] bytes) {
+            try {
+                outputStream.write(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class ThreadedEchoServer extends Thread {
+        static final int PORT = 7028;
+        private ArrayList<SendReceive> hijos=new ArrayList<>();
+
+
+        public void run() {
+            ServerSocket serverSocket = null;
+            Socket socket = null;
+
+            try {
+                serverSocket = new ServerSocket(PORT);
+                System.out.println("creo el socket");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            while (true) {
+                System.out.println("a");
+                try {
+                    socket = serverSocket.accept();
+                    System.out.println("b");
+                } catch (IOException e) {
+                    System.out.println("I/O error: " + e);
+                }
+                SendReceive nuevoHijo=new SendReceive(socket);
+//                sendReceive=nuevoHijo;//aca igualamos, pero cuando sean mas de uno habria tener un arreglo o algo asi
+                hijos.add(nuevoHijo);
+                nuevoHijo.start();
+            }
+        }
+    }
 
     public class ClientClass extends Thread {
         Socket socket;
@@ -151,69 +238,25 @@ public class TraerJuegos extends AppCompatActivity {
             try {
                 System.out.println("entre al run client");
                 socket.connect(new InetSocketAddress(hostAdd, 7028), 5000);
-//                sendReceive = new SendReceive(socket);
-//                sendReceive.start();
+                sendReceive = new SendReceive(socket);
+                sendReceive.start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-//    private class SendReceive extends Thread {
-//        private Socket socket;
-//        private InputStream inputStream;
-//        private OutputStream outputStream;
-//
-//        public SendReceive(Socket skt) {
-//            System.out.println("entre al constructor");
-//            socket = skt;
-//            try {
-//                System.out.println("se construyo el sendReceive");
-//                inputStream = socket.getInputStream();
-//                outputStream = socket.getOutputStream();
-//            } catch (IOException e) {
-//                System.out.println("entre al catch");
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        @Override
-//        public void run() {
-//            byte[] buffer = new byte[1024];
-//            int bytes;
-//            while (socket != null) {
-//                try {
-//                    bytes = inputStream.read(buffer);
-//                    if (bytes > 0) {
-//                        handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//
-//        public void write(byte[] bytes) {
-//            try {
-//                outputStream.write(bytes);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
-
-//    public class Write extends AsyncTask {
-//        @Override
-//        protected Object doInBackground(Object[] objects) {
-//            try {
-//                (EchoThread) objects[1].write((byte[]) objects[0]);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//    }
+    public class Write extends AsyncTask {
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            try {
+                sendReceive.write((byte[]) objects[0]); //esto para el cliente va bien
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 
 
     public static String getIPAddress(boolean useIPv4) {
