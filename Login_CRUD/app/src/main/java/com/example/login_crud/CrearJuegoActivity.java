@@ -3,12 +3,14 @@ package com.example.login_crud;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,12 +25,16 @@ public class CrearJuegoActivity extends AppCompatActivity  {
     ArrayList<String> listItems;
     boolean[] checkedItems;
     ArrayList<Integer> mUserItems = new ArrayList<>();
+    ImageView mImageView;
+//    ProgressDialog
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_juego);
 
+        
     mOrder = (Button) findViewById(R.id.btnOrder);
     ArrayList<String> nombresCategoria = new ArrayList<>();
     mItemSelected = (TextView) findViewById(R.id.tvItemSelected);
@@ -98,6 +104,9 @@ public class CrearJuegoActivity extends AppCompatActivity  {
             mDialog.show();
         }
     });
+
+
+
 }
 }
 
