@@ -43,14 +43,8 @@ public  abstract class DataManagerCategoria extends DataManager {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         System.out.println(document.getData());
-                        Color color_a_utilizar=Color.AMARILLO;
-                        for(Color color:Color.values()){
-                            if (document.getData().get("color").equals(color.toString())){
-                                color_a_utilizar=color;
-                            }
-                        }
                         List<Map<String, String>> tarjetas = (List<Map<String, String>>) document.getData().get("tarjeta");
-                        Categoria categoria = new Categoria((String) document.getData().get("nombre"), color_a_utilizar,tarjetas.size());
+                        Categoria categoria = new Categoria((String) document.getData().get("nombre"), (String) document.getData().get("color"),tarjetas.size());
                         categorias.add(categoria);
                     }
                     listener.traerDatos(categorias);
@@ -86,14 +80,8 @@ public  abstract class DataManagerCategoria extends DataManager {
                 String id = "";
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Color color_a_utilizar=Color.AMARILLO;
-                        for(Color color:Color.values()){
-                            if (document.getData().get("color").equals(color.toString())){
-                                color_a_utilizar=color;
-                            }
-                        }
                         List<Map<String, String>> tarjetas = (List<Map<String, String>>) document.getData().get("tarjeta");
-                        Categoria categoria = new Categoria((String) document.getData().get("nombre"), color_a_utilizar,tarjetas.size());
+                        Categoria categoria = new Categoria((String) document.getData().get("nombre"), (String) document.getData().get("color"),tarjetas.size());
                         listener.traer((Object) categoria);
                     }
                 } else {
@@ -104,7 +92,11 @@ public  abstract class DataManagerCategoria extends DataManager {
     }
 
 
-    public static void insertarCategoria(Categoria categoriaAInsertar, onInsertarListener listener) {
+    public static void insertarCategoria(Categoria categoria, onInsertarListener listener) {
+        Map<String, Object> categoriaAInsertar = new HashMap<>();
+        categoriaAInsertar.put("color",categoria.getColor().toString());
+        categoriaAInsertar.put("nombre",categoria.getNombre());
+        categoriaAInsertar.put("tarjetas",new ArrayList<>());
         DataManager.getDb().collection("categorias")
                 .add(categoriaAInsertar)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

@@ -10,12 +10,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.Listeners.onInsertarListener;
 import com.example.Listeners.onModificarListener;
 import com.example.Listeners.onTraerDatoListener;
 import com.example.Listeners.onTraerDatosListener;
@@ -58,15 +61,25 @@ public class CategoriasActivity extends FragmentActivity {
         traerDatos(context);
     }
 
-    public void aniadirCategoria(ArrayList<String> colores) {
+    public void aniadirCategoria(ArrayList<String> coloresYaSeleccionados) {
 
+        //Las primeas cuatro lineas crean la alerta que te sale ya con el xml que preparamos adentro
         LayoutInflater inflater = LayoutInflater.from(CategoriasActivity.this);
         View dialog_layout = inflater.inflate(R.layout.activity_aniadir_categoria, null);
         AlertDialog.Builder db = new AlertDialog.Builder(this);
         db.setView(dialog_layout);
+
+        //Empiezo a conseguir diferentes cosas de adentro de la alerta
         EditText nombre = dialog_layout.findViewById(R.id.nombreCategoria);
-        EditText color = dialog_layout.findViewById(R.id.colorCategoria);
         TextView colorRepetido = dialog_layout.findViewById(R.id.colorRepetido);
+
+        Spinner colores = (Spinner) dialog_layout.findViewById(R.id.opcionesColor);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        R.array.Colores, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        colores.setAdapter(adapter);
+
+
         db.setTitle("Nueva categoria");
         db.setPositiveButton("Añadir", null);
         final AlertDialog a = db.create();
@@ -77,12 +90,11 @@ public class CategoriasActivity extends FragmentActivity {
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        System.out.println("Entre onClick");
                         String nombreCategoria = nombre.getText().toString();
-                        String colorCategoria = color.getText().toString();
-                        if (!colores.contains(colorCategoria) && !nombreCategoria.equals("") && !colorCategoria.equals("")) {
-                            insertarCategoria(nombreCategoria, colorCategoria);
-                            System.out.println("Entre porq esta todo bien");
+                        String colorCategoria = String.valueOf(colores.getSelectedItem());
+                        if (true) {
+                            Categoria categoria=new Categoria(nombreCategoria,colorCategoria,0);
+                            insertarCategoria(categoria);
                             a.dismiss();
                         } else {
                             System.out.println("Entre algo mal");
@@ -100,25 +112,31 @@ public class CategoriasActivity extends FragmentActivity {
 
     }
 
-    private void insertarCategoria(String nombre, String color){
-        System.out.println("Inserto categoria");
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> categoria = new HashMap<>();
-        categoria.put("color", color);
-        categoria.put("nombre", nombre);
-        categoria.put("tarjeta", new ArrayList<>());
-        db.collection("categorias")
-                .add(categoria)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
-                });
+    private void insertarCategoria(Categoria categoria){
+        DataManagerCategoria.insertarCategoria(categoria, new onInsertarListener() {
+            @Override
+            public void insertar(boolean insertado) {
+                if (insertado){
+                    System.out.println("Siiiii");
+                }
+                else{
+                    System.out.println("Fallo algo en la base");
+                }
+            }
+        });
+    }
+    private void modificarCategoria(Categoria categoria, String nombreAnterior){
+        DataManagerCategoria.modificarDatosCategoria(nombreAnterior, categoria, new onModificarListener() {
+            @Override
+            public void modificar(boolean modificado) {
+                if (modificado){
+                    System.out.println("Suuu");
+                }
+                else{
+                    System.out.println("Nooo");
+                }
+            }
+        });
     }
 
     private ArrayList<String> traerDatos(Context context)  {
@@ -134,7 +152,7 @@ public class CategoriasActivity extends FragmentActivity {
                     Button button = new Button(context);
                     button.setLayoutParams(lp);
                     button.setText(categoria.getNombre()+" "+categoria.getCantidadTarjetas());
-                    button.setBackgroundColor(939393);
+                    button.setBackgroundColor(0);
                     llBotonera.addView(button);
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -146,15 +164,24 @@ public class CategoriasActivity extends FragmentActivity {
                                 startActivity(irATarjetas);
                             }
                             else{
+
+                                //Las primeas cuatro lineas crean la alerta que te sale ya con el xml que preparamos adentro
                                 LayoutInflater inflater = LayoutInflater.from(CategoriasActivity.this);
                                 View dialog_layout = inflater.inflate(R.layout.activity_aniadir_categoria, null);
                                 AlertDialog.Builder db = new AlertDialog.Builder(CategoriasActivity.this);
                                 db.setView(dialog_layout);
+
+                                //Empiezo a conseguir diferentes cosas de adentro de la alerta
                                 EditText nombre = dialog_layout.findViewById(R.id.nombreCategoria);
                                 nombre.setText(categoria.getNombre());
-                                EditText color = dialog_layout.findViewById(R.id.colorCategoria);
-                                color.setText(categoria.getColor().toString());
                                 TextView colorRepetido = dialog_layout.findViewById(R.id.colorRepetido);
+
+                                Spinner colores = (Spinner) dialog_layout.findViewById(R.id.opcionesColor);
+                                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CategoriasActivity.this,
+                                        R.array.Colores, android.R.layout.simple_spinner_item);
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                colores.setAdapter(adapter);
+
                                 db.setTitle("Modificar Categoria");
                                 db.setPositiveButton("Modificar", null);
                                 final AlertDialog a = db.create();
@@ -165,33 +192,16 @@ public class CategoriasActivity extends FragmentActivity {
                                         b.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View view) {
-                                                System.out.println("Entre onClick");
+                                                String nombreCategoria = nombre.getText().toString();
+                                                String colorCategoria = String.valueOf(colores.getSelectedItem());
+                                                Categoria categoriaNueva= new Categoria(nombreCategoria,colorCategoria,0);
                                                 DataManagerCategoria.traerIdCategoria(categoria.getNombre(), new onTraerDatoListener() {
                                                     @Override
                                                     public void traer(Object dato) {
-                                                        String nombreCategoria = nombre.getText().toString();
-                                                        String colorCategoria = color.getText().toString();
-                                                        for(Color color:Color.values()){
-                                                            if (colorCategoria.equals(color.toString())){
-                                                                categoria.setColor(color);
-                                                            }
-                                                        }
-                                                        categoria.setNombre(nombreCategoria);
-                                                        DataManagerCategoria.modificarDatosCategoria((String) dato, categoria, new onModificarListener() {
-                                                            @Override
-                                                            public void modificar(boolean modificado) {
-                                                                if (modificado){
-                                                                    Toast.makeText(CategoriasActivity.this, "Todo bien!", Toast.LENGTH_SHORT).show();
-                                                                    a.dismiss();
-                                                                }
-                                                                else{
-                                                                    Toast.makeText(CategoriasActivity.this, "Problemas en la base, disculpa", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            }
-                                                        });
+                                                        modificarCategoria(categoriaNueva, (String) dato);
                                                     }
                                                 });
-
+                                                a.dismiss();
                                             }
                                         });
                                     }

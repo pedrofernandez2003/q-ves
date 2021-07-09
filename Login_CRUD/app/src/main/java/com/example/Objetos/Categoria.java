@@ -6,9 +6,13 @@ public class Categoria {
     private Color color;
     private int cantidadTarjetas;
 
-    public Categoria(String nombre, Color color, int cantidadTarjetas){
+    public Categoria(String nombre, String nombreColor, int cantidadTarjetas){
+        for(Color color:Color.values()){
+            if (nombreColor.equals(color.toString())){
+                this.color= color;
+            }
+        }
         this.nombre = nombre;
-        this.color = color;
         this.cantidadTarjetas=cantidadTarjetas;
     }
     public Categoria(){
@@ -17,10 +21,6 @@ public class Categoria {
 
     public int getCantidadTarjetas() {
         return cantidadTarjetas;
-    }
-
-    public void setCantidadTarjetas(int cantidadTarjetas) {
-        this.cantidadTarjetas = cantidadTarjetas;
     }
 
     public String getNombre() {
@@ -38,4 +38,6 @@ public class Categoria {
     public void setColor(Color color) {
         this.color = color;
     }
+
+
 }

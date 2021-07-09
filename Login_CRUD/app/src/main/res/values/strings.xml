@@ -24,4 +24,18 @@
     <string name="ok_label">OK</string>
     <string name="dismiss_label">Dismiss</string>
 
+    <string-array name="Colores">
+        <item>AMARILLO</item>
+        <item>VERDE</item>
+        <item>CELESTE</item>
+        <item>TURQUESA</item>
+        <item>AZUL</item>
+        <item>VIOLETA</item>
+        <item>GRIS</item>
+        <item>ROJO</item>
+        <item>ROSA</item>
+        <item>NARANJA</item>
+        <item>NEGRO</item>
+    </string-array>
+
 </resources>
