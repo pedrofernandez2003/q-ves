@@ -140,6 +140,7 @@ public class PersonajesActivity extends AppCompatActivity {
 
             // adding listeners on upload
             // or failure of image
+            // ref.getDownloadUrl() implementar esto y guardar este token en la base. Despues con el picasso agarrarla
             ref.putFile(filePath)
                     .addOnSuccessListener(
                             new OnSuccessListener<UploadTask.TaskSnapshot>() {
