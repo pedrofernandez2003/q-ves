@@ -43,6 +43,8 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName" />
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -127,14 +129,14 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoriasSeleccionadas"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toTopOf="@+id/categoriasSeleccionadas" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
