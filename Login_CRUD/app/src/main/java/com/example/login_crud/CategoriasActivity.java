@@ -40,7 +40,7 @@ public class CategoriasActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Context context = this.getApplicationContext();
-        ArrayList<String> coloresUsados = traerDatos(context);
+        ArrayList<String> coloresUsados = traerCategorias(context);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tarjetas_y_categorias);
         Button aniadirCategoria = (Button) findViewById(R.id.aniadirCategoria);
@@ -49,6 +49,9 @@ public class CategoriasActivity extends FragmentActivity {
             public void onClick(View v) {
                 System.out.println("on click nueva categoria");
                 aniadirCategoria(coloresUsados);
+                LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
+                llBotonera.removeAllViews();
+                traerCategorias(context);
             }
         });
         Button modificarCategoria= (Button) findViewById(R.id.modificarCategoria);
@@ -58,7 +61,6 @@ public class CategoriasActivity extends FragmentActivity {
                 ModoModificar=!ModoModificar;
             }
         });
-        traerDatos(context);
     }
 
     public void aniadirCategoria(ArrayList<String> coloresYaSeleccionados) {
@@ -95,6 +97,7 @@ public class CategoriasActivity extends FragmentActivity {
                         if (true) {
                             Categoria categoria=new Categoria(nombreCategoria,colorCategoria,0);
                             insertarCategoria(categoria);
+
                             a.dismiss();
                         } else {
                             System.out.println("Entre algo mal");
@@ -117,10 +120,10 @@ public class CategoriasActivity extends FragmentActivity {
             @Override
             public void insertar(boolean insertado) {
                 if (insertado){
-                    System.out.println("Siiiii");
+                    Toast.makeText(CategoriasActivity.this, "Insertado Correctamente", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    System.out.println("Fallo algo en la base");
+                    Toast.makeText(CategoriasActivity.this, "Fallo en la base", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -130,16 +133,16 @@ public class CategoriasActivity extends FragmentActivity {
             @Override
             public void modificar(boolean modificado) {
                 if (modificado){
-                    System.out.println("Suuu");
+                    Toast.makeText(CategoriasActivity.this, "Modificado Correctamente", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    System.out.println("Nooo");
+                    Toast.makeText(CategoriasActivity.this, "Fallo en la base", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private ArrayList<String> traerDatos(Context context)  {
+    private ArrayList<String> traerCategorias(Context context)  {
         ArrayList<String> colores = new ArrayList<>();
         DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
@@ -158,6 +161,7 @@ public class CategoriasActivity extends FragmentActivity {
                         @Override
                         public void onClick(View v) {
                             if (!ModoModificar){
+
                                 Intent irATarjetas = new Intent(CategoriasActivity.this, TarjetasActivity.class);
                                 irATarjetas.putExtra("Color",categoria.getColor().getCodigo());
                                 irATarjetas.putExtra("Nombre",categoria.getNombre());
@@ -199,8 +203,11 @@ public class CategoriasActivity extends FragmentActivity {
                                                     @Override
                                                     public void traer(Object dato) {
                                                         modificarCategoria(categoriaNueva, (String) dato);
+                                                        llBotonera.removeAllViews();
+                                                        traerCategorias(context);
                                                     }
                                                 });
+
                                                 a.dismiss();
                                             }
                                         });

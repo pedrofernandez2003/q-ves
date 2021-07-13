@@ -35,7 +35,6 @@ public  abstract class DataManagerCategoria extends DataManager {
 
     public static void traerCategorias(onTraerDatosListener listener) {
         ArrayList<Object> categorias = new ArrayList<Object>();
-        //Preguntar por que corno me duplica los datos este get ...
         DataManager.getDb().collection("categorias").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

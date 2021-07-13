@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -52,6 +53,7 @@ public class TarjetasActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 aniadirTarjeta(v,nombreCategoria);
+                traerTarjetas(context,nombreCategoria,color);
             }
         });
         Button modificarTarjeta= (Button) findViewById(R.id.modificarTarjeta);
@@ -86,30 +88,53 @@ public class TarjetasActivity extends FragmentActivity {
                         String contenidoTarjeta = contenido.getText().toString();
                         String yapaTarjeta = yapa.getText().toString();
                         Tarjeta tarjeta= new Tarjeta(contenidoTarjeta,yapaTarjeta);
-                        DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
-                            @Override
-                            public void traer(Object dato) {
-                                DataManagerCategoria.insertarTarjeta(tarjeta,(String) dato, new onInsertarListener() {
-                                    @Override
-                                    public void insertar(boolean insertado) {
-                                        if (insertado){
-                                            Toast.makeText(TarjetasActivity.this, "Insertado!", Toast.LENGTH_SHORT).show();
-                                            a.dismiss();
-                                        }
-                                        else {
-                                            Toast.makeText(TarjetasActivity.this, "Error al insertar :(", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                            }
-                        });
-
+                        insertarTarjeta(tarjeta,nombreCategoria);
+                        a.dismiss();
+                        
                     }
                 });
             }
         });
         a.show();
 
+    }
+
+    private void insertarTarjeta(Tarjeta tarjeta, String nombreCategoria){
+        DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
+            @Override
+            public void traer(Object dato) {
+                DataManagerCategoria.insertarTarjeta(tarjeta,(String) dato, new onInsertarListener() {
+                    @Override
+                    public void insertar(boolean insertado) {
+                        if (insertado){
+                            Toast.makeText(TarjetasActivity.this, "Insertado!", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(TarjetasActivity.this, "Error al insertar :(", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void modificarTarjeta(Tarjeta tarjetaVieja,Tarjeta tarjetaActualizada,String nombreCategoria){
+        DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
+            @Override
+            public void traer(Object dato) {
+                DataManagerCategoria.modificarDatosTarjeta((String) dato, tarjetaActualizada, tarjetaVieja, new onModificarListener() {
+                    @Override
+                    public void modificar(boolean modificado) {
+                        if (modificado){
+                            Toast.makeText(TarjetasActivity.this, "Modifico Correctamente", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(TarjetasActivity.this, "Problemas en la base, intentar de vuelta", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
     }
 
 
@@ -137,14 +162,17 @@ public class TarjetasActivity extends FragmentActivity {
                                 @Override
                                 public void onClick(View v) {
                                     if (ModoModificar){
+
                                         LayoutInflater inflater = LayoutInflater.from(TarjetasActivity.this);
                                         View dialog_layout = inflater.inflate(R.layout.activity_aniadir_tarjeta, null);
                                         AlertDialog.Builder db = new AlertDialog.Builder(TarjetasActivity.this);
                                         db.setView(dialog_layout);
+
                                         EditText contenido = dialog_layout.findViewById(R.id.contenido);
                                         contenido.setText(tarjeta.getContenido());
                                         EditText yapa = dialog_layout.findViewById(R.id.yapa);
                                         yapa.setText(tarjeta.getYapa());
+
                                         db.setTitle("Nueva Tarjeta");
                                         db.setPositiveButton("Modificar", null);
                                         final AlertDialog a = db.create();
@@ -155,28 +183,16 @@ public class TarjetasActivity extends FragmentActivity {
                                                 b.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
+
                                                         String contenidoTarjeta = contenido.getText().toString();
                                                         String yapaTarjeta = yapa.getText().toString();
                                                         Tarjeta tarjetaNueva= new Tarjeta(contenidoTarjeta,yapaTarjeta);
-                                                        DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
-                                                            @Override
-                                                            public void traer(Object dato) {
-                                                                DataManagerCategoria.modificarDatosTarjeta((String) dato, tarjetaNueva, tarjeta, new onModificarListener() {
-                                                                    @Override
-                                                                    public void modificar(boolean modificado) {
-                                                                        if (modificado){
-                                                                            Toast.makeText(TarjetasActivity.this, "Todo bien!", Toast.LENGTH_SHORT).show();
-                                                                            a.dismiss();
-                                                                        }
-                                                                        else{
-                                                                            Toast.makeText(TarjetasActivity.this, "Problemas en la base, disculpa", Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    }
-                                                                });
-                                                            }
-                                                        });
+                                                        modificarTarjeta(tarjeta,tarjetaNueva,nombreCategoria);
 
+                                                        llBotonera.removeAllViews();
+                                                        traerTarjetas(context,nombreCategoria,color);
 
+                                                        a.dismiss();
                                                     }
                                                 });
                                             }

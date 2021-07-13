@@ -24,7 +24,7 @@
         <activity android:name=".AdminElementosActivity" />
         <activity android:name=".AdministradorActivity" />
         <activity android:name=".CrearJuegoActivity" >
-            
+
         </activity>
 
         <activity android:name=".CategoriasActivity" >
