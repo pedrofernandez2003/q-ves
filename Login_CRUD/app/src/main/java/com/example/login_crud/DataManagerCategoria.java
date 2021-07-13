@@ -43,7 +43,10 @@ public  abstract class DataManagerCategoria extends DataManager {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         System.out.println(document.getData());
-                        List<Map<String, String>> tarjetas = (List<Map<String, String>>) document.getData().get("tarjeta");
+                        ArrayList<Map<String, String>> tarjetas = (ArrayList<Map<String, String>>) document.getData().get("tarjeta");
+                        if(tarjetas==null){
+                            tarjetas= new ArrayList<>();
+                        }
                         Categoria categoria = new Categoria((String) document.getData().get("nombre"), (String) document.getData().get("color"),tarjetas.size());
                         categorias.add(categoria);
                     }
