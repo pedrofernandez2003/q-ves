@@ -42,19 +42,18 @@ import java.util.List;
 public class TraerJuegos extends AppCompatActivity {
     private static final String TAG = "";
     static final int MESSAGE_READ=1;
-//    private ServerClass serverClass;
     private ClientClass clientClass;
     private SendReceive sendReceive;
     private TextView textoCargando, IPDispositivo;
+    private ArrayList<SendReceive> hijos=new ArrayList<>();
 
 
     private WifiManager wifiManager;
     private WifiConfiguration currentConfig;
     private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
-    private Controlador controlador;
     private Juego juego;
-    private Equipo equipo;
     private Button botonMandar;
+    private ThreadedEchoServer server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,27 +65,24 @@ public class TraerJuegos extends AppCompatActivity {
         wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         currentConfig=new WifiConfiguration();
         juego=new Juego();
-        equipo=new Equipo();
         mostrarPlantillas(this.getApplicationContext());
 
         botonMandar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("tocaste mandar");
-                ArrayList<String> datos=new ArrayList<>();
-                datos.add(juego.serializar());
-//                datos.add("\"turno\":1");
-                datos.add(equipo.serializar());
-                Mensaje mensaje=new Mensaje("comenzar",datos);
-                String msg=mensaje.serializar();
-                System.out.println(msg);
-                byte[] bytesMsg = msg.getBytes();
-//                for (int i = 0; i < bytesMsg.length; i++) {
-//                    System.out.println(bytesMsg[i]);
-//                }
-                System.out.println("tocaste comenzar");
-                Write escribir = new Write();
-                escribir.execute(bytesMsg);
+                String juegoSerializado=juego.serializar();
+                for (int i=0;i<hijos.size();i++){ //le manda a todos los hijos la informacion de la partida
+                    ArrayList<String> datos=new ArrayList<>();
+                    datos.add(juegoSerializado);
+                    datos.add("\"turno\":"+i);
+                    Mensaje mensaje=new Mensaje("comenzar",datos);
+                    String msg=mensaje.serializar();
+                    System.out.println(msg);
+                    byte[] bytesMsg = msg.getBytes();
+                    Write escribir = new Write();
+                    escribir.execute(bytesMsg,i);
+                }
             }
         });
     }
@@ -100,22 +96,18 @@ public class TraerJuegos extends AppCompatActivity {
                     LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
                     Button button = new Button(context);
-                    TextView nombrePlantilla = new TextView(context);
                     button.setLayoutParams(lp);
-                    nombrePlantilla.setLayoutParams(lp);
-                    nombrePlantilla.setText(plantilla.getNombre());
-                    button.setText(">");
+                    button.setText(plantilla.getNombre());
                     button.setBackgroundColor(999999);
                     llBotonera.addView(button);
-                    llBotonera.addView(nombrePlantilla);
                     button.setOnClickListener(new View.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void onClick(View v) {
                             System.out.println("deberia comenzar la partida");
                             IPDispositivo.setText(getIPAddress(true));
-//                            turnOnHotspot();
-                            ThreadedEchoServer server=new ThreadedEchoServer();
+                            turnOnHotspot();
+                            server=new ThreadedEchoServer();
                             server.start();
 //                            clientClass = new ClientClass("192.168.43.1");
 //                            clientClass.start();
@@ -139,9 +131,8 @@ public class TraerJuegos extends AppCompatActivity {
                         Gson json = new Gson();
                         Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
                         Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
-                        Equipo equipo = json.fromJson(mensaje.getDatos().get(1), Equipo.class);
                         System.out.println(juego.getCodigo());
-                        System.out.println(equipo.getNombre());
+                        System.out.println(mensaje.getDatos().get(1));
                         Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -195,8 +186,6 @@ public class TraerJuegos extends AppCompatActivity {
 
     public class ThreadedEchoServer extends Thread {
         static final int PORT = 7028;
-        private ArrayList<SendReceive> hijos=new ArrayList<>();
-
 
         public void run() {
             ServerSocket serverSocket = null;
@@ -209,15 +198,12 @@ public class TraerJuegos extends AppCompatActivity {
                 e.printStackTrace();
             }
             while (true) {
-                System.out.println("a");
                 try {
                     socket = serverSocket.accept();
-                    System.out.println("b");
                 } catch (IOException e) {
                     System.out.println("I/O error: " + e);
                 }
                 SendReceive nuevoHijo=new SendReceive(socket);
-//                sendReceive=nuevoHijo;//aca igualamos, pero cuando sean mas de uno habria tener un arreglo o algo asi
                 hijos.add(nuevoHijo);
                 nuevoHijo.start();
             }
@@ -240,6 +226,7 @@ public class TraerJuegos extends AppCompatActivity {
                 socket.connect(new InetSocketAddress(hostAdd, 7028), 5000);
                 sendReceive = new SendReceive(socket);
                 sendReceive.start();
+                hijos.add(sendReceive);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -250,7 +237,7 @@ public class TraerJuegos extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] objects) {
             try {
-                sendReceive.write((byte[]) objects[0]); //esto para el cliente va bien
+                hijos.get((Integer) objects[1]).write((byte[]) objects[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
