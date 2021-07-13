@@ -24,6 +24,13 @@
         <activity android:name=".AdminElementosActivity" />
         <activity android:name=".AdministradorActivity" />
         <activity android:name=".CrearJuegoActivity" >
+<<<<<<< HEAD
+=======
+
+        </activity>
+
+        <activity android:name=".CategoriasActivity" >
+>>>>>>> 2db969fe30deaee30f78e371d69e098c63ac2858
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
