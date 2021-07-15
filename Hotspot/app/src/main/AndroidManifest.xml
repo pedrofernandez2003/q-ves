@@ -18,9 +18,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Hotspot">
         <activity
+            android:name=".MainActivity2"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/Theme.Hotspot.NoActionBar"></activity>
+        <activity
+            android:name=".Jugar"
+            android:label="@string/title_activity_jugar"
+            android:theme="@style/Theme.Hotspot.NoActionBar" />
+        <activity
             android:name=".TraerJuegos"
             android:label="@string/title_activity_traer_juegos"
-            android:theme="@style/Theme.Hotspot.NoActionBar"></activity>
+            android:theme="@style/Theme.Hotspot.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

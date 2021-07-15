@@ -34,6 +34,7 @@
         android:id="@+id/botonMandar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/botonMandar" />
+        android:text="@string/botonMandar"
+        android:visibility="invisible" />
 
 </LinearLayout>

@@ -20,4 +20,44 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="textoCargando">Cargando</string>
     <string name="botonMandar">Mandar datos</string>
+    <string name="title_activity_jugar">Jugar</string>
+    <string name="title_activity_main2">MainActivity</string>
+
+    <string name="inputCodigo">Codigo</string>
+    <string name="iniciar_sesion">Inicar Sesion</string>
+    <string name="iniciar">Inicar</string>
+    <string name="me_olvide_la_contrasenia">Me olvide la contrasenia</string>
+    <string name="invalid_mail">mail incorreto</string>
+    <string name="invalid_password">contrasenia incorreta</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="mail">mail</string>
+    <string name="contrasenia">contrasenia</string>
+    <string name="gmail">gmail</string>
+    <string name="facebook">facebook</string>
+    <string name="iniciarr">iniciar</string>
+    <string name="registrarse_con_mail">registrarse con mail</string>
+    <string name="subir_imagen">Subir Imagen</string>
+    <string name="seleccionar_foto">Seleccionar Foto</string>
+    <string name="subir_foto">subir Foto</string>
+    <string name="yapa">Yapa</string>
+    <string name="contenido">Contenido</string>
+    <string name="clear_all_label">limpiar</string>
+    <string name="make_an_order">Make an order</string>
+    <string name="dialog_title">Items available in a shop</string>
+    <string name="ok_label">OK</string>
+    <string name="dismiss_label">Dismiss</string>
+    <string name="unirse"><![CDATA[>]]></string>
+    <string-array name="Colores">
+        <item>AMARILLO</item>
+        <item>VERDE</item>
+        <item>CELESTE</item>
+        <item>TURQUESA</item>
+        <item>AZUL</item>
+        <item>VIOLETA</item>
+        <item>GRIS</item>
+        <item>ROJO</item>
+        <item>ROSA</item>
+        <item>NARANJA</item>
+        <item>NEGRO</item>
+    </string-array>
 </resources>

@@ -1,5 +1,12 @@
 package com.example.hotspot;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
@@ -7,30 +14,20 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.content.Context;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonElement;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -39,103 +36,87 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
-public class TraerJuegos extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity {
     private static final String TAG = "";
-    static final int MESSAGE_READ=1;
-//    private ClientClass clientClass;
-    private SendReceive sendReceive;
-    private TextView textoCargando, IPDispositivo;
-    private ArrayList<SendReceive> hijos=new ArrayList<>();
+    private Button botonServer, botonCliente, botonComenzar;
+    private TextView IPDispositivo;
+    private TextInputEditText inputIP;
 
+    static final int MESSAGE_READ=1;
+    private ServerClass serverClass;
+    private ClientClass clientClass;
+    private SendReceive sendReceive;
 
     private WifiManager wifiManager;
     private WifiConfiguration currentConfig;
     private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
-    private Juego juego;
-    private Button botonMandar;
-    private ThreadedEchoServer server;
+    private Controlador controlador;
 
+
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent irJuegos = new Intent(this, TraerJuegos.class);
+        startActivity(irJuegos);
+        controlador=new Controlador();
+        Juego juego=new Juego();
+        Equipo equipo=new Equipo();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_traer_juegos);
-        textoCargando = findViewById(R.id.textoCargando);
-        botonMandar = findViewById(R.id.botonMandar);
-        IPDispositivo = findViewById(R.id.ipDispositivo);
+        setContentView(R.layout.activity_main);
+//        getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         currentConfig=new WifiConfiguration();
-        juego=new Juego();
-        mostrarPlantillas(this.getApplicationContext());
+        IPDispositivo = findViewById(R.id.IPDispositivo);
+        inputIP = findViewById(R.id.inputIPServer);
+        botonServer = findViewById(R.id.botonServer);
+        botonComenzar = findViewById(R.id.botonComenzar);
+        botonCliente = findViewById(R.id.botonCliente);
+        IPDispositivo.setText(getIPAddress(true));
 
-        botonMandar.setOnClickListener(new View.OnClickListener() {
+        botonServer.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                System.out.println("tocaste mandar");
-                String juegoSerializado=juego.serializar();
-                for (int i=0;i<hijos.size();i++){ //le manda a todos los hijos la informacion de la partida
-                    ArrayList<String> datos=new ArrayList<>();
-                    datos.add(juegoSerializado);
-                    datos.add("\"turno\":"+i);
-                    Mensaje mensaje=new Mensaje("comenzar",datos);
-                    String msg=mensaje.serializar();
-                    System.out.println(msg);
-                    byte[] bytesMsg = msg.getBytes();
-                    Write escribir = new Write();
-                    escribir.execute(bytesMsg,i);
-                }
-                empezarJuego();
+                turnOnHotspot();
+                System.out.println("tocaste server");
+                serverClass = new ServerClass();
+                serverClass.start();
             }
         });
-    }
 
-    Handler handlerCantHijos = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(@NonNull Message msg) {
-            if(hijos.size() >= 1){
-                botonMandar.setVisibility(View.VISIBLE);
-            }
-            return true;
-        }
-    });
-
-    private void mostrarPlantillas(Context context)  {
-        DataManagerPlantillas.traerPlantillas(new onTraerDatosListener() {
+        botonCliente.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void traerDatos(ArrayList<Object> datos) {
-                for (Object PlantillaObject:datos) {
-                    Plantilla plantilla= (Plantilla) PlantillaObject;
-                    LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
-                    Button button = new Button(context);
-                    button.setLayoutParams(lp);
-                    button.setText(plantilla.getNombre());
-                    button.setBackgroundColor(999999);
-                    llBotonera.addView(button);
-
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @RequiresApi(api = Build.VERSION_CODES.O)
-                        @Override
-                        public void onClick(View v) {
-                            System.out.println("deberia comenzar la partida");
-                            IPDispositivo.setText(getIPAddress(true));
-//                            turnOnHotspot();
-                            textoCargando.setVisibility(View.VISIBLE);
-                            server=new ThreadedEchoServer();
-                            server.start();
-//                            botonMandar.setVisibility(View.VISIBLE);
-//                            clientClass = new ClientClass("192.168.43.1");
-//                            clientClass.start();
-                        }
-                    });
-                }
+            public void onClick(View v) {//aca agregamos la conexion automatica a la red?
+                System.out.println("tocaste cliente");
+                String ipServer = inputIP.getText().toString();
+                System.out.println(ipServer);
+                clientClass = new ClientClass(ipServer);
+                clientClass.start();
             }
         });
-    }
-    private void empezarJuego(){
-        Intent partida = new Intent(this, Jugar.class);
-        startActivity(partida);
+
+        botonComenzar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<String> datos=new ArrayList<>();
+                datos.add(juego.serializar());
+//                datos.add("\"turno\":1");
+                datos.add(equipo.serializar());
+                Mensaje mensaje=new Mensaje("comenzar",datos);
+                String msg=mensaje.serializar();
+                System.out.println(msg);
+                byte[] bytesMsg = msg.getBytes();
+                for (int i = 0; i < bytesMsg.length; i++) {
+                    System.out.println(bytesMsg[i]);
+                }
+                System.out.println("tocaste comenzar");
+                Write escribir = new Write();
+                escribir.execute(bytesMsg);
+            }
+        });
     }
 
     Handler handler = new Handler(new Handler.Callback() {
@@ -145,23 +126,38 @@ public class TraerJuegos extends AppCompatActivity {
                 case MESSAGE_READ:
                     byte[] readBuff = (byte[]) msg.obj;
                     String tempMsg = new String(readBuff, 0, msg.arg1);
-                    System.out.println("mensaje recibido "+tempMsg);
-                    try {
-                        Gson json = new Gson();
-                        Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
-                        Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
-                        System.out.println(juego.getCodigo());
-                        System.out.println(mensaje.getDatos().get(1));
-                        Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
-                        empezarJuego();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    System.out.println(tempMsg);
+                    Gson json = new Gson();
+                    Mensaje mensaje= json.fromJson(tempMsg, Mensaje.class);
+                    Juego juego= json.fromJson(mensaje.getDatos().get(0), Juego.class);
+                    Equipo equipo= json.fromJson(mensaje.getDatos().get(1), Equipo.class);
+                    System.out.println(juego.getCodigo());
+                    System.out.println(equipo.getNombre());
+                    Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                     break;
             }
             return true;
         }
     });
+
+    public class ServerClass extends Thread {
+        Socket socket;
+        ServerSocket serverSocket;
+
+        @Override
+        public void run() {
+            try {
+                System.out.println("entre al run server");
+                serverSocket = new ServerSocket(7028);
+                socket = serverSocket.accept();
+                sendReceive = new SendReceive(socket);
+                sendReceive.start();
+            } catch (Exception e) {
+                System.out.println("entre al catch");
+                e.printStackTrace();
+            }
+        }
+    }
 
     private class SendReceive extends Thread {
         private Socket socket;
@@ -206,68 +202,39 @@ public class TraerJuegos extends AppCompatActivity {
         }
     }
 
-    public class ThreadedEchoServer extends Thread {
-        static final int PORT = 7028;
+    public class ClientClass extends Thread {
+        Socket socket;
+        String hostAdd;
 
+        public ClientClass(String hostAddress) {
+            hostAdd = hostAddress;
+            socket = new Socket();
+        }
+
+        @Override
         public void run() {
-            ServerSocket serverSocket = null;
-            Socket socket = null;
-
             try {
-                serverSocket = new ServerSocket(PORT);
-                System.out.println("creo el socket");
+                System.out.println("entre al run client");
+                socket.connect(new InetSocketAddress(hostAdd, 7028), 5000);
+                sendReceive = new SendReceive(socket);
+                sendReceive.start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            while (true) {
-                try {
-                    socket = serverSocket.accept();
-                } catch (IOException e) {
-                    System.out.println("I/O error: " + e);
-                }
-                SendReceive nuevoHijo=new SendReceive(socket);
-                hijos.add(nuevoHijo);
-                handlerCantHijos.obtainMessage().sendToTarget();
-                nuevoHijo.start();
-            }
         }
     }
-
-//    public class ClientClass extends Thread {
-//        Socket socket;
-//        String hostAdd;
-//
-//        public ClientClass(String hostAddress) {
-//            hostAdd = hostAddress;
-//            socket = new Socket();
-//        }
-//
-//        @Override
-//        public void run() {
-//            try {
-//                System.out.println("entre al run client");
-//                socket.connect(new InetSocketAddress(hostAdd, 7028), 5000);
-//                sendReceive = new SendReceive(socket);
-//                sendReceive.start();
-//                hijos.add(sendReceive);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
     public class Write extends AsyncTask {
         @Override
         protected Object doInBackground(Object[] objects) {
             try {
-                hijos.get((Integer) objects[1]).write((byte[]) objects[0]);
+                sendReceive.write((byte[]) objects[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
         }
     }
-
 
     public static String getIPAddress(boolean useIPv4) {
         try {
