@@ -22,9 +22,10 @@ import com.example.Listeners.onTraerDatosListener;
 import com.example.Objetos.Categoria;
 import com.example.Objetos.Member;
 import com.example.Objetos.ViewHolder;
-//import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 
 import java.util.ArrayList;
@@ -47,11 +48,11 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         mOrder = (Button) findViewById(R.id.btnOrder);
         ArrayList<String> nombresCategoria = new ArrayList<>();
         mItemSelected = (TextView) findViewById(R.id.tvItemSelected);
-//        mRecyclerView = findViewById(R.id.recyclerview);
-//        mRecyclerView.setHasFixedSize(true);
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        firebaseDatabase = FirebaseDatabase.getInstance();
-//        reference = firebaseDatabase.getReference("Data");
+        mRecyclerView = findViewById(R.id.recyclerview);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        reference = firebaseDatabase.getReference("Data");
         DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
@@ -63,12 +64,6 @@ public class CrearJuegoActivity extends AppCompatActivity  {
                 listItems = nombresCategoria;
             }
         });
-
-//        nombresCategoria.add("verde");
-//        nombresCategoria.add("amarillo");
-//        nombresCategoria.add("azul");
-//        listItems = nombresCategoria;
-
 
         mOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,20 +123,21 @@ public class CrearJuegoActivity extends AppCompatActivity  {
 
 }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//
-//        FirebaseRecyclerAdapter<Member, ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Member, ViewHolder>(Member.class,R.layout.image,ViewHolder.class,reference) {
-//            @Override
-//            protected void populateViewHolder(ViewHolder viewHolder, Member member, int i) {
-//
-//                viewHolder.setDetails(getApplicationContext(),member.getImage());
-//            }
-//        };
-//
-//        mRecyclerView.setAdapter(firebaseRecyclerAdapter);
-//        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+        FirebaseRecyclerAdapter<Member, ViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Member, ViewHolder>(Member.class,R.layout.image,ViewHolder.class,reference) {
+            @Override
+            protected void populateViewHolder(ViewHolder viewHolder, Member member, int i) {
+
+                viewHolder.setDetails(getApplicationContext(),member.getImage());
+            }
+        };
+
+        mRecyclerView.setAdapter(firebaseRecyclerAdapter);
+        }
 
 
 

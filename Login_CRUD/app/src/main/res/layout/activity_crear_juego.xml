@@ -139,4 +139,5 @@
         app:layout_constraintTop_toTopOf="@+id/categoriasSeleccionadas" />
 
 
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -52,7 +52,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 //    //noinspection GradleCompatible
     implementation 'com.android.support:cardview-v7:27.0.2'
-//    implementation 'com.firebaseui:firebase-ui-database:2.2.0'
+    implementation 'com.firebaseui:firebase-ui-database:2.2.0'
 //    implementation 'com.google.firebase:firebase-database:11.4.2'
 
 }
