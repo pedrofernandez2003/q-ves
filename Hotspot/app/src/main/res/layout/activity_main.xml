@@ -10,46 +10,36 @@
 
 
     <Button
+        android:id="@+id/botonUnirse"
+        android:layout_width="282dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="464dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginRight="56dp"
+        android:text="@string/unirse"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
         android:id="@+id/iniciarSesion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="124dp"
         android:layout_marginLeft="124dp"
-        android:layout_marginTop="95dp"
+        android:layout_marginTop="92dp"
         android:layout_marginEnd="124dp"
         android:layout_marginRight="124dp"
-        android:layout_marginBottom="273dp"
+        android:layout_marginBottom="133dp"
         android:layout_weight="1"
         android:text="@string/iniciar_sesion"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputCodigo" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/inputCodigo"
-        android:layout_width="236dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="328dp"
-        android:layout_marginEnd="13dp"
-        android:layout_marginRight="13dp"
-        android:layout_weight="1"
-        android:hint="@string/inputCodigo"
-        app:layout_constraintEnd_toStartOf="@+id/botonUnirse"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/botonUnirse"
-        android:layout_width="69dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="328dp"
-        android:layout_marginEnd="43dp"
-        android:layout_marginRight="43dp"
-        android:text="@string/unirse"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/botonUnirse" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,16 +25,24 @@
         android:visibility="invisible" />
 
     <TextView
-        android:id="@+id/ipDispositivo"
+        android:id="@+id/claveRed"
         android:layout_width="223dp"
         android:layout_height="wrap_content"
-        android:text="@string/IP_dispositivo" />
+        android:text="@string/claveRed"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/nombreRed"
+        android:layout_width="223dp"
+        android:layout_height="wrap_content"
+        android:text="@string/nombreRed"
+        android:visibility="invisible" />
 
     <Button
-        android:id="@+id/botonMandar"
+        android:id="@+id/botonComenzarPartida"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/botonMandar"
+        android:text="@string/botonComenzarPartida"
         android:visibility="invisible" />
 
 </LinearLayout>

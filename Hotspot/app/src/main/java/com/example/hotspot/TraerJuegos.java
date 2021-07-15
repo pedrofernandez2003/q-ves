@@ -24,16 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -44,17 +39,14 @@ import java.util.List;
 public class TraerJuegos extends AppCompatActivity {
     private static final String TAG = "";
     static final int MESSAGE_READ=1;
-//    private ClientClass clientClass;
-    private SendReceive sendReceive;
-    private TextView textoCargando, IPDispositivo;
+    private TextView textoCargando, nombreRed, claveRed;
     private ArrayList<SendReceive> hijos=new ArrayList<>();
-
 
     private WifiManager wifiManager;
     private WifiConfiguration currentConfig;
     private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
     private Juego juego;
-    private Button botonMandar;
+    private Button botonComenzarPartida;
     private ThreadedEchoServer server;
 
     @Override
@@ -62,14 +54,15 @@ public class TraerJuegos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_traer_juegos);
         textoCargando = findViewById(R.id.textoCargando);
-        botonMandar = findViewById(R.id.botonMandar);
-        IPDispositivo = findViewById(R.id.ipDispositivo);
+        botonComenzarPartida = findViewById(R.id.botonComenzarPartida);
+        nombreRed = findViewById(R.id.nombreRed);
+        claveRed = findViewById(R.id.claveRed);
         wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         currentConfig=new WifiConfiguration();
         juego=new Juego();
         mostrarPlantillas(this.getApplicationContext());
 
-        botonMandar.setOnClickListener(new View.OnClickListener() {
+        botonComenzarPartida.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("tocaste mandar");
@@ -93,8 +86,8 @@ public class TraerJuegos extends AppCompatActivity {
     Handler handlerCantHijos = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
-            if(hijos.size() >= 1){
-                botonMandar.setVisibility(View.VISIBLE);
+            if(hijos.size() >= 1){//habria que reemplazar 1 por la cantidad de equipos del juego
+                botonComenzarPartida.setVisibility(View.VISIBLE);
             }
             return true;
         }
@@ -118,21 +111,19 @@ public class TraerJuegos extends AppCompatActivity {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void onClick(View v) {
-                            System.out.println("deberia comenzar la partida");
-                            IPDispositivo.setText(getIPAddress(true));
-//                            turnOnHotspot();
+                            turnOnHotspot();
                             textoCargando.setVisibility(View.VISIBLE);
+                            nombreRed.setVisibility(View.VISIBLE);
+                            claveRed.setVisibility(View.VISIBLE);
                             server=new ThreadedEchoServer();
                             server.start();
-//                            botonMandar.setVisibility(View.VISIBLE);
-//                            clientClass = new ClientClass("192.168.43.1");
-//                            clientClass.start();
                         }
                     });
                 }
             }
         });
     }
+
     private void empezarJuego(){
         Intent partida = new Intent(this, Jugar.class);
         startActivity(partida);
@@ -150,8 +141,6 @@ public class TraerJuegos extends AppCompatActivity {
                         Gson json = new Gson();
                         Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
                         Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
-                        System.out.println(juego.getCodigo());
-                        System.out.println(mensaje.getDatos().get(1));
                         Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                         empezarJuego();
                     } catch (Exception e) {
@@ -233,29 +222,6 @@ public class TraerJuegos extends AppCompatActivity {
         }
     }
 
-//    public class ClientClass extends Thread {
-//        Socket socket;
-//        String hostAdd;
-//
-//        public ClientClass(String hostAddress) {
-//            hostAdd = hostAddress;
-//            socket = new Socket();
-//        }
-//
-//        @Override
-//        public void run() {
-//            try {
-//                System.out.println("entre al run client");
-//                socket.connect(new InetSocketAddress(hostAdd, 7028), 5000);
-//                sendReceive = new SendReceive(socket);
-//                sendReceive.start();
-//                hijos.add(sendReceive);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
     public class Write extends AsyncTask {
         @Override
         protected Object doInBackground(Object[] objects) {
@@ -267,7 +233,6 @@ public class TraerJuegos extends AppCompatActivity {
             return null;
         }
     }
-
 
     public static String getIPAddress(boolean useIPv4) {
         try {
@@ -314,7 +279,8 @@ public class TraerJuegos extends AppCompatActivity {
                     currentConfig = hotspotReservation.getWifiConfiguration();
                     Log.v("DANG", "THE PASSWORD IS: " + currentConfig.preSharedKey + " \n SSID is : " + currentConfig.SSID);
                     hotspotDetailsDialog();
-                    IPDispositivo.setText(getIPAddress(true)); //agrego esto porque sino se queda con la ip de la red de mi casa
+                    nombreRed.setText(currentConfig.SSID);
+                    claveRed.setText(currentConfig.preSharedKey);
                 }
 
                 @Override

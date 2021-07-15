@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Hotspot</string>
+<!--    MainActivity2-->
     <string name="IP_dispositivo">IP dispositivo</string>
     <string name="botonServer">Server</string>
     <string name="botonCliente">Cliente</string>
@@ -10,7 +11,7 @@
     <string name="hotspot_ssid_label">ssidLabel</string>
     <string name="hotspot_pass_label">passLabel</string>
     <string name="title_activity_traer_juegos">TraerJuegos</string>
-    <!-- Strings used for fragments for navigation -->
+     Strings used for fragments for navigation
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
@@ -18,12 +19,15 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="textoCargando">Cargando</string>
-    <string name="botonMandar">Mandar datos</string>
+<!--    TraerJuegos-->
+    <string name="textoCargando">Esperando jugadores</string>
+    <string name="botonComenzarPartida">Comenzar partida</string>
+    
     <string name="title_activity_jugar">Jugar</string>
     <string name="title_activity_main2">MainActivity</string>
 
-    <string name="inputCodigo">Codigo</string>
+<!--    MainActivity-->
+    <string name="nombreRed">nombre de la red</string>
     <string name="iniciar_sesion">Inicar Sesion</string>
     <string name="iniciar">Inicar</string>
     <string name="me_olvide_la_contrasenia">Me olvide la contrasenia</string>
@@ -46,7 +50,8 @@
     <string name="dialog_title">Items available in a shop</string>
     <string name="ok_label">OK</string>
     <string name="dismiss_label">Dismiss</string>
-    <string name="unirse"><![CDATA[>]]></string>
+    <string name="unirse">Unirse a la partida</string>
+    <string name="claveRed">clave de la red</string>
     <string-array name="Colores">
         <item>AMARILLO</item>
         <item>VERDE</item>

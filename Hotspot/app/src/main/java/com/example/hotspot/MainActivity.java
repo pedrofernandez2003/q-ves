@@ -2,9 +2,15 @@ package com.example.hotspot;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import android.text.format.Formatter;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,19 +33,21 @@ import com.google.gson.Gson;
 public class MainActivity extends AppCompatActivity {
     private SendReceive sendReceive;
     private ClientClass clientClass;
-    static final int MESSAGE_READ=1;
-    private TextInputEditText inputCodigo;
+    static final int MESSAGE_READ = 1;
+    private WifiManager wifiManager;
+    private DhcpInfo dhcpInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        inputCodigo = findViewById(R.id.inputCodigo);
         Button botonUnirse = (Button) findViewById(R.id.botonUnirse);
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         botonUnirse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String codigo = inputCodigo.getText().toString();
+                dhcpInfo=wifiManager.getDhcpInfo();
+                String codigo = formatIP(dhcpInfo.gateway);
                 clientClass = new ClientClass(codigo);
                 clientClass.start();
                 setContentView(R.layout.cargando);
@@ -55,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(elegirPlantilla);
             }
         });
+    }
+
+    public String formatIP(int IpAddress) {
+        return Formatter.formatIpAddress(IpAddress);
     }
 
     private void empezarJuego(){
