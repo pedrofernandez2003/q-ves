@@ -24,18 +24,6 @@
         <activity android:name=".AdminElementosActivity" />
         <activity android:name=".AdministradorActivity" />
         <activity android:name=".CrearJuegoActivity" >
-<<<<<<< HEAD
-=======
-
-        </activity>
-
-        <activity android:name=".CategoriasActivity" >
->>>>>>> 2db969fe30deaee30f78e371d69e098c63ac2858
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity android:name=".CategoriasActivity" >
@@ -43,7 +31,14 @@
         </activity>
 
 
-        <activity android:name=".PersonajesActivity"/>
+
+        <activity android:name=".PersonajesActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity android:name=".PruebaActivity">
         </activity>
         <activity android:name=".TarjetasActivity">

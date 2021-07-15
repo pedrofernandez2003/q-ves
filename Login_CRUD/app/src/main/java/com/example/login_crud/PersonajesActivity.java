@@ -14,13 +14,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.Listeners.onInsertarListener;
+import com.example.Objetos.Categoria;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -133,32 +139,39 @@ public class PersonajesActivity extends AppCompatActivity {
             progressDialog.show();
 
             // Defining the child of storageReference
-            StorageReference ref= storageReference
-                    .child(
-                            "images/"
-                                    + UUID.randomUUID().toString());
+            StorageReference ref= storageReference.child("images/" + UUID.randomUUID().toString());
+
+
 
             // adding listeners on upload
             // or failure of image
             // ref.getDownloadUrl() implementar esto y guardar este token en la base. Despues con el picasso agarrarla
-            ref.putFile(filePath)
-                    .addOnSuccessListener(
-                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
+            ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
-                                public void onSuccess(
-                                        UploadTask.TaskSnapshot taskSnapshot)
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
                                 {
-
                                     // Image uploaded successfully
                                     // Dismiss dialog
                                     progressDialog.dismiss();
-                                    Toast
-                                            .makeText(PersonajesActivity.this,
-                                                    "Image Uploaded!!",
-                                                    Toast.LENGTH_SHORT)
-                                            .show();
+                                    Map<String, Object> personajeAInsertar = new HashMap<>();
+                                    personajeAInsertar.put("nombre",UUID.randomUUID().toString());
+                                    personajeAInsertar.put("token",ref.getDownloadUrl().getResult().toString());
+
+                                    DataManager.getDb().collection("personajes")
+                                            .add(personajeAInsertar).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            Toast.makeText(PersonajesActivity.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+
+                                                }
+                                            });
                                 }
+
                             })
 
                     .addOnFailureListener(new OnFailureListener() {
