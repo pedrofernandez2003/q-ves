@@ -1,13 +1,13 @@
 package com.example.login_crud;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,23 +15,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.Listeners.onInsertarListener;
 import com.example.Listeners.onModificarListener;
 import com.example.Listeners.onTraerDatoListener;
 import com.example.Listeners.onTraerDatosListener;
-import com.example.Objetos.Color;
 import com.example.Objetos.Tarjeta;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TarjetasActivity extends FragmentActivity {
 
@@ -43,7 +36,7 @@ public class TarjetasActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tarjetas);
         Bundle extras=getIntent().getExtras();
-        String color= extras.getString("Color");
+        int color= extras.getInt("Color");
         String nombreCategoria= extras.getString("Nombre");
         System.out.println(color+nombreCategoria);
 
@@ -139,7 +132,7 @@ public class TarjetasActivity extends FragmentActivity {
 
 
 
-   private void traerTarjetas(Context context,String nombreCategoria,String color) {
+   private void traerTarjetas(Context context, String nombreCategoria, int color) {
         ArrayList<String> colores = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
@@ -156,7 +149,7 @@ public class TarjetasActivity extends FragmentActivity {
                             Button button = new Button(context);
                             button.setLayoutParams(lp);
                             button.setText(tarjeta.getContenido() + " " + tarjeta.getYapa());
-                            button.setBackgroundColor(939393); //aca iria el string color pero por ahora no hay nada
+                            button.setBackgroundColor(color);
                             llBotonera.addView(button);
                             button.setOnClickListener(new View.OnClickListener() {
                                 @Override

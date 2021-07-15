@@ -36,11 +36,12 @@ import java.util.Map;
 public class CategoriasActivity extends FragmentActivity {
 
     public boolean ModoModificar=false;
+    ArrayList<String> coloresUsados;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Context context = this.getApplicationContext();
-        ArrayList<String> coloresUsados = traerCategorias(context);
+        coloresUsados = traerCategorias(context);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tarjetas_y_categorias);
         Button aniadirCategoria = (Button) findViewById(R.id.aniadirCategoria);
@@ -49,9 +50,6 @@ public class CategoriasActivity extends FragmentActivity {
             public void onClick(View v) {
                 System.out.println("on click nueva categoria");
                 aniadirCategoria(coloresUsados);
-                LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
-                llBotonera.removeAllViews();
-                traerCategorias(context);
             }
         });
         Button modificarCategoria= (Button) findViewById(R.id.modificarCategoria);
@@ -94,7 +92,7 @@ public class CategoriasActivity extends FragmentActivity {
                     public void onClick(View view) {
                         String nombreCategoria = nombre.getText().toString();
                         String colorCategoria = String.valueOf(colores.getSelectedItem());
-                        if (true) {
+                        if (!coloresYaSeleccionados.contains(colorCategoria)) {
                             Categoria categoria=new Categoria(nombreCategoria,colorCategoria,0);
                             insertarCategoria(categoria);
 
@@ -127,6 +125,9 @@ public class CategoriasActivity extends FragmentActivity {
                 }
             }
         });
+        LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
+        llBotonera.removeAllViews();
+        coloresUsados=traerCategorias(this.getApplicationContext());
     }
     private void modificarCategoria(Categoria categoria, String nombreAnterior){
         DataManagerCategoria.modificarDatosCategoria(nombreAnterior, categoria, new onModificarListener() {
@@ -143,7 +144,7 @@ public class CategoriasActivity extends FragmentActivity {
     }
 
     private ArrayList<String> traerCategorias(Context context)  {
-        ArrayList<String> colores = new ArrayList<>();
+        ArrayList<String> coloresElegidos = new ArrayList<>();
         DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
@@ -151,11 +152,12 @@ public class CategoriasActivity extends FragmentActivity {
                     Categoria categoria= (Categoria) CategoriaObject;
                     LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
-                    colores.add(categoria.getColor().toString());
+                    coloresElegidos.add(categoria.getColor().toString());
                     Button button = new Button(context);
                     button.setLayoutParams(lp);
+                    System.out.println(categoria.getColor().getCodigo());
                     button.setText(categoria.getNombre()+" "+categoria.getCantidadTarjetas());
-                    button.setBackgroundColor(0);
+                    button.setBackgroundColor(categoria.getColor().getCodigo());
                     llBotonera.addView(button);
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -199,16 +201,22 @@ public class CategoriasActivity extends FragmentActivity {
                                                 String nombreCategoria = nombre.getText().toString();
                                                 String colorCategoria = String.valueOf(colores.getSelectedItem());
                                                 Categoria categoriaNueva= new Categoria(nombreCategoria,colorCategoria,0);
-                                                DataManagerCategoria.traerIdCategoria(categoria.getNombre(), new onTraerDatoListener() {
-                                                    @Override
-                                                    public void traer(Object dato) {
-                                                        modificarCategoria(categoriaNueva, (String) dato);
-                                                        llBotonera.removeAllViews();
-                                                        traerCategorias(context);
-                                                    }
-                                                });
+                                                if(coloresElegidos.contains(colorCategoria)){
+                                                    Toast.makeText(CategoriasActivity.this, "Color ya elijido, intente con otro", Toast.LENGTH_SHORT).show();
+                                                }
+                                                else {
+                                                    DataManagerCategoria.traerIdCategoria(categoria.getNombre(), new onTraerDatoListener() {
+                                                        @Override
+                                                        public void traer(Object dato) {
+                                                            modificarCategoria(categoriaNueva, (String) dato);
+                                                            llBotonera.removeAllViews();
+                                                            coloresUsados=traerCategorias(context);
+                                                        }
+                                                    });
 
-                                                a.dismiss();
+                                                    a.dismiss();
+                                                }
+
                                             }
                                         });
                                     }
@@ -221,7 +229,7 @@ public class CategoriasActivity extends FragmentActivity {
                 }
             }
         });
-        return colores;
+        return coloresElegidos;
     }
 
 }
