@@ -4,19 +4,31 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class AdministradorActivity extends AppCompatActivity {
+
+    private Button crearJuego,iniciarJuego, administrarElementos;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrador);
-        Button crearJuego = (Button) findViewById(R.id.crearJuego);
-        Button iniciarJuego = (Button) findViewById(R.id.iniciarJuego);
-        Button administrarElementos = (Button) findViewById(R.id.adminElementos);
+
+        mAuth= FirebaseAuth.getInstance();
+        FirebaseUser currentUser= mAuth.getCurrentUser();
+        Toast.makeText(AdministradorActivity.this,currentUser.getDisplayName(),Toast.LENGTH_SHORT).show();
+        crearJuego = (Button) findViewById(R.id.crearJuego);
+        iniciarJuego = (Button) findViewById(R.id.iniciarJuego);
+        administrarElementos = (Button) findViewById(R.id.adminElementos);
         crearJuego.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

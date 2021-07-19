@@ -89,6 +89,20 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        FirebaseUser user= firebaseAuth.getCurrentUser();
+        if(user!=null){
+            Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
+            startActivity(intent);
+        }
+        super.onStart();
+    }
+
+    private void cambiarUsuario(FirebaseUser user){
+
+    }
+
     private View.OnClickListener handleGoogleLogin = new View.OnClickListener() {
         @Override
         public void onClick(View v){
@@ -137,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
                             startActivity(intent);
+                            LoginActivity.this.finish();
 
                         } else {
                             // If sign in fails, display a message to the user.
