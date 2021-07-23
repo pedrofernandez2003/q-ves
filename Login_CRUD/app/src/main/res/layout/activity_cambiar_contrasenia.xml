@@ -15,27 +15,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <EditText
-            android:id="@+id/mailRegistro"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="Mail" />
+            android:text="@string/ingrese_el_mail_que_uso_para_registrarse">
+        </TextView>
 
         <EditText
-            android:id="@+id/contraseniaRegistro"
+            android:id="@+id/mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="Contraseña" />
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            android:autofillHints=""
+            tools:ignore="LabelFor" />
 
         <Button
-            android:id="@+id/registrarse"
+            android:id="@+id/confirmar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Registrarse" />
+            android:text="@string/confirmar" />
 
+        <Button
+            android:id="@+id/cancelar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancelar" />
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

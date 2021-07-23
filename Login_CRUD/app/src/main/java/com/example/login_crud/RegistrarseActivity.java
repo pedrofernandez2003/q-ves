@@ -1,5 +1,6 @@
 package com.example.login_crud;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -35,8 +36,8 @@ public class RegistrarseActivity extends AppCompatActivity {
         // y awasomeValidation para que no se repitan mal y otras cosas
         firebaseAuth= FirebaseAuth.getInstance();
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
-        awesomeValidation.addValidation(this,R.id.mail, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
-        awesomeValidation.addValidation(this,R.id.contrasenia,".{6,}",R.string.invalid_password);
+        awesomeValidation.addValidation(this,R.id.mailRegistro, Patterns.EMAIL_ADDRESS,R.string.invalid_mail);
+        awesomeValidation.addValidation(this,R.id.contraseniaRegistro,".{6,}",R.string.invalid_password);
 
         mailIngresado = (EditText) findViewById(R.id.mailRegistro);
         contraseniaIngresada = (EditText) findViewById(R.id.contraseniaRegistro);
@@ -56,7 +57,8 @@ public class RegistrarseActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 Toast.makeText(RegistrarseActivity.this,"registrado!",Toast.LENGTH_SHORT).show();
-                                finish();
+                                Intent i = new Intent(RegistrarseActivity.this, LoginActivity.class);
+                                startActivity(i);
 
 
                             }else {

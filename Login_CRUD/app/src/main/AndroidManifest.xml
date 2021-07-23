@@ -43,6 +43,7 @@
         </activity>
         <activity android:name=".TarjetasActivity">
         </activity>
+        <activity android:name=".CambiarContraseniaActivity"/>
 
     </application>
 

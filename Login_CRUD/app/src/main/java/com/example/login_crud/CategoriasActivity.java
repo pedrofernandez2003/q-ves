@@ -26,6 +26,8 @@ import com.example.Objetos.Categoria;
 import com.example.Objetos.Color;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -35,8 +37,8 @@ import java.util.Map;
 
 public class CategoriasActivity extends FragmentActivity {
 
-    public boolean ModoModificar=false;
-    ArrayList<String> coloresUsados;
+    private boolean ModoModificar=false;
+    private ArrayList<String> coloresUsados;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

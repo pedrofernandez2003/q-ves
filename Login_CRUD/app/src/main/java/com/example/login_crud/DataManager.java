@@ -6,7 +6,7 @@ public abstract class DataManager {
     private static FirebaseFirestore db ;
 
     public DataManager() {
-       
+
     }
 
     public static FirebaseFirestore getDb() {

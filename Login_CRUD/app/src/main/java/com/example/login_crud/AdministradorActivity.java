@@ -30,8 +30,6 @@ public class AdministradorActivity extends AppCompatActivity {
         FirebaseUser currentUser= mAuth.getCurrentUser();
         Toast.makeText(AdministradorActivity.this,currentUser.getDisplayName(),Toast.LENGTH_SHORT).show();
 
-
-
         crearJuego = (Button) findViewById(R.id.crearJuego);
         iniciarJuego = (Button) findViewById(R.id.iniciarJuego);
         administrarElementos = (Button) findViewById(R.id.adminElementos);

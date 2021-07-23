@@ -31,7 +31,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity {
     EditText mailIngresado, contraseniaIngresada;
-    Button botonIngresar, botonRegistrarse;
+    Button botonIngresar, botonRegistrarse,boton;
     AwesomeValidation awesomeValidation;
     private static final int RC_SIGN_IN=1;
     private GoogleSignInClient mGoogleSignInClient;
@@ -58,7 +58,15 @@ public class LoginActivity extends AppCompatActivity {
         contraseniaIngresada = (EditText) findViewById(R.id.contrasenia);
         botonIngresar = (Button) findViewById(R.id.confirmarInicio);
         botonRegistrarse = (Button) findViewById(R.id.registrarseConMail);
+        boton = (Button) findViewById(R.id.olvideContrasenia);
 
+        boton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cambiarContrasenia = new Intent(LoginActivity.this, CambiarContraseniaActivity.class);
+                startActivity(cambiarContrasenia);
+            }
+        });
         botonRegistrarse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,10 +100,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         FirebaseUser user= firebaseAuth.getCurrentUser();
-        if(user!=null){
+        /*if(user!=null){
             Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
             startActivity(intent);
-        }
+        }*/
         super.onStart();
     }
 
