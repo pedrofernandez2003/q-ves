@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent data = getIntent();
+        ArrayList<String> personajesElegidos = data.getStringArrayListExtra("personajes");
+        System.out.println("los pers son: "+personajesElegidos);
         Button iniciarSesion = (Button) findViewById(R.id.iniciarSesion);
         iniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -16,15 +16,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nueva tarjeta"
-                app:background="@string/white"
-                app:backgroundTint="@string/black" />
+                app:background="@color/white"
+                app:backgroundTint="@color/black" />
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Modificar Tarjeta"
                 android:id="@+id/modificarTarjeta"
-                app:background="@string/white"
-                app:backgroundTint="@string/black" />
+                app:background="@color/white"
+                app:backgroundTint="@color/black" />
 
         </LinearLayout>
         <LinearLayout
