@@ -13,36 +13,36 @@
         android:textSize="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <LinearLayout
         android:id="@+id/detalleNombreJuego"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="96dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/titulo"
-        android:layout_marginLeft="8dp">
+        app:layout_constraintTop_toTopOf="@+id/titulo">
 
-                <TextView
-                    android:id="@+id/nombreJuego"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:singleLine="true"
+        <TextView
+            android:id="@+id/nombreJuego"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:singleLine="true"
 
-                    android:text="Nombre del juego:" />
+            android:text="Nombre del juego:" />
 
-                <EditText
-                    android:id="@+id/completarNombreJuego"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
+        <EditText
+            android:id="@+id/completarNombreJuego"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
 
 
     </LinearLayout>
@@ -51,21 +51,20 @@
         android:id="@+id/detalleCantidadEquipos"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="96dp"
         android:orientation="horizontal"
-        tools:layout_editor_absoluteY="605dp"
-        app:layout_constraintTop_toTopOf="@+id/detalleNombreJuego"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="96dp"
-        android:layout_marginLeft="8dp"
-        >
+        app:layout_constraintTop_toTopOf="@+id/detalleNombreJuego"
+        tools:layout_editor_absoluteY="605dp">
 
         <TextView
             android:id="@+id/cantidadEquipos"
-            android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:singleLine="true"
             android:text="Cantidad de equipos:" />
 
         <EditText
@@ -81,22 +80,21 @@
         android:id="@+id/botonCategoria"
         android:layout_width="fill_parent"
         android:layout_height="55dp"
-        android:orientation="horizontal"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintTop_toTopOf="@+id/detalleCantidadEquipos"
-        android:layout_marginTop="96dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="96dp"
         android:layout_marginRight="8dp"
-        >
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/detalleCantidadEquipos">
 
-                <Button
-                    android:id="@+id/btnOrder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Seleccioná las categorias" />
+        <Button
+            android:id="@+id/btnOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Seleccioná las categorias" />
 
     </LinearLayout>
 
@@ -104,40 +102,74 @@
         android:id="@+id/categoriasSeleccionadas"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="42dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/botonCategoria"
-        android:layout_marginTop="42dp">
+        app:layout_constraintTop_toTopOf="@+id/botonCategoria">
 
-                <TextView
-                    android:id="@+id/tvItemSelected"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:singleLine="true"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="#FFFF0000"
-                    android:textSize="14sp"
-                    android:textStyle="italic"
-                    tools:layout_editor_absoluteX="3dp"
-                    tools:layout_editor_absoluteY="397dp"
-                    android:layout_marginLeft="8dp"/>
+        <TextView
+            android:id="@+id/tvItemSelected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="#FFFF0000"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            tools:layout_editor_absoluteX="3dp"
+            tools:layout_editor_absoluteY="397dp" />
 
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="380dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="411dp"
+        android:layout_height="252dp"
+        tools:layout_editor_absoluteY="357dp" />
+
+    <LinearLayout
+        android:id="@+id/seleccionarPersonajes"
+        android:layout_width="fill_parent"
+        android:layout_height="55dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginRight="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/categoriasSeleccionadas">
+
+        <Button
+            android:id="@+id/botonPersonajes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Seleccioná los personajes" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/categoriasSeleccionadas" />
+        app:layout_constraintTop_toBottomOf="@+id/seleccionarPersonajes">
 
+        <TextView
+            android:id="@+id/cantidadPersonajesElegidos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=" " />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

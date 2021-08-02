@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.login_crud.CrearJuegoActivity;
 import com.example.login_crud.R;
 import com.example.simpleimagegallery.fragments.pictureBrowserFragment;
 import com.example.simpleimagegallery.utils.MarginDecoration;
@@ -54,7 +55,7 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
     ArrayList<String> personajesElegidos = new ArrayList<>();
 
     public void sendMessage(View view) {
-        Intent intent = new Intent(ImageDisplay.this, MainActivity.class);
+        Intent intent = new Intent(ImageDisplay.this, CrearJuegoActivity.class);
         System.out.println("antes de mandar: "+personajesElegidos);
         intent.putExtra("personajes", personajesElegidos);
         startActivity(intent);

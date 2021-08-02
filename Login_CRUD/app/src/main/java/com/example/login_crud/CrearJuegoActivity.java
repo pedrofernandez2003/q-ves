@@ -22,6 +22,7 @@ import com.example.Listeners.onTraerDatosListener;
 import com.example.Objetos.Categoria;
 import com.example.Objetos.Member;
 import com.example.Objetos.ViewHolder;
+import com.example.simpleimagegallery.ImageDisplay;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,7 +33,9 @@ import java.util.ArrayList;
 
 public class CrearJuegoActivity extends AppCompatActivity  {
     Button mOrder;
+    Button personajes;
     TextView mItemSelected;
+    TextView personajesElegidos;
     ArrayList<String> listItems;
     boolean[] checkedItems;
     ArrayList<Integer> mUserItems = new ArrayList<>();
@@ -43,11 +46,19 @@ public class CrearJuegoActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_juego);
+        Intent data = getIntent();
+        ArrayList<String> cantidadPersonajesElegidos = data.getStringArrayListExtra("personajes");
+        System.out.println("los pers son: "+personajesElegidos);
+        super.onCreate(savedInstanceState);
+        personajes = (Button) findViewById(R.id.botonPersonajes);
         mOrder = (Button) findViewById(R.id.btnOrder);
         ArrayList<String> nombresCategoria = new ArrayList<>();
         mItemSelected = (TextView) findViewById(R.id.tvItemSelected);
+        personajesElegidos = (TextView) findViewById(R.id.cantidadPersonajesElegidos);
+        if(!cantidadPersonajesElegidos.equals(null)) {
+            personajesElegidos.setText("");
+        }
         mRecyclerView = findViewById(R.id.recyclerview);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -65,6 +76,13 @@ public class CrearJuegoActivity extends AppCompatActivity  {
             }
         });
 
+        personajes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CrearJuegoActivity.this, ImageDisplay.class);
+                startActivity(intent);
+            }
+        });
         mOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
