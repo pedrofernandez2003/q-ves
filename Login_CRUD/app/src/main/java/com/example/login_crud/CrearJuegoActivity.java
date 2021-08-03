@@ -49,16 +49,16 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_crear_juego);
         Intent data = getIntent();
         ArrayList<String> cantidadPersonajesElegidos = data.getStringArrayListExtra("personajes");
-        System.out.println("los pers son: "+personajesElegidos);
+        System.out.println("los pers son: "+cantidadPersonajesElegidos.size());
         super.onCreate(savedInstanceState);
         personajes = (Button) findViewById(R.id.botonPersonajes);
         mOrder = (Button) findViewById(R.id.btnOrder);
         ArrayList<String> nombresCategoria = new ArrayList<>();
         mItemSelected = (TextView) findViewById(R.id.tvItemSelected);
         personajesElegidos = (TextView) findViewById(R.id.cantidadPersonajesElegidos);
-        if(!cantidadPersonajesElegidos.equals(null)) {
-            personajesElegidos.setText("");
-        }
+//        if(!cantidadPersonajesElegidos.equals(null)) {
+//            personajesElegidos.setText("");
+//        }
         mRecyclerView = findViewById(R.id.recyclerview);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

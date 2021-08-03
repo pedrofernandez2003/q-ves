@@ -1,6 +1,7 @@
 package com.example.simpleimagegallery;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -20,6 +21,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.Listeners.onTraerDatosListener;
+import com.example.Listeners.onTraerPersonajesListener;
 import com.example.login_crud.CrearJuegoActivity;
 import com.example.login_crud.R;
 import com.example.simpleimagegallery.fragments.pictureBrowserFragment;
@@ -74,19 +77,13 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
 
         if(allpictures.isEmpty()){
             load.setVisibility(View.VISIBLE);
-            allpictures = getAllImagesByFolder();
+            allpictures = cargarPersonajes();
             imageRecycler.setAdapter(new picture_Adapter(allpictures,ImageDisplay.this,this));
             load.setVisibility(View.GONE);
         }
 
     }
 
-    /**
-     *
-     * @param holder The ViewHolder for the clicked picture
-     * @param position The position in the grid of the picture that was clicked
-     * @param pics An ArrayList of all the items in the Adapter
-     */
     @Override
     public void onPicClicked(PicHolder holder, int position, ArrayList<pictureFacer> pics) {
         pictureBrowserFragment browser = pictureBrowserFragment.newInstance(pics,position,ImageDisplay.this);
@@ -120,37 +117,47 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
 
     }
 
-
-    /**
-     * This Method gets all the images in the folder paths passed as a String to the method and returns
-     * and ArrayList of pictureFacer a custom object that holds data of a given image
-     */
-    public ArrayList<pictureFacer> getAllImagesByFolder() {
+    public void getAllImagesByFolder(onTraerPersonajesListener callback) {
         ArrayList<pictureFacer> images = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("personajes").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                System.out.println("Entre complete");
-//                if (task.isSuccessful()) {
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                        System.out.println(document.getData());
-//                        pictureFacer pic = new pictureFacer();
-//                        pic.setPicturePath((String) document.getData().get("url"));
-//                        images.add(pic);
-//                    }
-//                }
-//            }
-//        });
-        pictureFacer pic1 = new pictureFacer();
-        pictureFacer pic2 = new pictureFacer();
-        pic1.setPicturePath("https://firebasestorage.googleapis.com/v0/b/qves-ddf27.appspot.com/o/images%2Fc14267dd-5350-4a27-b275-ea42b663f37a?alt=media&token=4699843f-e812-4c77-88e7-b554dbf85d0e");
-        images.add(pic1);
-        pic2.setPicturePath("https://firebasestorage.googleapis.com/v0/b/qves-ddf27.appspot.com/o/images%2F47b6a178-2e4f-41cc-b7d9-cde1961f2ded?alt=media&token=d37297e7-9665-41ed-9c5f-84b4719cb621");
-        images.add(pic2);
-        System.out.println("Tamaño: " + images.size());
-        return images;
+        db.collection("personajes").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                System.out.println("Entre complete");
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        System.out.println(document.getData());
+                        pictureFacer pic = new pictureFacer();
+                        pic.setPicturePath((String) document.getData().get("url"));
+                        images.add(pic);
+                    }
+                    callback.traerPersonaje(images);
+                }
+            }
+        });
     }
+        private ArrayList<pictureFacer> cargarPersonajes(){
+            ArrayList<pictureFacer> personajes = new ArrayList<>();
+            getAllImagesByFolder(new onTraerPersonajesListener() {
+                @Override
+                public void traerPersonaje(ArrayList<pictureFacer> datos) {
+                    for(pictureFacer dato: datos){
+                        personajes.add(dato);
+                    }
+                }
+            });
+            return personajes;
+        }
+
+//        pictureFacer pic1 = new pictureFacer();
+//        pictureFacer pic2 = new pictureFacer();
+//        pic1.setPicturePath("https://firebasestorage.googleapis.com/v0/b/qves-ddf27.appspot.com/o/images%2Fc14267dd-5350-4a27-b275-ea42b663f37a?alt=media&token=4699843f-e812-4c77-88e7-b554dbf85d0e");
+//        images.add(pic1);
+//        pic2.setPicturePath("https://firebasestorage.googleapis.com/v0/b/qves-ddf27.appspot.com/o/images%2F47b6a178-2e4f-41cc-b7d9-cde1961f2ded?alt=media&token=d37297e7-9665-41ed-9c5f-84b4719cb621");
+//        images.add(pic2);
+//        System.out.println("Tamaño: " + images.size());
+//        return images;
+
 
 
 }
