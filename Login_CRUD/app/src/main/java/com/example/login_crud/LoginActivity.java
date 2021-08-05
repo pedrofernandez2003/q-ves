@@ -100,10 +100,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         FirebaseUser user= firebaseAuth.getCurrentUser();
-        /*if(user!=null){
+        if(user!=null){
             Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
             startActivity(intent);
-        }*/
+        }
         super.onStart();
     }
 
@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 // ...
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, e.getMessage()+" Super f ", Toast.LENGTH_SHORT).show();
             }
         }
     }

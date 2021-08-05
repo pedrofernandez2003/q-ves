@@ -10,7 +10,7 @@
     <string name="mail">mail</string>
     <string name="contrasenia">contrasenia</string>
     <string name="gmail">gmail</string>
-    <string name="facebook">facebook</string>
+    <string name="facebook_app_id">348130413459372</string> <string name="fb_login_protocol_scheme">fb348130413459372</string>
     <string name="iniciarr">iniciar</string>
     <string name="registrarse_con_mail">registrarse con mail</string>
     <string name="subir_imagen">Subir Imagen</string>
