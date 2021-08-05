@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.content.Context;
@@ -126,6 +127,8 @@ public class TraerJuegos extends AppCompatActivity {
 
     private void empezarJuego(){
         Intent partida = new Intent(this, Jugar.class);
+        partida.putExtra("server", (Parcelable) server);
+        partida.putExtra("hijos", hijos);
         startActivity(partida);
     }
 

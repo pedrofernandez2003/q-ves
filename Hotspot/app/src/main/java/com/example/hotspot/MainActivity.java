@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        startService(new Intent(this,ServicioJuego.class));
         Button botonUnirse = (Button) findViewById(R.id.botonUnirse);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         botonUnirse.setOnClickListener(new View.OnClickListener() {
