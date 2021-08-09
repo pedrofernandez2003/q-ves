@@ -55,6 +55,7 @@ public class TraerJuegos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_traer_juegos);
+        context=GameContext.getGameContext();
         textoCargando = findViewById(R.id.textoCargando);
         botonComenzarPartida = findViewById(R.id.botonComenzarPartida);
         nombreRed = findViewById(R.id.nombreRed);
@@ -95,7 +96,7 @@ public class TraerJuegos extends AppCompatActivity {
         }
     });
 
-    private void mostrarPlantillas(Context context)  {
+    private void mostrarPlantillas(Context appCcontext)  {
         DataManagerPlantillas.traerPlantillas(new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
@@ -103,7 +104,7 @@ public class TraerJuegos extends AppCompatActivity {
                     Plantilla plantilla= (Plantilla) PlantillaObject;
                     LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
-                    Button button = new Button(context);
+                    Button button = new Button(appCcontext);
                     button.setLayoutParams(lp);
                     button.setText(plantilla.getNombre());
                     button.setBackgroundColor(999999);
@@ -119,6 +120,7 @@ public class TraerJuegos extends AppCompatActivity {
                             claveRed.setVisibility(View.VISIBLE);
                             server=new ThreadedEchoServer();
                             server.start();
+                            context.setServer(server);
                         }
                     });
                 }
@@ -224,17 +226,17 @@ public class TraerJuegos extends AppCompatActivity {
         }
     }
 
-//    public class Write extends AsyncTask {
-//        @Override
-//        protected Object doInBackground(Object[] objects) {
-//            try {
-//                context.getHijos().get((Integer) objects[1]).write((byte[]) objects[0]);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//    }
+    public class Write extends AsyncTask {
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            try {
+                context.getHijos().get((Integer) objects[1]).write((byte[]) objects[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 
     public static String getIPAddress(boolean useIPv4) {
         try {

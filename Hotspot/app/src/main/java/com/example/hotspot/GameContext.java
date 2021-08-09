@@ -19,13 +19,13 @@ import java.util.List;
 public class GameContext extends Thread {
     private static GameContext context;
     private static TraerJuegos.ThreadedEchoServer server;
-    public List<TraerJuegos.ThreadedEchoServer> servers = new ArrayList<TraerJuegos.ThreadedEchoServer>();
-    private ArrayList<SendReceive> hijos=new ArrayList<>();
+    public static List<TraerJuegos.ThreadedEchoServer> servers = new ArrayList<TraerJuegos.ThreadedEchoServer>();
+    private static ArrayList<SendReceive> hijos=new ArrayList<>();
 
     private GameContext(){}
     public static GameContext getGameContext() {
         //instantiate a new CustomerLab if we didn't instantiate one yet
-        if (server == null) {
+        if (context == null) {
             context = new GameContext();
         }
         return context;
@@ -35,7 +35,7 @@ public class GameContext extends Thread {
         return context;
     }
 
-    public List<TraerJuegos.ThreadedEchoServer> getServers() {
+    public static List<TraerJuegos.ThreadedEchoServer> getServers() {
         return servers;
     }
 
@@ -46,11 +46,11 @@ public class GameContext extends Thread {
     public static void setServer(TraerJuegos.ThreadedEchoServer server) {
         GameContext.server = server;
     }
-    public void agregarHijo(SendReceive hijo){
+    public static void agregarHijo(SendReceive hijo){
         hijos.add(hijo);
     }
 
-    public ArrayList<SendReceive> getHijos() {
+    public static ArrayList<SendReceive> getHijos() {
         return hijos;
     }
 }

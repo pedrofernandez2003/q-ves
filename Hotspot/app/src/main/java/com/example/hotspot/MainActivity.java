@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         startService(new Intent(this,ServicioJuego.class));
         Button botonUnirse = (Button) findViewById(R.id.botonUnirse);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
         botonUnirse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,8 +55,10 @@ public class MainActivity extends AppCompatActivity {
                 setContentView(R.layout.cargando);
             }
         });
+
         Button botonIniciarSesion=(Button)findViewById(R.id.iniciarSesion);
         Context context=this;
+
         botonIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,65 +78,71 @@ public class MainActivity extends AppCompatActivity {
         startActivity(partida);
     }
 
-//    Handler handler = new Handler(new Handler.Callback() {
-//        @Override
-//        public boolean handleMessage(@NonNull Message msg) {
-//            switch (msg.what) {
-//                case MESSAGE_READ:
-//                    byte[] readBuff = (byte[]) msg.obj;
-//                    String tempMsg = new String(readBuff, 0, msg.arg1);
-//                    System.out.println("mensaje recibido "+tempMsg);
-//                    try {
-//                        Gson json = new Gson();
-//                        Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
-//                        Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
-//                        System.out.println(juego.getCodigo());
-//                        System.out.println(mensaje.getDatos().get(1));
-//                        Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
-//                        empezarJuego();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    break;
-//            }
-//            return true;
-//        }
-//    });
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+            switch (msg.what) {
+                case MESSAGE_READ:
+                    byte[] readBuff = (byte[]) msg.obj;
+                    String tempMsg = new String(readBuff, 0, msg.arg1);
+                    System.out.println("mensaje recibido "+tempMsg);
+                    try {
+                        Gson json = new Gson();
+                        Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
+                        if (mensaje.getAccion().equals("comenzar")){
+                            Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
+                            System.out.println(juego.getCodigo());
+                            System.out.println(mensaje.getDatos().get(1));
+//                            Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
+                            empezarJuego();
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
+                        }
 
-//    private class SendReceive extends Thread {
-//        private Socket socket;
-//        private InputStream inputStream;
-//        private OutputStream outputStream;
-//
-//        public SendReceive(Socket skt) {
-//            System.out.println("entre al constructor");
-//            socket = skt;
-//            try {
-//                System.out.println("se construyo el sendReceive");
-//                inputStream = socket.getInputStream();
-//                outputStream = socket.getOutputStream();
-//            } catch (IOException e) {
-//                System.out.println("entre al catch");
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        @Override
-//        public void run() {
-//            byte[] buffer = new byte[1024];
-//            int bytes;
-//            while (socket != null) {
-//                try {
-//                    bytes = inputStream.read(buffer);
-//                    if (bytes > 0) {
-//                        handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+            return true;
+        }
+    });
+
+    private class SendReceive extends Thread {
+        private Socket socket;
+        private InputStream inputStream;
+        private OutputStream outputStream;
+
+        public SendReceive(Socket skt) {
+            System.out.println("entre al constructor");
+            socket = skt;
+            try {
+                System.out.println("se construyo el sendReceive");
+                inputStream = socket.getInputStream();
+                outputStream = socket.getOutputStream();
+            } catch (IOException e) {
+                System.out.println("entre al catch");
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void run() {
+            byte[] buffer = new byte[1024];
+            int bytes;
+            while (socket != null) {
+                try {
+                    bytes = inputStream.read(buffer);
+                    if (bytes > 0) {
+                        handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
 //        public void write(byte[] bytes) {
 //            try {
 //                outputStream.write(bytes);
@@ -141,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 //                e.printStackTrace();
 //            }
 //        }
-//    }
+    }
 
     public class ClientClass extends Thread {
         Socket socket;
