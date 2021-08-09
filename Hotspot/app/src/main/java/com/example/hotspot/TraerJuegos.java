@@ -40,8 +40,9 @@ import java.util.List;
 public class TraerJuegos extends AppCompatActivity {
     private static final String TAG = "";
     static final int MESSAGE_READ=1;
+    private GameContext context;
     private TextView textoCargando, nombreRed, claveRed;
-    private ArrayList<SendReceive> hijos=new ArrayList<>();
+//    private ArrayList<SendReceive> hijos=new ArrayList<>();
 
     private WifiManager wifiManager;
     private WifiConfiguration currentConfig;
@@ -68,7 +69,7 @@ public class TraerJuegos extends AppCompatActivity {
             public void onClick(View v) {
                 System.out.println("tocaste mandar");
                 String juegoSerializado=juego.serializar();
-                for (int i=0;i<hijos.size();i++){ //le manda a todos los hijos la informacion de la partida
+                for (int i=0;i<context.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
                     ArrayList<String> datos=new ArrayList<>();
                     datos.add(juegoSerializado);
                     datos.add("\"turno\":"+i);
@@ -87,7 +88,7 @@ public class TraerJuegos extends AppCompatActivity {
     Handler handlerCantHijos = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
-            if(hijos.size() >= 1){//habria que reemplazar 1 por la cantidad de equipos del juego
+            if(context.getHijos().size() >= 1){//habria que reemplazar 1 por la cantidad de equipos del juego
                 botonComenzarPartida.setVisibility(View.VISIBLE);
             }
             return true;
@@ -127,76 +128,74 @@ public class TraerJuegos extends AppCompatActivity {
 
     private void empezarJuego(){
         Intent partida = new Intent(this, Jugar.class);
-        partida.putExtra("server", (Parcelable) server);
-        partida.putExtra("hijos", hijos);
         startActivity(partida);
     }
 
-    Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(@NonNull Message msg) {
-            switch (msg.what) {
-                case MESSAGE_READ:
-                    byte[] readBuff = (byte[]) msg.obj;
-                    String tempMsg = new String(readBuff, 0, msg.arg1);
-                    System.out.println("mensaje recibido "+tempMsg);
-                    try {
-                        Gson json = new Gson();
-                        Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
-                        Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
-                        Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
-                        empezarJuego();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
-            }
-            return true;
-        }
-    });
+//    Handler handler = new Handler(new Handler.Callback() {
+//        @Override
+//        public boolean handleMessage(@NonNull Message msg) {
+//            switch (msg.what) {
+//                case MESSAGE_READ:
+//                    byte[] readBuff = (byte[]) msg.obj;
+//                    String tempMsg = new String(readBuff, 0, msg.arg1);
+//                    System.out.println("mensaje recibido "+tempMsg);
+//                    try {
+//                        Gson json = new Gson();
+//                        Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
+//                        Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
+//                        Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
+//                        empezarJuego();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    break;
+//            }
+//            return true;
+//        }
+//    });
 
-    private class SendReceive extends Thread {
-        private Socket socket;
-        private InputStream inputStream;
-        private OutputStream outputStream;
-
-        public SendReceive(Socket skt) {
-            System.out.println("entre al constructor");
-            socket = skt;
-            try {
-                System.out.println("se construyo el sendReceive");
-                inputStream = socket.getInputStream();
-                outputStream = socket.getOutputStream();
-            } catch (IOException e) {
-                System.out.println("entre al catch");
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void run() {
-            byte[] buffer = new byte[1024];
-            int bytes;
-            while (socket != null) {
-                try {
-                    bytes = inputStream.read(buffer);
-                    if (bytes > 0) {
-                        handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        public void write(byte[] bytes) {
-            try {
-                outputStream.write(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    private class SendReceive extends Thread {
+//        private Socket socket;
+//        private InputStream inputStream;
+//        private OutputStream outputStream;
+//
+//        public SendReceive(Socket skt) {
+//            System.out.println("entre al constructor");
+//            socket = skt;
+//            try {
+//                System.out.println("se construyo el sendReceive");
+//                inputStream = socket.getInputStream();
+//                outputStream = socket.getOutputStream();
+//            } catch (IOException e) {
+//                System.out.println("entre al catch");
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        @Override
+//        public void run() {
+//            byte[] buffer = new byte[1024];
+//            int bytes;
+//            while (socket != null) {
+//                try {
+//                    bytes = inputStream.read(buffer);
+//                    if (bytes > 0) {
+//                        handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//
+//        public void write(byte[] bytes) {
+//            try {
+//                outputStream.write(bytes);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     public class ThreadedEchoServer extends Thread {
         static final int PORT = 7028;
@@ -218,24 +217,24 @@ public class TraerJuegos extends AppCompatActivity {
                     System.out.println("I/O error: " + e);
                 }
                 SendReceive nuevoHijo=new SendReceive(socket);
-                hijos.add(nuevoHijo);
+                context.agregarHijo(nuevoHijo);
                 handlerCantHijos.obtainMessage().sendToTarget();
                 nuevoHijo.start();
             }
         }
     }
 
-    public class Write extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            try {
-                hijos.get((Integer) objects[1]).write((byte[]) objects[0]);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
+//    public class Write extends AsyncTask {
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//            try {
+//                context.getHijos().get((Integer) objects[1]).write((byte[]) objects[0]);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//    }
 
     public static String getIPAddress(boolean useIPv4) {
         try {
