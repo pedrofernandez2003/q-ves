@@ -21,7 +21,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 
-
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.facebook.login.LoginResult;
@@ -53,17 +52,67 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN=1;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth firebaseAuth;
-
+    private CallbackManager mCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         firebaseAuth = FirebaseAuth.getInstance();
-        CallbackManager mCallbackManager = CallbackManager.Factory.create();
+        mCallbackManager = CallbackManager.Factory.create();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        SignInButton googleLogin = findViewById(R.id.gmail);
+        googleLogin.setOnClickListener(handleGoogleLogin);
 
         LoginButton loginButton = findViewById(R.id.login_button);
+        mailIngresado = (EditText) findViewById(R.id.mail);
+        contraseniaIngresada = (EditText) findViewById(R.id.contrasenia);
+        botonIngresar = (Button) findViewById(R.id.confirmarInicio);
+        botonRegistrarse = (Button) findViewById(R.id.registrarseConMail);
+        boton = (Button) findViewById(R.id.olvideContrasenia);
+
+        boton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cambiarContrasenia = new Intent(LoginActivity.this, CambiarContraseniaActivity.class);
+                startActivity(cambiarContrasenia);
+            }
+        });
+        botonRegistrarse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent registrarse = new Intent(LoginActivity.this, RegistrarseActivity.class);
+                startActivity(registrarse);
+            }
+        });
+
+        botonIngresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String mail = mailIngresado.getText().toString();
+                String pass = contraseniaIngresada.getText().toString();
+
+                firebaseAuth.signInWithEmailAndPassword(mail, pass)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Intent i = new Intent(LoginActivity.this, AdministradorActivity.class);
+                                    startActivity(i);
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "Todo mal", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
 
         //Setting the permission that we need to read
         loginButton.setReadPermissions("public_profile", "email", "user_birthday", "user_friends");
@@ -75,6 +124,9 @@ public class LoginActivity extends AppCompatActivity {
                 //Sign in completed
                 Log.i(TAG, "onSuccess: logged in successfully");
 
+                //handling the token for Firebase Auth
+                handleFacebookAccessToken(loginResult.getAccessToken());
+
                 //Getting the user information
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
@@ -83,9 +135,12 @@ public class LoginActivity extends AppCompatActivity {
                         Log.i(TAG, "onCompleted: response: " + response.toString());
                         try {
                             String email = object.getString("email");
+                            Toast.makeText(LoginActivity.this, object.getString("email"), Toast.LENGTH_SHORT).show();
+
                             String birthday = object.getString("birthday");
 
                             Log.i(TAG, "onCompleted: Email: " + email);
+
                             Log.i(TAG, "onCompleted: Birthday: " + birthday);
 
                         } catch (JSONException e) {
@@ -113,40 +168,68 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-        private void handleFacebookAccessToken(AccessToken token) {
-            Log.d(TAG, "handleFacebookAccessToken:" + token);
-
-            AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-            firebaseAuth.signInWithCredential(credential)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "signInWithCredential:success");
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
-                                Log.i(TAG, "onComplete: login completed with user: " + user.getDisplayName());
-
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInWithCredential:failure", task.getException());
-                                Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-
-                            // ...
-                        }
-                    });
-        }
 
     @Override
+    protected void onStart() {
+        FirebaseUser user= firebaseAuth.getCurrentUser();
+        /*if(user!=null){
+            Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
+            startActivity(intent);
+        }*/
+        super.onStart();
+    }
+
+
+
+    private View.OnClickListener handleGoogleLogin = new View.OnClickListener() {
+        @Override
+        public void onClick(View v){
+            signInGoogle();
+        }
+    };
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            Toast.makeText(LoginActivity.this, "Hola.", Toast.LENGTH_SHORT).show();
+
+                            Log.i(TAG, "onComplete: login completed with user: " + user.getDisplayName());
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    private void signInGoogle() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode,Intent data) {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-    }
+    }*/
         
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
 
@@ -166,93 +249,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
-        /*GoogleSignInOptions gso = new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        SignInButton googleLogin= findViewById(R.id.gmail);
-        googleLogin.setOnClickListener(handleGoogleLogin);*/
-
-        /*mailIngresado = (EditText) findViewById(R.id.mail);
-        contraseniaIngresada = (EditText) findViewById(R.id.contrasenia);
-        botonIngresar = (Button) findViewById(R.id.confirmarInicio);
-        botonRegistrarse = (Button) findViewById(R.id.registrarseConMail);
-        boton = (Button) findViewById(R.id.olvideContrasenia);*/
-
-        /*boton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent cambiarContrasenia = new Intent(LoginActivity.this, CambiarContraseniaActivity.class);
-                startActivity(cambiarContrasenia);
-            }
-        });
-        botonRegistrarse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent registrarse = new Intent(LoginActivity.this, RegistrarseActivity.class);
-                startActivity(registrarse);
-            }
-        });
-
-        botonIngresar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String mail=mailIngresado.getText().toString();
-                String pass=contraseniaIngresada.getText().toString();
-
-                firebaseAuth.signInWithEmailAndPassword(mail,pass)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Intent i = new Intent(LoginActivity.this,AdministradorActivity.class);
-                                    startActivity(i);
-                                } else {
-                                    Toast.makeText(LoginActivity.this,"Todo mal",Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-            }
-        });*/
-
-
-    @Override
-    protected void onStart() {
-        FirebaseUser user= firebaseAuth.getCurrentUser();
-        /*if(user!=null){
-            Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
-            startActivity(intent);
-        }*/
-        super.onStart();
-    }
-
-    private void cambiarUsuario(FirebaseUser user){
-
-    }
-
-    /*private View.OnClickListener handleGoogleLogin = new View.OnClickListener() {
-        @Override
-        public void onClick(View v){
-            signInGoogle();
-        }
-    };
-
-    private void signInGoogle() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-
-
-
+    private void cambiarUsuario(FirebaseUser user){ }
 
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
@@ -275,7 +272,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }*/
+    }
 }
 
 
