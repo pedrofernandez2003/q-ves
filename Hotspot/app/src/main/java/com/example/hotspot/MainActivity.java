@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private WifiManager wifiManager;
     private DhcpInfo dhcpInfo;
     private Button botonUnirse, botonIniciarSesion;
-    private EditText nombreEquipo;
+    private TextInputEditText nombreEquipo;
     private TextView turno;
 
     @Override
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         botonUnirse = (Button) findViewById(R.id.botonUnirse);
         turno = (TextView) findViewById(R.id.turno);
-        nombreEquipo =  (EditText) findViewById(R.id.nombreEquipo);
+        nombreEquipo =  (TextInputEditText) findViewById(R.id.nombreEquipo);
         botonIniciarSesion=(Button)findViewById(R.id.iniciarSesion);
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 clientClass = new ClientClass(codigo);
                 clientClass.start();
                 System.out.println(nombreEquipo);
-                GameContext.getNombresEquipos().add(String.valueOf(nombreEquipo));
+                GameContext.getNombresEquipos().add(nombreEquipo.getText().toString());
                 setContentView(R.layout.cargando);
             }
         });
