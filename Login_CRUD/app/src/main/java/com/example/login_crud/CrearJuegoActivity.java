@@ -48,8 +48,8 @@ public class CrearJuegoActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_crear_juego);
         Intent data = getIntent();
-        ArrayList<String> cantidadPersonajesElegidos = data.getStringArrayListExtra("personajes");
-        System.out.println("los pers son: "+cantidadPersonajesElegidos.size());
+//        ArrayList<String> cantidadPersonajesElegidos = data.getStringArrayListExtra("personajes");
+//        System.out.println("los pers son: "+cantidadPersonajesElegidos.size());
         super.onCreate(savedInstanceState);
         personajes = (Button) findViewById(R.id.botonPersonajes);
         mOrder = (Button) findViewById(R.id.btnOrder);

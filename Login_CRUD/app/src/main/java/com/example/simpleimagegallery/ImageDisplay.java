@@ -18,12 +18,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.Listeners.onTraerDatosListener;
 import com.example.Listeners.onTraerPersonajesListener;
+import com.example.Objetos.Categoria;
 import com.example.login_crud.CrearJuegoActivity;
+import com.example.login_crud.DataManager;
+import com.example.login_crud.DataManagerCategoria;
 import com.example.login_crud.R;
 import com.example.simpleimagegallery.fragments.pictureBrowserFragment;
 import com.example.simpleimagegallery.utils.MarginDecoration;
@@ -77,9 +81,19 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
 
         if(allpictures.isEmpty()){
             load.setVisibility(View.VISIBLE);
-            allpictures = cargarPersonajes();
-            imageRecycler.setAdapter(new picture_Adapter(allpictures,ImageDisplay.this,this));
-            load.setVisibility(View.GONE);
+            final ImageDisplay that  = this;
+            ArrayList<pictureFacer> allpictures= new ArrayList<>();
+            traerPersonajes(new onTraerPersonajesListener() {
+                @Override
+                public void traerPersonaje(ArrayList<pictureFacer> datos) {
+                    for (pictureFacer personaje : datos) {
+                        allpictures.add(personaje);
+                    }
+                    imageRecycler.setAdapter(new picture_Adapter(allpictures,ImageDisplay.this,that));
+                    load.setVisibility(View.GONE);
+                }
+            });
+
         }
 
     }
@@ -117,10 +131,10 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
 
     }
 
-    public void getAllImagesByFolder(onTraerPersonajesListener callback) {
-        ArrayList<pictureFacer> images = new ArrayList<>();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("personajes").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+    private void traerPersonajes(onTraerPersonajesListener listener) {
+        ArrayList<pictureFacer> personajes = new ArrayList<>();
+        DataManager.getDb().collection("personajes").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 System.out.println("Entre complete");
@@ -129,34 +143,13 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
                         System.out.println(document.getData());
                         pictureFacer pic = new pictureFacer();
                         pic.setPicturePath((String) document.getData().get("url"));
-                        images.add(pic);
+                        personajes.add(pic);
                     }
-                    callback.traerPersonaje(images);
+                    listener.traerPersonaje(personajes);
                 }
             }
         });
     }
-        private ArrayList<pictureFacer> cargarPersonajes(){
-            ArrayList<pictureFacer> personajes = new ArrayList<>();
-            getAllImagesByFolder(new onTraerPersonajesListener() {
-                @Override
-                public void traerPersonaje(ArrayList<pictureFacer> datos) {
-                    for(pictureFacer dato: datos){
-                        personajes.add(dato);
-                    }
-                }
-            });
-            return personajes;
-        }
-
-//        pictureFacer pic1 = new pictureFacer();
-//        pictureFacer pic2 = new pictureFacer();
-//        pic1.setPicturePath("https://firebasestorage.googleapis.com/v0/b/qves-ddf27.appspot.com/o/images%2Fc14267dd-5350-4a27-b275-ea42b663f37a?alt=media&token=4699843f-e812-4c77-88e7-b554dbf85d0e");
-//        images.add(pic1);
-//        pic2.setPicturePath("https://firebasestorage.googleapis.com/v0/b/qves-ddf27.appspot.com/o/images%2F47b6a178-2e4f-41cc-b7d9-cde1961f2ded?alt=media&token=d37297e7-9665-41ed-9c5f-84b4719cb621");
-//        images.add(pic2);
-//        System.out.println("Tamaño: " + images.size());
-//        return images;
 
 
 

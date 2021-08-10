@@ -9,9 +9,11 @@ import com.example.Listeners.onInsertarListener;
 import com.example.Listeners.onModificarListener;
 import com.example.Listeners.onTraerDatoListener;
 import com.example.Listeners.onTraerDatosListener;
+import com.example.Listeners.onTraerPersonajesListener;
 import com.example.Objetos.Categoria;
 import com.example.Objetos.Color;
 import com.example.Objetos.Tarjeta;
+import com.example.simpleimagegallery.utils.pictureFacer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,6 +58,7 @@ public  abstract class DataManagerCategoria extends DataManager {
             }
         });
     }
+
 
     public static void traerIdCategoria( String nombre, onTraerDatoListener listener) {
         DataManager.getDb().collection("categorias").whereEqualTo("nombre", nombre).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

@@ -17,6 +17,10 @@ public class pictureFacer {
 
     }
 
+    public pictureFacer(String picturePath) {
+        this.picturePath = picturePath;
+    }
+
     public pictureFacer(String picturName, String picturePath, String pictureSize, String imageUri) {
         this.picturName = picturName;
         this.picturePath = picturePath;
