@@ -25,6 +25,7 @@ public class Juego implements Serializable {
     public Juego(){
         this.codigo="abc";
         this.partidas=new ArrayList<>();
+        partidas.add(new Partida());
         this.equipos=new ArrayList<>();
         this.plantilla=new Plantilla();
         this.mazo=new HashSet<>();

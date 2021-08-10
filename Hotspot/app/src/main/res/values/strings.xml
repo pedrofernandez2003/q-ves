@@ -28,7 +28,7 @@
 
 <!--    MainActivity-->
     <string name="nombreRed">nombre de la red</string>
-    <string name="iniciar_sesion">Inicar Sesion</string>
+    <string name="iniciar_sesion">Iniciar Sesion</string>
     <string name="iniciar">Inicar</string>
     <string name="me_olvide_la_contrasenia">Me olvide la contrasenia</string>
     <string name="invalid_mail">mail incorreto</string>

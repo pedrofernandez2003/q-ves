@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startService(new Intent(this,ServicioJuego.class));
+//        startService(new Intent(this,ServicioJuego.class));
         Button botonUnirse = (Button) findViewById(R.id.botonUnirse);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
@@ -57,13 +57,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button botonIniciarSesion=(Button)findViewById(R.id.iniciarSesion);
-        Context context=this;
+        Context appContext=this;
 
         botonIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("On click");
-                Intent elegirPlantilla = new Intent(context, TraerJuegos.class);
+                Intent elegirPlantilla = new Intent(appContext, TraerJuegos.class);
                 startActivity(elegirPlantilla);
             }
         });
@@ -91,12 +91,14 @@ public class MainActivity extends AppCompatActivity {
                         Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
                         if (mensaje.getAccion().equals("comenzar")){
                             Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
-                            System.out.println(juego.getCodigo());
-                            System.out.println(mensaje.getDatos().get(1));
+                            GameContext.setJuego(juego);
+                            System.out.println("setea el juego del game context-------------------------------------");
+//                            System.out.println(juego.getCodigo());
+//                            System.out.println(mensaje.getDatos().get(1));
 //                            Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                             empezarJuego();
                         }
-                        else{
+                        else {
                             Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                         }
 

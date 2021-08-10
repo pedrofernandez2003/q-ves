@@ -24,6 +24,8 @@ import java.util.ArrayList;
 
 public class Jugar extends AppCompatActivity  {
     private GameContext context;
+    private Juego juego;
+    private Partida partida;
 
     public class Write extends AsyncTask {
         @Override
@@ -42,14 +44,16 @@ public class Jugar extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablero);
         context=GameContext.getGameContext();
-        System.out.println(context.getHijos().size());
+        juego= GameContext.getJuego();
+        System.out.println("codigo juego: "+juego.getCodigo());
+        partida=juego.getPartidas().get(0);
         ArrayList<String> datos=new ArrayList<>();
-        datos.add("\"aloo\"");
-        Mensaje mensaje=new Mensaje("comenzar",datos);
+        datos.add("\"idJugador\": "+partida.getTurno());
+        Mensaje mensaje=new Mensaje("turno",datos);
         String msg=mensaje.serializar();
 //        System.out.println(msg);
         byte[] bytesMsg = msg.getBytes();
-//        Write escribir = new Write();
-//        escribir.execute(bytesMsg,0);
+        Write escribir = new Write();
+        escribir.execute(bytesMsg,0);
     }
 }

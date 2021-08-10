@@ -78,6 +78,7 @@ public class TraerJuegos extends AppCompatActivity {
                     String msg=mensaje.serializar();
                     System.out.println(msg);
                     byte[] bytesMsg = msg.getBytes();
+                    GameContext.setJuego(juego);
                     Write escribir = new Write();
                     escribir.execute(bytesMsg,i);
                 }

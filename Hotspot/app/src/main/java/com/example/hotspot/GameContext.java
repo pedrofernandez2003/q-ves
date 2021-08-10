@@ -21,6 +21,7 @@ public class GameContext extends Thread {
     private static TraerJuegos.ThreadedEchoServer server;
     public static List<TraerJuegos.ThreadedEchoServer> servers = new ArrayList<TraerJuegos.ThreadedEchoServer>();
     private static ArrayList<SendReceive> hijos=new ArrayList<>();
+    private static Juego juego;
 
     private GameContext(){}
     public static GameContext getGameContext() {
@@ -29,6 +30,14 @@ public class GameContext extends Thread {
             context = new GameContext();
         }
         return context;
+    }
+
+    public static Juego getJuego() {
+        return juego;
+    }
+
+    public static void setJuego(Juego juego) {
+        GameContext.juego = juego;
     }
 
     public static GameContext getContext() {
