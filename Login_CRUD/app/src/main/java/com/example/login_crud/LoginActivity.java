@@ -114,9 +114,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //Setting the permission that we need to read
-        loginButton.setReadPermissions("public_profile", "email", "user_birthday", "user_friends");
 
+        
         //Registering callback!
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
