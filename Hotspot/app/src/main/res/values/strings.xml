@@ -52,6 +52,7 @@
     <string name="dismiss_label">Dismiss</string>
     <string name="unirse">Unirse a la partida</string>
     <string name="claveRed">clave de la red</string>
+    <string name="turno">es mi turno</string>
     <string-array name="Colores">
         <item>AMARILLO</item>
         <item>VERDE</item>

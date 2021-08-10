@@ -40,7 +40,7 @@ import java.util.List;
 public class TraerJuegos extends AppCompatActivity {
     private static final String TAG = "";
     static final int MESSAGE_READ=1;
-    private GameContext context;
+    private int cantidadEquipos;
     private TextView textoCargando, nombreRed, claveRed;
 //    private ArrayList<SendReceive> hijos=new ArrayList<>();
 
@@ -55,7 +55,7 @@ public class TraerJuegos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_traer_juegos);
-        context=GameContext.getGameContext();
+        cantidadEquipos=0;
         textoCargando = findViewById(R.id.textoCargando);
         botonComenzarPartida = findViewById(R.id.botonComenzarPartida);
         nombreRed = findViewById(R.id.nombreRed);
@@ -70,7 +70,7 @@ public class TraerJuegos extends AppCompatActivity {
             public void onClick(View v) {
                 System.out.println("tocaste mandar");
                 String juegoSerializado=juego.serializar();
-                for (int i=0;i<context.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
+                for (int i=0;i<GameContext.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
                     ArrayList<String> datos=new ArrayList<>();
                     datos.add(juegoSerializado);
                     datos.add("\"turno\":"+i);
@@ -90,7 +90,7 @@ public class TraerJuegos extends AppCompatActivity {
     Handler handlerCantHijos = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
-            if(context.getHijos().size() >= 1){//habria que reemplazar 1 por la cantidad de equipos del juego
+            if(GameContext.getHijos().size() >= cantidadEquipos){//habria que reemplazar 1 por la cantidad de equipos del juego
                 botonComenzarPartida.setVisibility(View.VISIBLE);
             }
             return true;
@@ -108,6 +108,7 @@ public class TraerJuegos extends AppCompatActivity {
                     Button button = new Button(appCcontext);
                     button.setLayoutParams(lp);
                     button.setText(plantilla.getNombre());
+                    cantidadEquipos=plantilla.getCantEquipos();
                     button.setBackgroundColor(999999);
                     llBotonera.addView(button);
 
@@ -121,7 +122,7 @@ public class TraerJuegos extends AppCompatActivity {
                             claveRed.setVisibility(View.VISIBLE);
                             server=new ThreadedEchoServer();
                             server.start();
-                            context.setServer(server);
+                            GameContext.setServer(server);
                         }
                     });
                 }
@@ -220,7 +221,7 @@ public class TraerJuegos extends AppCompatActivity {
                     System.out.println("I/O error: " + e);
                 }
                 SendReceive nuevoHijo=new SendReceive(socket);
-                context.agregarHijo(nuevoHijo);
+                GameContext.agregarHijo(nuevoHijo);
                 handlerCantHijos.obtainMessage().sendToTarget();
                 nuevoHijo.start();
             }
@@ -231,7 +232,7 @@ public class TraerJuegos extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] objects) {
             try {
-                context.getHijos().get((Integer) objects[1]).write((byte[]) objects[0]);
+                GameContext.getHijos().get((Integer) objects[1]).write((byte[]) objects[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -24,6 +24,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Objects;
 
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -36,13 +38,19 @@ public class MainActivity extends AppCompatActivity {
     static final int MESSAGE_READ = 1;
     private WifiManager wifiManager;
     private DhcpInfo dhcpInfo;
+    private Button botonUnirse, botonIniciarSesion;
+    private EditText nombreEquipo;
+    private TextView turno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        startService(new Intent(this,ServicioJuego.class));
-        Button botonUnirse = (Button) findViewById(R.id.botonUnirse);
+        botonUnirse = (Button) findViewById(R.id.botonUnirse);
+        turno = (TextView) findViewById(R.id.turno);
+        nombreEquipo =  (EditText) findViewById(R.id.nombreEquipo);
+        botonIniciarSesion=(Button)findViewById(R.id.iniciarSesion);
+
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         botonUnirse.setOnClickListener(new View.OnClickListener() {
@@ -52,11 +60,12 @@ public class MainActivity extends AppCompatActivity {
                 String codigo = formatIP(dhcpInfo.gateway);
                 clientClass = new ClientClass(codigo);
                 clientClass.start();
+                System.out.println(nombreEquipo);
+                GameContext.getNombresEquipos().add(String.valueOf(nombreEquipo));
                 setContentView(R.layout.cargando);
             }
         });
 
-        Button botonIniciarSesion=(Button)findViewById(R.id.iniciarSesion);
         Context appContext=this;
 
         botonIniciarSesion.setOnClickListener(new View.OnClickListener() {
@@ -93,12 +102,13 @@ public class MainActivity extends AppCompatActivity {
                             Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
                             GameContext.setJuego(juego);
                             System.out.println("setea el juego del game context-------------------------------------");
-//                            System.out.println(juego.getCodigo());
-//                            System.out.println(mensaje.getDatos().get(1));
-//                            Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                             empezarJuego();
                         }
-                        else {
+                        else if(mensaje.getAccion().equals("turno")) {
+                            if(GameContext.getNombresEquipos().get( GameContext.getJuego().getPartidas().get(0).getTurno()).equals(nombreEquipo)){
+                                System.out.println("entre porque es mi turno");
+                                turno.setVisibility(View.VISIBLE);
+                            }
                             Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                         }
 

@@ -21,6 +21,7 @@ public class GameContext extends Thread {
     private static TraerJuegos.ThreadedEchoServer server;
     public static List<TraerJuegos.ThreadedEchoServer> servers = new ArrayList<TraerJuegos.ThreadedEchoServer>();
     private static ArrayList<SendReceive> hijos=new ArrayList<>();
+    private static ArrayList<String> nombresEquipos=new ArrayList<>();
     private static Juego juego;
 
     private GameContext(){}
@@ -61,5 +62,13 @@ public class GameContext extends Thread {
 
     public static ArrayList<SendReceive> getHijos() {
         return hijos;
+    }
+
+    public static ArrayList<String> getNombresEquipos() {
+        return nombresEquipos;
+    }
+
+    public static void setNombresEquipos(ArrayList<String> nombresEquipos) {
+        GameContext.nombresEquipos = nombresEquipos;
     }
 }

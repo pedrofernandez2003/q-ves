@@ -54,6 +54,11 @@ public class Jugar extends AppCompatActivity  {
 //        System.out.println(msg);
         byte[] bytesMsg = msg.getBytes();
         Write escribir = new Write();
-        escribir.execute(bytesMsg,0);
+        for (int i=0;i<GameContext.getHijos().size();i++) {
+            escribir.execute(bytesMsg, i);
+        }
+        for (int i = 0; i < GameContext.getNombresEquipos().size(); i++) {
+            System.out.println(GameContext.getNombresEquipos().get(i));
+        }
     }
 }

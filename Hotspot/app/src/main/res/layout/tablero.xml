@@ -52,12 +52,13 @@
 
     <GridLayout
 
+        android:id="@+id/gridLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:columnCount="4"
+
+
         android:rowCount="3"
-
-
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintHorizontal_bias="0.0"
@@ -66,8 +67,8 @@
         app:layout_constraintVertical_bias="1.0">
 
         <androidx.cardview.widget.CardView
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#FED713"
@@ -95,8 +96,8 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#F7941E"
@@ -124,8 +125,8 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#EE2A7B"
@@ -153,8 +154,8 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#EB1B24"
@@ -182,8 +183,8 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#92278f"
@@ -211,8 +212,8 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#262262"
@@ -240,8 +241,8 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#1c75bc"
@@ -269,8 +270,8 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#00aeef"
@@ -298,8 +299,8 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#00a79e"
@@ -327,8 +328,8 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#8dc63f"
@@ -356,8 +357,8 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#000000"
@@ -385,8 +386,8 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_columnWeight="1"
             android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
             android:layout_gravity="fill"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#d3d3d3"
@@ -457,5 +458,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.97" />
+
+    <TextView
+        android:id="@+id/turno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
+        android:text="@string/turno"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/gridLayout"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
