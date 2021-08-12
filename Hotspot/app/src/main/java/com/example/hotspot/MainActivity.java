@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         botonUnirse = (Button) findViewById(R.id.botonUnirse);
-        turno = (TextView) findViewById(R.id.turno);
+        turno = findViewById(R.id.turno);
         nombreEquipo =  (TextInputEditText) findViewById(R.id.nombreEquipo);
         botonIniciarSesion=(Button)findViewById(R.id.iniciarSesion);
 
@@ -105,7 +105,9 @@ public class MainActivity extends AppCompatActivity {
                             empezarJuego();
                         }
                         else if(mensaje.getAccion().equals("turno")) {
-                            if(GameContext.getNombresEquipos().get( GameContext.getJuego().getPartidas().get(0).getTurno()).equals(nombreEquipo)){
+                            System.out.println("entre turno");
+                            System.out.println(GameContext.getNombresEquipos().get( GameContext.getJuego().getPartidas().get(0).getTurno())+"  "+nombreEquipo.getText().toString());
+                            if(GameContext.getNombresEquipos().get( GameContext.getJuego().getPartidas().get(0).getTurno()).equals(nombreEquipo.getText().toString())){
                                 System.out.println("entre porque es mi turno");
                                 turno.setVisibility(View.VISIBLE);
                             }

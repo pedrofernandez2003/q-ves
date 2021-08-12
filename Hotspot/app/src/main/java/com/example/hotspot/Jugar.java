@@ -26,6 +26,7 @@ public class Jugar extends AppCompatActivity  {
     private GameContext context;
     private Juego juego;
     private Partida partida;
+    private TextView turno;
 
     public class Write extends AsyncTask {
         @Override
@@ -41,6 +42,7 @@ public class Jugar extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        turno = findViewById(R.id.turno);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablero);
         context=GameContext.getGameContext();
@@ -60,5 +62,8 @@ public class Jugar extends AppCompatActivity  {
         for (int i = 0; i < GameContext.getNombresEquipos().size(); i++) {
             System.out.println(GameContext.getNombresEquipos().get(i));
         }
+    }
+    public void turnoVisible(){
+        turno.setVisibility(View.VISIBLE);
     }
 }
