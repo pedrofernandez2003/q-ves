@@ -38,6 +38,12 @@
             android:label="@string/title_activity_traer_juegos"
             android:theme="@style/Theme.Hotspot.NoActionBar" />
         <activity android:name=".MainActivity">
+
+        </activity>
+
+        <activity android:name=".CrearTablero"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
