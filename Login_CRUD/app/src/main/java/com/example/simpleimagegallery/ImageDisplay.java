@@ -1,33 +1,20 @@
 package com.example.simpleimagegallery;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import android.transition.Fade;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.example.Listeners.onTraerDatosListener;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.Listeners.onTraerPersonajesListener;
-import com.example.Objetos.Categoria;
 import com.example.login_crud.CrearJuegoActivity;
 import com.example.login_crud.DataManager;
-import com.example.login_crud.DataManagerCategoria;
 import com.example.login_crud.R;
 import com.example.simpleimagegallery.fragments.pictureBrowserFragment;
 import com.example.simpleimagegallery.utils.MarginDecoration;
@@ -35,24 +22,13 @@ import com.example.simpleimagegallery.utils.PicHolder;
 import com.example.simpleimagegallery.utils.itemClickListener;
 import com.example.simpleimagegallery.utils.pictureFacer;
 import com.example.simpleimagegallery.utils.picture_Adapter;
-import com.bumptech.glide.request.SingleRequest;
-import com.example.login_crud.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
-/**
- * Author CodeBoy722
- *
- * This Activity get a path to a folder that contains images from the MainActivity Intent and displays
- * all the images in the folder inside a RecyclerView
- */
 
 public class ImageDisplay extends AppCompatActivity implements itemClickListener {
 
@@ -97,13 +73,16 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
         }
 
     }
+    private int getCurrentItem(){
+        return ((LinearLayoutManager)imageRecycler.getLayoutManager())
+                .findFirstVisibleItemPosition();
+    }
+
 
     @Override
     public void onPicClicked(PicHolder holder, int position, ArrayList<pictureFacer> pics) {
         pictureBrowserFragment browser = pictureBrowserFragment.newInstance(pics,position,ImageDisplay.this);
-        System.out.println("posicion "+position);
         FrameLayout imagenAgrandada = findViewById(R.id.displayContainer);
-        System.out.println("figura clickeada");
         Button seleccionarPersonaje = new Button(this);
         seleccionarPersonaje.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         seleccionarPersonaje.setText("Elegir personaje");
@@ -112,6 +91,7 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
         seleccionarPersonaje.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println("La posicion actual es browser: "+browser.getPosition());
                 personajesElegidos.add((String) pics.get(position).getPicturePath());
             }
 
@@ -119,7 +99,7 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .addSharedElement(holder.picture, position+"picture")
+//                .addSharedElement(holder.picture, position+"picture")
                 .add(R.id.displayContainer, browser)
                 .addToBackStack(null)
                 .commit();
@@ -137,10 +117,8 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
         DataManager.getDb().collection("personajes").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                System.out.println("Entre complete");
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        System.out.println(document.getData());
                         pictureFacer pic = new pictureFacer();
                         pic.setPicturePath((String) document.getData().get("url"));
                         personajes.add(pic);

@@ -48,6 +48,86 @@ public class pictureBrowserFragment extends Fragment implements imageIndicatorLi
     private ImagesPagerAdapter pagingImages;
     private int previousSelected = -1;
 
+    public ArrayList<pictureFacer> getAllImages() {
+        return allImages;
+    }
+
+    public void setAllImages(ArrayList<pictureFacer> allImages) {
+        this.allImages = allImages;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public Context getAnimeContx() {
+        return animeContx;
+    }
+
+    public void setAnimeContx(Context animeContx) {
+        this.animeContx = animeContx;
+    }
+
+    public ImageView getImage() {
+        return image;
+    }
+
+    public void setImage(ImageView image) {
+        this.image = image;
+    }
+
+    public ViewPager getImagePager() {
+        return imagePager;
+    }
+
+    public void setImagePager(ViewPager imagePager) {
+        this.imagePager = imagePager;
+    }
+
+    public RecyclerView getIndicatorRecycler() {
+        return indicatorRecycler;
+    }
+
+    public void setIndicatorRecycler(RecyclerView indicatorRecycler) {
+        this.indicatorRecycler = indicatorRecycler;
+    }
+
+    public int getViewVisibilityController() {
+        return viewVisibilityController;
+    }
+
+    public void setViewVisibilityController(int viewVisibilityController) {
+        this.viewVisibilityController = viewVisibilityController;
+    }
+
+    public int getViewVisibilitylooper() {
+        return viewVisibilitylooper;
+    }
+
+    public void setViewVisibilitylooper(int viewVisibilitylooper) {
+        this.viewVisibilitylooper = viewVisibilitylooper;
+    }
+
+    public ImagesPagerAdapter getPagingImages() {
+        return pagingImages;
+    }
+
+    public void setPagingImages(ImagesPagerAdapter pagingImages) {
+        this.pagingImages = pagingImages;
+    }
+
+    public int getPreviousSelected() {
+        return previousSelected;
+    }
+
+    public void setPreviousSelected(int previousSelected) {
+        this.previousSelected = previousSelected;
+    }
+
     public pictureBrowserFragment(){
 
     }
@@ -97,7 +177,7 @@ public class pictureBrowserFragment extends Fragment implements imageIndicatorLi
          */
         indicatorRecycler = view.findViewById(R.id.indicatorRecycler);
         indicatorRecycler.hasFixedSize();
-        indicatorRecycler.setLayoutManager(new GridLayoutManager(getContext(),1,RecyclerView.HORIZONTAL,false));
+//        indicatorRecycler.setLayoutManager(new GridLayoutManager(getContext(),1,RecyclerView.HORIZONTAL,false));
         RecyclerView.Adapter indicatorAdapter = new recyclerViewPagerImageIndicator(allImages,getContext(),this);
         indicatorRecycler.setAdapter(indicatorAdapter);
 
@@ -106,59 +186,59 @@ public class pictureBrowserFragment extends Fragment implements imageIndicatorLi
         allImages.get(position).setSelected(true);
         previousSelected = position;
         indicatorAdapter.notifyDataSetChanged();
-        indicatorRecycler.scrollToPosition(position);
+//        indicatorRecycler.scrollToPosition(position);
 
 
         /**
          * this listener controls the visibility of the recyclerView
          * indication and it current position in respect to the image ViewPager
          */
-        imagePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                if(previousSelected != -1){
-                    allImages.get(previousSelected).setSelected(false);
-                    previousSelected = position;
-                    allImages.get(position).setSelected(true);
-                    indicatorRecycler.getAdapter().notifyDataSetChanged();
-                    indicatorRecycler.scrollToPosition(position);
-                }else{
-                    previousSelected = position;
-                    allImages.get(position).setSelected(true);
-                    indicatorRecycler.getAdapter().notifyDataSetChanged();
-                    indicatorRecycler.scrollToPosition(position);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-
-        indicatorRecycler.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                /**
-                 *  uncomment the below condition to control recyclerView visibility automatically
-                 *  when image is clicked also uncomment the condition set on the image's onClickListener in the ImagesPagerAdapter adapter
-                 */
-                /*if(viewVisibilityController == 0){
-                    indicatorRecycler.setVisibility(View.VISIBLE);
-                    visibiling();
-                }else{
-                    viewVisibilitylooper++;
-                }*/
-                return false;
-            }
-        });
+//        imagePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//
+//                if(previousSelected != -1){
+//                    allImages.get(previousSelected).setSelected(false);
+//                    previousSelected = position;
+//                    allImages.get(position).setSelected(true);
+//                    indicatorRecycler.getAdapter().notifyDataSetChanged();
+////                    indicatorRecycler.scrollToPosition(position);
+//                }else{
+//                    previousSelected = position;
+//                    allImages.get(position).setSelected(true);
+//                    indicatorRecycler.getAdapter().notifyDataSetChanged();
+////                    indicatorRecycler.scrollToPosition(position);
+//                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
+//
+//
+//        indicatorRecycler.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                /**
+//                 *  uncomment the below condition to control recyclerView visibility automatically
+//                 *  when image is clicked also uncomment the condition set on the image's onClickListener in the ImagesPagerAdapter adapter
+//                 */
+//                /*if(viewVisibilityController == 0){
+//                    indicatorRecycler.setVisibility(View.VISIBLE);
+//                    visibiling();
+//                }else{
+//                    viewVisibilitylooper++;
+//                }*/
+//                return false;
+//            }
+//        });
 
     }
 
