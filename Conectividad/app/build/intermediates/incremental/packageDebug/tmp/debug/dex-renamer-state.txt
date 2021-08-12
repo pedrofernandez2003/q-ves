@@ -1,4 +1,0 @@
-#Tue Apr 27 16:16:39 ART 2021
-base.0=/home/fernandez/AndroidStudioProjects/Conectividad/app/build/intermediates/dex/debug/mergeDexDebug/classes.dex
-path.0=classes.dex
-renamed.0=classes.dex

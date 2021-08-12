@@ -1,4 +1,0 @@
-com/example/conectividad/BuildConfig.java
- com.example.conectividad.BuildConfig
-com/example/conectividad/MainActivity.java
- com.example.conectividad.MainActivity

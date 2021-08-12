@@ -114,9 +114,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //Setting the permission that we need to read
-        loginButton.setReadPermissions("public_profile", "email", "user_birthday", "user_friends");
 
+        
         //Registering callback!
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -126,34 +125,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 //handling the token for Firebase Auth
                 handleFacebookAccessToken(loginResult.getAccessToken());
-
-                //Getting the user information
-                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        // Application code
-                        Log.i(TAG, "onCompleted: response: " + response.toString());
-                        try {
-                            String email = object.getString("email");
-                            Toast.makeText(LoginActivity.this, object.getString("email"), Toast.LENGTH_SHORT).show();
-
-                            String birthday = object.getString("birthday");
-
-                            Log.i(TAG, "onCompleted: Email: " + email);
-
-                            Log.i(TAG, "onCompleted: Birthday: " + birthday);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.i(TAG, "onCompleted: JSON exception");
-                        }
-                    }
-                });
-
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender,birthday");
-                request.setParameters(parameters);
-                request.executeAsync();
 
             }
 
@@ -172,10 +143,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         FirebaseUser user= firebaseAuth.getCurrentUser();
-        /*if(user!=null){
+        if(user!=null){
             Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
             startActivity(intent);
-        }*/
+            LoginActivity.this.finish();
+        }
         super.onStart();
     }
 
@@ -201,7 +173,9 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Hola.", Toast.LENGTH_SHORT).show();
-
+                            Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
+                            startActivity(intent);
+                            LoginActivity.this.finish();
                             Log.i(TAG, "onComplete: login completed with user: " + user.getDisplayName());
 
                         } else {
@@ -221,11 +195,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode,Intent data) {
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-    }*/
+
         
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
