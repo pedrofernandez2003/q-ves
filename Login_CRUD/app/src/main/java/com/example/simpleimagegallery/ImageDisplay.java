@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.example.login_crud.DataManager;
 import com.example.login_crud.R;
 import com.example.simpleimagegallery.fragments.pictureBrowserFragment;
 import com.example.simpleimagegallery.utils.MarginDecoration;
+import com.example.simpleimagegallery.utils.OnSwipeTouchListener;
 import com.example.simpleimagegallery.utils.PicHolder;
 import com.example.simpleimagegallery.utils.itemClickListener;
 import com.example.simpleimagegallery.utils.pictureFacer;
@@ -88,6 +90,8 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
         seleccionarPersonaje.setText("Elegir personaje");
         imagenAgrandada.addView(seleccionarPersonaje);
 
+
+
         seleccionarPersonaje.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,7 +108,22 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
                 .addToBackStack(null)
                 .commit();
 
+        imagenAgrandada.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeLeft() {
+                System.out.println("izq");
+                super.onSwipeLeft();
+                Toast.makeText(ImageDisplay.this, "Swipe Left gesture detected", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onSwipeRight() {
+                System.out.println("derecha");
+                super.onSwipeRight();
+                Toast.makeText(ImageDisplay.this, "Swipe Right gesture detected", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 
     @Override
     public void onPicClicked(String pictureFolderPath, String folderName) {
