@@ -64,8 +64,8 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         firebaseDatabase = FirebaseDatabase.getInstance();
         reference = firebaseDatabase.getReference("Data");
-        nombreJuego = findViewById(R.id.completarNombreJuego);
-        cantidadEquipos = findViewById(R.id.completarCantidadEquipos);
+        nombreJuego = (EditText) findViewById(R.id.completarNombreJuego);
+        cantidadEquipos = (EditText) findViewById(R.id.completarCantidadEquipos);
         Plantilla plantilla = Plantilla.obtenerPlantilla();
 
         if( getIntent().getExtras() != null)
