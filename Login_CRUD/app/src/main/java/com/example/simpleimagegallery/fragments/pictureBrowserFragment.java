@@ -193,52 +193,52 @@ public class pictureBrowserFragment extends Fragment implements imageIndicatorLi
          * this listener controls the visibility of the recyclerView
          * indication and it current position in respect to the image ViewPager
          */
-//        imagePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//
-//                if(previousSelected != -1){
-//                    allImages.get(previousSelected).setSelected(false);
-//                    previousSelected = position;
-//                    allImages.get(position).setSelected(true);
-//                    indicatorRecycler.getAdapter().notifyDataSetChanged();
-////                    indicatorRecycler.scrollToPosition(position);
-//                }else{
-//                    previousSelected = position;
-//                    allImages.get(position).setSelected(true);
-//                    indicatorRecycler.getAdapter().notifyDataSetChanged();
-////                    indicatorRecycler.scrollToPosition(position);
-//                }
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
-//
-//
-//        indicatorRecycler.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                /**
-//                 *  uncomment the below condition to control recyclerView visibility automatically
-//                 *  when image is clicked also uncomment the condition set on the image's onClickListener in the ImagesPagerAdapter adapter
-//                 */
-//                /*if(viewVisibilityController == 0){
-//                    indicatorRecycler.setVisibility(View.VISIBLE);
-//                    visibiling();
-//                }else{
-//                    viewVisibilitylooper++;
-//                }*/
-//                return false;
-//            }
-//        });
+        imagePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                if(previousSelected != -1){
+                    allImages.get(previousSelected).setSelected(false);
+                    previousSelected = position;
+                    allImages.get(position).setSelected(true);
+                    indicatorRecycler.getAdapter().notifyDataSetChanged();
+                }else{
+                    previousSelected = position;
+                    allImages.get(position).setSelected(true);
+                    indicatorRecycler.getAdapter().notifyDataSetChanged();
+                }
+                setPosition(position);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+
+        indicatorRecycler.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                /**
+                 *  uncomment the below condition to control recyclerView visibility automatically
+                 *  when image is clicked also uncomment the condition set on the image's onClickListener in the ImagesPagerAdapter adapter
+                 */
+                /*if(viewVisibilityController == 0){
+                    indicatorRecycler.setVisibility(View.VISIBLE);
+                    visibiling();
+                }else{
+                    viewVisibilitylooper++;
+                }*/
+                return false;
+            }
+        });
+//        return position;
 
     }
 
@@ -331,25 +331,5 @@ public class pictureBrowserFragment extends Fragment implements imageIndicatorLi
         }
     }
 
-    /**
-     * function for controlling the visibility of the recyclerView indicator
-     */
-    private void visibiling(){
-        viewVisibilityController = 1;
-        final int checker = viewVisibilitylooper;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(viewVisibilitylooper > checker){
-                   visibiling();
-                }else{
-                   indicatorRecycler.setVisibility(View.GONE);
-                   viewVisibilityController = 0;
-
-                   viewVisibilitylooper = 0;
-                }
-            }
-        }, 4000);
-    }
 
 }

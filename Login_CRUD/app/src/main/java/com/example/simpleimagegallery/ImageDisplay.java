@@ -95,8 +95,8 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
         seleccionarPersonaje.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("La posicion actual es browser: "+browser.getPosition());
-                personajesElegidos.add((String) pics.get(position).getPicturePath());
+                int posicion = browser.getPosition();
+                personajesElegidos.add((String) pics.get(posicion).getPicturePath());
             }
 
         });
@@ -107,21 +107,6 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
                 .add(R.id.displayContainer, browser)
                 .addToBackStack(null)
                 .commit();
-
-        imagenAgrandada.setOnTouchListener(new OnSwipeTouchListener(this) {
-            @Override
-            public void onSwipeLeft() {
-                System.out.println("izq");
-                super.onSwipeLeft();
-                Toast.makeText(ImageDisplay.this, "Swipe Left gesture detected", Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void onSwipeRight() {
-                System.out.println("derecha");
-                super.onSwipeRight();
-                Toast.makeText(ImageDisplay.this, "Swipe Right gesture detected", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 
