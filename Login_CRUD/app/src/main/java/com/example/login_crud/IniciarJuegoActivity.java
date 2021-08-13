@@ -1,4 +1,5 @@
 package com.example.login_crud;
 
-public class IniciarJuegoActivity {
+public class IniciarJuegoActivity{
+
 }
