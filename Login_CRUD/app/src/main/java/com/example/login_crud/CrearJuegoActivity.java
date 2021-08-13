@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import com.example.Listeners.onTraerDatosListener;
 import com.example.Objetos.Categoria;
 import com.example.Objetos.Member;
+import com.example.Objetos.Plantilla;
 import com.example.Objetos.ViewHolder;
 import com.example.simpleimagegallery.ImageDisplay;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -30,6 +32,7 @@ import com.squareup.picasso.Picasso;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CrearJuegoActivity extends AppCompatActivity  {
     Button mOrder;
@@ -42,17 +45,14 @@ public class CrearJuegoActivity extends AppCompatActivity  {
     RecyclerView mRecyclerView;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference reference;
+    EditText nombreJuego;
+    EditText cantidadEquipos;
+    HashMap<String, Object> plantillaAInsertar = new HashMap<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_crear_juego);
-        if( getIntent().getExtras() != null)
-        {
-            ArrayList<String> cantidadPersonajesElegidos = getIntent().getStringArrayListExtra("personajes");
-            System.out.println("los pers son: "+cantidadPersonajesElegidos.size());
-        }
-
         super.onCreate(savedInstanceState);
         personajes = (Button) findViewById(R.id.botonPersonajes);
         mOrder = (Button) findViewById(R.id.btnOrder);
@@ -64,6 +64,21 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         firebaseDatabase = FirebaseDatabase.getInstance();
         reference = firebaseDatabase.getReference("Data");
+        nombreJuego = findViewById(R.id.completarNombreJuego);
+        cantidadEquipos = findViewById(R.id.completarCantidadEquipos);
+        Plantilla plantilla = Plantilla.obtenerPlantilla();
+
+        if( getIntent().getExtras() != null)
+        {
+            ArrayList<String> cantidadPersonajesElegidos = getIntent().getStringArrayListExtra("personajes");
+            plantilla.setUrls(cantidadPersonajesElegidos);
+            nombreJuego.setText(plantilla.getNombrePlantilla());
+            cantidadEquipos.setText(plantilla.getCantidadEquipos());
+            mItemSelected.setText(plantilla.getCategorias());
+            personajesElegidos.setText("Eligió "+cantidadPersonajesElegidos.size()+  " personajes");
+        }
+
+
         DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
@@ -79,6 +94,9 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         personajes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                plantilla.setNombrePlantilla(nombreJuego.getText().toString());
+                plantilla.setCantidadEquipos( Integer.parseInt(cantidadEquipos.getText().toString()));
+                plantilla.setCategorias(mItemSelected.toString());
                 Intent intent = new Intent(CrearJuegoActivity.this, ImageDisplay.class);
                 startActivity(intent);
             }

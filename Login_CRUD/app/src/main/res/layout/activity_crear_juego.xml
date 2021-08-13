@@ -118,9 +118,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:singleLine="true"
-            android:textColor="#FFFF0000"
             android:textSize="14sp"
             android:textStyle="italic"
+            android:text="Aún no ha seleccionado categorias "
             tools:layout_editor_absoluteX="3dp"
             tools:layout_editor_absoluteY="397dp" />
 
@@ -167,8 +167,17 @@
             android:id="@+id/cantidadPersonajesElegidos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
             android:layout_weight="1"
-            android:text=" " />
+            android:gravity="center"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:text="Aún no ha seleccionado personajes "
+            tools:layout_editor_absoluteX="3dp"
+            tools:layout_editor_absoluteY="397dp" />
     </LinearLayout>
 
 
