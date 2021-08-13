@@ -7,24 +7,21 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 
 public  enum Color implements Serializable{
-    AMARILLO("HOLA"), VERDE("1"), CELESTE("F"), TURQUESA("2"),
-    AZUL("3"),  VIOLETA("4"),GRIS("5"), ROJO("6"), ROSA("7"), NARANJA("8"),
-    NEGRO("9");
+    AMARILLO(0xffffff00), VERDE(0xff008000 ), CELESTE(0xff13c8f5), TURQUESA(0xff67e2aa),
+    AZUL(0xff0f3bee),  VIOLETA(0xff3D00FF),GRIS(0xff808080), ROJO(0xffC21807), ROSA(0xffE63C8E), NARANJA(0xffF04A00),
+    NEGRO(0xff1b1bbf);
 
     //    private String nombre;
-    private String codigo;
+    private final int codigo;
 
-    Color(String codigo) {
+    Color(int codigo) {
         this.codigo = codigo;
     }
 
-    public String getCodigo() {
+    public int getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(java.lang.String codigo) {
-        this.codigo = codigo;
-    }
 
     @Override
     public String serializar() {

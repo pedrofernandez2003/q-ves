@@ -55,10 +55,10 @@ public class ServicioJuego extends Service {
                         }
                         else if(mensaje.getAccion().equals("turno")) {
                             System.out.println("entre turno");
-                            System.out.println(GameContext.getNombresEquipos().get( GameContext.getJuego().getPartidas().get(0).getTurno())+"  "+nombreEquipo.getText().toString());
-                            if(GameContext.getNombresEquipos().get( GameContext.getJuego().getPartidas().get(0).getTurno()).equals(nombreEquipo.getText().toString())){
-                                System.out.println("entre porque es mi turno");
-                            }
+                            //System.out.println(GameContext.getNombresEquipos().get( GameContext.getJuego().getPartidas().get(0).getTurno())+"  "+nombreEquipo.getText().toString());
+                            //if(GameContext.getNombresEquipos().get( GameContext.getJuego().getPartidas().get(0).getTurno()).equals(nombreEquipo.getText().toString())){
+                            //    System.out.println("entre porque es mi turno");
+                            //}
                             Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                         }
 
