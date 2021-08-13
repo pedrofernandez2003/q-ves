@@ -47,18 +47,18 @@ public class CrearJuegoActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_crear_juego);
-        Intent data = getIntent();
-//        ArrayList<String> cantidadPersonajesElegidos = data.getStringArrayListExtra("personajes");
-//        System.out.println("los pers son: "+cantidadPersonajesElegidos.size());
+        if( getIntent().getExtras() != null)
+        {
+            ArrayList<String> cantidadPersonajesElegidos = getIntent().getStringArrayListExtra("personajes");
+            System.out.println("los pers son: "+cantidadPersonajesElegidos.size());
+        }
+
         super.onCreate(savedInstanceState);
         personajes = (Button) findViewById(R.id.botonPersonajes);
         mOrder = (Button) findViewById(R.id.btnOrder);
         ArrayList<String> nombresCategoria = new ArrayList<>();
         mItemSelected = (TextView) findViewById(R.id.tvItemSelected);
         personajesElegidos = (TextView) findViewById(R.id.cantidadPersonajesElegidos);
-//        if(!cantidadPersonajesElegidos.equals(null)) {
-//            personajesElegidos.setText("");
-//        }
         mRecyclerView = findViewById(R.id.recyclerview);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

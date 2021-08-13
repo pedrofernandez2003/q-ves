@@ -169,30 +169,16 @@ public class pictureBrowserFragment extends Fragment implements imageIndicatorLi
         pagingImages = new ImagesPagerAdapter();
         imagePager.setAdapter(pagingImages);
         imagePager.setOffscreenPageLimit(3);
-        imagePager.setCurrentItem(position);//displaying the image at the current position passed by the ImageDisplay Activity
+        imagePager.setCurrentItem(position);
 
-
-        /**
-         * setting up the recycler view indicator for the viewPager
-         */
         indicatorRecycler = view.findViewById(R.id.indicatorRecycler);
         indicatorRecycler.hasFixedSize();
-//        indicatorRecycler.setLayoutManager(new GridLayoutManager(getContext(),1,RecyclerView.HORIZONTAL,false));
         RecyclerView.Adapter indicatorAdapter = new recyclerViewPagerImageIndicator(allImages,getContext(),this);
         indicatorRecycler.setAdapter(indicatorAdapter);
-
-        //adjusting the recyclerView indicator to the current position of the viewPager, also highlights the image in recyclerView with respect to the
-        //viewPager's position
         allImages.get(position).setSelected(true);
         previousSelected = position;
         indicatorAdapter.notifyDataSetChanged();
-//        indicatorRecycler.scrollToPosition(position);
 
-
-        /**
-         * this listener controls the visibility of the recyclerView
-         * indication and it current position in respect to the image ViewPager
-         */
         imagePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -238,21 +224,11 @@ public class pictureBrowserFragment extends Fragment implements imageIndicatorLi
                 return false;
             }
         });
-//        return position;
-
     }
 
-
-    /**
-     * this method of the imageIndicatorListerner interface helps in communication between the fragment and the recyclerView Adapter
-     * each time an iten in the adapter is clicked the position of that item is communicated in the fragment and the position of the
-     * viewPager is adjusted as follows
-     * @param ImagePosition The position of an image item in the RecyclerView Adapter
-     */
     @Override
     public void onImageIndicatorClicked(int ImagePosition) {
 
-        //the below lines of code highlights the currently select image in  the indicatorRecycler with respect to the viewPager position
         if(previousSelected != -1){
             allImages.get(previousSelected).setSelected(false);
             previousSelected = ImagePosition;
@@ -264,9 +240,6 @@ public class pictureBrowserFragment extends Fragment implements imageIndicatorLi
         imagePager.setCurrentItem(ImagePosition);
     }
 
-    /**
-     * the imageViewPager's adapter
-     */
     private class ImagesPagerAdapter extends PagerAdapter {
 
         @Override
@@ -299,17 +272,6 @@ public class pictureBrowserFragment extends Fragment implements imageIndicatorLi
                     }else{
                         indicatorRecycler.setVisibility(View.GONE);
                     }
-
-                    /**
-                     * uncomment the below condition and comment the one above to control recyclerView visibility automatically
-                     * when image is clicked
-                     */
-                    /*if(viewVisibilityController == 0){
-                     indicatorRecycler.setVisibility(View.VISIBLE);
-                     visibiling();
-                 }else{
-                     viewVisibilitylooper++;
-                 }*/
 
                 }
             });
