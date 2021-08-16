@@ -62,7 +62,7 @@ public class SendReceive extends Thread {
             try {
                 bytes = inputStream.read(buffer);
                 if (bytes > 0) {
-                    handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+                    handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();//este handler deberia estar en el servicio
                 }
             } catch (IOException e) {
                 e.printStackTrace();

@@ -1,6 +1,8 @@
 package com.example.hotspot;
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -51,9 +53,28 @@ public class TraerJuegos extends AppCompatActivity {
     private Button botonComenzarPartida;
     private ThreadedEchoServer server;
 
+    BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("accion: "+intent.getAction());
+            switch (intent.getAction()){
+                case "nuevo equipo":
+                    if(GameContext.getHijos().size() >= cantidadEquipos){
+                        botonComenzarPartida.setVisibility(View.VISIBLE);
+                    }
+                    System.out.println("prueba");
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("nuevo equipo");
+        registerReceiver(broadcastReceiver,intentFilter);
         super.onCreate(savedInstanceState);
+        startService(new Intent(this,ServicioJuego.class));
         setContentView(R.layout.activity_traer_juegos);
         cantidadEquipos=0;
         textoCargando = findViewById(R.id.textoCargando);
@@ -87,15 +108,15 @@ public class TraerJuegos extends AppCompatActivity {
         });
     }
 
-    Handler handlerCantHijos = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(@NonNull Message msg) {
-            if(GameContext.getHijos().size() >= cantidadEquipos){//habria que reemplazar 1 por la cantidad de equipos del juego
-                botonComenzarPartida.setVisibility(View.VISIBLE);
-            }
-            return true;
-        }
-    });
+//    Handler handlerCantHijos = new Handler(new Handler.Callback() {
+//        @Override
+//        public boolean handleMessage(@NonNull Message msg) {
+//            if(GameContext.getHijos().size() >= cantidadEquipos){
+//                botonComenzarPartida.setVisibility(View.VISIBLE);
+//            }
+//            return true;
+//        }
+//    });
 
     private void mostrarPlantillas(Context appCcontext)  {
         DataManagerPlantillas.traerPlantillas(new onTraerDatosListener() {
@@ -120,7 +141,7 @@ public class TraerJuegos extends AppCompatActivity {
                             textoCargando.setVisibility(View.VISIBLE);
                             nombreRed.setVisibility(View.VISIBLE);
                             claveRed.setVisibility(View.VISIBLE);
-                            server=new ThreadedEchoServer();
+                            server= new ThreadedEchoServer();
                             server.start();
                             GameContext.setServer(server);
                         }
@@ -201,44 +222,45 @@ public class TraerJuegos extends AppCompatActivity {
 //        }
 //    }
 
-    public class ThreadedEchoServer extends Thread {
-        static final int PORT = 7028;
+//    public class ThreadedEchoServer extends Thread {
+//        static final int PORT = 7028;
+//
+//        public void run() {
+//            ServerSocket serverSocket = null;
+//            Socket socket = null;
+//
+//            try {
+//                serverSocket = new ServerSocket(PORT);
+//                System.out.println("creo el socket");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            while (true) {
+//                try {
+//                    socket = serverSocket.accept();
+//                } catch (IOException e) {
+//                    System.out.println("I/O error: " + e);
+//                }
+//                SendReceive nuevoHijo=new SendReceive(socket);
+//                GameContext.agregarHijo(nuevoHijo);
+//                handlerCantHijos.obtainMessage().sendToTarget();
+//                nuevoHijo.start();
+//            }
+//        }
+//    }
 
-        public void run() {
-            ServerSocket serverSocket = null;
-            Socket socket = null;
-
-            try {
-                serverSocket = new ServerSocket(PORT);
-                System.out.println("creo el socket");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            while (true) {
-                try {
-                    socket = serverSocket.accept();
-                } catch (IOException e) {
-                    System.out.println("I/O error: " + e);
-                }
-                SendReceive nuevoHijo=new SendReceive(socket);
-                GameContext.agregarHijo(nuevoHijo);
-                handlerCantHijos.obtainMessage().sendToTarget();
-                nuevoHijo.start();
-            }
-        }
-    }
-
-    public class Write extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            try {
-                GameContext.getHijos().get((Integer) objects[1]).write((byte[]) objects[0]);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
+//    public class Write extends AsyncTask {
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//            try {
+//                GameContext.getHijos().get((Integer) objects[1]).write((byte[]) objects[0]);
+//                System.out.println("escribi");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//    }
 
     public static String getIPAddress(boolean useIPv4) {
         try {

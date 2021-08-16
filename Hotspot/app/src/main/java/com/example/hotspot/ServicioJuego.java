@@ -1,9 +1,12 @@
 package com.example.hotspot;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.widget.Toast;
@@ -13,9 +16,18 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 public class ServicioJuego extends Service {
-    String prueba;
+    int turno;
     static final int MESSAGE_READ = 1;
+    private ThreadedEchoServer server;
+    private SendReceive sendReceive;
 
     @Nullable
     @Override
@@ -26,18 +38,18 @@ public class ServicioJuego extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        prueba="hola";
+        turno=0;
     }
 
-    public String getPrueba() {
-        return prueba;
+    public int getTurno() {
+        return turno;
     }
 
-    public void setPrueba(String prueba) {
-        this.prueba = prueba;
+    public void setTurno(int turno) {
+        this.turno = turno;
     }
 
-    Handler handler = new Handler(new Handler.Callback() {
+    Handler handlerMensajes = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
             switch (msg.what) {
@@ -51,14 +63,17 @@ public class ServicioJuego extends Service {
                         if (mensaje.getAccion().equals("comenzar")){
                             Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
                             GameContext.setJuego(juego);
+                            Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                             System.out.println("setea el juego del game context-------------------------------------");
+                            Intent intent= new Intent();
+                            intent.setAction("comenzar");
+                            this.sendBroadcast(intent);
                         }
                         else if(mensaje.getAccion().equals("turno")) {
                             System.out.println("entre turno");
-                            //System.out.println(GameContext.getNombresEquipos().get( GameContext.getJuego().getPartidas().get(0).getTurno())+"  "+nombreEquipo.getText().toString());
-                            //if(GameContext.getNombresEquipos().get( GameContext.getJuego().getPartidas().get(0).getTurno()).equals(nombreEquipo.getText().toString())){
-                            //    System.out.println("entre porque es mi turno");
-                            //}
+                            Intent intent= new Intent();
+                            intent.setAction("turno");
+                            this.sendBroadcast(intent);
                             Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                         }
 
@@ -69,5 +84,24 @@ public class ServicioJuego extends Service {
             }
             return true;
         }
+
+        private void sendBroadcast(Intent intent) {
+            this.sendBroadcast(intent);
+        }
     });
+
+    Handler handlerNuevoEquipo = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+            Intent intent= new Intent();
+            intent.setAction("nuevo equipo");
+            this.sendBroadcast(intent);
+            return true;
+        }
+
+        private void sendBroadcast(Intent intent) {
+            this.sendBroadcast(intent);
+        }
+    });
+
 }
