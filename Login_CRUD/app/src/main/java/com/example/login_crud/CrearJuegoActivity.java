@@ -110,9 +110,7 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         personajes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nombreJuego.setText("Juego Prueba");
-                cantidadEquipos.setText("3");
-
+                
 //                if(nombreJuego.getText().toString() != "" && cantidadEquipos != null && mItemSelected.toString() != "") {
                     guardarDatos(plantilla, mItemSelected.getText().toString());
                     Intent intent = new Intent(CrearJuegoActivity.this, ImageDisplay.class);

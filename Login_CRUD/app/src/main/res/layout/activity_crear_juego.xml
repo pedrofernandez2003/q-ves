@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+
     <LinearLayout
         android:id="@+id/detalleNombreJuego"
         android:layout_width="fill_parent"
@@ -39,13 +40,11 @@
 
         <EditText
             android:id="@+id/completarNombreJuego"
-            android:inputType="text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ems="10"
-            />
-
-
+            android:inputType="text" />
 
     </LinearLayout>
 
@@ -124,7 +123,7 @@
             android:textStyle="italic"
             android:text="Aún no ha seleccionado categorias "
             tools:layout_editor_absoluteX="3dp"
-            tools:layout_editor_absoluteY="397dp" />
+            tools:layout_editor_absoluteY="397dp"/>
 
 
     </LinearLayout>
@@ -133,7 +132,8 @@
         android:id="@+id/recyclerview"
         android:layout_width="411dp"
         android:layout_height="252dp"
-        tools:layout_editor_absoluteY="357dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoriasSeleccionadas" />
 
     <LinearLayout
         android:id="@+id/seleccionarPersonajes"
@@ -146,7 +146,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/categoriasSeleccionadas">
+        app:layout_constraintTop_toTopOf="@+id/recyclerview">
 
         <Button
             android:id="@+id/botonPersonajes"
@@ -192,6 +192,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
