@@ -28,17 +28,17 @@ public class Jugar extends AppCompatActivity  {
     private Partida partida;
     private TextView turno;
 
-    public class Write extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            try {
-                context.getHijos().get((Integer) objects[1]).write((byte[]) objects[0]);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
+//    public class Write extends AsyncTask {
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//            try {
+//                context.getHijos().get((Integer) objects[1]).write((byte[]) objects[0]);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

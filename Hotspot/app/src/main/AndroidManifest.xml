@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.hotspot">
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -20,14 +20,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Hotspot">
-        <service android:name=".ServicioJuego"
+<!--        <activity-->
+<!--            android:name=".Cargando"-->
+<!--            android:exported="true"-->
+<!--            android:label="@string/title_activity_cargando"-->
+<!--            android:theme="@style/Theme.Hotspot.NoActionBar" />-->
+
+        <service
+            android:name=".ServicioJuego"
             tools:ignore="Instantiatable" />
 
         <activity
-                android:name=".MainActivity2"
-                android:label="@string/title_activity_main2"
-                android:theme="@style/Theme.Hotspot.NoActionBar">
-        </activity>
+            android:name=".MainActivity2"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/Theme.Hotspot.NoActionBar"></activity>
         <activity
             android:name=".Jugar"
             android:label="@string/title_activity_jugar"
@@ -42,7 +48,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CrearTablero"
+        <activity
+            android:name=".CrearTablero"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape">
         </activity>

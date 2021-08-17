@@ -40,8 +40,8 @@ public class DataManagerPlantillas extends DataManager {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
 //                        HashMap<String, String> colorInfo = (HashMap<String, String>) document.getData().get("colorcolor");
-                        int cantPartidas= Math.toIntExact(((Long) document.getData().get("cantPartidas")));
-                        int cantEquipos= Math.toIntExact(((Long) document.getData().get("cantEquipos")));
+                        int cantPartidas= Integer.parseInt((String) document.getData().get("cantPartidas"));
+                        int cantEquipos= Integer.parseInt((String) document.getData().get("cantEquipos"));
                         ArrayList<String>categoriasBase= (ArrayList<String>) document.getData().get("categorias");
                         ArrayList<Categoria>categorias=new ArrayList<>();
                         ArrayList<Personaje>personajes=new ArrayList<>();//harcodeamos para probar

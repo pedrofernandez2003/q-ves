@@ -38,21 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private TextInputEditText nombreEquipo;
     private TextView turno;
 
-    BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            System.out.println("prueba");
-            System.out.println("accion: "+intent.getAction());
-            switch (intent.getAction()){
-                case "comenzar":
-                    unregisterReceiver(broadcastReceiver);
-                    System.out.println("entre");
-                    empezarJuego();
-                    break;
-            }
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,23 +50,24 @@ public class MainActivity extends AppCompatActivity {
         turno = findViewById(R.id.turno);
         nombreEquipo =  (TextInputEditText) findViewById(R.id.nombreEquipo);
         botonIniciarSesion=(Button)findViewById(R.id.iniciarSesion);
-
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-
+        Context appContext=this;
         botonUnirse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dhcpInfo=wifiManager.getDhcpInfo();
                 String codigo = formatIP(dhcpInfo.gateway);
-                clientClass = new ClientClass(codigo);
-                clientClass.start();
-                System.out.println(nombreEquipo);
+                Intent intent= new Intent();
+                intent.setAction("nuevo equipo");
+                intent.putExtra("codigo",codigo);
+                appContext.sendBroadcast(intent);
+//                clientClass = new ClientClass(codigo);
+//                clientClass.start();
+                System.out.println("nombre equipo: "+nombreEquipo.getText().toString());
                 GameContext.getNombresEquipos().add(nombreEquipo.getText().toString());
                 setContentView(R.layout.cargando);
             }
         });
-
-        Context appContext=this;
 
         botonIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,17 +78,41 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("accion main activity: "+intent.getAction());
+            switch (intent.getAction()){
+                case "comenzar":
+                    System.out.println("comienza");
+                    empezarJuego();
+                    break;
+            }
+        }
+    };
 
     public String formatIP(int IpAddress) {
         return Formatter.formatIpAddress(IpAddress);
     }
 
     private void empezarJuego(){
+        unregisterReceiver(broadcastReceiver);
         Intent partida = new Intent(this, Jugar.class);
         startActivity(partida);
     }
 
-//    Handler handler = new Handler(new Handler.Callback() {
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(broadcastReceiver);
+        super.onDestroy();
+    }
+
+//    @Override
+//    protected void onPause() {
+//        unregisterReceiver(broadcastReceiver);
+//        super.onPause();
+//    }
+    //    Handler handler = new Handler(new Handler.Callback() {
 //        @Override
 //        public boolean handleMessage(@NonNull Message msg) {
 //            switch (msg.what) {

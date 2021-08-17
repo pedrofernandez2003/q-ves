@@ -53,27 +53,12 @@ public class TraerJuegos extends AppCompatActivity {
     private Button botonComenzarPartida;
     private ThreadedEchoServer server;
 
-    BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            System.out.println("accion: "+intent.getAction());
-            switch (intent.getAction()){
-                case "nuevo equipo":
-                    if(GameContext.getHijos().size() >= cantidadEquipos){
-                        botonComenzarPartida.setVisibility(View.VISIBLE);
-                    }
-                    System.out.println("prueba");
-                    break;
-            }
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("nuevo equipo");
-        registerReceiver(broadcastReceiver,intentFilter);
         super.onCreate(savedInstanceState);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("nuevo equipo2");
+        registerReceiver(broadcastReceiver,intentFilter);
         startService(new Intent(this,ServicioJuego.class));
         setContentView(R.layout.activity_traer_juegos);
         cantidadEquipos=0;
@@ -107,6 +92,20 @@ public class TraerJuegos extends AppCompatActivity {
             }
         });
     }
+    BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("accion traer juegos: "+intent.getAction());
+            switch (intent.getAction()){
+                case "nuevo equipo2":
+                    System.out.println(GameContext.getHijos().size());
+                    if(GameContext.getHijos().size() >= cantidadEquipos){
+                        botonComenzarPartida.setVisibility(View.VISIBLE);
+                    }
+                    break;
+            }
+        }
+    };
 
 //    Handler handlerCantHijos = new Handler(new Handler.Callback() {
 //        @Override
@@ -117,7 +116,7 @@ public class TraerJuegos extends AppCompatActivity {
 //            return true;
 //        }
 //    });
-
+    Context appContext=this;
     private void mostrarPlantillas(Context appCcontext)  {
         DataManagerPlantillas.traerPlantillas(new onTraerDatosListener() {
             @Override
@@ -132,7 +131,6 @@ public class TraerJuegos extends AppCompatActivity {
                     cantidadEquipos=plantilla.getCantEquipos();
                     button.setBackgroundColor(999999);
                     llBotonera.addView(button);
-
                     button.setOnClickListener(new View.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
@@ -141,8 +139,11 @@ public class TraerJuegos extends AppCompatActivity {
                             textoCargando.setVisibility(View.VISIBLE);
                             nombreRed.setVisibility(View.VISIBLE);
                             claveRed.setVisibility(View.VISIBLE);
-                            server= new ThreadedEchoServer();
-                            server.start();
+                            Intent intent= new Intent();
+                            intent.setAction("crear server");
+                            appContext.sendBroadcast(intent);
+//                            server= new ThreadedEchoServer();
+//                            server.start();
                             GameContext.setServer(server);
                         }
                     });
@@ -152,11 +153,23 @@ public class TraerJuegos extends AppCompatActivity {
     }
 
     private void empezarJuego(){
+        unregisterReceiver(broadcastReceiver);
         Intent partida = new Intent(this, Jugar.class);
         startActivity(partida);
     }
 
-//    Handler handler = new Handler(new Handler.Callback() {
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(broadcastReceiver);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(broadcastReceiver);
+        super.onPause();
+    }
+    //    Handler handler = new Handler(new Handler.Callback() {
 //        @Override
 //        public boolean handleMessage(@NonNull Message msg) {
 //            switch (msg.what) {
