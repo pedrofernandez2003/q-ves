@@ -110,12 +110,15 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         personajes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
-//                if(nombreJuego.getText().toString() != "" && cantidadEquipos != null && mItemSelected.toString() != "") {
+
+                if (nombreJuego.getText().toString().matches("") || cantidadEquipos.getText().toString().matches("") || mItemSelected.getText().toString().isEmpty()  ) {
+                    Toast.makeText(CrearJuegoActivity.this, "Carge todos los datos antes de elegir personajes", Toast.LENGTH_SHORT).show();
+                }
+                else{
                     guardarDatos(plantilla, mItemSelected.getText().toString());
                     Intent intent = new Intent(CrearJuegoActivity.this, ImageDisplay.class);
                     startActivity(intent);
-//                }
+                }
             }
         });
         mOrder.setOnClickListener(new View.OnClickListener() {
