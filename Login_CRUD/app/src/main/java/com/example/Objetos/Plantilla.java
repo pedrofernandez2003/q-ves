@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Plantilla {
     private static Plantilla context;
     private static String nombrePlantilla;
-    private static int cantidadEquipos;
-    private static String categorias;
+    private static String cantidadEquipos;
+    private static ArrayList<String>  categorias;
     private static ArrayList<String> urls;
 
 
@@ -21,7 +21,7 @@ public class Plantilla {
         Plantilla.context = context;
     }
 
-    public static String getNombrePlantilla() {
+    public static String  getNombrePlantilla() {
         return nombrePlantilla;
     }
 
@@ -29,19 +29,19 @@ public class Plantilla {
         Plantilla.nombrePlantilla = nombrePlantilla;
     }
 
-    public static int getCantidadEquipos() {
+    public static String getCantidadEquipos() {
         return cantidadEquipos;
     }
 
-    public static void setCantidadEquipos(int cantidadEquipos) {
+    public static void setCantidadEquipos(String cantidadEquipos) {
         Plantilla.cantidadEquipos = cantidadEquipos;
     }
 
-    public static String getCategorias() {
+    public static ArrayList<String>  getCategorias() {
         return categorias;
     }
 
-    public static void setCategorias(String categorias) {
+    public static void setCategorias(ArrayList<String>  categorias) {
         Plantilla.categorias = categorias;
     }
 

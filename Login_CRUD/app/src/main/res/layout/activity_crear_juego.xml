@@ -25,7 +25,8 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/titulo">
+        app:layout_constraintTop_toTopOf="@+id/titulo"
+        >
 
         <TextView
             android:id="@+id/nombreJuego"
@@ -34,15 +35,16 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:singleLine="true"
-
-            android:text="Nombre del juego:" />
+            android:text="Nombre:" />
 
         <EditText
             android:id="@+id/completarNombreJuego"
+            android:inputType="text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="text" />
+            />
+
 
 
     </LinearLayout>
@@ -65,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:singleLine="true"
-            android:text="Cantidad de equipos:" />
+            android:text="Equipos:" />
 
         <EditText
             android:id="@+id/completarCantidadEquipos"
@@ -156,6 +158,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -173,12 +176,22 @@
             android:layout_weight="1"
             android:gravity="center"
             android:singleLine="true"
+            android:text="Aún no ha seleccionado personajes "
             android:textSize="14sp"
             android:textStyle="italic"
-            android:text="Aún no ha seleccionado personajes "
             tools:layout_editor_absoluteX="3dp"
             tools:layout_editor_absoluteY="397dp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/guardarPlantilla"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guardar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

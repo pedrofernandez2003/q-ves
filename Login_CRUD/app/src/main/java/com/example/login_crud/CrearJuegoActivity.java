@@ -10,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -18,7 +19,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.Listeners.onInsertarListener;
 import com.example.Listeners.onTraerDatosListener;
 import com.example.Objetos.Categoria;
 import com.example.Objetos.Member;
@@ -32,11 +35,13 @@ import com.squareup.picasso.Picasso;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class CrearJuegoActivity extends AppCompatActivity  {
     Button mOrder;
     Button personajes;
+    Button guardarPlantilla;
     TextView mItemSelected;
     TextView personajesElegidos;
     ArrayList<String> listItems;
@@ -47,7 +52,6 @@ public class CrearJuegoActivity extends AppCompatActivity  {
     DatabaseReference reference;
     EditText nombreJuego;
     EditText cantidadEquipos;
-    HashMap<String, Object> plantillaAInsertar = new HashMap<>();
 
 
     @Override
@@ -56,6 +60,7 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         personajes = (Button) findViewById(R.id.botonPersonajes);
         mOrder = (Button) findViewById(R.id.btnOrder);
+        guardarPlantilla = (Button) findViewById(R.id.guardarPlantilla);
         ArrayList<String> nombresCategoria = new ArrayList<>();
         mItemSelected = (TextView) findViewById(R.id.tvItemSelected);
         personajesElegidos = (TextView) findViewById(R.id.cantidadPersonajesElegidos);
@@ -74,7 +79,18 @@ public class CrearJuegoActivity extends AppCompatActivity  {
             plantilla.setUrls(cantidadPersonajesElegidos);
             nombreJuego.setText(plantilla.getNombrePlantilla());
             cantidadEquipos.setText(plantilla.getCantidadEquipos());
-            mItemSelected.setText(plantilla.getCategorias());
+            String categorias= "";
+            String categoriasAux;
+            for(String categoria: plantilla.getCategorias()){
+                categoriasAux = categoria;
+                if(categoria!=plantilla.getCategorias().get(0)) {
+                    categorias = categorias + ", " + categoriasAux;
+                }
+                else{
+                    categorias = categoria;
+                }
+            }
+            mItemSelected.setText(categorias);
             personajesElegidos.setText("Eligió "+cantidadPersonajesElegidos.size()+  " personajes");
         }
 
@@ -94,11 +110,14 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         personajes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                plantilla.setNombrePlantilla(nombreJuego.getText().toString());
-                plantilla.setCantidadEquipos( Integer.parseInt(cantidadEquipos.getText().toString()));
-                plantilla.setCategorias(mItemSelected.toString());
-                Intent intent = new Intent(CrearJuegoActivity.this, ImageDisplay.class);
-                startActivity(intent);
+                nombreJuego.setText("Juego Prueba");
+                cantidadEquipos.setText("3");
+
+//                if(nombreJuego.getText().toString() != "" && cantidadEquipos != null && mItemSelected.toString() != "") {
+                    guardarDatos(plantilla, mItemSelected.getText().toString());
+                    Intent intent = new Intent(CrearJuegoActivity.this, ImageDisplay.class);
+                    startActivity(intent);
+//                }
             }
         });
         mOrder.setOnClickListener(new View.OnClickListener() {
@@ -157,7 +176,38 @@ public class CrearJuegoActivity extends AppCompatActivity  {
 
 
 
+        guardarPlantilla.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guardarDatos(plantilla, mItemSelected.getText().toString());
+                DataManagerCategoria.insertarPlantilla(plantilla, new onInsertarListener() {
+                    @Override
+                    public void insertar(boolean insertado) {
+                        if (insertado){
+                            Toast.makeText(CrearJuegoActivity.this, "Plantilla guardada", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(CrearJuegoActivity.this, "No se ha podido guardar", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+            }
+        });
+
+
+
+
+
 }
+
+    private void guardarDatos(Plantilla plantilla, String categoriasSeleccionadas) {
+        plantilla.setNombrePlantilla(nombreJuego.getText().toString());
+        plantilla.setCantidadEquipos(cantidadEquipos.getText().toString());
+        ArrayList<String> categorias = new ArrayList<>(Arrays.asList(categoriasSeleccionadas.split(",")));
+        plantilla.setCategorias(categorias);
+
+    }
 
     @Override
     protected void onStart() {

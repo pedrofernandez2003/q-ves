@@ -12,6 +12,7 @@ import com.example.Listeners.onTraerDatosListener;
 import com.example.Listeners.onTraerPersonajesListener;
 import com.example.Objetos.Categoria;
 import com.example.Objetos.Color;
+import com.example.Objetos.Plantilla;
 import com.example.Objetos.Tarjeta;
 import com.example.simpleimagegallery.utils.pictureFacer;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -104,6 +105,32 @@ public  abstract class DataManagerCategoria extends DataManager {
         categoriaAInsertar.put("tarjetas",new ArrayList<>());
         DataManager.getDb().collection("categorias")
                 .add(categoriaAInsertar)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        listener.insertar(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        listener.insertar(false);
+
+                    }
+                });
+    }
+
+    public static void insertarPlantilla(Plantilla plantilla, onInsertarListener listener) {
+        Map<String, Object> plantillaAInsertar = new HashMap<>();
+        plantillaAInsertar.put("cantEquipos",plantilla.getCantidadEquipos());
+        plantillaAInsertar.put("cantPartidas",String.valueOf(plantilla.getUrls().size()));
+        plantillaAInsertar.put("categorias",plantilla.getCategorias());
+        plantillaAInsertar.put("moderador", "usuario hardcodeado");
+        plantillaAInsertar.put("nombre",plantilla.getNombrePlantilla());
+        plantillaAInsertar.put("personajes",plantilla.getUrls());
+
+        DataManager.getDb().collection("plantilas")
+                .add(plantillaAInsertar)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
