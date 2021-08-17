@@ -111,14 +111,15 @@ public class CrearJuegoActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
 
-                if (nombreJuego.getText().toString().matches("") || cantidadEquipos.getText().toString().matches("") || mItemSelected.getText().toString().isEmpty()  ) {
-                    Toast.makeText(CrearJuegoActivity.this, "Carge todos los datos antes de elegir personajes", Toast.LENGTH_SHORT).show();
-                }
-                else{
+//                if(verificarCamposCompletos()){
+//                    Toast.makeText(CrearJuegoActivity.this, "Ingrese todos los datos antes de elegir personajes", Toast.LENGTH_SHORT).show();
+//
+//                }
+//                else{
                     guardarDatos(plantilla, mItemSelected.getText().toString());
                     Intent intent = new Intent(CrearJuegoActivity.this, ImageDisplay.class);
                     startActivity(intent);
-                }
+//                }
             }
         });
         mOrder.setOnClickListener(new View.OnClickListener() {
@@ -180,19 +181,24 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         guardarPlantilla.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                guardarDatos(plantilla, mItemSelected.getText().toString());
-                DataManagerCategoria.insertarPlantilla(plantilla, new onInsertarListener() {
-                    @Override
-                    public void insertar(boolean insertado) {
-                        if (insertado){
-                            Toast.makeText(CrearJuegoActivity.this, "Plantilla guardada", Toast.LENGTH_SHORT).show();
+                if (verificarCamposCompletos()) {
+                    guardarDatos(plantilla, mItemSelected.getText().toString());
+                    DataManagerCategoria.insertarPlantilla(plantilla, new onInsertarListener() {
+                        @Override
+                        public void insertar(boolean insertado) {
+                            if (insertado) {
+                                Toast.makeText(CrearJuegoActivity.this, "Plantilla guardada", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(CrearJuegoActivity.this, "No se ha podido guardar", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else {
-                            Toast.makeText(CrearJuegoActivity.this, "No se ha podido guardar", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                    });
 
+                }
+                else{
+                    Toast.makeText(CrearJuegoActivity.this, "Ingrese todos los datos antes de continuar", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
@@ -201,6 +207,13 @@ public class CrearJuegoActivity extends AppCompatActivity  {
 
 
 }
+
+    private boolean verificarCamposCompletos() {
+        if (nombreJuego.getText().toString().matches("") || cantidadEquipos.getText().toString().matches("") || mItemSelected.getText().toString().isEmpty() || personajesElegidos.getText().equals("Aún no ha seleccionado personajes ") ) {
+            return false;
+        }
+        return true;
+    }
 
     private void guardarDatos(Plantilla plantilla, String categoriasSeleccionadas) {
         plantilla.setNombrePlantilla(nombreJuego.getText().toString());
