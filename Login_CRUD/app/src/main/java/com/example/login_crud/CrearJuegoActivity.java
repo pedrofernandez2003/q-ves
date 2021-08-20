@@ -110,16 +110,10 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         personajes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                if(verificarCamposCompletos()){
-//                    Toast.makeText(CrearJuegoActivity.this, "Ingrese todos los datos antes de elegir personajes", Toast.LENGTH_SHORT).show();
-//
-//                }
-//                else{
                     guardarDatos(plantilla, mItemSelected.getText().toString());
                     Intent intent = new Intent(CrearJuegoActivity.this, ImageDisplay.class);
+                    intent.putExtra("personajes", plantilla.getUrls());
                     startActivity(intent);
-//                }
             }
         });
         mOrder.setOnClickListener(new View.OnClickListener() {
@@ -209,7 +203,7 @@ public class CrearJuegoActivity extends AppCompatActivity  {
 }
 
     private boolean verificarCamposCompletos() {
-        if (nombreJuego.getText().toString().matches("") || cantidadEquipos.getText().toString().matches("") || mItemSelected.getText().toString().isEmpty() || personajesElegidos.getText().equals("Aún no ha seleccionado personajes ") ) {
+        if (nombreJuego.getText().toString().matches("") || cantidadEquipos.getText().toString().matches("") || mItemSelected.getText().toString().isEmpty() || personajesElegidos.getText().equals("Aún no ha seleccionado personajes ") || personajesElegidos.getText().equals("Eligió 0 personajes") ) {
             return false;
         }
         return true;

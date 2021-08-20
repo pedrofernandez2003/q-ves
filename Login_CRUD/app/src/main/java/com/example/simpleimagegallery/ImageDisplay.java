@@ -65,6 +65,14 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
                 @Override
                 public void traerPersonaje(ArrayList<pictureFacer> datos) {
                     for (pictureFacer personaje : datos) {
+                        if( getIntent().getExtras() != null)
+                        {
+                            if( getIntent().getStringArrayListExtra("personajes").contains(personaje.getPicturePath())){
+                                System.out.println("Imagen que viene de la clase: "+personaje.getPicturePath());
+
+                            }
+                        }
+
                         allpictures.add(personaje);
                     }
                     imageRecycler.setAdapter(new picture_Adapter(allpictures,ImageDisplay.this,that));
@@ -87,7 +95,14 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
         FrameLayout imagenAgrandada = findViewById(R.id.displayContainer);
         Button seleccionarPersonaje = new Button(this);
         seleccionarPersonaje.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-        seleccionarPersonaje.setText("Elegir personaje");
+        int posicion = browser.getPosition();
+        if(getIntent().getStringArrayListExtra("personajes").contains((String) pics.get(posicion).getPicturePath())){
+            seleccionarPersonaje.setText("Deseleccionar");
+        }
+        else{
+            seleccionarPersonaje.setText("Seleccionar");
+
+        }
         imagenAgrandada.addView(seleccionarPersonaje);
 
 
@@ -96,14 +111,20 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
             @Override
             public void onClick(View view) {
                 int posicion = browser.getPosition();
-                personajesElegidos.add((String) pics.get(posicion).getPicturePath());
+                if(seleccionarPersonaje.getText()=="Seleccionar") {
+                    personajesElegidos.add((String) pics.get(posicion).getPicturePath());
+                    seleccionarPersonaje.setText("Deseleccionar");
+                }
+                else{
+                    personajesElegidos.remove((String) pics.get(posicion).getPicturePath());
+
+                }
             }
 
         });
 
         getSupportFragmentManager()
                 .beginTransaction()
-//                .addSharedElement(holder.picture, position+"picture")
                 .add(R.id.displayContainer, browser)
                 .addToBackStack(null)
                 .commit();

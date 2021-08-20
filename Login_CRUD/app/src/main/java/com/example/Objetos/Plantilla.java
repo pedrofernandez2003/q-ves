@@ -7,7 +7,7 @@ public class Plantilla {
     private static String nombrePlantilla;
     private static String cantidadEquipos;
     private static ArrayList<String>  categorias;
-    private static ArrayList<String> urls;
+    private static ArrayList<String> urls = new ArrayList<>() ;
 
 
     private Plantilla() {

@@ -43,31 +43,6 @@
 
 
         </LinearLayout>
-        <!--        <androidx.cardview.widget.CardView-->
-        <!--            android:id="@+id/head"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="50dp"-->
-        <!--            app:cardBackgroundColor="@color/skyblue">-->
-
-        <!--            <TextView-->
-        <!--                android:id="@+id/foldername"-->
-        <!--                android:layout_width="100dp"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_gravity="center|start"-->
-        <!--                android:layout_marginStart="10dp"-->
-        <!--                android:layout_marginLeft="10dp"-->
-        <!--                android:text="Personajes"-->
-        <!--                android:textColor="@color/white"-->
-        <!--                android:textSize="18sp"-->
-        <!--                android:textStyle="bold" />-->
-
-        <!--            <Button-->
-        <!--                android:id="@+id/button"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:text="Button" />-->
-        <!--        </androidx.cardview.widget.CardView>-->
-
         <com.example.simpleimagegallery.utils.AutoFitRecyclerView
             android:layout_below="@id/head"
             android:id="@+id/recycler"
