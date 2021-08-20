@@ -54,13 +54,39 @@ public class ServicioJuego extends Service {
                     ClientClass clientClass = new ClientClass(intent.getStringExtra("codigo"));
                     clientClass.start();
                     System.out.println("se conecto un equipo");
-                    Intent intent2= new Intent();
-                    intent2.setAction("nuevo equipo2");
-                    contexto.sendBroadcast(intent2);
                     break;
                 case "crear server":
                     server= new ThreadedEchoServer();
                     server.start();
+                    for (SendReceive hijo:GameContext.getHijos()) {
+                        hijo.callbackMensaje=new mensajeCallback() {
+                            @Override
+                            public void mensajeRecibido(int estado, int bytes, int argumento, byte[] buffer) {
+                                if (estado==1){
+                                    String tempMsg = new String(buffer, 0, bytes);
+                                    System.out.println("mensaje recibido "+tempMsg);
+                                    try {
+                                        Gson json = new Gson();
+                                        Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
+                                        switch (mensaje.getAccion()){
+                                            case "se conecto":
+                                                Intent intent2= new Intent();
+                                                intent2.setAction("nuevo equipo2");
+                                                contexto.sendBroadcast(intent2);
+                                                break;
+                                        }
+
+//                        Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
+//                        Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
+//                        empezarJuego();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+
+                        };
+                    }
                     System.out.println("se creo el server");
                     break;
             }

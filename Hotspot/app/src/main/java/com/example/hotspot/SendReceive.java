@@ -19,6 +19,8 @@ public class SendReceive extends Thread {
     private OutputStream outputStream;
     static final int MESSAGE_READ=1;
     private Handler handler;
+    public mensajeCallback callbackMensaje;
+
 
     public SendReceive(Socket skt) {
         System.out.println("entre al constructor");
@@ -62,7 +64,8 @@ public class SendReceive extends Thread {
             try {
                 bytes = inputStream.read(buffer);
                 if (bytes > 0) {
-                    handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();//este handler deberia estar en el servicio
+                    callbackMensaje.mensajeRecibido(MESSAGE_READ, bytes, -1, buffer);
+//                    handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();//este handler deberia estar en el servicio
                 }
             } catch (IOException e) {
                 e.printStackTrace();
