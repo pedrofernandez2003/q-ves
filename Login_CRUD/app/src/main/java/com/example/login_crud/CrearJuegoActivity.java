@@ -73,6 +73,18 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         cantidadEquipos = (EditText) findViewById(R.id.completarCantidadEquipos);
         Plantilla plantilla = Plantilla.obtenerPlantilla();
 
+        DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
+            @Override
+            public void traerDatos(ArrayList<Object> datos) {
+                checkedItems = new boolean[datos.size()];
+                for (Object dato: datos) {
+                    Categoria categoria= (Categoria) dato;
+                    nombresCategoria.add(categoria.getNombre());
+                }
+                listItems = nombresCategoria;
+            }
+        });
+
         if( getIntent().getExtras() != null)
         {
             ArrayList<String> cantidadPersonajesElegidos = getIntent().getStringArrayListExtra("personajes");
@@ -90,22 +102,13 @@ public class CrearJuegoActivity extends AppCompatActivity  {
                     categorias = categoria;
                 }
             }
+            
             mItemSelected.setText(categorias);
             personajesElegidos.setText("Eligió "+cantidadPersonajesElegidos.size()+  " personajes");
         }
 
 
-        DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
-            @Override
-            public void traerDatos(ArrayList<Object> datos) {
-                checkedItems = new boolean[datos.size()];
-                for (Object dato: datos) {
-                    Categoria categoria= (Categoria) dato;
-                    nombresCategoria.add(categoria.getNombre());
-                }
-                listItems = nombresCategoria;
-            }
-        });
+
 
         personajes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +119,7 @@ public class CrearJuegoActivity extends AppCompatActivity  {
                     startActivity(intent);
             }
         });
+
         mOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

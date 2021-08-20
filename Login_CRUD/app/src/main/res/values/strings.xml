@@ -20,9 +20,9 @@
     <string name="contenido">Contenido</string>
     <string name="clear_all_label">limpiar</string>
     <string name="make_an_order">Make an order</string>
-    <string name="dialog_title">Items available in a shop</string>
-    <string name="ok_label">OK</string>
-    <string name="dismiss_label">Dismiss</string>
+    <string name="dialog_title">Categorías</string>
+    <string name="ok_label">Aceptar</string>
+    <string name="dismiss_label">Ocultar</string>
     <string name="confirmar">confirmar</string>
     <string name="cancelar">cancelar</string>
     <string name="ingrese_el_mail_que_uso_para_registrarse">Ingrese el mail que uso para registrarse</string>
