@@ -111,9 +111,8 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
             public void onClick(View view) {
                 int posicion = browser.getPosition();
                 if(seleccionarPersonaje.getText()=="Seleccionar") {
-                    imagenAgrandada.setVisibility(View.INVISIBLE);
-                    imageRecycler.setVisibility(View.VISIBLE);
-//                    browser.get
+
+                    getSupportFragmentManager().popBackStack();
                     personajesElegidos.add((String) pics.get(posicion).getPicturePath());
                     seleccionarPersonaje.setText("Deseleccionar");
                 }
