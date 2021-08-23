@@ -19,6 +19,7 @@ public class ClientClass extends Thread{
             socket.connect(new InetSocketAddress(hostAdd, 7028), 5000);
             SendReceive sendReceive = new SendReceive(socket);
             sendReceive.start();
+            GameContext.agregarHijo(sendReceive);
 //            ServicioJuego.handler.obtainMessage().sendToTarget(); cuando se conecta al server, llamaria al handler del servicio
         } catch (Exception e) {
             e.printStackTrace();

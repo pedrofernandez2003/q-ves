@@ -23,6 +23,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ServicioJuego extends Service {
     int turno;
@@ -39,7 +40,7 @@ public class ServicioJuego extends Service {
     public void onCreate() {
         super.onCreate();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("nuevo equipo");
+        intentFilter.addAction("unirse");
         intentFilter.addAction("crear server");
         registerReceiver(broadcastReceiver,intentFilter);
         turno=0;
@@ -50,43 +51,47 @@ public class ServicioJuego extends Service {
         public void onReceive(Context context, Intent intent) {
             System.out.println("accion: "+intent.getAction());
             switch (intent.getAction()){
-                case "nuevo equipo":
+                case "unirse":
                     ClientClass clientClass = new ClientClass(intent.getStringExtra("codigo"));
                     clientClass.start();
+                    SendReceive hijo=GameContext.getHijos().get(0);
+                    hijo.callbackMensaje=new mensajeCallback() {
+                        @Override
+                        public void mensajeRecibido(int estado, int bytes, int argumento, byte[] buffer) {
+                            if (estado==1){
+                                String tempMsg = new String(buffer, 0, bytes);
+                                System.out.println("mensaje recibido "+tempMsg);
+                                try {
+                                    Gson json = new Gson();
+                                    Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
+                                    switch (mensaje.getAccion()){
+                                        case "comenzar":
+//                                            ArrayList<String> datos=new ArrayList<>();
+//                                            mensaje=new Mensaje("conectar",datos);
+//                                            String msg=mensaje.serializar();
+//                                            byte[] bytesMsg = msg.getBytes();
+//                                            Write escribir = new Write();
+//                                            escribir.execute(bytesMsg, 0);
+                                            Intent intent2= new Intent();
+                                            intent2.setAction("comenzar");
+                                            contexto.sendBroadcast(intent2);
+                                            break;
+                                    }
+
+//                        Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
+//                        Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
+//                        empezarJuego();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    };
                     System.out.println("se conecto un equipo");
                     break;
                 case "crear server":
                     server= new ThreadedEchoServer();
                     server.start();
-                    for (SendReceive hijo:GameContext.getHijos()) {
-                        hijo.callbackMensaje=new mensajeCallback() {
-                            @Override
-                            public void mensajeRecibido(int estado, int bytes, int argumento, byte[] buffer) {
-                                if (estado==1){
-                                    String tempMsg = new String(buffer, 0, bytes);
-                                    System.out.println("mensaje recibido "+tempMsg);
-                                    try {
-                                        Gson json = new Gson();
-                                        Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
-                                        switch (mensaje.getAccion()){
-                                            case "se conecto":
-                                                Intent intent2= new Intent();
-                                                intent2.setAction("nuevo equipo2");
-                                                contexto.sendBroadcast(intent2);
-                                                break;
-                                        }
-
-//                        Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
-//                        Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
-//                        empezarJuego();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-
-                        };
-                    }
                     System.out.println("se creo el server");
                     break;
             }

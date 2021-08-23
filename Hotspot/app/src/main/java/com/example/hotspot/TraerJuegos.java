@@ -57,7 +57,7 @@ public class TraerJuegos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("nuevo equipo2");
+        intentFilter.addAction("nuevo equipo");
         registerReceiver(broadcastReceiver,intentFilter);
         startService(new Intent(this,ServicioJuego.class));
         setContentView(R.layout.activity_traer_juegos);
@@ -97,8 +97,8 @@ public class TraerJuegos extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             System.out.println("accion traer juegos: "+intent.getAction());
             switch (intent.getAction()){
-                case "nuevo equipo2":
-                    System.out.println(GameContext.getHijos().size());
+                case "nuevo equipo":
+                    System.out.println("cantidad hijos :"+GameContext.getHijos().size());
                     if(GameContext.getHijos().size() >= cantidadEquipos){
                         botonComenzarPartida.setVisibility(View.VISIBLE);
                     }

@@ -58,11 +58,9 @@ public class MainActivity extends AppCompatActivity {
                 dhcpInfo=wifiManager.getDhcpInfo();
                 String codigo = formatIP(dhcpInfo.gateway);
                 Intent intent= new Intent();
-                intent.setAction("nuevo equipo");
+                intent.setAction("unirse");
                 intent.putExtra("codigo",codigo);
                 appContext.sendBroadcast(intent);
-//                clientClass = new ClientClass(codigo);
-//                clientClass.start();
                 System.out.println("nombre equipo: "+nombreEquipo.getText().toString());
                 GameContext.getNombresEquipos().add(nombreEquipo.getText().toString());
                 setContentView(R.layout.cargando);
