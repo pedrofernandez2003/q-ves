@@ -6,7 +6,8 @@ public class Plantilla {
     private static Plantilla context;
     private static String nombrePlantilla;
     private static String cantidadEquipos;
-    private static ArrayList<String>  categorias;
+    private static ArrayList<String>  categoriasElegidas;
+    private static ArrayList<String> categorias;
     private static ArrayList<String> urls = new ArrayList<>() ;
 
 
@@ -37,11 +38,19 @@ public class Plantilla {
         Plantilla.cantidadEquipos = cantidadEquipos;
     }
 
-    public static ArrayList<String>  getCategorias() {
+    public static ArrayList<String>  getCategoriasElegidas() {
+        return categoriasElegidas;
+    }
+
+    public static void setCategoriasElegidas(ArrayList<String>  categoriasElegidas) {
+        Plantilla.categoriasElegidas = categoriasElegidas;
+    }
+
+    public static ArrayList<String> getCategorias() {
         return categorias;
     }
 
-    public static void setCategorias(ArrayList<String>  categorias) {
+    public static void setCategorias(ArrayList<String> categorias) {
         Plantilla.categorias = categorias;
     }
 

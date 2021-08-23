@@ -45,6 +45,7 @@ public class CrearJuegoActivity extends AppCompatActivity  {
     TextView mItemSelected;
     TextView personajesElegidos;
     ArrayList<String> listItems;
+    Boolean segundaVez;
     boolean[] checkedItems;
     ArrayList<Integer> mUserItems = new ArrayList<>();
     RecyclerView mRecyclerView;
@@ -58,6 +59,7 @@ public class CrearJuegoActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_crear_juego);
         super.onCreate(savedInstanceState);
+        segundaVez = false;
         personajes = (Button) findViewById(R.id.botonPersonajes);
         mOrder = (Button) findViewById(R.id.btnOrder);
         guardarPlantilla = (Button) findViewById(R.id.guardarPlantilla);
@@ -76,34 +78,52 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
-                checkedItems = new boolean[datos.size()];
-                for (Object dato: datos) {
-                    Categoria categoria= (Categoria) dato;
+                System.out.println("traigo datos");
+                if(!segundaVez) {
+                    checkedItems = new boolean[datos.size()];
+                }
+                int i = 0;
+//                Arrays.fill(checkedItems, true);
+                for (Object dato : datos) {
+                    Categoria categoria = (Categoria) dato;
                     nombresCategoria.add(categoria.getNombre());
                 }
                 listItems = nombresCategoria;
+                plantilla.setCategorias(listItems);
             }
         });
 
         if( getIntent().getExtras() != null)
         {
+            checkedItems = new boolean[plantilla.getCategorias().size()];
+            segundaVez=true;
             ArrayList<String> cantidadPersonajesElegidos = getIntent().getStringArrayListExtra("personajes");
             plantilla.setUrls(cantidadPersonajesElegidos);
             nombreJuego.setText(plantilla.getNombrePlantilla());
             cantidadEquipos.setText(plantilla.getCantidadEquipos());
             String categorias= "";
             String categoriasAux;
-            for(String categoria: plantilla.getCategorias()){
-                categoriasAux = categoria;
-                if(categoria!=plantilla.getCategorias().get(0)) {
-                    categorias = categorias + ", " + categoriasAux;
-                }
-                else{
-                    categorias = categoria;
+            for(String categoria: plantilla.getCategoriasElegidas()){
+                mUserItems.add(plantilla.getCategorias().indexOf(categoria.replace(" ","")));
+                checkedItems[plantilla.getCategorias().indexOf(categoria.replace(" ",""))]=true;
+//                categoriasAux = categoria;
+//                if(categoria!=plantilla.getCategoriasElegidas().get(0)) {
+//                    categorias = categorias + ", " + categoriasAux;
+//                }
+//                else{
+//                    categorias = categoria;
+//                }
+            }
+            String item = "";
+            for (int i = 0; i < mUserItems.size(); i++) {
+                item = item + plantilla.getCategorias().get(mUserItems.get(i));
+                if (i != mUserItems.size() - 1) {
+                    item = item + ", ";
                 }
             }
-            
-            mItemSelected.setText(categorias);
+            mItemSelected.setText(item);
+
+//            mItemSelected.setText(categorias);
             personajesElegidos.setText("Eligió "+cantidadPersonajesElegidos.size()+  " personajes");
         }
 
@@ -206,6 +226,24 @@ public class CrearJuegoActivity extends AppCompatActivity  {
 
 }
 
+//    private void traigoDatos() {
+//        ArrayList<String> nombresCategoria = new ArrayList<>();
+//        DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
+//            @Override
+//            public void traerDatos(ArrayList<Object> datos) {
+//                System.out.println("traigo datos");
+//                checkedItems = new boolean[datos.size()];
+//                int i = 0;
+////                Arrays.fill(checkedItems, true);
+//                for (Object dato : datos) {
+//                    Categoria categoria = (Categoria) dato;
+//                    nombresCategoria.add(categoria.getNombre());
+//                }
+//                listItems = nombresCategoria;
+//                System.out.println("list items" + listItems);
+//            }
+//        });
+//    }
     private boolean verificarCamposCompletos() {
         if (nombreJuego.getText().toString().matches("") || cantidadEquipos.getText().toString().matches("") || mItemSelected.getText().toString().isEmpty() || personajesElegidos.getText().equals("Aún no ha seleccionado personajes ") || personajesElegidos.getText().equals("Eligió 0 personajes") ) {
             return false;
@@ -217,7 +255,7 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         plantilla.setNombrePlantilla(nombreJuego.getText().toString());
         plantilla.setCantidadEquipos(cantidadEquipos.getText().toString());
         ArrayList<String> categorias = new ArrayList<>(Arrays.asList(categoriasSeleccionadas.split(",")));
-        plantilla.setCategorias(categorias);
+        plantilla.setCategoriasElegidas(categorias);
 
     }
 

@@ -124,7 +124,7 @@ public  abstract class DataManagerCategoria extends DataManager {
         Map<String, Object> plantillaAInsertar = new HashMap<>();
         plantillaAInsertar.put("cantEquipos",plantilla.getCantidadEquipos());
         plantillaAInsertar.put("cantPartidas",String.valueOf(plantilla.getUrls().size()));
-        plantillaAInsertar.put("categorias",plantilla.getCategorias());
+        plantillaAInsertar.put("categorias",plantilla.getCategoriasElegidas());
         plantillaAInsertar.put("moderador", "usuario hardcodeado");
         plantillaAInsertar.put("nombre",plantilla.getNombrePlantilla());
         plantillaAInsertar.put("personajes",plantilla.getUrls());
