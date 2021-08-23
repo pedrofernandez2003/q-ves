@@ -206,24 +206,6 @@ public class pictureBrowserFragment extends Fragment implements imageIndicatorLi
             public void onPageScrollStateChanged(int state) {
             }
         });
-
-
-        indicatorRecycler.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                /**
-                 *  uncomment the below condition to control recyclerView visibility automatically
-                 *  when image is clicked also uncomment the condition set on the image's onClickListener in the ImagesPagerAdapter adapter
-                 */
-                /*if(viewVisibilityController == 0){
-                    indicatorRecycler.setVisibility(View.VISIBLE);
-                    visibiling();
-                }else{
-                    viewVisibilitylooper++;
-                }*/
-                return false;
-            }
-        });
     }
 
     @Override
@@ -262,6 +244,7 @@ public class pictureBrowserFragment extends Fragment implements imageIndicatorLi
                     .load(pic.getPicturePath())
                     .apply(new RequestOptions().fitCenter())
                     .into(image);
+
 
             image.setOnClickListener(new View.OnClickListener() {
                 @Override

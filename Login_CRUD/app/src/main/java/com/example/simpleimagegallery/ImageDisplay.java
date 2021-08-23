@@ -2,6 +2,7 @@ package com.example.simpleimagegallery;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -41,7 +42,6 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
 
     public void sendMessage(View view) {
         Intent intent = new Intent(ImageDisplay.this, CrearJuegoActivity.class);
-        System.out.println("antes de mandar: "+personajesElegidos);
         intent.putExtra("personajes", personajesElegidos);
         startActivity(intent);
     }
@@ -67,6 +67,7 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
                     for (pictureFacer personaje : datos) {
                         if( getIntent().getExtras() != null)
                         {
+                            personajesElegidos = getIntent().getStringArrayListExtra("personajes");
                             if( getIntent().getStringArrayListExtra("personajes").contains(personaje.getPicturePath())){
                                 System.out.println("Imagen que viene de la clase: "+personaje.getPicturePath());
 
@@ -96,7 +97,7 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
         Button seleccionarPersonaje = new Button(this);
         seleccionarPersonaje.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         int posicion = browser.getPosition();
-        if(getIntent().getStringArrayListExtra("personajes").contains((String) pics.get(posicion).getPicturePath())){
+        if(personajesElegidos.contains((String) pics.get(posicion).getPicturePath())){
             seleccionarPersonaje.setText("Deseleccionar");
         }
         else{
@@ -105,13 +106,14 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
         }
         imagenAgrandada.addView(seleccionarPersonaje);
 
-
-
         seleccionarPersonaje.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int posicion = browser.getPosition();
                 if(seleccionarPersonaje.getText()=="Seleccionar") {
+                    imagenAgrandada.setVisibility(View.INVISIBLE);
+                    imageRecycler.setVisibility(View.VISIBLE);
+//                    browser.get
                     personajesElegidos.add((String) pics.get(posicion).getPicturePath());
                     seleccionarPersonaje.setText("Deseleccionar");
                 }

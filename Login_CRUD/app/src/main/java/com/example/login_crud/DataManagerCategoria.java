@@ -44,7 +44,6 @@ public  abstract class DataManagerCategoria extends DataManager {
                 String TAG = "";
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        System.out.println(document.getData());
                         ArrayList<Map<String, String>> tarjetas = (ArrayList<Map<String, String>>) document.getData().get("tarjeta");
                         if(tarjetas==null){
                             tarjetas= new ArrayList<>();

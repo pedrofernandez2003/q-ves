@@ -78,7 +78,6 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
-                System.out.println("traigo datos");
                 if(!segundaVez) {
                     checkedItems = new boolean[datos.size()];
                 }
