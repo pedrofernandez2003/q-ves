@@ -6,8 +6,8 @@ public class Plantilla {
     private static Plantilla context;
     private static String nombrePlantilla;
     private static String cantidadEquipos;
-    private static ArrayList<String>  categoriasElegidas;
-    private static ArrayList<String> categorias;
+    private static ArrayList<String>  categoriasElegidas = new ArrayList<>();
+    private static ArrayList<String> categorias = new ArrayList<>();
     private static ArrayList<String> urls = new ArrayList<>() ;
 
 

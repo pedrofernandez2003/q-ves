@@ -1,23 +1,16 @@
 package com.example.login_crud;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,12 +24,8 @@ import com.example.simpleimagegallery.ImageDisplay;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
-
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class CrearJuegoActivity extends AppCompatActivity  {
     Button mOrder;
@@ -78,11 +67,10 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
-                if(!segundaVez) {
+                if(plantilla.getCategorias().equals(null)) {
                     checkedItems = new boolean[datos.size()];
                 }
                 int i = 0;
-//                Arrays.fill(checkedItems, true);
                 for (Object dato : datos) {
                     Categoria categoria = (Categoria) dato;
                     nombresCategoria.add(categoria.getNombre());
@@ -100,30 +88,13 @@ public class CrearJuegoActivity extends AppCompatActivity  {
             plantilla.setUrls(cantidadPersonajesElegidos);
             nombreJuego.setText(plantilla.getNombrePlantilla());
             cantidadEquipos.setText(plantilla.getCantidadEquipos());
-            String categorias= "";
-            String categoriasAux;
             for(String categoria: plantilla.getCategoriasElegidas()){
                 mUserItems.add(plantilla.getCategorias().indexOf(categoria.replace(" ","")));
                 checkedItems[plantilla.getCategorias().indexOf(categoria.replace(" ",""))]=true;
-//                categoriasAux = categoria;
-//                if(categoria!=plantilla.getCategoriasElegidas().get(0)) {
-//                    categorias = categorias + ", " + categoriasAux;
-//                }
-//                else{
-//                    categorias = categoria;
-//                }
             }
-            String item = "";
-            for (int i = 0; i < mUserItems.size(); i++) {
-                item = item + plantilla.getCategorias().get(mUserItems.get(i));
-                if (i != mUserItems.size() - 1) {
-                    item = item + ", ";
-                }
-            }
-            mItemSelected.setText(item);
-
-//            mItemSelected.setText(categorias);
+            mItemSelected.setText(escribirCategorias(mUserItems, plantilla.getCategorias()));
             personajesElegidos.setText("Eligió "+cantidadPersonajesElegidos.size()+  " personajes");
+
         }
 
 
@@ -159,14 +130,14 @@ public class CrearJuegoActivity extends AppCompatActivity  {
                 mBuilder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
-                        String item = "";
-                        for (int i = 0; i < mUserItems.size(); i++) {
-                            item = item + listItems.get(mUserItems.get(i));
-                            if (i != mUserItems.size() - 1) {
-                                item = item + ", ";
-                            }
-                        }
-                        mItemSelected.setText(item);
+//                        String item = "";
+//                        for (int i = 0; i < mUserItems.size(); i++) {
+//                            item = item + listItems.get(mUserItems.get(i));
+//                            if (i != mUserItems.size() - 1) {
+//                                item = item + ", ";
+//                            }
+//                        }
+                        mItemSelected.setText(escribirCategorias(mUserItems,listItems));
                     }
                 });
 
@@ -225,24 +196,17 @@ public class CrearJuegoActivity extends AppCompatActivity  {
 
 }
 
-//    private void traigoDatos() {
-//        ArrayList<String> nombresCategoria = new ArrayList<>();
-//        DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
-//            @Override
-//            public void traerDatos(ArrayList<Object> datos) {
-//                System.out.println("traigo datos");
-//                checkedItems = new boolean[datos.size()];
-//                int i = 0;
-////                Arrays.fill(checkedItems, true);
-//                for (Object dato : datos) {
-//                    Categoria categoria = (Categoria) dato;
-//                    nombresCategoria.add(categoria.getNombre());
-//                }
-//                listItems = nombresCategoria;
-//                System.out.println("list items" + listItems);
-//            }
-//        });
-//    }
+    private String escribirCategorias(ArrayList<Integer> categoriasSeleccionadas, ArrayList<String> listaCategorias) {
+        String item = "";
+        for (int i = 0; i < categoriasSeleccionadas.size(); i++) {
+            item = item + listaCategorias.get(categoriasSeleccionadas.get(i));
+            if (i != categoriasSeleccionadas.size() - 1) {
+                item = item + ", ";
+            }
+        }
+        return item;
+    }
+
     private boolean verificarCamposCompletos() {
         if (nombreJuego.getText().toString().matches("") || cantidadEquipos.getText().toString().matches("") || mItemSelected.getText().toString().isEmpty() || personajesElegidos.getText().equals("Aún no ha seleccionado personajes ") || personajesElegidos.getText().equals("Eligió 0 personajes") ) {
             return false;

@@ -1,6 +1,8 @@
 package com.example.simpleimagegallery;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -65,14 +67,15 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
                 @Override
                 public void traerPersonaje(ArrayList<pictureFacer> datos) {
                     for (pictureFacer personaje : datos) {
-                        if( getIntent().getExtras() != null)
-                        {
-                            personajesElegidos = getIntent().getStringArrayListExtra("personajes");
-                            if( getIntent().getStringArrayListExtra("personajes").contains(personaje.getPicturePath())){
-                                System.out.println("Imagen que viene de la clase: "+personaje.getPicturePath());
-
-                            }
-                        }
+//                        if( getIntent().getExtras() != null)
+//                        {
+//                            personajesElegidos = getIntent().getStringArrayListExtra("personajes");
+//                            if( getIntent().getStringArrayListExtra("personajes").contains(personaje.getPicturePath())){
+//                                System.out.println("Imagen que viene de la clase: "+personaje.getPicturePath());
+//
+//                            }
+//                        }
+                        System.out.println(datos);
 
                         allpictures.add(personaje);
                     }
@@ -111,14 +114,16 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
             public void onClick(View view) {
                 int posicion = browser.getPosition();
                 if(seleccionarPersonaje.getText()=="Seleccionar") {
-
                     getSupportFragmentManager().popBackStack();
                     personajesElegidos.add((String) pics.get(posicion).getPicturePath());
                     seleccionarPersonaje.setText("Deseleccionar");
+                    seleccionarPersonaje.setVisibility(View.GONE);
                 }
                 else{
                     personajesElegidos.remove((String) pics.get(posicion).getPicturePath());
-
+                    seleccionarPersonaje.setText("Seleccionar");
+                    getSupportFragmentManager().popBackStack();
+                    seleccionarPersonaje.setVisibility(View.GONE);
                 }
             }
 
