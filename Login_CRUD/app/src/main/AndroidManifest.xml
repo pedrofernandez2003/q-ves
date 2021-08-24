@@ -31,8 +31,15 @@
         <activity android:name=".MainActivity">
 
         </activity>
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".LoginActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity android:name=".RegistrarseActivity" />
+        <activity android:name=".ModeradorActivity" />
         <activity android:name=".AdminElementosActivity" />
         <activity android:name=".AdministradorActivity" />
         <activity android:name=".CrearJuegoActivity" >
@@ -55,11 +62,7 @@
         </activity>
         <activity android:name=".CambiarContraseniaActivity"/>
         <activity android:name="com.example.simpleimagegallery.ImageDisplay">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
     </application>

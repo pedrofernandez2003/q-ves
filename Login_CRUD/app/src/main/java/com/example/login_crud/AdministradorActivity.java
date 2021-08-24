@@ -19,16 +19,11 @@ import java.util.ArrayList;
 public class AdministradorActivity extends AppCompatActivity {
 
     private Button crearJuego,iniciarJuego, administrarElementos;
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrador);
-
-        mAuth= FirebaseAuth.getInstance();
-        FirebaseUser currentUser= mAuth.getCurrentUser();
-        Toast.makeText(AdministradorActivity.this,currentUser.getDisplayName(),Toast.LENGTH_SHORT).show();
 
         crearJuego = (Button) findViewById(R.id.crearJuego);
         iniciarJuego = (Button) findViewById(R.id.iniciarJuego);

@@ -3,15 +3,19 @@ package com.example.login_crud;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.Objetos.Tarjeta;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -32,6 +36,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -40,9 +46,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.annotations.NotNull;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     EditText mailIngresado, contraseniaIngresada;
@@ -104,8 +117,11 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    Intent i = new Intent(LoginActivity.this, AdministradorActivity.class);
-                                    startActivity(i);
+
+                                   manejarUsuario(firebaseAuth.getCurrentUser());
+
+                                   // Intent i = new Intent(LoginActivity.this, AdministradorActivity.class);
+                                    // startActivity(i);
                                 } else {
                                     Toast.makeText(LoginActivity.this, "Todo mal", Toast.LENGTH_SHORT).show();
                                 }
@@ -144,9 +160,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         FirebaseUser user= firebaseAuth.getCurrentUser();
         if(user!=null){
-            Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
-            startActivity(intent);
-            LoginActivity.this.finish();
+            manejarUsuario(firebaseAuth.getCurrentUser());
         }
         super.onStart();
     }
@@ -171,12 +185,8 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            Toast.makeText(LoginActivity.this, "Hola.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
-                            startActivity(intent);
-                            LoginActivity.this.finish();
-                            Log.i(TAG, "onComplete: login completed with user: " + user.getDisplayName());
+                            manejarUsuario(firebaseAuth.getCurrentUser());
+
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -219,7 +229,63 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void cambiarUsuario(FirebaseUser user){ }
+    private void manejarUsuario(FirebaseUser user){
+        DataManager.getDb().collection("usuarios").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NotNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    boolean estaEnLaBase=false;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        System.out.println(document.getData().get("UID"));
+                        if (document.getData().get("UID").equals(user.getUid())){
+                            estaEnLaBase=true;
+                            if (document.getData().get("ocupacion").equals("Administrador")){
+                                Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
+                                startActivity(intent);
+                                LoginActivity.this.finish();
+                            }
+                            else{
+                                Intent intent = new Intent(getApplicationContext(), ModeradorActivity.class);
+                                startActivity(intent);
+                                LoginActivity.this.finish();
+                            }
+                        }
+
+                    }
+                    if(!estaEnLaBase){
+                        elegirTrabajo();
+                    }
+                }
+            }
+        });
+    }
+    private void insertarUsuario(String ocupacion){
+        Map<String,String> usuarioAIngresar= new HashMap<>();
+        usuarioAIngresar.put("UID",firebaseAuth.getCurrentUser().getUid());
+        usuarioAIngresar.put("ocupacion",ocupacion);
+        DataManager.getDb().collection("usuarios").add(usuarioAIngresar)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        if (ocupacion.equals("Administrador")){
+                            Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
+                            startActivity(intent);
+                            LoginActivity.this.finish();
+                        }
+                        else{
+                            Intent intent = new Intent(getApplicationContext(), ModeradorActivity.class);
+                            startActivity(intent);
+                            LoginActivity.this.finish();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NotNull Exception e) {
+                        System.out.println(e);
+                    }
+                });
+    }
 
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
@@ -231,10 +297,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
-                            startActivity(intent);
-                            LoginActivity.this.finish();
+                            manejarUsuario(firebaseAuth.getCurrentUser());
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -242,6 +305,41 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public void elegirTrabajo() {
+
+        LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
+        View dialog_layout = inflater.inflate(R.layout.elegir_trabajo, null);
+        AlertDialog.Builder db = new AlertDialog.Builder(this);
+        db.setView(dialog_layout);
+        Button moderador=dialog_layout.findViewById(R.id.moderador);
+        Button administrador=dialog_layout.findViewById(R.id.administrador);
+        db.setTitle("Elegir trabajo");
+        final AlertDialog a = db.create();
+        a.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                moderador.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        insertarUsuario("Moderador");
+                        a.dismiss();
+                    }
+                });
+
+                administrador.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        insertarUsuario("Administrador");
+                        a.dismiss();
+                    }
+                });
+            }
+        });
+        a.show();
+
     }
 }
 
