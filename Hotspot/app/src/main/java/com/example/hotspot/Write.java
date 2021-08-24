@@ -6,6 +6,7 @@ public class Write extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] objects) {
         try {
+            System.out.println(GameContext.getHijos().get((Integer) objects[1]).callbackMensaje);
             GameContext.getHijos().get((Integer) objects[1]).write((byte[]) objects[0]);
         } catch (Exception e) {
             e.printStackTrace();

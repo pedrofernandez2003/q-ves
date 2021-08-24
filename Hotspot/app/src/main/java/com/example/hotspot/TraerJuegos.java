@@ -56,6 +56,7 @@ public class TraerJuegos extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        GameContext.setContextoTraerJuego(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("nuevo equipo");
         registerReceiver(broadcastReceiver,intentFilter);
@@ -76,6 +77,7 @@ public class TraerJuegos extends AppCompatActivity {
             public void onClick(View v) {
                 System.out.println("tocaste mandar");
                 String juegoSerializado=juego.serializar();
+                GameContext.setJuego(juego);
                 for (int i=0;i<GameContext.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
                     ArrayList<String> datos=new ArrayList<>();
                     datos.add(juegoSerializado);
@@ -84,7 +86,6 @@ public class TraerJuegos extends AppCompatActivity {
                     String msg=mensaje.serializar();
                     System.out.println(msg);
                     byte[] bytesMsg = msg.getBytes();
-                    GameContext.setJuego(juego);
                     Write escribir = new Write();
                     escribir.execute(bytesMsg,i);
                 }

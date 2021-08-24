@@ -59,9 +59,6 @@ public class Jugar extends AppCompatActivity  {
         for (int i=0;i<GameContext.getHijos().size();i++) {
             escribir.execute(bytesMsg, i);
         }
-        for (int i = 0; i < GameContext.getNombresEquipos().size(); i++) {
-            System.out.println(GameContext.getNombresEquipos().get(i));
-        }
     }
     public void turnoVisible(){
         turno.setVisibility(View.VISIBLE);

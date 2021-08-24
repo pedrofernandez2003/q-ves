@@ -6,6 +6,7 @@ import java.net.Socket;
 public class ClientClass extends Thread{
     Socket socket;
     String hostAdd;
+    public conectarCallback callbackMensaje;
 
     public ClientClass(String hostAddress) {
         hostAdd = hostAddress;
@@ -19,8 +20,13 @@ public class ClientClass extends Thread{
             socket.connect(new InetSocketAddress(hostAdd, 7028), 5000);
             SendReceive sendReceive = new SendReceive(socket);
             sendReceive.start();
+            sendReceive.callbackMensaje= new mensajeCallback() {
+                @Override
+                public void mensajeRecibido(int estado, int bytes, int argumento, byte[] buffer) {
+                    callbackMensaje.conectar(estado, bytes, argumento,buffer);
+                }
+            };
             GameContext.agregarHijo(sendReceive);
-//            ServicioJuego.handler.obtainMessage().sendToTarget(); cuando se conecta al server, llamaria al handler del servicio
         } catch (Exception e) {
             e.printStackTrace();
         }

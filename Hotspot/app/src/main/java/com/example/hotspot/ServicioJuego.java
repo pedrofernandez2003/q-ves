@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +27,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ServicioJuego extends Service {
-    int turno;
     static final int MESSAGE_READ = 1;
     private ThreadedEchoServer server;
 
@@ -43,7 +43,6 @@ public class ServicioJuego extends Service {
         intentFilter.addAction("unirse");
         intentFilter.addAction("crear server");
         registerReceiver(broadcastReceiver,intentFilter);
-        turno=0;
     }
     Context contexto=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -54,33 +53,38 @@ public class ServicioJuego extends Service {
                 case "unirse":
                     ClientClass clientClass = new ClientClass(intent.getStringExtra("codigo"));
                     clientClass.start();
-                    SendReceive hijo=GameContext.getHijos().get(0);
-                    hijo.callbackMensaje=new mensajeCallback() {
+                    clientClass.callbackMensaje=new conectarCallback() {
                         @Override
-                        public void mensajeRecibido(int estado, int bytes, int argumento, byte[] buffer) {
+                        public void conectar(int estado, int bytes, int argumento, byte[] buffer) {
                             if (estado==1){
                                 String tempMsg = new String(buffer, 0, bytes);
                                 System.out.println("mensaje recibido "+tempMsg);
                                 try {
                                     Gson json = new Gson();
                                     Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
+                                    System.out.println(mensaje.getAccion()+" "+mensaje.getDatos());
                                     switch (mensaje.getAccion()){
                                         case "comenzar":
-//                                            ArrayList<String> datos=new ArrayList<>();
-//                                            mensaje=new Mensaje("conectar",datos);
-//                                            String msg=mensaje.serializar();
-//                                            byte[] bytesMsg = msg.getBytes();
-//                                            Write escribir = new Write();
-//                                            escribir.execute(bytesMsg, 0);
+                                            try {
+                                                Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
+                                                GameContext.setJuego(juego);
+                                            } catch (JsonSyntaxException e) {
+                                                e.printStackTrace();
+                                            }
                                             Intent intent2= new Intent();
                                             intent2.setAction("comenzar");
                                             contexto.sendBroadcast(intent2);
                                             break;
+                                        case "conectar":
+                                            System.out.println("me llego conectar");
+                                            ArrayList<String> datos=new ArrayList<>();
+                                            mensaje=new Mensaje("conectado",datos);
+                                            String msg=mensaje.serializar();
+                                            byte[] bytesMsg = msg.getBytes();
+                                            Write escribir = new Write();
+                                            escribir.execute(bytesMsg, 0);
+                                            break;
                                     }
-
-//                        Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
-//                        Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
-//                        empezarJuego();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -92,19 +96,34 @@ public class ServicioJuego extends Service {
                 case "crear server":
                     server= new ThreadedEchoServer();
                     server.start();
+                    server.callbackMensaje=new conectarCallback() {
+                        @Override
+                        public void conectar(int estado, int bytes, int argumento, byte[] buffer) {
+                            if (estado==1){
+                                String tempMsg = new String(buffer, 0, bytes);
+                                System.out.println("mensaje recibido "+tempMsg);
+                                try {
+                                    Gson json = new Gson();
+                                    Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
+                                    switch (mensaje.getAccion()){
+                                        case "conectado":
+                                            System.out.println(mensaje.getAccion()+" "+mensaje.getDatos());
+                                            Intent intent2= new Intent();
+                                            intent2.setAction("nuevo equipo");
+                                            contexto.sendBroadcast(intent2);
+                                            break;
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    };
                     System.out.println("se creo el server");
                     break;
             }
         }
     };
-    public int getTurno() {
-        return turno;
-    }
-
-    public void setTurno(int turno) {
-        this.turno = turno;
-    }
-
     @Override
     public void onDestroy() {
         unregisterReceiver(broadcastReceiver);
