@@ -30,10 +30,16 @@
             android:name=".ServicioJuego"
             tools:ignore="Instantiatable" />
 
-        <activity
-            android:name=".MainActivity2"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.Hotspot.NoActionBar"></activity>
+<!--        <activity-->
+<!--            android:name=".MainActivity2"-->
+<!--            android:label="@string/title_activity_main2"-->
+<!--            android:theme="@style/Theme.Hotspot.NoActionBar"></activity>-->
+        <activity android:name=".SolicitarUbicacion">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Jugar"
             android:label="@string/title_activity_jugar"
@@ -43,10 +49,10 @@
             android:label="@string/title_activity_traer_juegos"
             android:theme="@style/Theme.Hotspot.NoActionBar" />
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".CrearTablero"

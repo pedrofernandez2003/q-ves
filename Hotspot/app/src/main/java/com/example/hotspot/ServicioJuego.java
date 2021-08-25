@@ -84,6 +84,19 @@ public class ServicioJuego extends Service {
                                             Write escribir = new Write();
                                             escribir.execute(bytesMsg, 0);
                                             break;
+                                        case "turno":
+                                            int turno=0;
+                                            try {
+                                                turno = Integer.parseInt(mensaje.getDatos().get(0));//ver como obtener el valor que corresponde a la clave "idJugador"
+                                            } catch (NumberFormatException e) {
+                                                e.printStackTrace();
+                                            }
+                                            if (turno==0){
+                                                Intent intent= new Intent();
+                                                intent.setAction("turno");
+                                                contexto.sendBroadcast(intent);
+                                            }
+                                            break;
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();

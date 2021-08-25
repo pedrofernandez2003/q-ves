@@ -15,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.squareup.picasso.Picasso;
-
 import java.io.InputStream;
 
 public class SolicitarUbicacion extends AppCompatActivity {
@@ -26,7 +24,7 @@ public class SolicitarUbicacion extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.imagenprueba);
+        setContentView(R.layout.activity_main);
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -42,7 +40,11 @@ public class SolicitarUbicacion extends AppCompatActivity {
 
             }
         }
-
+//        else {
+//            System.out.println("entre else2");
+//            Intent main = new Intent(this, MainActivity.class);
+//            startActivity(main);
+//        }
     }
 
 

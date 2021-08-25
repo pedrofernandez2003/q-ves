@@ -159,17 +159,17 @@ public class TraerJuegos extends AppCompatActivity {
         startActivity(partida);
     }
 
-    @Override
-    protected void onDestroy() {
-        unregisterReceiver(broadcastReceiver);
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        unregisterReceiver(broadcastReceiver);
-        super.onPause();
-    }
+//    @Override
+//    protected void onDestroy() {
+//        unregisterReceiver(broadcastReceiver);
+//        super.onDestroy();
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        unregisterReceiver(broadcastReceiver);
+//        super.onPause();
+//    }
     //    Handler handler = new Handler(new Handler.Callback() {
 //        @Override
 //        public boolean handleMessage(@NonNull Message msg) {

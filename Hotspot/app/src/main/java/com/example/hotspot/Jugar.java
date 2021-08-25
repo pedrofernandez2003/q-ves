@@ -7,8 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -28,22 +31,24 @@ public class Jugar extends AppCompatActivity  {
     private Partida partida;
     private TextView turno;
 
-//    public class Write extends AsyncTask {
-//        @Override
-//        protected Object doInBackground(Object[] objects) {
-//            try {
-//                context.getHijos().get((Integer) objects[1]).write((byte[]) objects[0]);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//    }
-
+    BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("accion jugar: "+intent.getAction());
+            switch (intent.getAction()){
+                case "turno":
+                    turno.setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         turno = findViewById(R.id.turno);
         super.onCreate(savedInstanceState);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("turno");
+        registerReceiver(broadcastReceiver,intentFilter);
         setContentView(R.layout.tablero);
         context=GameContext.getGameContext();
         juego= GameContext.getJuego();
