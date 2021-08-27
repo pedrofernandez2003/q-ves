@@ -16,8 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.Listeners.onInsertarListener;
 import com.example.Objetos.Categoria;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -117,6 +120,7 @@ public class PersonajesActivity extends AppCompatActivity {
                 // Setting image on image view using Bitmap
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),
                                 filePath);
+                bitmap = Bitmap.createScaledBitmap(bitmap, 446, 338, false);
                 imageView.setImageBitmap(bitmap);
             }
 
@@ -140,28 +144,35 @@ public class PersonajesActivity extends AppCompatActivity {
 
             // Defining the child of storageReference
             StorageReference ref= storageReference.child("images/" + UUID.randomUUID().toString());
+            UploadTask urlTask = ref.putFile(filePath);
+            Task<Uri> u = urlTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
 
-
-
-            // adding listeners on upload
-            // or failure of image
-            // ref.getDownloadUrl() implementar esto y guardar este token en la base. Despues con el picasso agarrarla
-            ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
-                                {
-                                    // Image uploaded successfully
-                                    // Dismiss dialog
-                                    progressDialog.dismiss();
-                                    Map<String, Object> personajeAInsertar = new HashMap<>();
-                                    personajeAInsertar.put("nombre",UUID.randomUUID().toString());
-                                    personajeAInsertar.put("token",ref.getDownloadUrl().getResult().toString());
-
-                                    DataManager.getDb().collection("personajes")
+                    // Continue with the task to get the download URL
+                    return ref.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        if (downloadUri == null){
+                        }
+                        else {
+                            System.out.println("String uri:"+downloadUri.toString());
+                            HashMap<String, String> personajeAInsertar = new HashMap<>();
+                            personajeAInsertar.put("url", downloadUri.toString());
+                            DataManager.getDb().collection("personajes")
                                             .add(personajeAInsertar).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
+                                            progressDialog.dismiss();
                                             Toast.makeText(PersonajesActivity.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
+
                                         }
                                     })
                                             .addOnFailureListener(new OnFailureListener() {
@@ -170,24 +181,60 @@ public class PersonajesActivity extends AppCompatActivity {
 
                                                 }
                                             });
-                                }
 
-                            })
-
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e)
-                        {
-
-                            // Error, Image not uploaded
-                            progressDialog.dismiss();
-                            Toast
-                                    .makeText(PersonajesActivity.this,
-                                            "Failed " + e.getMessage(),
-                                            Toast.LENGTH_SHORT)
-                                    .show();
                         }
-                    });
+
+                    }
+                }
+                                                                      });
+
+
+            // adding listeners on upload
+            // or failure of image
+            // ref.getDownloadUrl() implementar esto y guardar este token en la base. Despues con el picasso agarrarla
+//            ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                                @Override
+//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+//                                {
+//                                    // Image uploaded successfully
+//                                    // Dismiss dialog
+//                                    Map<String, Object> personajeAInsertar = new HashMap<>();
+//                                    personajeAInsertar.put("nombre",UUID.randomUUID().toString());
+//                                    if(taskSnapshot.getTask().isComplete()) {
+//                                        personajeAInsertar.put("token", ref.getDownloadUrl().getResult().toString());
+//                                    }
+//
+//                                    DataManager.getDb().collection("personajes")
+//                                            .add(personajeAInsertar).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                                        @Override
+//                                        public void onSuccess(DocumentReference documentReference) {
+//                                            Toast.makeText(PersonajesActivity.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    })
+//                                            .addOnFailureListener(new OnFailureListener() {
+//                                                @Override
+//                                                public void onFailure(@NonNull Exception e) {
+//
+//                                                }
+//                                            });
+//                                }
+//
+//                            })
+//
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e)
+//                        {
+//
+//                            // Error, Image not uploaded
+//                            progressDialog.dismiss();
+//                            Toast
+//                                    .makeText(PersonajesActivity.this,
+//                                            "Failed " + e.getMessage(),
+//                                            Toast.LENGTH_SHORT)
+//                                    .show();
+//                        }
+//                    });
         }
     }
 }

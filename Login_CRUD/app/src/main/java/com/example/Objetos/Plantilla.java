@@ -6,6 +6,7 @@ public class Plantilla {
     private static Plantilla context;
     private static String nombrePlantilla;
     private static String cantidadEquipos;
+    private static String usuario;
     private static ArrayList<String>  categoriasElegidas = new ArrayList<>();
     private static ArrayList<String> categorias = new ArrayList<>();
     private static ArrayList<String> urls = new ArrayList<>() ;
@@ -36,6 +37,14 @@ public class Plantilla {
 
     public static void setCantidadEquipos(String cantidadEquipos) {
         Plantilla.cantidadEquipos = cantidadEquipos;
+    }
+
+    public static String getUsuario() {
+        return usuario;
+    }
+
+    public static void setUsuario(String usuario) {
+        Plantilla.usuario = usuario;
     }
 
     public static ArrayList<String>  getCategoriasElegidas() {

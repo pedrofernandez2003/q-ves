@@ -22,6 +22,8 @@ import com.example.Objetos.Plantilla;
 import com.example.Objetos.ViewHolder;
 import com.example.simpleimagegallery.ImageDisplay;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
@@ -63,6 +65,8 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         nombreJuego = (EditText) findViewById(R.id.completarNombreJuego);
         cantidadEquipos = (EditText) findViewById(R.id.completarCantidadEquipos);
         Plantilla plantilla = Plantilla.obtenerPlantilla();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 
         DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
@@ -130,13 +134,6 @@ public class CrearJuegoActivity extends AppCompatActivity  {
                 mBuilder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
-//                        String item = "";
-//                        for (int i = 0; i < mUserItems.size(); i++) {
-//                            item = item + listItems.get(mUserItems.get(i));
-//                            if (i != mUserItems.size() - 1) {
-//                                item = item + ", ";
-//                            }
-//                        }
                         mItemSelected.setText(escribirCategorias(mUserItems,listItems));
                     }
                 });
@@ -170,6 +167,7 @@ public class CrearJuegoActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 if (verificarCamposCompletos()) {
+                    plantilla.setUsuario(user.getEmail());
                     guardarDatos(plantilla, mItemSelected.getText().toString());
                     DataManagerCategoria.insertarPlantilla(plantilla, new onInsertarListener() {
                         @Override

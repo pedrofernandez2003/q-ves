@@ -159,9 +159,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         FirebaseUser user= firebaseAuth.getCurrentUser();
-        if(user!=null){
-            manejarUsuario(firebaseAuth.getCurrentUser());
-        }
+//        if(user!=null){
+//            manejarUsuario(firebaseAuth.getCurrentUser());
+//        }
         super.onStart();
     }
 

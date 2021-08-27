@@ -124,7 +124,7 @@ public  abstract class DataManagerCategoria extends DataManager {
         plantillaAInsertar.put("cantEquipos",plantilla.getCantidadEquipos());
         plantillaAInsertar.put("cantPartidas",String.valueOf(plantilla.getUrls().size()));
         plantillaAInsertar.put("categorias",plantilla.getCategoriasElegidas());
-        plantillaAInsertar.put("moderador", "usuario hardcodeado");
+        plantillaAInsertar.put("usuario", plantilla.getUsuario());
         plantillaAInsertar.put("nombre",plantilla.getNombrePlantilla());
         plantillaAInsertar.put("personajes",plantilla.getUrls());
 
