@@ -25,6 +25,9 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class ServicioJuego extends Service {
     static final int MESSAGE_READ = 1;
@@ -78,6 +81,7 @@ public class ServicioJuego extends Service {
                                         case "conectar":
                                             System.out.println("me llego conectar");
                                             ArrayList<String> datos=new ArrayList<>();
+                                            datos.add(GameContext.getNombresEquipos().get(0));
                                             mensaje=new Mensaje("conectado",datos);
                                             String msg=mensaje.serializar();
                                             byte[] bytesMsg = msg.getBytes();
@@ -85,13 +89,19 @@ public class ServicioJuego extends Service {
                                             escribir.execute(bytesMsg, 0);
                                             break;
                                         case "turno":
-                                            int turno=0;
+                                            HashMap<String, String> mapDatos=new HashMap<>();
                                             try {
-                                                turno = Integer.parseInt(mensaje.getDatos().get(0));//ver como obtener el valor que corresponde a la clave "idJugador"
-                                            } catch (NumberFormatException e) {
+                                                mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
+                                                for (Map.Entry<String, String> aux: mapDatos.entrySet()){
+                                                    System.out.println("clave "+aux.getKey());
+                                                    System.out.println("valor "+aux.getValue());
+                                                }
+                                            } catch (JsonSyntaxException e) {
                                                 e.printStackTrace();
                                             }
-                                            if (turno==0){
+//                                            turno = Integer.parseInt(mensaje.getDatos().get(0));//ver como obtener el valor que corresponde a la clave "idJugador"
+                                            System.out.println(mapDatos.get("idJugador"));
+                                            if (mapDatos.get("idJugador").equals(GameContext.getNombresEquipos().get(0))){
                                                 Intent intent= new Intent();
                                                 intent.setAction("turno");
                                                 contexto.sendBroadcast(intent);
@@ -120,6 +130,7 @@ public class ServicioJuego extends Service {
                                     Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
                                     switch (mensaje.getAccion()){
                                         case "conectado":
+                                            GameContext.getNombresEquipos().add(mensaje.getDatos().get(0));
                                             System.out.println(mensaje.getAccion()+" "+mensaje.getDatos());
                                             Intent intent2= new Intent();
                                             intent2.setAction("nuevo equipo");

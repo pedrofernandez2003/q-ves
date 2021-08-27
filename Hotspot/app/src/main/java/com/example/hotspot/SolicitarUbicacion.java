@@ -1,6 +1,7 @@
 package com.example.hotspot;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -40,11 +41,11 @@ public class SolicitarUbicacion extends AppCompatActivity {
 
             }
         }
-//        else {
-//            System.out.println("entre else2");
-//            Intent main = new Intent(this, MainActivity.class);
-//            startActivity(main);
-//        }
+        else {
+            System.out.println("entre else2");
+            Intent main = new Intent(this, MainActivity.class);
+            startActivity(main);
+        }
     }
 
 
@@ -56,6 +57,8 @@ public class SolicitarUbicacion extends AppCompatActivity {
                 System.out.println("Denegado");
             }
         }
+        Intent main = new Intent(this, MainActivity.class);
+        startActivity(main);
     }
 
 }

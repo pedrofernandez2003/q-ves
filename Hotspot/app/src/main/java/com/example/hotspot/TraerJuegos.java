@@ -129,7 +129,6 @@ public class TraerJuegos extends AppCompatActivity {
                     Button button = new Button(appCcontext);
                     button.setLayoutParams(lp);
                     button.setText(plantilla.getNombre());
-                    cantidadEquipos=plantilla.getCantEquipos();
                     button.setBackgroundColor(999999);
                     llBotonera.addView(button);
                     button.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +136,8 @@ public class TraerJuegos extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             turnOnHotspot();
+                            cantidadEquipos=plantilla.getCantEquipos();
+                            System.out.println("cantidad "+cantidadEquipos);
                             textoCargando.setVisibility(View.VISIBLE);
                             nombreRed.setVisibility(View.VISIBLE);
                             claveRed.setVisibility(View.VISIBLE);

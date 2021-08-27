@@ -37,6 +37,8 @@ public class Jugar extends AppCompatActivity  {
             System.out.println("accion jugar: "+intent.getAction());
             switch (intent.getAction()){
                 case "turno":
+                    System.out.println("modifico el label turno");
+                    turno = findViewById(R.id.turno);
                     turno.setVisibility(View.VISIBLE);
                     break;
             }
@@ -44,7 +46,6 @@ public class Jugar extends AppCompatActivity  {
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        turno = findViewById(R.id.turno);
         super.onCreate(savedInstanceState);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("turno");
@@ -55,7 +56,9 @@ public class Jugar extends AppCompatActivity  {
         System.out.println("codigo juego: "+juego.getCodigo());
         partida=juego.getPartidas().get(0);
         ArrayList<String> datos=new ArrayList<>();
-        datos.add("\"idJugador\": "+partida.getTurno());
+        System.out.println("turno de: "+GameContext.getNombresEquipos().get(partida.getTurno()));
+        System.out.println("hijos "+GameContext.getHijos().size());
+        datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(partida.getTurno())+"\"}");
         Mensaje mensaje=new Mensaje("turno",datos);
         String msg=mensaje.serializar();
 //        System.out.println(msg);
