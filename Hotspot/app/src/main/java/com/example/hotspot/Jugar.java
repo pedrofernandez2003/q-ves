@@ -55,17 +55,19 @@ public class Jugar extends AppCompatActivity  {
         juego= GameContext.getJuego();
         System.out.println("codigo juego: "+juego.getCodigo());
         partida=juego.getPartidas().get(0);
-        ArrayList<String> datos=new ArrayList<>();
-        System.out.println("turno de: "+GameContext.getNombresEquipos().get(partida.getTurno()));
-        System.out.println("hijos "+GameContext.getHijos().size());
-        datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(partida.getTurno())+"\"}");
-        Mensaje mensaje=new Mensaje("turno",datos);
-        String msg=mensaje.serializar();
+        if (GameContext.getHijos().size()>1){//para que solo haga esto el server
+            for (int i=0;i<GameContext.getHijos().size();i++) {
+                ArrayList<String> datos=new ArrayList<>();
+                System.out.println("turno de: "+GameContext.getNombresEquipos().get(partida.getTurno()));
+                System.out.println("hijos "+GameContext.getHijos().size());
+                datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(partida.getTurno())+"\"}");
+                Mensaje mensaje=new Mensaje("turno",datos);
+                String msg=mensaje.serializar();
 //        System.out.println(msg);
-        byte[] bytesMsg = msg.getBytes();
-        Write escribir = new Write();
-        for (int i=0;i<GameContext.getHijos().size();i++) {
-            escribir.execute(bytesMsg, i);
+                byte[] bytesMsg = msg.getBytes();
+                Write escribir = new Write();
+                escribir.execute(bytesMsg, i);
+            }
         }
     }
     public void turnoVisible(){

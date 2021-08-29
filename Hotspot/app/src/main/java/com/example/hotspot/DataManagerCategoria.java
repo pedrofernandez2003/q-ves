@@ -25,13 +25,17 @@ public class DataManagerCategoria extends DataManager {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Color color_a_utilizar=Color.AMARILLO;
+                        int cantidadTarjetas=0;
                         for(Color color:Color.values()){
                             if (document.getData().get("color").equals(color.toString())){
                                 color_a_utilizar=color;
                             }
                         }
                         List<Map<String, String>> tarjetas = (List<Map<String, String>>) document.getData().get("tarjeta");
-                        Categoria categoria = new Categoria((String) document.getData().get("nombre"), color_a_utilizar,tarjetas.size());
+                        if(tarjetas!=null){
+                            cantidadTarjetas=tarjetas.size();
+                        }
+                        Categoria categoria = new Categoria((String) document.getData().get("nombre"), color_a_utilizar,cantidadTarjetas);
                         listener.traer((Object) categoria);
                     }
                 } else {
