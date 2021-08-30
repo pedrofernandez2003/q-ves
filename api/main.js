@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 var admin = require("firebase-admin");
-var serviceAccount = require("/home/conectividad/Escritorio/q-ves/api/clave.json");
+var serviceAccount = require("/Users/MartinBarbieri/Desktop/q-ves/api/clave.json");
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://qves-ddf27-default-rtdb.firebaseio.com"
@@ -58,10 +58,10 @@ app.get('/topMods', function (req, res) { return __awaiter(_this, void 0, void 0
         switch (_a.label) {
             case 0:
                 console.log("entre");
-                return [4 /*yield*/, a.get()
+                return [4 /*yield*/, db.collection('plantilas').get()
                         .then(function (querySnapshot) {
                         querySnapshot.forEach(function (doc) {
-                            console.log(doc.id, " => ", doc.data());
+                            console.log(doc.id, " => ", doc.data().categorias);
                         });
                     })["catch"](function (error) {
                         console.log("Error getting documents: ", error);

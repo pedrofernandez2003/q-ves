@@ -2,7 +2,8 @@
 
 const admin = require("firebase-admin");
 
-var serviceAccount = require("/home/conectividad/Escritorio/q-ves/api/clave.json");
+var serviceAccount = require("/Users/MartinBarbieri/Desktop/q-ves/api/clave.json");
+var moderadores = new Map();
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -28,10 +29,11 @@ app.listen(port, () => {
 
 app.get('/topMods', async (req, res) => {
     console.log("entre");
-    await a.get()
+    await db.collection('plantilas').get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
+            cantidadDeApariencias(doc.data().moderador)
+            console.log(doc.id, " => ", doc.data().categorias);
         });
     })
     .catch((error) => {
@@ -39,3 +41,20 @@ app.get('/topMods', async (req, res) => {
     });
     res.send("hola");
 });
+
+function cantidadDeApariencias(nombreModerador){
+    let cantidadModerador = 0;
+    if(moderadores.has(nombreModerador)){
+        cantidadModerador = moderadores.get(nombreModerador);
+    }
+
+    moderadores.set(nombreModerador, cantidadModerador++ );
+}
+
+function definirTop3(moderadoresConCantidad){
+    let valorMayor = 0
+    let moderador;
+    moderadoresConCantidad.forEach((values,keys)=>{
+        if(values>)
+      })
+}
