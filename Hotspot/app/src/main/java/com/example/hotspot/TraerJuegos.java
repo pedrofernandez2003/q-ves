@@ -41,10 +41,8 @@ import java.util.List;
 
 public class TraerJuegos extends AppCompatActivity {
     private static final String TAG = "";
-    static final int MESSAGE_READ=1;
     private int cantidadEquipos;
     private TextView textoCargando, nombreRed, claveRed;
-//    private ArrayList<SendReceive> hijos=new ArrayList<>();
 
     private WifiManager wifiManager;
     private WifiConfiguration currentConfig;
@@ -56,7 +54,6 @@ public class TraerJuegos extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        GameContext.setContextoTraerJuego(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("nuevo equipo");
         registerReceiver(broadcastReceiver,intentFilter);
@@ -108,15 +105,6 @@ public class TraerJuegos extends AppCompatActivity {
         }
     };
 
-//    Handler handlerCantHijos = new Handler(new Handler.Callback() {
-//        @Override
-//        public boolean handleMessage(@NonNull Message msg) {
-//            if(GameContext.getHijos().size() >= cantidadEquipos){
-//                botonComenzarPartida.setVisibility(View.VISIBLE);
-//            }
-//            return true;
-//        }
-//    });
     Context appContext=this;
     private void mostrarPlantillas(Context appCcontext)  {
         DataManagerPlantillas.traerPlantillas(new onTraerDatosListener() {
@@ -144,8 +132,6 @@ public class TraerJuegos extends AppCompatActivity {
                             Intent intent= new Intent();
                             intent.setAction("crear server");
                             appContext.sendBroadcast(intent);
-//                            server= new ThreadedEchoServer();
-//                            server.start();
                             GameContext.setServer(server);
                         }
                     });
@@ -160,123 +146,6 @@ public class TraerJuegos extends AppCompatActivity {
         startActivity(partida);
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        unregisterReceiver(broadcastReceiver);
-//        super.onDestroy();
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        unregisterReceiver(broadcastReceiver);
-//        super.onPause();
-//    }
-    //    Handler handler = new Handler(new Handler.Callback() {
-//        @Override
-//        public boolean handleMessage(@NonNull Message msg) {
-//            switch (msg.what) {
-//                case MESSAGE_READ:
-//                    byte[] readBuff = (byte[]) msg.obj;
-//                    String tempMsg = new String(readBuff, 0, msg.arg1);
-//                    System.out.println("mensaje recibido "+tempMsg);
-//                    try {
-//                        Gson json = new Gson();
-//                        Mensaje mensaje = json.fromJson(tempMsg, Mensaje.class);
-//                        Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
-//                        Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
-//                        empezarJuego();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    break;
-//            }
-//            return true;
-//        }
-//    });
-
-//    private class SendReceive extends Thread {
-//        private Socket socket;
-//        private InputStream inputStream;
-//        private OutputStream outputStream;
-//
-//        public SendReceive(Socket skt) {
-//            System.out.println("entre al constructor");
-//            socket = skt;
-//            try {
-//                System.out.println("se construyo el sendReceive");
-//                inputStream = socket.getInputStream();
-//                outputStream = socket.getOutputStream();
-//            } catch (IOException e) {
-//                System.out.println("entre al catch");
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        @Override
-//        public void run() {
-//            byte[] buffer = new byte[1024];
-//            int bytes;
-//            while (socket != null) {
-//                try {
-//                    bytes = inputStream.read(buffer);
-//                    if (bytes > 0) {
-//                        handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//
-//        public void write(byte[] bytes) {
-//            try {
-//                outputStream.write(bytes);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
-//    public class ThreadedEchoServer extends Thread {
-//        static final int PORT = 7028;
-//
-//        public void run() {
-//            ServerSocket serverSocket = null;
-//            Socket socket = null;
-//
-//            try {
-//                serverSocket = new ServerSocket(PORT);
-//                System.out.println("creo el socket");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            while (true) {
-//                try {
-//                    socket = serverSocket.accept();
-//                } catch (IOException e) {
-//                    System.out.println("I/O error: " + e);
-//                }
-//                SendReceive nuevoHijo=new SendReceive(socket);
-//                GameContext.agregarHijo(nuevoHijo);
-//                handlerCantHijos.obtainMessage().sendToTarget();
-//                nuevoHijo.start();
-//            }
-//        }
-//    }
-
-//    public class Write extends AsyncTask {
-//        @Override
-//        protected Object doInBackground(Object[] objects) {
-//            try {
-//                GameContext.getHijos().get((Integer) objects[1]).write((byte[]) objects[0]);
-//                System.out.println("escribi");
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//    }
-
     public static String getIPAddress(boolean useIPv4) {
         try {
             List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
@@ -285,7 +154,6 @@ public class TraerJuegos extends AppCompatActivity {
                 for (InetAddress addr : addrs) {
                     if (!addr.isLoopbackAddress()) {
                         String sAddr = addr.getHostAddress();
-                        //boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
                         boolean isIPv4 = sAddr.indexOf(':') < 0;
 
                         if (useIPv4) {
@@ -293,7 +161,7 @@ public class TraerJuegos extends AppCompatActivity {
                                 return sAddr;
                         } else {
                             if (!isIPv4) {
-                                int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
+                                int delim = sAddr.indexOf('%');
                                 return delim < 0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
                             }
                         }
@@ -301,7 +169,7 @@ public class TraerJuegos extends AppCompatActivity {
                 }
             }
         } catch (Exception ex) {
-        } // for now eat exceptions
+        }
         return "";
     }
 

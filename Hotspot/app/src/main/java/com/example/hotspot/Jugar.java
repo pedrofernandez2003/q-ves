@@ -1,27 +1,14 @@
 package com.example.hotspot;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -63,7 +50,6 @@ public class Jugar extends AppCompatActivity  {
                 datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(partida.getTurno())+"\"}");
                 Mensaje mensaje=new Mensaje("turno",datos);
                 String msg=mensaje.serializar();
-//        System.out.println(msg);
                 byte[] bytesMsg = msg.getBytes();
                 Write escribir = new Write();
                 escribir.execute(bytesMsg, i);
