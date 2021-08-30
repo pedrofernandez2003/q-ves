@@ -112,21 +112,24 @@ public class LoginActivity extends AppCompatActivity {
                 String mail = mailIngresado.getText().toString();
                 String pass = contraseniaIngresada.getText().toString();
 
-                firebaseAuth.signInWithEmailAndPassword(mail, pass)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
+                if (!mail.isEmpty() & !pass.isEmpty()) {
+                    firebaseAuth.signInWithEmailAndPassword(mail, pass)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
 
-                                   manejarUsuario(firebaseAuth.getCurrentUser());
+                                        manejarUsuario(firebaseAuth.getCurrentUser());
 
-                                   // Intent i = new Intent(LoginActivity.this, AdministradorActivity.class);
-                                    // startActivity(i);
-                                } else {
-                                    Toast.makeText(LoginActivity.this, "Todo mal", Toast.LENGTH_SHORT).show();
+                                        // Intent i = new Intent(LoginActivity.this, AdministradorActivity.class);
+                                        // startActivity(i);
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, "Todo mal", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                }
+                Toast.makeText(getApplicationContext(), "El email o la contraseña estan vacios", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -159,9 +162,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         FirebaseUser user= firebaseAuth.getCurrentUser();
-//        if(user!=null){
-//            manejarUsuario(firebaseAuth.getCurrentUser());
-//        }
+        if(user!=null){
+            manejarUsuario(firebaseAuth.getCurrentUser());
+        }
         super.onStart();
     }
 

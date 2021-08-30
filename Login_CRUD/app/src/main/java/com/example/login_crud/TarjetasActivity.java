@@ -29,6 +29,8 @@ import java.util.ArrayList;
 public class TarjetasActivity extends FragmentActivity {
 
     public boolean ModoModificar=false;
+    public  String nombreCategoria;
+    public int color;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +38,8 @@ public class TarjetasActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tarjetas);
         Bundle extras=getIntent().getExtras();
-        int color= extras.getInt("Color");
-        String nombreCategoria= extras.getString("Nombre");
-        System.out.println(color+nombreCategoria);
+        color= extras.getInt("Color");
+        nombreCategoria= extras.getString("Nombre");
 
         Button aniadirTarjeta = (Button) findViewById(R.id.aniadirTarjeta);
         aniadirTarjeta.setOnClickListener(new View.OnClickListener() {
@@ -46,7 +47,7 @@ public class TarjetasActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 aniadirTarjeta(v,nombreCategoria);
-                traerTarjetas(context,nombreCategoria,color);
+
             }
         });
         Button modificarTarjeta= (Button) findViewById(R.id.modificarTarjeta);
@@ -82,6 +83,12 @@ public class TarjetasActivity extends FragmentActivity {
                         String yapaTarjeta = yapa.getText().toString();
                         Tarjeta tarjeta= new Tarjeta(contenidoTarjeta,yapaTarjeta);
                         insertarTarjeta(tarjeta,nombreCategoria);
+
+
+                        LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera2);
+                        llBotonera.removeAllViews();
+                        traerTarjetas(getApplicationContext(),nombreCategoria,color);
+
                         a.dismiss();
                         
                     }
