@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "@types/node": "^16.7.6"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "firebase-admin": "^9.11.1"
+  }
+}
