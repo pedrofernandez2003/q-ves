@@ -119,6 +119,7 @@ public class TraerJuegos extends AppCompatActivity {
                     button.setText(plantilla.getNombre());
                     button.setBackgroundColor(999999);
                     llBotonera.addView(button);
+                    System.out.println("cantidad de categorias "+plantilla.getCategorias().size());
                     button.setOnClickListener(new View.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
