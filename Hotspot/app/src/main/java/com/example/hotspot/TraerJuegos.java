@@ -125,6 +125,7 @@ public class TraerJuegos extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             turnOnHotspot();
+                            juego= new Juego(plantilla);
                             cantidadEquipos=plantilla.getCantEquipos();
                             System.out.println("cantidad "+cantidadEquipos);
                             textoCargando.setVisibility(View.VISIBLE);

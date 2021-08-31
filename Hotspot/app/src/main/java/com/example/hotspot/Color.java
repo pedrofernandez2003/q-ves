@@ -22,7 +22,6 @@ public  enum Color implements Serializable{
         return codigo;
     }
 
-
     @Override
     public String serializar() {
         Gson serializador=new Gson();

@@ -28,8 +28,8 @@ public class CrearTablero extends AppCompatActivity {
                     Plantilla plantilla = (Plantilla) PlantillaObject;
                     for (Categoria categoria : plantilla.getCategorias()) {
                         categoria.getColor();
-                        categoria.getnombre();
-                        System.out.println(categoria.getnombre());
+                        categoria.getNombre();
+                        System.out.println(categoria.getNombre());
                     }
                 }
             }

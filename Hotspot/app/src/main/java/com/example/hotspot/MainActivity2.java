@@ -131,7 +131,7 @@ public class MainActivity2 extends AppCompatActivity {
                     Mensaje mensaje= json.fromJson(tempMsg, Mensaje.class);
                     Juego juego= json.fromJson(mensaje.getDatos().get(0), Juego.class);
                     Equipo equipo= json.fromJson(mensaje.getDatos().get(1), Equipo.class);
-                    System.out.println(juego.getCodigo());
+//                    System.out.println(juego.getCodigo());
                     System.out.println(equipo.getNombre());
                     Toast.makeText(getApplicationContext(), tempMsg, Toast.LENGTH_SHORT).show();
                     break;

@@ -9,21 +9,27 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Juego implements Serializable {
-    private String codigo;
+//    private String codigo;
     private ArrayList<Partida> partidas;
     private ArrayList<Equipo> equipos;
     private Plantilla plantilla;
     private HashSet<Tarjeta> mazo;
 
-    public Juego(String codigo, ArrayList<Partida> partidas, ArrayList<Equipo> equipos, Plantilla plantilla, HashSet<Tarjeta> mazo){
-        this.codigo=codigo;
-        this.partidas=partidas;
-        this.equipos=equipos;
+    public Juego(Plantilla plantilla){//sacamos el mazo
+        this.partidas=new ArrayList<Partida>();
+        this.equipos=new ArrayList<Equipo>();
         this.plantilla=plantilla;
-        this.mazo=mazo;
+        this.mazo=new HashSet<Tarjeta>();
+        for(int i=0;i<plantilla.getCantPartidas();i++){
+            this.getPartidas().get(i).setPersonaje(plantilla.getPersonajes().get(i));
+        }
+//        for (Categoria categoria:plantilla.getCategorias()) {
+//            for (Tarjeta tarjeta:categoria.getTarjetas()) {
+//                mazo.add(tarjeta);
+//            }
+//        }
     }
     public Juego(){
-        this.codigo="abc";
         this.partidas=new ArrayList<>();
         partidas.add(new Partida());
         this.equipos=new ArrayList<>();
@@ -45,14 +51,6 @@ public class Juego implements Serializable {
 
     public HashSet<Tarjeta> getMazo() {
         return mazo;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
     }
 
     public void setEquipos(ArrayList<Equipo> equipos) {

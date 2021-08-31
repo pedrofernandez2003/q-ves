@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class Jugar extends AppCompatActivity  {
-    private GameContext context;
+//    private GameContext context;
     private Juego juego;
     private Partida partida;
     private TextView turno;
@@ -38,13 +38,12 @@ public class Jugar extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablero_creable);
-        mostrarPlantilaEnXml(GameContext.getJuego().getPlantilla(), this);
+        mostrarPlantillaEnXml(GameContext.getJuego().getPlantilla(), this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("turno");
         registerReceiver(broadcastReceiver,intentFilter);
-        context=GameContext.getGameContext();
+//        context=GameContext.getGameContext();
         juego= GameContext.getJuego();
-        System.out.println("codigo juego: "+juego.getCodigo());
         partida=juego.getPartidas().get(0);
         if (GameContext.getHijos().size()>1){//para que solo haga esto el server
             for (int i=0;i<GameContext.getHijos().size();i++) {
@@ -60,11 +59,8 @@ public class Jugar extends AppCompatActivity  {
             }
         }
     }
-    public void turnoVisible(){
-        turno.setVisibility(View.VISIBLE);
-    }
 
-    public void mostrarPlantilaEnXml(Plantilla plantilla, Context context) {
+    public void mostrarPlantillaEnXml(Plantilla plantilla, Context context) {
         ArrayList<CardView> espacioCartas = conseguirCardViews();
         ArrayList<TextView> espaciosTextos = conseguirTextViews();
         ArrayList<Categoria> categorias = plantilla.getCategorias();
@@ -73,9 +69,9 @@ public class Jugar extends AppCompatActivity  {
         ).into(imageView);
 
         for (int i = 0; i < 10; i++) {
-            System.out.println(categorias.get(i).getnombre());
+            System.out.println(categorias.get(i).getNombre());
             int codigoColor=categorias.get(i).getColor().getCodigo();
-            String nombre= categorias.get(i).getnombre();
+            String nombre= categorias.get(i).getNombre();
 
             CardView espacioCarta= espacioCartas.get(i);
             espacioCarta.setCardBackgroundColor(codigoColor);
@@ -84,9 +80,6 @@ public class Jugar extends AppCompatActivity  {
             espacioTexto.setText(nombre);
 
         }
-
-
-
     }
 
     public ArrayList<CardView> conseguirCardViews() {

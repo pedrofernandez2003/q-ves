@@ -32,7 +32,7 @@ public class DataManagerPlantillas extends DataManager {
 
     public static void traerPlantillas(onTraerDatosListener listener) {
         ArrayList<Object> plantillas = new ArrayList<Object>();
-        DataManager.getDb().collection("plantilas").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DataManager.getDb().collection("plantillas").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -50,7 +50,9 @@ public class DataManagerPlantillas extends DataManager {
                             DataManagerCategoria.traerCategoria(nombreCategoria, new onTraerDatoListener() {
                                 @Override
                                 public void traer(Object dato) {
-                                    categorias.add((Categoria) dato);
+                                    if (dato!=null){
+                                        categorias.add((Categoria) dato);
+                                    }
                                 }
                             });
                         }
