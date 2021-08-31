@@ -28,6 +28,7 @@
     <string name="ingrese_el_mail_que_uso_para_registrarse">Ingrese el mail que uso para registrarse</string>
 
     <string-array name="Colores">
+        <item> </item>
         <item>AMARILLO</item>
         <item>VERDE</item>
         <item>CELESTE</item>

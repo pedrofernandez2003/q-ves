@@ -102,7 +102,6 @@ public class CategoriasActivity extends AppCompatActivity {
 
                             a.dismiss();
                         } else {
-                            System.out.println("Entre algo mal");
                             if (nombreCategoria.equals("") || colorCategoria.equals("")) {
                                 Toast.makeText(CategoriasActivity.this, "Ningún campo puede quedar vacío", Toast.LENGTH_SHORT).show();
                             } else {
@@ -159,7 +158,6 @@ public class CategoriasActivity extends AppCompatActivity {
                     coloresElegidos.add(categoria.getColor().toString());
                     Button button = new Button(context);
                     button.setLayoutParams(lp);
-                    System.out.println(categoria.getColor().getCodigo());
                     button.setText(categoria.getNombre()+" "+categoria.getCantidadTarjetas());
                     button.setBackgroundColor(categoria.getColor().getCodigo());
                     llBotonera.addView(button);
@@ -187,11 +185,9 @@ public class CategoriasActivity extends AppCompatActivity {
                                 TextView colorRepetido = dialog_layout.findViewById(R.id.colorRepetido);
 
                                 Spinner colores = (Spinner) dialog_layout.findViewById(R.id.opcionesColor);
-                                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CategoriasActivity.this,
-                                        R.array.Colores, android.R.layout.simple_spinner_item);
+                                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CategoriasActivity.this, R.array.Colores, android.R.layout.simple_spinner_item);
                                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 colores.setAdapter(adapter);
-
                                 db.setTitle("Modificar Categoria");
                                 db.setPositiveButton("Aceptar", null);
                                 db.setNegativeButton("Eliminar", null);
@@ -222,25 +218,44 @@ public class CategoriasActivity extends AppCompatActivity {
                                         aceptarModificacion.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View view) {
+                                                Boolean modificoSoloNombre = false;
                                                 String nombreCategoria = nombre.getText().toString();
                                                 String colorCategoria = String.valueOf(colores.getSelectedItem());
-                                                Categoria categoriaNueva= new Categoria(nombreCategoria,colorCategoria,0);
-                                                if(coloresElegidos.contains(colorCategoria)){
-                                                }
-                                                else {
-                                                    DataManagerCategoria.traerIdCategoria(categoria.getNombre(), new onTraerDatoListener() {
-                                                        @Override
-                                                        public void traer(Object dato) {
-                                                            modificarCategoria(categoriaNueva, (String) dato);
-                                                            llBotonera.removeAllViews();
-                                                            Toast.makeText(CategoriasActivity.this, "Color ya elegido, intente con otro", Toast.LENGTH_SHORT).show();
-                                                            coloresUsados=traerCategorias(context);
+                                                Categoria categoriaNueva = new Categoria(nombreCategoria, colorCategoria, 0);
+                                                if (!colorCategoria.equals("")) {
+                                                    if (coloresElegidos.contains(colorCategoria)) {
+                                                        if (colorCategoria.equals(categoria.getColor().toString())) { // cambia solo el nombre
+                                                            DataManagerCategoria.traerIdCategoria(categoria.getNombre(), new onTraerDatoListener() {
+                                                                @Override
+                                                                public void traer(Object dato) {
+                                                                    modificarCategoria(categoriaNueva, (String) dato);
+                                                                    llBotonera.removeAllViews();
+                                                                    coloresUsados = traerCategorias(context);
+                                                                }
+                                                            });
+                                                            modificoSoloNombre = true;
                                                         }
-                                                    });
+                                                        if (!modificoSoloNombre) {
+                                                            Toast.makeText(CategoriasActivity.this, "Color ya elegido, intente con otro", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    } else {
+                                                        DataManagerCategoria.traerIdCategoria(categoria.getNombre(), new onTraerDatoListener() {
+                                                            @Override
+                                                            public void traer(Object dato) {
+                                                                modificarCategoria(categoriaNueva, (String) dato);
+                                                                llBotonera.removeAllViews();
+                                                                coloresUsados = traerCategorias(context);
+                                                            }
+                                                        });
 
-                                                    a.dismiss();
+                                                        a.dismiss();
+                                                    }
+
                                                 }
+                                                else{
+                                                    Toast.makeText(CategoriasActivity.this, "Ingrese el color de la categoria", Toast.LENGTH_SHORT).show();
 
+                                                }
                                             }
                                         });
                                     }
