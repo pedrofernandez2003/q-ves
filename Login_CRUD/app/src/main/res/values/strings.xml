@@ -4,8 +4,8 @@
     <string name="iniciar_sesion">Inicar Sesion</string>
     <string name="iniciar">Inicar</string>
     <string name="me_olvide_la_contrasenia">Me olvide la contrasenia</string>
-    <string name="invalid_mail">mail incorreto</string>
-    <string name="invalid_password">contrasenia incorreta</string>
+    <string name="invalid_mail">ingrese un mail valido</string>
+    <string name="invalid_password">ingrese una contraseña con mas de 6 caracteres </string>
     <string name="registrarse">Registrarse</string>
     <string name="mail">mail</string>
     <string name="contrasenia">contrasenia</string>
