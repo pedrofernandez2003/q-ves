@@ -52,6 +52,8 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_display);
+        getSupportActionBar().hide();
+
         allpictures = new ArrayList<>();
         imageRecycler = findViewById(R.id.recycler);
         imageRecycler.addItemDecoration(new MarginDecoration(this));

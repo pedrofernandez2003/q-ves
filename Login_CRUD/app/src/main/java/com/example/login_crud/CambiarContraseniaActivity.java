@@ -20,6 +20,8 @@ public class CambiarContraseniaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cambiar_contrasenia);
+        getSupportActionBar().hide();
+
         firebaseAuth=FirebaseAuth.getInstance();
 
         mail= (EditText) findViewById(R.id.mail);

@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.Listeners.onInsertarListener;
@@ -25,7 +26,7 @@ import com.example.Objetos.Categoria;
 
 import java.util.ArrayList;
 
-public class CategoriasActivity extends FragmentActivity {
+public class CategoriasActivity extends AppCompatActivity {
 
     private boolean ModoModificar=false;
     private ArrayList<String> coloresUsados;
@@ -36,6 +37,9 @@ public class CategoriasActivity extends FragmentActivity {
         coloresUsados = traerCategorias(context);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categorias);
+        getSupportActionBar().hide();
+
+
         Button aniadirCategoria = (Button) findViewById(R.id.aniadirCategoria);
         aniadirCategoria.setOnClickListener(new View.OnClickListener() {
             @Override

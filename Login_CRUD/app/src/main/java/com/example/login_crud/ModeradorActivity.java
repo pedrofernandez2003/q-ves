@@ -18,6 +18,7 @@ public class ModeradorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moderador);
+        getSupportActionBar().hide();
 
         crearJuego = (Button) findViewById(R.id.crearJuego);
         iniciarJuego = (Button) findViewById(R.id.iniciarJuego);

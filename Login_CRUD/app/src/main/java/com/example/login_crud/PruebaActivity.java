@@ -18,6 +18,7 @@ public class PruebaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prueba);
+        getSupportActionBar().hide();
 
         Tarjeta tarjetaAntigua= new Tarjeta("J","K");
         Tarjeta tarjetaModificada= new Tarjeta("A","B");

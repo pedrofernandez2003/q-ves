@@ -49,6 +49,8 @@ public class CrearJuegoActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_crear_juego);
+        getSupportActionBar().hide();
+
         super.onCreate(savedInstanceState);
         segundaVez = false;
         personajes = (Button) findViewById(R.id.botonPersonajes);

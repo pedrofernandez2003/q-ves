@@ -128,7 +128,7 @@ public  abstract class DataManagerCategoria extends DataManager {
         plantillaAInsertar.put("nombre",plantilla.getNombrePlantilla());
         plantillaAInsertar.put("personajes",plantilla.getUrls());
 
-        DataManager.getDb().collection("plantilas")
+        DataManager.getDb().collection("plantillas")
                 .add(plantillaAInsertar)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

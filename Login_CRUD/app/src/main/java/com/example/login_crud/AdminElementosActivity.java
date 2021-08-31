@@ -12,6 +12,7 @@ public class AdminElementosActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrar_elementos);
+        getSupportActionBar().hide();
         Button tarjetasYCategorias = (Button) findViewById(R.id.tarjetasYCategorias);
         Button personajes = (Button) findViewById(R.id.personajes);
 

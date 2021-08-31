@@ -1,6 +1,7 @@
 package com.example.login_crud;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.AlertDialog;
@@ -26,7 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-public class TarjetasActivity extends FragmentActivity {
+public class TarjetasActivity extends AppCompatActivity {
 
     public boolean ModoModificar=false;
     public  String nombreCategoria;
@@ -37,6 +38,8 @@ public class TarjetasActivity extends FragmentActivity {
         Context context = this.getApplicationContext();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tarjetas);
+        getSupportActionBar().hide();
+
         Bundle extras=getIntent().getExtras();
         color= extras.getInt("Color");
         nombreCategoria= extras.getString("Nombre");
