@@ -101,7 +101,7 @@ public  abstract class DataManagerCategoria extends DataManager {
         Map<String, Object> categoriaAInsertar = new HashMap<>();
         categoriaAInsertar.put("color",categoria.getColor().toString());
         categoriaAInsertar.put("nombre",categoria.getNombre());
-        categoriaAInsertar.put("tarjetas",new ArrayList<>());
+        categoriaAInsertar.put("tarjeta",new ArrayList<>());
         DataManager.getDb().collection("categorias")
                 .add(categoriaAInsertar)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
