@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.Listeners.onEliminarListener;
 import com.example.Listeners.onInsertarListener;
 import com.example.Listeners.onModificarListener;
 import com.example.Listeners.onTraerDatoListener;
@@ -192,20 +193,39 @@ public class CategoriasActivity extends AppCompatActivity {
                                 colores.setAdapter(adapter);
 
                                 db.setTitle("Modificar Categoria");
-                                db.setPositiveButton("Modificar", null);
+                                db.setPositiveButton("Aceptar", null);
+                                db.setNegativeButton("Eliminar", null);
                                 final AlertDialog a = db.create();
                                 a.setOnShowListener(new DialogInterface.OnShowListener() {
                                     @Override
                                     public void onShow(DialogInterface dialog) {
-                                        Button b = a.getButton(AlertDialog.BUTTON_POSITIVE);
-                                        b.setOnClickListener(new View.OnClickListener() {
+                                        Button aceptarModificacion = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                                        Button eliminarCategoria = a.getButton(AlertDialog.BUTTON_NEGATIVE);
+                                        eliminarCategoria.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                DataManagerCategoria.eliminarCategoria(categoria.getNombre(), new onEliminarListener() {
+                                                    @Override
+                                                    public void eliminar(boolean eliminado) {
+                                                        if(eliminado) {
+                                                            llBotonera.removeAllViews();
+                                                            coloresUsados = traerCategorias(context);
+                                                            a.dismiss();
+                                                        }
+                                                        else{
+                                                            Toast.makeText(CategoriasActivity.this, "No se pudo eliminar", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        aceptarModificacion.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View view) {
                                                 String nombreCategoria = nombre.getText().toString();
                                                 String colorCategoria = String.valueOf(colores.getSelectedItem());
                                                 Categoria categoriaNueva= new Categoria(nombreCategoria,colorCategoria,0);
                                                 if(coloresElegidos.contains(colorCategoria)){
-                                                    Toast.makeText(CategoriasActivity.this, "Color ya elijido, intente con otro", Toast.LENGTH_SHORT).show();
                                                 }
                                                 else {
                                                     DataManagerCategoria.traerIdCategoria(categoria.getNombre(), new onTraerDatoListener() {
@@ -213,6 +233,7 @@ public class CategoriasActivity extends AppCompatActivity {
                                                         public void traer(Object dato) {
                                                             modificarCategoria(categoriaNueva, (String) dato);
                                                             llBotonera.removeAllViews();
+                                                            Toast.makeText(CategoriasActivity.this, "Color ya elegido, intente con otro", Toast.LENGTH_SHORT).show();
                                                             coloresUsados=traerCategorias(context);
                                                         }
                                                     });

@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.Listeners.onEliminarListener;
 import com.example.Listeners.onInsertarListener;
 import com.example.Listeners.onModificarListener;
 import com.example.Listeners.onTraerDatoListener;
@@ -57,7 +59,6 @@ public class TarjetasActivity extends AppCompatActivity {
         modificarTarjeta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ModoModificar=!ModoModificar;
                 ModoModificar=!ModoModificar;
                 if (ModoModificar){
                     modificarTarjeta.setText("Salir del modo editable");
@@ -147,7 +148,10 @@ public class TarjetasActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, CategoriasActivity.class));
+    }
 
    private void traerTarjetas(Context context, String nombreCategoria, int color) {
         ArrayList<String> colores = new ArrayList<>();
@@ -185,12 +189,38 @@ public class TarjetasActivity extends AppCompatActivity {
 
                                         db.setTitle("Nueva Tarjeta");
                                         db.setPositiveButton("Modificar", null);
+                                        db.setNegativeButton("Eliminar", null);
+
                                         final AlertDialog a = db.create();
                                         a.setOnShowListener(new DialogInterface.OnShowListener() {
                                             @Override
                                             public void onShow(DialogInterface dialog) {
-                                                Button b = a.getButton(AlertDialog.BUTTON_POSITIVE);
-                                                b.setOnClickListener(new View.OnClickListener() {
+                                                Button modificarTarjeta = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                                                Button eliminarTarjeta = a.getButton(AlertDialog.BUTTON_NEGATIVE);
+                                                eliminarTarjeta.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
+                                                            @Override
+                                                            public void traer(Object dato) {
+                                                                DataManagerCategoria.eliminarTarjeta(tarjeta, (String) dato, new onEliminarListener() {
+                                                                    @Override
+                                                                    public void eliminar(boolean eliminado) {
+                                                                        if(eliminado) {
+                                                                            llBotonera.removeAllViews();
+                                                                            traerTarjetas(context,nombreCategoria,color);
+                                                                            a.dismiss();
+                                                                        }
+                                                                        else{
+                                                                            Toast.makeText(TarjetasActivity.this, "No se pudo eliminar", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                                modificarTarjeta.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
 

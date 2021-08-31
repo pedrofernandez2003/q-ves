@@ -32,11 +32,7 @@
 
         </activity>
         <activity android:name=".LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".RegistrarseActivity" />
         <activity android:name=".ModeradorActivity" />
@@ -48,7 +44,11 @@
         </activity>
 
         <activity android:name=".CategoriasActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
 

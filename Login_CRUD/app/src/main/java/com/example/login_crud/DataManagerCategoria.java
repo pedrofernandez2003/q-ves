@@ -145,21 +145,27 @@ public  abstract class DataManagerCategoria extends DataManager {
                 });
     }
 
-    public static void eliminarCategoria(String id, onEliminarListener listener) {
-        DataManager.getDb().collection("categorias").document(id)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        listener.eliminar(true);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        listener.eliminar(false);
-                    }
-                });
+    public static void eliminarCategoria(String nombre, onEliminarListener listener) {
+        traerIdCategoria(nombre, new onTraerDatoListener() {
+            @Override
+            public void traer(Object dato) {
+                DataManager.getDb().collection("categorias").document((String)dato)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                listener.eliminar(true);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                listener.eliminar(false);
+                            }
+                        });
+            }
+        });
+
     }
 
     public static void traerTarjetasCategoria(String id, onTraerDatosListener listener) {
