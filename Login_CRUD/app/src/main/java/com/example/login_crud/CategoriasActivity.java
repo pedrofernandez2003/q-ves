@@ -35,7 +35,7 @@ public class CategoriasActivity extends FragmentActivity {
         Context context = this.getApplicationContext();
         coloresUsados = traerCategorias(context);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tarjetas_y_categorias);
+        setContentView(R.layout.activity_categorias);
         Button aniadirCategoria = (Button) findViewById(R.id.aniadirCategoria);
         aniadirCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +48,14 @@ public class CategoriasActivity extends FragmentActivity {
         modificarCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 ModoModificar=!ModoModificar;
+                if (ModoModificar){
+                    modificarCategoria.setText("Salir del modo editable");
+                }
+                else{
+                    modificarCategoria.setText("Editar categoria");
+                }
             }
         });
     }

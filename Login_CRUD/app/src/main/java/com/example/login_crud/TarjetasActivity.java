@@ -54,6 +54,13 @@ public class TarjetasActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 ModoModificar=!ModoModificar;
+                ModoModificar=!ModoModificar;
+                if (ModoModificar){
+                    modificarTarjeta.setText("Salir del modo editable");
+                }
+                else{
+                    modificarTarjeta.setText("Editar tarjeta");
+                }
 
             }
         });

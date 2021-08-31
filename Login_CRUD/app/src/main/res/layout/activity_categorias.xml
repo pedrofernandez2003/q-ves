@@ -21,7 +21,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Modificar Categoria"
+                android:text="Editar categoria"
                 android:id="@+id/modificarCategoria"
                 app:background="@color/white"
                 app:backgroundTint="@color/black" />

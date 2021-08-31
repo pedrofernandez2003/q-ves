@@ -21,7 +21,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Modificar Tarjeta"
+                android:text="Editar tarjeta"
                 android:id="@+id/modificarTarjeta"
                 app:background="@color/white"
                 app:backgroundTint="@color/black" />
