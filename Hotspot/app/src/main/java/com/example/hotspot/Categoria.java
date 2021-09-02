@@ -62,8 +62,9 @@ public class Categoria implements Serializable {
     private String nombre;
     private Color color;
     private int cantidadTarjetas;
+    private ArrayList<Tarjeta> tarjetas;
 
-    public Categoria(String nombre, String nombreColor, int cantidadTarjetas){
+    public Categoria(String nombre, String nombreColor, int cantidadTarjetas, ArrayList<Tarjeta>tarjetas){
         for(Color color:Color.values()){
             if (nombreColor.equals(color.toString())){
                 this.color= color;
@@ -71,8 +72,11 @@ public class Categoria implements Serializable {
         }
         this.nombre = nombre;
         this.cantidadTarjetas=cantidadTarjetas;
+        this.tarjetas=tarjetas;
     }
-    public Categoria(){ }
+    public Categoria(){
+        this.cantidadTarjetas=0;
+    }
 
     public int getCantidadTarjetas() {
         return cantidadTarjetas;
@@ -93,7 +97,15 @@ public class Categoria implements Serializable {
     public void setColor(Color color) {
         this.color = color;
     }
-    
+
+    public ArrayList<Tarjeta> getTarjetas() {
+        return tarjetas;
+    }
+
+    public void setTarjetas(ArrayList<Tarjeta> tarjetas) {
+        this.tarjetas = tarjetas;
+    }
+
     @Override
     public String serializar() {
         Gson serializador=new Gson();

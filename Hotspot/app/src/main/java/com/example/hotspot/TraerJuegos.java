@@ -125,6 +125,7 @@ public class TraerJuegos extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             turnOnHotspot();
+                            System.out.println("personajes "+plantilla.getPersonajes().size());
                             juego= new Juego(plantilla);
                             cantidadEquipos=plantilla.getCantEquipos();
                             System.out.println("cantidad "+cantidadEquipos);

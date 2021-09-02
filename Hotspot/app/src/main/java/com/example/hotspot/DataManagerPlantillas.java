@@ -44,7 +44,12 @@ public class DataManagerPlantillas extends DataManager {
                         int cantEquipos= Integer.parseInt((String) document.getData().get("cantEquipos"));
                         ArrayList<String>categoriasBase= (ArrayList<String>) document.getData().get("categorias");
                         ArrayList<Categoria>categorias=new ArrayList<>();
-                        ArrayList<Personaje>personajes=new ArrayList<>();//harcodeamos para probar
+                        ArrayList<String>personajesBase=(ArrayList<String>) document.getData().get("personajes");
+                        ArrayList<Personaje>personajes=new ArrayList<>();
+                        for (String url:personajesBase){
+                            Personaje personaje=new Personaje("",url);
+                            personajes.add(personaje);
+                        }
                         String mailModerador= (String) document.getData().get("moderador");
                         for(String nombreCategoria:categoriasBase){
                             DataManagerCategoria.traerCategoria(nombreCategoria, new onTraerDatoListener() {
@@ -53,14 +58,17 @@ public class DataManagerPlantillas extends DataManager {
                                     if (dato!=null){
                                         categorias.add((Categoria) dato);
                                     }
+                                    if(categoriasBase.size()==categorias.size()){
+                                        Plantilla plantilla = new Plantilla(categorias,personajes,(String) document.getData().get("nombre"), cantPartidas,cantEquipos,mailModerador);
+                                        plantillas.add(plantilla);
+                                    }
+                                    if(plantillas.size()==task.getResult().size()){
+                                        listener.traerDatos(plantillas);
+                                    }
                                 }
                             });
                         }
-//                        List<Map<String, String>> tarjetas = (List<Map<String, String>>) document.getData().get("tarjeta");
-                        Plantilla plantilla = new Plantilla(categorias,personajes,(String) document.getData().get("nombre"), cantPartidas,cantEquipos,mailModerador);
-                        plantillas.add(plantilla);
                     }
-                    listener.traerDatos(plantillas);
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }

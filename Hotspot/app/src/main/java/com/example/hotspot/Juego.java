@@ -17,17 +17,20 @@ public class Juego implements Serializable {
 
     public Juego(Plantilla plantilla){//sacamos el mazo
         this.partidas=new ArrayList<Partida>();
+        for (int i=0;i<plantilla.getCantPartidas();i++){
+            this.partidas.add(new Partida());
+        }
         this.equipos=new ArrayList<Equipo>();
         this.plantilla=plantilla;
         this.mazo=new HashSet<Tarjeta>();
         for(int i=0;i<plantilla.getCantPartidas();i++){
             this.getPartidas().get(i).setPersonaje(plantilla.getPersonajes().get(i));
         }
-//        for (Categoria categoria:plantilla.getCategorias()) {
-//            for (Tarjeta tarjeta:categoria.getTarjetas()) {
-//                mazo.add(tarjeta);
-//            }
-//        }
+        for (Categoria categoria:plantilla.getCategorias()) {
+            for (Tarjeta tarjeta:categoria.getTarjetas()) {
+                mazo.add(tarjeta);
+            }
+        }
     }
     public Juego(){
         this.partidas=new ArrayList<>();

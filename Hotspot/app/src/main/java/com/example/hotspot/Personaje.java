@@ -13,10 +13,10 @@ public class Personaje implements Serializable{
         this.foto=foto;
     }
 
-    public Personaje(){
-        this.nombre="prueba";
-        this.foto="prueba.jpg";
-    }
+//    public Personaje(){
+//        this.nombre="prueba";
+//        this.foto="prueba.jpg";
+//    }
 
     public String getNombre() {
         return nombre;
