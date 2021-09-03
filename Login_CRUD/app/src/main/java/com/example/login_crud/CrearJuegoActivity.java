@@ -201,7 +201,7 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         for (int i = 0; i < categoriasSeleccionadas.size(); i++) {
             item = item + listaCategorias.get(categoriasSeleccionadas.get(i));
             if (i != categoriasSeleccionadas.size() - 1) {
-                item = item + ", ";
+                item = item + ",";
             }
         }
         return item;
