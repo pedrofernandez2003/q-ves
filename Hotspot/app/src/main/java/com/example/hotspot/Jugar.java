@@ -45,7 +45,8 @@ public class Jugar extends AppCompatActivity  {
 //        context=GameContext.getGameContext();
         juego= GameContext.getJuego();
         partida=juego.getPartidas().get(0);
-        if (GameContext.getHijos().size()>1){//para que solo haga esto el server
+        System.out.println(GameContext.getHijos().size());
+        if (GameContext.getServers().size()>0){//para que solo haga esto el server
             for (int i=0;i<GameContext.getHijos().size();i++) {
                 ArrayList<String> datos=new ArrayList<>();
                 System.out.println("turno de: "+GameContext.getNombresEquipos().get(partida.getTurno()));

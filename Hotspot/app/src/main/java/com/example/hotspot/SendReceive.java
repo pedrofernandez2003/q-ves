@@ -29,7 +29,8 @@ public class SendReceive extends Thread {
             System.out.println("entre al catch");
             e.printStackTrace();
         }
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[16384];
+        System.out.println(buffer.length);
         int bytes;
         while (socket != null) {
             try {

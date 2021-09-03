@@ -119,16 +119,13 @@ public class TraerJuegos extends AppCompatActivity {
                     button.setText(plantilla.getNombre());
                     button.setBackgroundColor(999999);
                     llBotonera.addView(button);
-                    System.out.println("cantidad de categorias "+plantilla.getCategorias().size());
                     button.setOnClickListener(new View.OnClickListener() {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void onClick(View v) {
                             turnOnHotspot();
-                            System.out.println("personajes "+plantilla.getPersonajes().size());
                             juego= new Juego(plantilla);
                             cantidadEquipos=plantilla.getCantEquipos();
-                            System.out.println("cantidad "+cantidadEquipos);
                             textoCargando.setVisibility(View.VISIBLE);
                             nombreRed.setVisibility(View.VISIBLE);
                             claveRed.setVisibility(View.VISIBLE);
@@ -136,6 +133,7 @@ public class TraerJuegos extends AppCompatActivity {
                             intent.setAction("crear server");
                             appContext.sendBroadcast(intent);
                             GameContext.setServer(server);
+                            GameContext.getServers().add(server);
                         }
                     });
                 }
