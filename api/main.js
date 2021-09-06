@@ -37,7 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 var admin = require("firebase-admin");
-var serviceAccount = require("/Users/MartinBarbieri/Desktop/q-ves/api/clave.json");
+var serviceAccount = require("./clave.json");
+var moderadoresApariciones = new Map();
+var personajesApariciones = new Map();
+var moderadoresUnicos = new Array();
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://qves-ddf27-default-rtdb.firebaseio.com"
@@ -53,23 +56,161 @@ app.use(bp.urlencoded({ extended: true }));
 app.listen(port, function () {
     console.log("App listening at http://localhost:" + port);
 });
-app.get('/topMods', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+app.get('/promEquipos', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                console.log("entre");
-                return [4 /*yield*/, db.collection('plantilas').get()
-                        .then(function (querySnapshot) {
-                        querySnapshot.forEach(function (doc) {
-                            console.log(doc.id, " => ", doc.data().categorias);
-                        });
-                    })["catch"](function (error) {
-                        console.log("Error getting documents: ", error);
-                    })];
+            case 0: return [4 /*yield*/, db.collection('plantillas').get()
+                    .then(function (querySnapshot) {
+                    var sumaEquipos = 0;
+                    var cantidadPlantillas = 0;
+                    querySnapshot.forEach(function (doc) {
+                        var prueba = doc.data().cantEquipos;
+                        var cantEquipos = parseInt(prueba);
+                        sumaEquipos = sumaEquipos + cantEquipos;
+                        cantidadPlantillas++;
+                    });
+                    var promedio = sumaEquipos / cantidadPlantillas;
+                    res.send(promedio.toString());
+                })["catch"](function (error) {
+                    res.status(503);
+                    res.send(error);
+                })];
             case 1:
                 _a.sent();
-                res.send("hola");
                 return [2 /*return*/];
         }
     });
 }); });
+app.get('/promPartidas', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, db.collection('plantillas').get()
+                    .then(function (querySnapshot) {
+                    var sumaPartidas = 0;
+                    var cantidadPlantillas = 0;
+                    querySnapshot.forEach(function (doc) {
+                        var cantPartidasString = doc.data().cantPartidas;
+                        var cantPartidas = parseInt(cantPartidasString);
+                        sumaPartidas = sumaPartidas + cantPartidas;
+                        cantidadPlantillas++;
+                    });
+                    var promedio = sumaPartidas / cantidadPlantillas;
+                    res.send(promedio.toString());
+                })["catch"](function (error) {
+                    res.status(503);
+                    res.send(error);
+                })];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.get('/mods', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var listaModeradores;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, db.collection('plantillas').get()
+                    .then(function (querySnapshot) {
+                    querySnapshot.forEach(function (doc) {
+                        listarModeradores(doc.data().usuario);
+                    });
+                })["catch"](function (error) {
+                    res.status(503);
+                    res.send(error);
+                })];
+            case 1:
+                _a.sent();
+                listaModeradores = moderadoresUnicos;
+                moderadoresUnicos = [];
+                res.send(listaModeradores);
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.get('/topPersonajes', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var top3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, db.collection('plantillas').get()
+                    .then(function (querySnapshot) {
+                    querySnapshot.forEach(function (doc) {
+                        var personajes = doc.data().personajes;
+                        for (var i = 0; i < personajes.length; i++) {
+                            var personaje = personajes[i];
+                            cantidadDeApariciones(personaje);
+                        }
+                    });
+                })["catch"](function (error) {
+                    res.status(503);
+                    res.send(error);
+                })];
+            case 1:
+                _a.sent();
+                top3 = definirTop3(personajesApariciones);
+                personajesApariciones.clear();
+                res.send(top3);
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.get('/topMods', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var top3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, db.collection('plantillas').get()
+                    .then(function (querySnapshot) {
+                    querySnapshot.forEach(function (doc) {
+                        cantidadDeApariencias(doc.data().usuario);
+                        console.log(doc.id, " => ", doc.data().usuario);
+                    });
+                })["catch"](function (error) {
+                    res.status(503);
+                    res.send(error);
+                })];
+            case 1:
+                _a.sent();
+                top3 = definirTop3(moderadoresApariciones);
+                moderadoresApariciones.clear();
+                res.send(top3);
+                return [2 /*return*/];
+        }
+    });
+}); });
+function listarModeradores(nombreModerador) {
+    if (!moderadoresUnicos.includes(nombreModerador)) {
+        moderadoresUnicos.push(nombreModerador);
+    }
+}
+function cantidadDeApariciones(personaje) {
+    var cantidadPersonaje = 0;
+    if (personajesApariciones.has(personaje)) {
+        cantidadPersonaje = personajesApariciones.get(personaje);
+    }
+    personajesApariciones.set(personaje, cantidadPersonaje + 1);
+}
+function cantidadDeApariencias(nombreModerador) {
+    var cantidadModerador = 0;
+    if (moderadoresApariciones.has(nombreModerador)) {
+        cantidadModerador = moderadoresApariciones.get(nombreModerador);
+    }
+    moderadoresApariciones.set(nombreModerador, cantidadModerador + 1);
+}
+function definirTop3(moderadoresConCantidad) {
+    var valorMayor = 0;
+    var moderador;
+    var top3 = new Array();
+    for (var i = 0; i < 3; i++) {
+        moderadoresConCantidad.forEach(function (values, keys) {
+            if (values > valorMayor) {
+                valorMayor = values;
+                moderador = keys;
+            }
+        });
+        top3.push(moderador);
+        moderadoresConCantidad["delete"](moderador);
+        moderador = "";
+        valorMayor = 0;
+    }
+    return top3;
+}
