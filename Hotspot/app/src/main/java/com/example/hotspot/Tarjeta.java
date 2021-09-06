@@ -5,14 +5,14 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 
 public class Tarjeta implements Serializable {
-//    private Categoria categoria;
+    private String categoria;
     private String contenido;
     private String yapa;
 
-    public Tarjeta(String contenido, String yapa) {
-//        this.categoria = categoria;
+    public Tarjeta(String contenido, String yapa, String categoria) {
         this.contenido = contenido;
         this.yapa = yapa;
+        this.categoria= categoria;
     }
 
     public Tarjeta(){
@@ -20,9 +20,9 @@ public class Tarjeta implements Serializable {
         this.yapa = "cosas yapa";
     }
 
-//    public Categoria getCategoria() {
-//        return categoria;
-//    }
+    public String getCategoria() {
+        return categoria;
+    }
 
     public String getContenido() {
         return contenido;
@@ -32,9 +32,9 @@ public class Tarjeta implements Serializable {
         return yapa;
     }
 
-//    public void setCategoria(Categoria categoria) {
-//        this.categoria = categoria;
-//    }
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
 
     public void setContenido(String contenido) {
         this.contenido = contenido;

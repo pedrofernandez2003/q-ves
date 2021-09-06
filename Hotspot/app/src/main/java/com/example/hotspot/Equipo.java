@@ -14,6 +14,11 @@ public class Equipo implements Serializable {
         this.nombre=nombre;
         this.tarjetas=tarjetas;
     }
+    public Equipo(HashSet<Tarjeta> tarjetas, String nombre){
+        this.id=id;
+        this.nombre=nombre;
+        this.tarjetas=tarjetas;
+    }
     
     public Equipo(){
         this.id=0;

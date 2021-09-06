@@ -32,7 +32,7 @@ public class DataManagerCategoria extends DataManager {
                         if(tarjetas!=null){
                             cantidadTarjetas=tarjetas.size();
                             for (int i = 0; i< tarjetas.size();i++){
-                                Tarjeta tarjeta=new Tarjeta(tarjetas.get(i).get("contenido"),tarjetas.get(i).get("yapa"));
+                                Tarjeta tarjeta=new Tarjeta(tarjetas.get(i).get("contenido"),tarjetas.get(i).get("yapa"),nombre);
                                 tarjetasArray.add(tarjeta);
                             }
                         }

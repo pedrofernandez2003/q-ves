@@ -57,6 +57,9 @@ public class ServicioJuego extends Service {
                                             try {
                                                 Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
                                                 GameContext.setJuego(juego);
+                                                //aca
+                                                Equipo equipo= new Equipo(juego.getMazo(),GameContext.getNombresEquipos().get(0));
+                                                GameContext.setEquipo(equipo);
                                             } catch (JsonSyntaxException e) {
                                                 e.printStackTrace();
                                             }

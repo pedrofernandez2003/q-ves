@@ -83,6 +83,7 @@ public class TraerJuegos extends AppCompatActivity {
                     String msg=mensaje.serializar();
                     System.out.println(msg);
                     byte[] bytesMsg = msg.getBytes();
+                    System.out.println("tamaño msg env: " + bytesMsg.length);
                     Write escribir = new Write();
                     escribir.execute(bytesMsg,i);
                 }

@@ -10,6 +10,7 @@ public class GameContext extends Thread {
     private static ArrayList<SendReceive> hijos=new ArrayList<>();
     private static ArrayList<String> nombresEquipos=new ArrayList<>();
     private static Juego juego;
+    private Equipo equipo;
 
     private GameContext(){}
     public static GameContext getGameContext() {
@@ -17,6 +18,10 @@ public class GameContext extends Thread {
             context = new GameContext();
         }
         return context;
+    }
+
+    public static void setEquipo(Equipo equipo) {
+        equipo = equipo;
     }
 
     public static Juego getJuego() {
