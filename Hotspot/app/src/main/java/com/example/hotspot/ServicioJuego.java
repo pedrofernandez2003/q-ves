@@ -16,10 +16,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 
 public class ServicioJuego extends Service {
     private ThreadedEchoServer server;
     private ArrayList<Categoria> categorias;
+    private Boolean cantidadExacta = true;
 
     @Nullable
     @Override
@@ -60,22 +62,7 @@ public class ServicioJuego extends Service {
                                         case "comenzar":
                                             try {
                                                 Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
-                                                int cantidadPartidas = juego.getPartidas().size();
-                                                int contador=0;
-                                                HashSet<Tarjeta> tarjetasARepartir = new HashSet<>();
-                                                for (Categoria categoria: categorias) {
-                                                    for (Tarjeta tarjeta: juego.getMazo()){ //creo que es totalmente aleatorio, chequear eso
-                                                        while(contador<cantidadPartidas){
-                                                            if(tarjeta.getCategoria().equals(categoria.getNombre())){
-                                                                tarjetasARepartir.add(tarjeta);
-                                                            }
-                                                            contador++;
-                                                        }
-                                                    }
-                                                }
-                                                while(tarjetasARepartir.size()%juego.getEquipos().size()!=0){
 
-                                                }
 
                                                 Equipo equipo= new Equipo(juego.getMazo(),GameContext.getNombresEquipos().get(0));
                                                 GameContext.setEquipo(equipo);

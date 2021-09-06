@@ -37,7 +37,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 public class TraerJuegos extends AppCompatActivity {
     private static final String TAG = "";
@@ -50,6 +52,8 @@ public class TraerJuegos extends AppCompatActivity {
     private Juego juego;
     private Button botonComenzarPartida;
     private ThreadedEchoServer server;
+    private ArrayList<Categoria> categorias = juego.getPlantilla().getCategorias();
+    private Boolean cantidadExacta = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +77,11 @@ public class TraerJuegos extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("tocaste mandar");
-                String juegoSerializado=juego.serializar();
+                ArrayList<HashSet<Tarjeta>> mazos = repartirTarjetas();
                 GameContext.setJuego(juego);
                 for (int i=0;i<GameContext.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
+                    juego.setMazo(mazos.get(i));
+                    String juegoSerializado=juego.serializar();
                     ArrayList<String> datos=new ArrayList<>();
                     datos.add(juegoSerializado);
                     datos.add("\"turno\":"+i);
@@ -106,6 +112,81 @@ public class TraerJuegos extends AppCompatActivity {
         }
     };
 
+    private ArrayList<HashSet<Tarjeta>> repartirTarjetas(){
+        ArrayList<HashSet<Tarjeta>> mazoPorEquipo = new ArrayList<>(); //Objeto a retornar
+        int cantidadPartidas = juego.getPartidas().size();
+        int contador=0;
+        HashSet<Tarjeta> tarjetasARepartir = new HashSet<>();
+        for (Categoria categoria: categorias) { //Selecciono 3 tarjetas por cada categoria
+            for (Tarjeta tarjeta: juego.getMazo()){ //creo que es totalmente aleatorio, chequear eso
+                while(contador<cantidadPartidas){
+                    if(tarjeta.getCategoria().equals(categoria.getNombre())){
+                        tarjetasARepartir.add(tarjeta);
+                    }
+                    contador++;
+                }
+            }
+        }
+        for(Tarjeta tarjetaAEliminar: tarjetasARepartir ) { //Elimino del mazo las tarjetas ya seleccionadas para los equipos
+            juego.getMazo().remove(tarjetaAEliminar);
+        }
+        ArrayList<String> categoriasElegidas = new ArrayList<>();
+        for(Categoria categ : categorias){
+            categoriasElegidas.add(categ.getNombre()); // Armo un array de strings con todas las categorias de esa plantilla
+        }
+        ArrayList<String> categoriasAEliminar = new ArrayList<>();
+        for (Tarjeta tarj : juego.getMazo()){
+            if(!categoriasElegidas.contains(tarj.getCategoria())){
+                categoriasAEliminar.add(tarj.getCategoria()); // Agrego qué tarjetas del mazo se tienen que eliminar porq no son de ninguna categoria de la plantilla
+            }
+        }
+        HashSet<Tarjeta> tarjetaFinal = juego.getMazo(); // Copio el mazo a otro hashset así puedo ir eliminando
+        for (String categoria: categoriasAEliminar) {
+            for (Tarjeta tarjeta: tarjetaFinal){ //creo que es totalmente aleatorio, chequear eso
+                if(tarjeta.getCategoria().equals(categoriasAEliminar)){
+                    juego.getMazo().remove(tarjeta); //Elimino del mazo las tarjetas innecesarias
+                }
+            }
+        }
+
+        if(tarjetasARepartir.size()%juego.getEquipos().size()!=0) { //Chequeo que haya una cant iguales de tarjetas para repartir entre todos
+            cantidadExacta = false;
+            while (!cantidadExacta) { // Si no lo hay selecciono un random de tarjetas del mazo y lo agrego al array a repartir
+                int size = juego.getMazo().size();
+                int item = new Random().nextInt(size);
+                int i = 0;
+                HashSet<Tarjeta> tarjetasFinal = juego.getMazo(); // Copio el mazo a otro hashset así puedo ir eliminando
+
+                for (Tarjeta obj : tarjetasFinal) {
+                    if (i == item) {
+                        tarjetasARepartir.add(obj);
+                        juego.getMazo().remove(obj);
+                    }
+                    i++;
+                }
+                if(tarjetasARepartir.size()%juego.getEquipos().size()==0){
+                    cantidadExacta = true;
+                }
+
+            }
+        }
+        int tarjetasPorEquipo = tarjetasARepartir.size()/juego.getEquipos().size();
+
+        int contadorVueltasPorEquipo = 0;//Cuando llegue a la cant de tarjetasPorEquipo se reinicia
+        HashSet<Tarjeta> tarjetasDeUnEquipo = new HashSet<>();
+        for (Tarjeta tarjEquipo: tarjetasARepartir){
+            if(contadorVueltasPorEquipo<tarjetasPorEquipo) {
+                tarjetasDeUnEquipo.add(tarjEquipo);
+            }
+            else{
+                mazoPorEquipo.add(tarjetasDeUnEquipo);
+                contadorVueltasPorEquipo = 0;
+                tarjetasDeUnEquipo.clear();
+            }
+        }
+
+        return mazoPorEquipo;
+    }
     Context appContext=this;
     private void mostrarPlantillas(Context appCcontext)  {
         DataManagerPlantillas.traerPlantillas(new onTraerDatosListener() {
