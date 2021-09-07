@@ -36,7 +36,7 @@ public class ServicioJuego extends Service {
         intentFilter.addAction("unirse");
         intentFilter.addAction("crear server");
         registerReceiver(broadcastReceiver,intentFilter);
-        categorias = GameContext.getJuego().getPlantilla().getCategorias();
+//        categorias = GameContext.getJuego().getPlantilla().getCategorias();
 
     }
     Context contexto=this;
@@ -62,8 +62,7 @@ public class ServicioJuego extends Service {
                                         case "comenzar":
                                             try {
                                                 Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
-
-
+                                                GameContext.setJuego(juego);
                                                 Equipo equipo= new Equipo(juego.getMazo(),GameContext.getNombresEquipos().get(0));
                                                 GameContext.setEquipo(equipo);
                                             } catch (JsonSyntaxException e) {
@@ -84,6 +83,9 @@ public class ServicioJuego extends Service {
                                             escribir.execute(bytesMsg, 0);
                                             break;
                                         case "turno":
+                                            Intent intentPrueba= new Intent();
+                                            intentPrueba.setAction("turno");
+                                            contexto.sendBroadcast(intentPrueba);
                                             HashMap<String, String> mapDatos=new HashMap<>();
                                             try {
                                                 mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas

@@ -41,6 +41,7 @@ public class Jugar extends AppCompatActivity  {
         mostrarPlantillaEnXml(GameContext.getJuego().getPlantilla(), this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("turno");
+        intentFilter.addAction("prueba");
         registerReceiver(broadcastReceiver,intentFilter);
 //        context=GameContext.getGameContext();
         juego= GameContext.getJuego();
