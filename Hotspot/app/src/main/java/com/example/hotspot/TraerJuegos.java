@@ -77,9 +77,9 @@ public class TraerJuegos extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("tocaste mandar");
-//                ArrayList<HashSet<Tarjeta>> mazos = repartirTarjetas();
                 GameContext.setJuego(juego);
                 categorias = juego.getPlantilla().getCategorias();
+                ArrayList<HashSet<Tarjeta>> mazos = repartirTarjetas();
                 for (int i=0;i<GameContext.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
 //                    juego.setMazo(mazos.get(i));
                     String juegoSerializado=juego.serializar();
