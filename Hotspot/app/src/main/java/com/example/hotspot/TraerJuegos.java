@@ -80,8 +80,9 @@ public class TraerJuegos extends AppCompatActivity {
                 GameContext.setJuego(juego);
                 categorias = juego.getPlantilla().getCategorias();
                 ArrayList<HashSet<Tarjeta>> mazos = repartirTarjetas();
+                System.out.println(mazos);
                 for (int i=0;i<GameContext.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
-//                    juego.setMazo(mazos.get(i));
+                    juego.setMazo(mazos.get(i));
                     String juegoSerializado=juego.serializar();
                     ArrayList<String> datos=new ArrayList<>();
                     datos.add(juegoSerializado);
@@ -120,11 +121,12 @@ public class TraerJuegos extends AppCompatActivity {
         HashSet<Tarjeta> tarjetasARepartir = new HashSet<>();
         for (Categoria categoria: categorias) { //Selecciono 3 tarjetas por cada categoria
             for (Tarjeta tarjeta: juego.getMazo()){ //creo que es totalmente aleatorio, chequear eso
-                while(contador<cantidadPartidas){
-                    if(tarjeta.getCategoria().equals(categoria.getNombre())){
-                        tarjetasARepartir.add(tarjeta);
-                    }
+                if(tarjeta.getCategoria().equals(categoria.getNombre())){
+                    tarjetasARepartir.add(tarjeta);
                     contador++;
+                }
+                if(contador==cantidadPartidas-1){
+                    break;
                 }
             }
         }
@@ -150,7 +152,7 @@ public class TraerJuegos extends AppCompatActivity {
             }
         }
 
-        if(tarjetasARepartir.size()%juego.getEquipos().size()!=0) { //Chequeo que haya una cant iguales de tarjetas para repartir entre todos
+        if(tarjetasARepartir.size()%cantidadEquipos!=0) { //Chequeo que haya una cant iguales de tarjetas para repartir entre todos
             cantidadExacta = false;
             while (!cantidadExacta) { // Si no lo hay selecciono un random de tarjetas del mazo y lo agrego al array a repartir
                 int size = juego.getMazo().size();
@@ -165,13 +167,13 @@ public class TraerJuegos extends AppCompatActivity {
                     }
                     i++;
                 }
-                if(tarjetasARepartir.size()%juego.getEquipos().size()==0){
+                if(tarjetasARepartir.size()%cantidadEquipos==0){
                     cantidadExacta = true;
                 }
 
             }
         }
-        int tarjetasPorEquipo = tarjetasARepartir.size()/juego.getEquipos().size();
+        int tarjetasPorEquipo = tarjetasARepartir.size()/cantidadEquipos;
 
         int contadorVueltasPorEquipo = 0;//Cuando llegue a la cant de tarjetasPorEquipo se reinicia
         HashSet<Tarjeta> tarjetasDeUnEquipo = new HashSet<>();
