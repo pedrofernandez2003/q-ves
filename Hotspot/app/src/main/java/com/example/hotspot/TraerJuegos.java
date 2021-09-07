@@ -80,9 +80,8 @@ public class TraerJuegos extends AppCompatActivity {
                 GameContext.setJuego(juego);
                 categorias = juego.getPlantilla().getCategorias();
                 ArrayList<HashSet<Tarjeta>> mazos = repartirTarjetas();
-                System.out.println(mazos);
                 for (int i=0;i<GameContext.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
-                    juego.setMazo(mazos.get(i));
+//                    juego.setMazo(mazos.get(i));
                     String juegoSerializado=juego.serializar();
                     ArrayList<String> datos=new ArrayList<>();
                     datos.add(juegoSerializado);
@@ -130,9 +129,6 @@ public class TraerJuegos extends AppCompatActivity {
                 }
                 if(contador==cantidadPartidas){
                     contador=0;
-                    break;
-                }
-                if(contador==cantidadPartidas-1){
                     break;
                 }
             }
