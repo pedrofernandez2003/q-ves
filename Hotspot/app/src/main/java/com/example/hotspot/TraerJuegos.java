@@ -80,9 +80,8 @@ public class TraerJuegos extends AppCompatActivity {
                 GameContext.setJuego(juego);
                 categorias = juego.getPlantilla().getCategorias();
                 ArrayList<HashSet<Tarjeta>> mazos = repartirTarjetas();
-                System.out.println(mazos);
                 for (int i=0;i<GameContext.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
-                    juego.setMazo(mazos.get(i));
+//                    juego.setMazo(mazos.get(i));
                     String juegoSerializado=juego.serializar();
                     ArrayList<String> datos=new ArrayList<>();
                     datos.add(juegoSerializado);
@@ -117,6 +116,8 @@ public class TraerJuegos extends AppCompatActivity {
     private ArrayList<HashSet<Tarjeta>> repartirTarjetas(){
         ArrayList<HashSet<Tarjeta>> mazoPorEquipo = new ArrayList<>(); //Objeto a retornar
         int cantidadPartidas = juego.getPartidas().size();
+        categorias = juego.getPlantilla().getCategorias();
+        System.out.println("Cantidad tarjetas iniciales" +juego.getMazo().size());
         int contador=0;
         HashSet<Tarjeta> tarjetasARepartir = new HashSet<>();
         for (Categoria categoria: categorias) { //Selecciono 3 tarjetas por cada categoria
@@ -124,33 +125,19 @@ public class TraerJuegos extends AppCompatActivity {
                 if(tarjeta.getCategoria().equals(categoria.getNombre())){
                     tarjetasARepartir.add(tarjeta);
                     contador++;
+                    System.out.println("agregue una carte de la categoria: "+ categoria.getNombre());
                 }
-                if(contador==cantidadPartidas-1){
+                if(contador==cantidadPartidas){
+                    contador=0;
                     break;
                 }
             }
         }
+        System.out.println("tarjetas a repartir size: " + tarjetasARepartir.size());
         for(Tarjeta tarjetaAEliminar: tarjetasARepartir ) { //Elimino del mazo las tarjetas ya seleccionadas para los equipos
             juego.getMazo().remove(tarjetaAEliminar);
         }
-        ArrayList<String> categoriasElegidas = new ArrayList<>();
-        for(Categoria categ : categorias){
-            categoriasElegidas.add(categ.getNombre()); // Armo un array de strings con todas las categorias de esa plantilla
-        }
-        ArrayList<String> categoriasAEliminar = new ArrayList<>();
-        for (Tarjeta tarj : juego.getMazo()){
-            if(!categoriasElegidas.contains(tarj.getCategoria())){
-                categoriasAEliminar.add(tarj.getCategoria()); // Agrego qué tarjetas del mazo se tienen que eliminar porq no son de ninguna categoria de la plantilla
-            }
-        }
-        HashSet<Tarjeta> tarjetaFinal = juego.getMazo(); // Copio el mazo a otro hashset así puedo ir eliminando
-        for (String categoria: categoriasAEliminar) {
-            for (Tarjeta tarjeta: tarjetaFinal){ //creo que es totalmente aleatorio, chequear eso
-                if(tarjeta.getCategoria().equals(categoriasAEliminar)){
-                    juego.getMazo().remove(tarjeta); //Elimino del mazo las tarjetas innecesarias
-                }
-            }
-        }
+        System.out.println("Elimine las tarjetas a repartir y el size quedo en : "+juego.getMazo().size());
 
         if(tarjetasARepartir.size()%cantidadEquipos!=0) { //Chequeo que haya una cant iguales de tarjetas para repartir entre todos
             cantidadExacta = false;
@@ -182,12 +169,17 @@ public class TraerJuegos extends AppCompatActivity {
                 tarjetasDeUnEquipo.add(tarjEquipo);
             }
             else{
+                System.out.println("tarjetas De un equipo" + tarjetasDeUnEquipo.size());
                 mazoPorEquipo.add(tarjetasDeUnEquipo);
                 contadorVueltasPorEquipo = 0;
-                tarjetasDeUnEquipo.clear();
+                tarjetasDeUnEquipo = new HashSet<>();
+                tarjetasDeUnEquipo.add(tarjEquipo);
             }
+            contadorVueltasPorEquipo++;
         }
+        mazoPorEquipo.add(tarjetasDeUnEquipo);
 
+        System.out.println("cantidad d emazos que quedaorn: "+mazoPorEquipo.size());
         return mazoPorEquipo;
     }
     Context appContext=this;
@@ -211,6 +203,8 @@ public class TraerJuegos extends AppCompatActivity {
                             turnOnHotspot();
                             juego= new Juego(plantilla);
                             cantidadEquipos=plantilla.getCantEquipos();
+                            repartirTarjetas();
+
                             textoCargando.setVisibility(View.VISIBLE);
                             nombreRed.setVisibility(View.VISIBLE);
                             claveRed.setVisibility(View.VISIBLE);
