@@ -12,34 +12,5 @@
         android:orientation="horizontal"
     >
 
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Hola ">
-        </Button>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Hola ">
-        </Button>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Hola ">
-        </Button>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Hola ">
-        </Button>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Hola ">
-        </Button>
-
-
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
