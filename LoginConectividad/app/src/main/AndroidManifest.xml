@@ -31,9 +31,6 @@
         <activity android:name=".MainActivity">
 
         </activity>
-        <activity android:name=".LoginActivity">
-
-        </activity>
         <activity android:name=".RegistrarseActivity" />
         <activity android:name=".ModeradorActivity" />
         <activity android:name=".AdminElementosActivity" />

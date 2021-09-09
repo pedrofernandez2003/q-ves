@@ -2,8 +2,6 @@ package com.example.hotspot;
 
 import com.google.gson.Gson;
 
-import java.util.HashMap;
-
 public class Casillero implements Serializable {
     private Categoria categoria;
     private Tarjeta tarjeta;

@@ -2,11 +2,8 @@ package com.example.hotspot;
 
 import com.google.gson.Gson;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 
 public class Juego implements Serializable {
 //    private String codigo;

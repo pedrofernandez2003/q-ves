@@ -3,7 +3,6 @@ package com.example.hotspot;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Categoria implements Serializable {
 //    private int cantidadTarjetas;
