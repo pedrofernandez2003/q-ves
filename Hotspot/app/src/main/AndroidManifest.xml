@@ -35,10 +35,7 @@
 <!--            android:label="@string/title_activity_main2"-->
 <!--            android:theme="@style/Theme.Hotspot.NoActionBar"></activity>-->
         <activity android:name=".SolicitarUbicacion">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <activity
@@ -60,5 +57,15 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape">
         </activity>
+
+        <activity android:name=".TableroActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 </manifest>
