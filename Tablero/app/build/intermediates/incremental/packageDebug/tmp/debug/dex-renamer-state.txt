@@ -1,4 +1,0 @@
-#Thu Aug 05 14:09:57 ART 2021
-base.0=/home/fernandez/Escritorio/q-ves/Tablero/app/build/intermediates/dex/debug/mergeDexDebug/classes.dex
-path.0=classes.dex
-renamed.0=classes.dex

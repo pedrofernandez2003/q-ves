@@ -1,4 +1,0 @@
-com/example/tablero/BuildConfig.java
- com.example.tablero.BuildConfig
-com/example/tablero/MainActivity.java
- com.example.tablero.MainActivity
