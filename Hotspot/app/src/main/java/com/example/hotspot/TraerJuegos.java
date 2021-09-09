@@ -151,6 +151,7 @@ public class TraerJuegos extends AppCompatActivity {
                     if (i == item) {
                         tarjetasARepartir.add(obj);
                         juego.getMazo().remove(obj);
+                        break;
                     }
                     i++;
                 }
