@@ -32,11 +32,6 @@ public class AutoFitRecyclerView extends RecyclerView {
     }
 
 
-    /**
-     *
-     * @param context The Activities Context
-     * @param attrs Dimention columnWidth of the RecyclerView
-     */
     private void initialize(Context context, AttributeSet attrs) {
         if (attrs != null) {
             int[] attrsArray = {

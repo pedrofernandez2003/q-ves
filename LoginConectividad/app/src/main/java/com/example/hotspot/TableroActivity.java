@@ -16,11 +16,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-<<<<<<< HEAD
 import com.example.R;
-=======
-import com.example.login_crud.R;
->>>>>>> 4f07e47c9e83a679e1f708fb85b45a2a628141f7
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;

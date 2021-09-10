@@ -24,7 +24,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public void setDetails(Context context, String image){
         ImageView mImagetv = view.findViewById(R.id.rImageView);
 
-//        Picasso.get().load(image).into(mImagetv);
+        Picasso.with(context).load(image).into(mImagetv);
 
 
 

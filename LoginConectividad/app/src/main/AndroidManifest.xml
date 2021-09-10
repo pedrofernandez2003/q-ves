@@ -61,13 +61,9 @@
         <activity android:name="com.example.login_crud.PersonajesActivity">
 
         </activity>
-<<<<<<< HEAD
         <activity android:name="com.example.login_crud.PruebaActivity">
         </activity>
         <activity android:name="com.example.login_crud.TarjetasActivity">
-=======
-        <activity android:name=".TarjetasActivity">
->>>>>>> 4f07e47c9e83a679e1f708fb85b45a2a628141f7
         </activity>
 
         <activity android:name="com.example.login_crud.CambiarContraseniaActivity"/>

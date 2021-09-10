@@ -5,12 +5,13 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.Listeners.onModificarListener;
-import com.example.Objetos.Categoria;
+import com.example.Objetos.CategoriaSinTarjetas;
 import com.example.Objetos.Color;
-import com.example.Objetos.Tarjeta;
+import com.example.Objetos.TarjetaSinCategoria;
 import com.example.Listeners.onTraerDatoListener;
 import com.example.Listeners.onTraerDatosListener;
 import com.example.R;
+import com.example.hotspot.Tarjeta;
 
 import java.util.ArrayList;
 
@@ -20,16 +21,16 @@ public class PruebaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prueba);
         getSupportActionBar().hide();
-
-        Tarjeta tarjetaAntigua= new Tarjeta("J","K");
-        Tarjeta tarjetaModificada= new Tarjeta("A","B");
-
-        DataManagerCategoria.modificarDatosTarjeta("3", tarjetaModificada, tarjetaAntigua, new onModificarListener() {
-            @Override
-            public void modificar(boolean modificado) {
-                System.out.println("Se actualizo?"+modificado);
-            }
-        });
+//
+//        Tarjeta tarjetaAntigua= new Tarjeta("J","K");
+//        Tarjeta tarjetaModificada= new Tarjeta("A","B");
+//
+//        DataManagerCategoria.modificarDatosTarjeta("3", tarjetaModificada, tarjetaAntigua, new onModificarListener() {
+//            @Override
+//            public void modificar(boolean modificado) {
+//                System.out.println("Se actualizo?"+modificado);
+//            }
+//        });
 
         /*DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override

@@ -17,10 +17,11 @@ import android.widget.Toast;
 
 import com.example.Listeners.onInsertarListener;
 import com.example.Listeners.onTraerDatosListener;
-import com.example.Objetos.Categoria;
+import com.example.Objetos.CategoriaSinTarjetas;
 import com.example.Objetos.Member;
 import com.example.Objetos.Plantilla;
 import com.example.Objetos.ViewHolder;
+import com.example.hotspot.Categoria;
 import com.example.simpleimagegallery.ImageDisplay;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -77,7 +78,7 @@ public class CrearJuegoActivity extends AppCompatActivity  {
                 }
                 int i = 0;
                 for (Object dato : datos) {
-                    Categoria categoria = (Categoria) dato;
+                    CategoriaSinTarjetas categoria = (CategoriaSinTarjetas) dato;
                     nombresCategoria.add(categoria.getNombre());
                 }
                 listItems = nombresCategoria;
