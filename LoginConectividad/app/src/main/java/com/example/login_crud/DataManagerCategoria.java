@@ -10,10 +10,10 @@ import com.example.Listeners.onModificarListener;
 import com.example.Listeners.onTraerDatoListener;
 import com.example.Listeners.onTraerDatosListener;
 import com.example.Listeners.onTraerPersonajesListener;
-import com.example.Objetos.Categoria;
+import com.example.Objetos.CategoriaSinTarjetas;
 import com.example.Objetos.Color;
 import com.example.Objetos.Plantilla;
-import com.example.Objetos.Tarjeta;
+import com.example.Objetos.TarjetaSinCategoria;
 import com.example.simpleimagegallery.utils.pictureFacer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -48,7 +48,7 @@ public  abstract class DataManagerCategoria extends DataManager {
                         if(tarjetas==null){
                             tarjetas= new ArrayList<>();
                         }
-                        Categoria categoria = new Categoria((String) document.getData().get("nombre"), (String) document.getData().get("color"),tarjetas.size());
+                        CategoriaSinTarjetas categoria = new CategoriaSinTarjetas((String) document.getData().get("nombre"), (String) document.getData().get("color"),tarjetas.size());
                         categorias.add(categoria);
                     }
                     listener.traerDatos(categorias);
@@ -86,7 +86,7 @@ public  abstract class DataManagerCategoria extends DataManager {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         List<Map<String, String>> tarjetas = (List<Map<String, String>>) document.getData().get("tarjeta");
-                        Categoria categoria = new Categoria((String) document.getData().get("nombre"), (String) document.getData().get("color"),tarjetas.size());
+                        CategoriaSinTarjetas categoria = new CategoriaSinTarjetas((String) document.getData().get("nombre"), (String) document.getData().get("color"),tarjetas.size());
                         listener.traer((Object) categoria);
                     }
                 } else {
@@ -97,7 +97,7 @@ public  abstract class DataManagerCategoria extends DataManager {
     }
 
 
-    public static void insertarCategoria(Categoria categoria, onInsertarListener listener) {
+    public static void insertarCategoria(CategoriaSinTarjetas categoria, onInsertarListener listener) {
         Map<String, Object> categoriaAInsertar = new HashMap<>();
         categoriaAInsertar.put("color",categoria.getColor().toString());
         categoriaAInsertar.put("nombre",categoria.getNombre());
@@ -180,7 +180,7 @@ public  abstract class DataManagerCategoria extends DataManager {
                         for (Map.Entry<String, Object> atributosCategoria : categoria.entrySet()) {
                             if (atributosCategoria.getKey().equals("tarjeta")) {
                                 for (HashMap<String, Object> atributosTarjeta : (ArrayList<HashMap<String, Object>>) atributosCategoria.getValue()) {
-                                    Tarjeta tarjeta = new Tarjeta((String ) atributosTarjeta.get("contenido"), (String ) atributosTarjeta.get("yapa"));
+                                    TarjetaSinCategoria tarjeta = new TarjetaSinCategoria((String ) atributosTarjeta.get("contenido"), (String ) atributosTarjeta.get("yapa"));
                                     tarjetas.add(tarjeta);
                                 }
                             }
@@ -192,7 +192,7 @@ public  abstract class DataManagerCategoria extends DataManager {
         });
     }
 
-    public static void insertarTarjeta(Tarjeta tarjetaAInsertar, String id, onInsertarListener listener) {
+    public static void insertarTarjeta(TarjetaSinCategoria tarjetaAInsertar, String id, onInsertarListener listener) {
         DataManager.getDb().collection("categorias")
                 .document(id)
                 .update("tarjeta", FieldValue.arrayUnion(tarjetaAInsertar))
@@ -210,7 +210,7 @@ public  abstract class DataManagerCategoria extends DataManager {
                 });
     }
 
-    public static void eliminarTarjeta(Tarjeta tarjetaAInsertar, String id, onEliminarListener listener) {
+    public static void eliminarTarjeta(TarjetaSinCategoria tarjetaAInsertar, String id, onEliminarListener listener) {
         DataManager.getDb().collection("categorias")
                 .document(id)
                 .update("tarjeta", FieldValue.arrayRemove(tarjetaAInsertar))
@@ -229,7 +229,7 @@ public  abstract class DataManagerCategoria extends DataManager {
     }
 
 
-    public static void modificarDatosCategoria(String id, Categoria categoriaModificada, onModificarListener listener) {
+    public static void modificarDatosCategoria(String id, CategoriaSinTarjetas categoriaModificada, onModificarListener listener) {
         DataManager.getDb().collection("categorias").document(id)
                 .update(
                 "nombre", categoriaModificada.getNombre(),
@@ -248,7 +248,7 @@ public  abstract class DataManagerCategoria extends DataManager {
                 });
     }
 
-    public static void modificarDatosTarjeta(String idCategoria, Tarjeta tarjetaModificada,Tarjeta tarjetaAntigua, onModificarListener listener) {
+    public static void modificarDatosTarjeta(String idCategoria, TarjetaSinCategoria tarjetaModificada,TarjetaSinCategoria tarjetaAntigua, onModificarListener listener) {
         DataManager.getDb().collection("categorias")
                 .document(idCategoria)
                 .update("tarjeta", FieldValue.arrayRemove(tarjetaAntigua))

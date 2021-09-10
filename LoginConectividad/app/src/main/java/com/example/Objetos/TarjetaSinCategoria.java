@@ -1,15 +1,15 @@
 package com.example.Objetos;
 
-public class Tarjeta {
+public class TarjetaSinCategoria {
     private String contenido;
     private String  yapa;
 
-    public Tarjeta(String  contenido, String  yapa) {
+    public TarjetaSinCategoria(String  contenido, String  yapa) {
         this.contenido = contenido;
         this.yapa = yapa;
     }
 
-    public Tarjeta() {
+    public TarjetaSinCategoria() {
     }
 
 

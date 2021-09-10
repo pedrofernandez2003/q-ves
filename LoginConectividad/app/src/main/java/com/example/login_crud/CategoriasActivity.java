@@ -23,7 +23,7 @@ import com.example.Listeners.onInsertarListener;
 import com.example.Listeners.onModificarListener;
 import com.example.Listeners.onTraerDatoListener;
 import com.example.Listeners.onTraerDatosListener;
-import com.example.Objetos.Categoria;
+import com.example.Objetos.CategoriaSinTarjetas;
 
 import java.util.ArrayList;
 
@@ -97,7 +97,7 @@ public class CategoriasActivity extends AppCompatActivity {
                         String nombreCategoria = nombre.getText().toString();
                         String colorCategoria = String.valueOf(colores.getSelectedItem());
                         if (!coloresYaSeleccionados.contains(colorCategoria)) {
-                            Categoria categoria=new Categoria(nombreCategoria,colorCategoria,0);
+                            CategoriaSinTarjetas categoria=new CategoriaSinTarjetas(nombreCategoria,colorCategoria,0);
                             insertarCategoria(categoria);
 
                             a.dismiss();
@@ -116,7 +116,7 @@ public class CategoriasActivity extends AppCompatActivity {
 
     }
 
-    private void insertarCategoria(Categoria categoria){
+    private void insertarCategoria(CategoriaSinTarjetas categoria){
         DataManagerCategoria.insertarCategoria(categoria, new onInsertarListener() {
             @Override
             public void insertar(boolean insertado) {
@@ -132,7 +132,7 @@ public class CategoriasActivity extends AppCompatActivity {
         llBotonera.removeAllViews();
         coloresUsados=traerCategorias(this.getApplicationContext());
     }
-    private void modificarCategoria(Categoria categoria, String nombreAnterior){
+    private void modificarCategoria(CategoriaSinTarjetas categoria, String nombreAnterior){
         DataManagerCategoria.modificarDatosCategoria(nombreAnterior, categoria, new onModificarListener() {
             @Override
             public void modificar(boolean modificado) {
@@ -152,7 +152,7 @@ public class CategoriasActivity extends AppCompatActivity {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
                 for (Object CategoriaObject:datos) {
-                    Categoria categoria= (Categoria) CategoriaObject;
+                    CategoriaSinTarjetas categoria= (CategoriaSinTarjetas) CategoriaObject;
                     LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
                     coloresElegidos.add(categoria.getColor().toString());
@@ -221,7 +221,7 @@ public class CategoriasActivity extends AppCompatActivity {
                                                 Boolean modificoSoloNombre = false;
                                                 String nombreCategoria = nombre.getText().toString();
                                                 String colorCategoria = String.valueOf(colores.getSelectedItem());
-                                                Categoria categoriaNueva = new Categoria(nombreCategoria, colorCategoria, 0);
+                                                CategoriaSinTarjetas categoriaNueva = new CategoriaSinTarjetas(nombreCategoria, colorCategoria, 0);
                                                 if (!colorCategoria.equals("")) {
                                                     if (coloresElegidos.contains(colorCategoria)) {
                                                         if (colorCategoria.equals(categoria.getColor().toString())) { // cambia solo el nombre

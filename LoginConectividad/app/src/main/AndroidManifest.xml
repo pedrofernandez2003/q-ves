@@ -57,8 +57,6 @@
         <activity android:name=".PersonajesActivity">
 
         </activity>
-        <activity android:name=".PruebaActivity">
-        </activity>
         <activity android:name=".TarjetasActivity">
         </activity>
 
