@@ -38,54 +38,52 @@
             </activity>
 
         <service
-            android:name="com.example.hotspot.ServicioJuego"
+            android:name="com.example.objetos.ServicioJuego"
             tools:ignore="Instantiatable" />
 
-        <activity android:name="com.example.login_crud.RegistrarseActivity" />
-        <activity android:name="com.example.login_crud.ModeradorActivity" />
-        <activity android:name="com.example.login_crud.AdminElementosActivity" />
-        <activity android:name="com.example.login_crud.AdministradorActivity" />
-        <activity android:name="com.example.login_crud.CrearJuegoActivity" >
+        <activity android:name="com.example.actividades.RegistrarseActivity" />
+        <activity android:name="com.example.actividades.ModeradorActivity" />
+        <activity android:name="com.example.actividades.AdminElementosActivity" />
+        <activity android:name="com.example.actividades.AdministradorActivity" />
+        <activity android:name="com.example.actividades.CrearJuegoActivity" >
 
         </activity>
-        <activity android:name="com.example.login_crud.LoginActivity" >
-
-        </activity>
-
-        <activity android:name="com.example.login_crud.CategoriasActivity" >
+        <activity android:name="com.example.actividades.LoginActivity" >
 
         </activity>
 
-
-
-        <activity android:name="com.example.login_crud.PersonajesActivity">
+        <activity android:name="com.example.actividades.CategoriasActivity" >
 
         </activity>
-        <activity android:name="com.example.login_crud.PruebaActivity">
+
+
+
+        <activity android:name="com.example.actividades.PersonajesActivity">
+
         </activity>
-        <activity android:name="com.example.login_crud.TarjetasActivity">
+        <activity android:name="com.example.actividades.TarjetasActivity">
         </activity>
 
-        <activity android:name="com.example.login_crud.CambiarContraseniaActivity"/>
-        <activity android:name="com.example.simpleimagegallery.ImageDisplay">
+        <activity android:name="com.example.actividades.CambiarContraseniaActivity"/>
+        <activity android:name="com.example.personajesEnMiniaturas.ImageDisplay">
         </activity>
-        <activity android:name="com.example.hotspot.MainActivity">
+        <activity android:name="com.example.actividades.MainActivity">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
 
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
-        <activity android:name="com.example.hotspot.Jugar">
+        <activity android:name="com.example.actividades.JugarActivity">
         </activity>
 
-        <activity android:name="com.example.hotspot.SolicitarUbicacion">
+        <activity android:name="com.example.actividades.SolicitarUbicacion">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.hotspot.TraerJuegos">
+        <activity android:name="com.example.actividades.TraerJuegosActivity">
         </activity>
 
     </application>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.simpleimagegallery.ImageDisplay"
+    tools:context="com.example.personajesEnMiniaturas.ImageDisplay"
     android:id="@+id/displayContainer">
 
     <RelativeLayout
@@ -43,7 +43,7 @@
 
 
         </LinearLayout>
-        <com.example.simpleimagegallery.utils.AutoFitRecyclerView
+        <com.example.personajesEnMiniaturas.utils.AutoFitRecyclerView
             android:layout_below="@id/head"
             android:id="@+id/recycler"
             android:layout_width="match_parent"
@@ -51,7 +51,7 @@
             android:background="@color/white"
             android:columnWidth="@dimen/picture_column_width">
 
-        </com.example.simpleimagegallery.utils.AutoFitRecyclerView>
+        </com.example.personajesEnMiniaturas.utils.AutoFitRecyclerView>
 
 
 
