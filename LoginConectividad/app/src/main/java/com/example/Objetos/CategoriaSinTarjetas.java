@@ -1,12 +1,12 @@
 package com.example.Objetos;
 
-public class Categoria {
+public class CategoriaSinTarjetas {
 
     private String nombre;
     private Color color;
     private int cantidadTarjetas;
 
-    public Categoria(String nombre, String nombreColor, int cantidadTarjetas){
+    public CategoriaSinTarjetas(String nombre, String nombreColor, int cantidadTarjetas){
         for(Color color:Color.values()){
             if (nombreColor.equals(color.toString())){
                 this.color= color;
@@ -15,7 +15,7 @@ public class Categoria {
         this.nombre = nombre;
         this.cantidadTarjetas=cantidadTarjetas;
     }
-    public Categoria(){
+    public CategoriaSinTarjetas(){
 
     }
 

@@ -24,7 +24,7 @@ import com.example.Listeners.onInsertarListener;
 import com.example.Listeners.onModificarListener;
 import com.example.Listeners.onTraerDatoListener;
 import com.example.Listeners.onTraerDatosListener;
-import com.example.Objetos.Tarjeta;
+import com.example.Objetos.TarjetaSinCategoria;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.example.R;
 
@@ -84,6 +84,7 @@ public class TarjetasActivity extends AppCompatActivity {
         db.setTitle("Nueva Tarjeta");
         db.setPositiveButton("Añadir", null);
         final AlertDialog a = db.create();
+
         a.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
@@ -93,7 +94,7 @@ public class TarjetasActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         String contenidoTarjeta = contenido.getText().toString();
                         String yapaTarjeta = yapa.getText().toString();
-                        Tarjeta tarjeta= new Tarjeta(contenidoTarjeta,yapaTarjeta);
+                        TarjetaSinCategoria tarjeta= new TarjetaSinCategoria(contenidoTarjeta,yapaTarjeta);
                         insertarTarjeta(tarjeta,nombreCategoria);
 
 
@@ -111,7 +112,7 @@ public class TarjetasActivity extends AppCompatActivity {
 
     }
 
-    private void insertarTarjeta(Tarjeta tarjeta, String nombreCategoria){
+    private void insertarTarjeta(TarjetaSinCategoria tarjeta, String nombreCategoria){
         DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
             @Override
             public void traer(Object dato) {
@@ -130,7 +131,7 @@ public class TarjetasActivity extends AppCompatActivity {
         });
     }
 
-    private void modificarTarjeta(Tarjeta tarjetaVieja,Tarjeta tarjetaActualizada,String nombreCategoria){
+    private void modificarTarjeta(TarjetaSinCategoria tarjetaVieja,TarjetaSinCategoria tarjetaActualizada,String nombreCategoria){
         DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
             @Override
             public void traer(Object dato) {
@@ -164,7 +165,7 @@ public class TarjetasActivity extends AppCompatActivity {
                     @Override
                     public void traerDatos(ArrayList<Object> datos) {
                         for (Object tarjetaObject:datos) {
-                            Tarjeta tarjeta= (Tarjeta) tarjetaObject;
+                            TarjetaSinCategoria tarjeta= (TarjetaSinCategoria) tarjetaObject;
                             System.out.println(tarjeta.getContenido()+" "+tarjeta.getYapa());
                             LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera2);
                             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
@@ -227,7 +228,7 @@ public class TarjetasActivity extends AppCompatActivity {
 
                                                         String contenidoTarjeta = contenido.getText().toString();
                                                         String yapaTarjeta = yapa.getText().toString();
-                                                        Tarjeta tarjetaNueva= new Tarjeta(contenidoTarjeta,yapaTarjeta);
+                                                        TarjetaSinCategoria tarjetaNueva= new TarjetaSinCategoria(contenidoTarjeta,yapaTarjeta);
                                                         modificarTarjeta(tarjeta,tarjetaNueva,nombreCategoria);
 
                                                         llBotonera.removeAllViews();
