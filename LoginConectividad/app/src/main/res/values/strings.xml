@@ -53,13 +53,9 @@
 
     <!--    MainActivity-->
     <string name="nombreRed">nombre de la red</string>
- 
-    <string name="invalid_mail">mail incorreto</string>
-    <string name="invalid_password">contrasenia incorreta</string>
+
     <string name="facebook">facebook</string>
-    
-    <string name="ok_label">OK</string>
-    <string name="dismiss_label">Dismiss</string>
+
     <string name="unirse">Unirse a la partida</string>
     <string name="claveRed">clave de la red</string>
     <string name="turno">es mi turno</string>

@@ -11,6 +11,9 @@ import android.text.format.Formatter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.login_crud.AdministradorActivity;
+import com.example.login_crud.LoginActivity;
 import com.example.login_crud.R;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         intentFilter.addAction("turno");
         registerReceiver(broadcastReceiver,intentFilter);
         startService(new Intent(this,ServicioJuego.class));
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_mainHotspot);
         botonUnirse = (Button) findViewById(R.id.botonUnirse);
         turno = findViewById(R.id.turno);
         nombreEquipo =  (TextInputEditText) findViewById(R.id.nombreEquipo);
@@ -57,8 +60,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("On click");
-                Intent elegirPlantilla = new Intent(appContext, TraerJuegos.class);
+                Intent elegirPlantilla = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(elegirPlantilla);
+
             }
         });
     }

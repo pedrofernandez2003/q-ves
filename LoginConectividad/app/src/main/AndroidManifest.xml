@@ -6,8 +6,16 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
 
     <application
 
@@ -28,19 +36,15 @@
             </intent-filter>
             </activity>
 
-        <activity android:name=".MainActivity">
+        <service
+            android:name="com.example.hotspot.ServicioJuego"
+            tools:ignore="Instantiatable" />
 
-        </activity>
         <activity android:name=".RegistrarseActivity" />
         <activity android:name=".ModeradorActivity" />
         <activity android:name=".AdminElementosActivity" />
         <activity android:name=".AdministradorActivity" />
         <activity android:name=".CrearJuegoActivity" >
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
 
         </activity>
 
@@ -60,8 +64,24 @@
 
         <activity android:name=".CambiarContraseniaActivity"/>
         <activity android:name="com.example.simpleimagegallery.ImageDisplay">
+        </activity>
+        <activity android:name="com.example.hotspot.MainActivity">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity android:name="com.example.hotspot.Jugar">
+        </activity>
 
+        <activity android:name="com.example.hotspot.SolicitarUbicacion">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.example.hotspot.TraerJuegos">
         </activity>
 
     </application>

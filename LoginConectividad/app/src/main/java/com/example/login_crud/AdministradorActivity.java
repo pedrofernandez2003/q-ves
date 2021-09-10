@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.Listeners.onTraerDatosListener;
+import com.example.hotspot.TraerJuegos;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -39,8 +40,8 @@ public class AdministradorActivity extends AppCompatActivity {
         iniciarJuego.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(AdministradorActivity.this, IniciarJuegoActivity.class);
-                        startActivity(i);
+                        Intent elegirPlantilla = new Intent(AdministradorActivity.this, TraerJuegos.class);
+                        startActivity(elegirPlantilla);
                     }
          });
          administrarElementos.setOnClickListener(new View.OnClickListener() {
