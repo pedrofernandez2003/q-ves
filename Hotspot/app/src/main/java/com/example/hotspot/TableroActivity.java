@@ -76,7 +76,6 @@ public class TableroActivity extends AppCompatActivity {
                 View dialog_layout = inflater.inflate(R.layout.ver_cartas, null);
                 AlertDialog.Builder db = new AlertDialog.Builder(TableroActivity.this);
                 db.setView(dialog_layout);
-
                 LinearLayout contenedorCartas=(LinearLayout) dialog_layout.findViewById(R.id.contenedorCartas);
 
                 for (int i = 0; i < tarjetasArray.size(); i++) {
@@ -99,7 +98,8 @@ public class TableroActivity extends AppCompatActivity {
                             tarjetaElegida=tarjetaARevisar;
                             System.out.println(tarjetaARevisar.getContenido());
 
-                            //button.setPadding(4,4,4,4);
+                            //cuando tenga las tarjetas correctas hacer esto de "Seleccionarlas"
+
                         }
                     });
                 }
