@@ -1,5 +1,8 @@
 package com.example.objetos;
 
+import com.example.objetos.manejoSockets.SendReceive;
+import com.example.objetos.manejoSockets.ThreadedEchoServer;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +14,8 @@ public class GameContext extends Thread {
     private static ArrayList<String> nombresEquipos=new ArrayList<>();
     private static Juego juego;
     private static Partida partidaActual;
-    private Equipo equipo;
+    private static Equipo equipo;
+    private static boolean esMiTurno;
 
     private GameContext(){}
     public static GameContext getGameContext() {
@@ -21,20 +25,29 @@ public class GameContext extends Thread {
         return context;
     }
 
+    public static boolean isEsMiTurno() {
+        return esMiTurno;
+    }
+
     public static void setPartidaActual(Partida partidaActual) {
         GameContext.partidaActual = partidaActual;
     }
+
+    public static void setEsMiTurno(boolean esMiTurno) {
+        GameContext.esMiTurno = esMiTurno;
+    }
+
 
     public static Partida getPartidaActual() {
         return partidaActual;
     }
 
-    public Equipo getEquipo() {
+    public static Equipo getEquipo() {
         return equipo;
     }
 
     public static void setEquipo(Equipo equipo) {
-        equipo = equipo;
+        GameContext.equipo = equipo;
     }
 
     public static Juego getJuego() {

@@ -6,15 +6,24 @@ import com.google.gson.Gson;
 public class Casillero implements Serializable {
     private Categoria categoria;
     private Tarjeta tarjeta;
+    private int id;
 
     public Casillero(Categoria categoria, Tarjeta tarjeta){
         this.categoria=categoria;
         this.tarjeta=tarjeta;
     }
-    
+
     public Casillero(){
         this.categoria = new Categoria();
         this.tarjeta = new Tarjeta();
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Categoria getCategoria() {

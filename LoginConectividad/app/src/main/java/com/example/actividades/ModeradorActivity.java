@@ -28,7 +28,7 @@ public class ModeradorActivity extends AppCompatActivity {
         iniciarJuego.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ModeradorActivity.this, IniciarJuegoActivity.class);
+                Intent i = new Intent(ModeradorActivity.this, TraerJuegosActivity.class);
                 startActivity(i);
             }
         });

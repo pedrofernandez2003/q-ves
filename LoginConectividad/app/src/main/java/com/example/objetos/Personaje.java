@@ -3,19 +3,14 @@ package com.example.objetos;
 import com.example.interfaces.Serializable;
 import com.google.gson.Gson;
 
-public class Personaje implements Serializable {
+public class Personaje implements Serializable{
     private String foto;
     private String nombre;
-    
+
     public Personaje(String foto,String nombre){
         this.nombre=nombre;
         this.foto=foto;
     }
-
-//    public Personaje(){
-//        this.nombre="prueba";
-//        this.foto="prueba.jpg";
-//    }
 
     public String getNombre() {
         return nombre;

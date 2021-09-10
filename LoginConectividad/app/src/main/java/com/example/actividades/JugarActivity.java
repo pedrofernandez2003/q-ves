@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +18,7 @@ import com.example.objetos.GameContext;
 import com.example.objetos.Juego;
 import com.example.objetos.Mensaje;
 import com.example.objetos.Partida;
-import com.example.objetos.Write;
+import com.example.objetos.manejoSockets.Write;
 import com.example.R;
 import com.example.objetos.Plantilla;
 import com.squareup.picasso.Picasso;
@@ -25,18 +26,17 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class JugarActivity extends AppCompatActivity  {
-//    private GameContext context;
+    //    private GameContext context;
     private Juego juego;
     private Partida partida;
     private TextView turno;
+    private Button botonTirarCarta;
 
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("accion jugar: "+intent.getAction());
             switch (intent.getAction()){
                 case "turno":
-                    System.out.println("modifico el label turno");
                     turno = findViewById(R.id.turno);
                     turno.setVisibility(View.VISIBLE);
                     break;
@@ -58,28 +58,30 @@ public class JugarActivity extends AppCompatActivity  {
         System.out.println(GameContext.getHijos().size());
         if (GameContext.getServers().size()==0){
             ArrayList<String> datos=new ArrayList<>();
-//            System.out.println("turno de: "+GameContext.getNombresEquipos().get(partida.getTurno()));
-//            System.out.println("hijos "+GameContext.getHijos().size());
-            datos.add("{\"partida\": \""+partida.getTurno()+"\"}");
             Mensaje mensaje=new Mensaje("jugarListo",datos);
             String msg=mensaje.serializar();
-            //byte[] bytesMsg = msg.getBytes();
             Write escribir = new Write();
             escribir.execute(msg, 0);
         }
-        if (GameContext.getServers().size()>0){//para que solo haga esto el server
-//            for (int i=0;i<GameContext.getHijos().size();i++) {
-//                ArrayList<String> datos=new ArrayList<>();
-//                System.out.println("turno de: "+GameContext.getNombresEquipos().get(partida.getTurno()));
-//                System.out.println("hijos "+GameContext.getHijos().size());
-//                datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(partida.getTurno())+"\"}");
-//                Mensaje mensaje=new Mensaje("turno",datos);
-//                String msg=mensaje.serializar();
-//                byte[] bytesMsg = msg.getBytes();
-//                Write escribir = new Write();
-//                escribir.execute(bytesMsg, i);
-//            }
-        }
+        botonTirarCarta=(Button)findViewById(R.id.agarrarCarta);
+        botonTirarCarta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (GameContext.isEsMiTurno()){
+                    ArrayList<String> datos=new ArrayList<>();
+                    datos.add(GameContext.getEquipo().getTarjetas().iterator().next().serializar());
+                    datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+                    Mensaje mensaje=new Mensaje("jugada",datos);
+                    String msg=mensaje.serializar();
+                    System.out.println("mensaje enviado "+msg);
+                    Write escribir = new Write();
+                    escribir.execute(msg, 0);
+                }
+                else{
+                    System.out.println();//poner un toast que diga no es tu turno
+                }
+            }
+        });
     }
 
     public void mostrarPlantillaEnXml(Plantilla plantilla, Context context) {

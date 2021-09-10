@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Juego implements Serializable {
-//    private String codigo;
     private ArrayList<Partida> partidas;
     private ArrayList<Equipo> equipos;
     private Plantilla plantilla;
@@ -19,6 +18,7 @@ public class Juego implements Serializable {
             ArrayList<Casillero> casilleros=new ArrayList<>();
             for (int j=0;j<plantilla.getCategorias().size();j++){
                 Casillero casillero=new Casillero();
+                casillero.setId(j++);
                 casilleros.add(casillero);
             }
             Partida partida=new Partida(plantilla.getPersonajes().get(i),casilleros,0);

@@ -12,9 +12,8 @@ public class Partida {
         this.casilleros=casilleros;
         this.turno=turno;
     }
-    
+
     public Partida(){
-//        this.personaje = new Personaje();
         this.casilleros = new ArrayList<>();
         this.turno = 0;
     }

@@ -1,7 +1,8 @@
-package com.example.objetos;
+package com.example.objetos.manejoSockets;
 
 import com.example.interfaces.conectarCallback;
 import com.example.interfaces.mensajeCallback;
+import com.example.objetos.GameContext;
 
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -25,8 +26,8 @@ public class ClientClass extends Thread{
             sendReceive.start();
             sendReceive.callbackMensaje= new mensajeCallback() {
                 @Override
-                public void mensajeRecibido(int estado, int bytes, int argumento, String buffer) {
-                    callbackMensaje.conectar(estado, bytes, argumento,buffer);
+                public void mensajeRecibido(int estado, String buffer) {
+                    callbackMensaje.conectar(estado,buffer);
                 }
             };
             GameContext.agregarHijo(sendReceive);

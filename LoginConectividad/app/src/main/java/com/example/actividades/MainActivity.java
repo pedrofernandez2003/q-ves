@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.objetos.Equipo;
 import com.example.objetos.GameContext;
 import com.example.R;
 
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.setAction("unirse");
                 intent.putExtra("codigo",codigo);
                 appContext.sendBroadcast(intent);
-                System.out.println("nombre equipo: "+nombreEquipo.getText().toString());
+                GameContext.setEquipo(new Equipo());
                 GameContext.getNombresEquipos().add(nombreEquipo.getText().toString());
                 setContentView(R.layout.cargando);
             }
@@ -63,14 +64,12 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("On click");
                 Intent elegirPlantilla = new Intent(MainActivity.this, com.example.actividades.LoginActivity.class);
                 startActivity(elegirPlantilla);
-
             }
         });
     }
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("accion main activity: "+intent.getAction());
             switch (intent.getAction()){
                 case "comenzar":
                     System.out.println("comienza");

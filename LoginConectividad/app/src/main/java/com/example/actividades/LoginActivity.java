@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.example.R;
+
 
 import com.example.dataManagers.DataManager;
 import com.facebook.AccessToken;

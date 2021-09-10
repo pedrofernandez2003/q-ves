@@ -10,17 +10,17 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 
 import com.example.interfaces.conectarCallback;
+import com.example.objetos.manejoSockets.ClientClass;
+import com.example.objetos.manejoSockets.ThreadedEchoServer;
+import com.example.objetos.manejoSockets.Write;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class ServicioJuego extends Service {
     private ThreadedEchoServer server;
-    private ArrayList<Categoria> categorias;
-    private Boolean cantidadExacta = true;
 
     @Nullable
     @Override
@@ -35,8 +35,6 @@ public class ServicioJuego extends Service {
         intentFilter.addAction("unirse");
         intentFilter.addAction("crear server");
         registerReceiver(broadcastReceiver,intentFilter);
-//        categorias = GameContext.getJuego().getPlantilla().getCategorias();
-
     }
     Context contexto=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -49,15 +47,12 @@ public class ServicioJuego extends Service {
                     clientClass.start();
                     clientClass.callbackMensaje=new conectarCallback() {
                         @Override
-                        public void conectar(int estado, int bytes, int argumento, String buffer) {
+                        public void conectar(int estado, String buffer) {
                             if (estado==1){
-//                                System.out.println("mensaje con el buffer acumulado "+buffer);
-//                                String tempMsg = new String(buffer, 0, bytes);
                                 System.out.println("mensaje recibido "+buffer);
                                 try {
                                     Gson json = new Gson();
                                     Mensaje mensaje = json.fromJson(buffer, Mensaje.class);
-                                    System.out.println(mensaje.getAccion()+" "+mensaje.getDatos());
                                     switch (mensaje.getAccion()){
                                         case "comenzar":
                                             try {
@@ -79,7 +74,6 @@ public class ServicioJuego extends Service {
                                             datos.add(GameContext.getNombresEquipos().get(0));
                                             mensaje=new Mensaje("conectado",datos);
                                             String msg=mensaje.serializar();
-//                                            byte[] bytesMsg = msg.getBytes();
                                             Write escribir = new Write();
                                             escribir.execute(msg, 0);
                                             break;
@@ -87,20 +81,30 @@ public class ServicioJuego extends Service {
                                             HashMap<String, String> mapDatos=new HashMap<>();
                                             try {
                                                 mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
-                                                for (Map.Entry<String, String> aux: mapDatos.entrySet()){
-                                                    System.out.println("clave "+aux.getKey());
-                                                    System.out.println("valor "+aux.getValue());
-                                                }
                                             } catch (JsonSyntaxException e) {
                                                 e.printStackTrace();
                                             }
-                                            System.out.println(mapDatos.get("idJugador"));
                                             if (mapDatos.get("idJugador").equals(GameContext.getNombresEquipos().get(0))){
+                                                GameContext.setEsMiTurno(true);
                                                 Intent intent= new Intent();
                                                 intent.setAction("turno");
                                                 contexto.sendBroadcast(intent);
                                             }
+                                            else{
+                                                GameContext.setEsMiTurno(false);
+                                            }
                                             break;
+                                        case "actualizacion_tablero":
+                                            Tarjeta tarjeta= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
+                                            mapDatos=new HashMap<>();
+                                            try {
+                                                mapDatos = json.fromJson(mensaje.getDatos().get(1),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
+                                            } catch (JsonSyntaxException e) {
+                                                e.printStackTrace();
+                                            }
+                                            System.out.println(mapDatos.get("idJugador")+" tiro esta carta "+tarjeta.getContenido());
+                                            break;
+
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -108,17 +112,14 @@ public class ServicioJuego extends Service {
                             }
                         }
                     };
-                    System.out.println("se conecto un equipo");
                     break;
                 case "crear server":
                     server= new ThreadedEchoServer();
                     server.start();
                     server.callbackMensaje=new conectarCallback() {
                         @Override
-                        public void conectar(int estado, int bytes, int argumento, String buffer) {
+                        public void conectar(int estado, String buffer) {
                             if (estado==1){
-//                                String tempMsg = new String(buffer, 0, bytes);
-//                                System.out.println("mensaje recibido "+tempMsg);
                                 try {
                                     Gson json = new Gson();
                                     Mensaje mensaje = json.fromJson(buffer, Mensaje.class);
@@ -140,6 +141,29 @@ public class ServicioJuego extends Service {
                                                 escribir.execute(msg, i);
                                             }
                                             break;
+                                        case "jugada":
+                                            System.out.println("buffer "+buffer +"\n mensaje"+mensaje.getDatos().get(0));
+                                            Tarjeta tarjeta= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
+                                            HashMap<String, String> mapDatos=new HashMap<>();
+                                            try {
+                                                mapDatos = json.fromJson(mensaje.getDatos().get(1),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
+                                            } catch (JsonSyntaxException e) {
+                                                e.printStackTrace();
+                                            }
+                                            String nombreEquipo= mapDatos.get("idJugador");
+                                            for (int i=0;i<GameContext.getHijos().size();i++){
+                                                if(!GameContext.getNombresEquipos().get(i).equals(nombreEquipo)){ //para que no se lo mande al que jugo
+                                                    ArrayList<String> datos=new ArrayList<>();
+                                                    datos.add(tarjeta.serializar());
+                                                    datos.add("{\"idJugador\": \""+nombreEquipo+"\"}");
+                                                    mensaje=new Mensaje("actualizacion_tablero",datos);
+                                                    String msg=mensaje.serializar();
+                                                    Write escribir = new Write();
+                                                    escribir.execute(msg, i);
+                                                }
+
+                                            }
+                                            break;
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -147,7 +171,6 @@ public class ServicioJuego extends Service {
                             }
                         }
                     };
-                    System.out.println("se creo el server");
                     break;
             }
         }

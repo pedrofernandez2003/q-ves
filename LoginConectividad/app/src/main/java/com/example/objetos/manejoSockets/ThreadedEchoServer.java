@@ -1,8 +1,10 @@
-package com.example.objetos;
+package com.example.objetos.manejoSockets;
 
 
 import com.example.interfaces.conectarCallback;
 import com.example.interfaces.mensajeCallback;
+import com.example.objetos.GameContext;
+import com.example.objetos.Mensaje;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -32,8 +34,8 @@ public class ThreadedEchoServer extends Thread{
             SendReceive nuevoHijo=new SendReceive(socket);
             nuevoHijo.callbackMensaje= new mensajeCallback() {
                 @Override
-                public void mensajeRecibido(int estado, int bytes, int argumento, String buffer) {
-                    callbackMensaje.conectar(estado, bytes, argumento,buffer);
+                public void mensajeRecibido(int estado, String buffer) {
+                    callbackMensaje.conectar(estado,buffer);
                 }
             };
             GameContext.agregarHijo(nuevoHijo);

@@ -1,4 +1,4 @@
-package com.example.objetos;
+package com.example.objetos.manejoSockets;
 
 import com.example.interfaces.mensajeCallback;
 
@@ -31,7 +31,6 @@ public class SendReceive extends Thread {
             e.printStackTrace();
         }
         byte[] buffer = new byte[1];
-        System.out.println(buffer.length);
         int bytes;
         String bufferAcumulado="";
         while (socket != null) {
@@ -39,8 +38,7 @@ public class SendReceive extends Thread {
                 bytes = inputStream.read(buffer);
                 if (bytes > 0) {
                     if ((byte)'>'== buffer[0]){
-                        System.out.println("me llego el ultimo caracter, buffer: "+bufferAcumulado);
-                        callbackMensaje.mensajeRecibido(MESSAGE_READ, bytes, -1, bufferAcumulado);//no funciona
+                        callbackMensaje.mensajeRecibido(MESSAGE_READ, bufferAcumulado);//no funciona
                         bufferAcumulado="";
                     }
                     else   {
@@ -56,7 +54,6 @@ public class SendReceive extends Thread {
     public void write(String msg) {
         try {
             msg=msg+">";
-            System.out.println("envio "+msg);
             byte[] bytesMsg = msg.getBytes();
             outputStream.write(bytesMsg);
         } catch (IOException e) {
