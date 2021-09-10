@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.Listeners.onTraerPersonajesListener;
 import com.example.login_crud.CrearJuegoActivity;
 import com.example.login_crud.DataManager;
-import com.example.login_crud.R;
+import com.example.R;
 import com.example.simpleimagegallery.fragments.pictureBrowserFragment;
 import com.example.simpleimagegallery.utils.MarginDecoration;
 import com.example.simpleimagegallery.utils.OnSwipeTouchListener;
@@ -52,7 +52,6 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_display);
-        getSupportActionBar().hide();
 
         allpictures = new ArrayList<>();
         imageRecycler = findViewById(R.id.recycler);

@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.login_crud.R;
+import com.example.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

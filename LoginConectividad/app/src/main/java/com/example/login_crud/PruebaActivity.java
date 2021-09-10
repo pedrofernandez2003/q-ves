@@ -10,6 +10,7 @@ import com.example.Objetos.Color;
 import com.example.Objetos.Tarjeta;
 import com.example.Listeners.onTraerDatoListener;
 import com.example.Listeners.onTraerDatosListener;
+import com.example.R;
 
 import java.util.ArrayList;
 

@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.R;
 import com.google.gson.Gson;
 
 import java.io.IOException;

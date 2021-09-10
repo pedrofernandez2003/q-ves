@@ -3,6 +3,7 @@ package com.example.login_crud;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.R;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -49,8 +50,6 @@ public class CrearJuegoActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_crear_juego);
-        getSupportActionBar().hide();
-
         super.onCreate(savedInstanceState);
         segundaVez = false;
         personajes = (Button) findViewById(R.id.botonPersonajes);

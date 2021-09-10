@@ -7,6 +7,8 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.R;
+
 import java.util.ArrayList;
 
 public class CrearTablero extends AppCompatActivity {

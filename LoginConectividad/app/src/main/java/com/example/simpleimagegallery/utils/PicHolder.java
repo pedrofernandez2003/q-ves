@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.login_crud.R;
+import com.example.R;
 
 
 /**

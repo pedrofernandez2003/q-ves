@@ -7,7 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.login_crud.R;
+import com.example.R;
 
 /**
  * Author CodeBoy722

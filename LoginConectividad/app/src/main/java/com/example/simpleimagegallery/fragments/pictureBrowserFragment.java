@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.login_crud.R;
+import com.example.R;
 import com.example.simpleimagegallery.utils.imageIndicatorListener;
 import com.example.simpleimagegallery.utils.pictureFacer;
 import com.example.simpleimagegallery.utils.recyclerViewPagerImageIndicator;

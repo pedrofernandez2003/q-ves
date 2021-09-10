@@ -26,6 +26,8 @@ import com.example.Listeners.onTraerDatoListener;
 import com.example.Listeners.onTraerDatosListener;
 import com.example.Objetos.Tarjeta;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.R;
+
 
 import java.util.ArrayList;
 
@@ -40,7 +42,6 @@ public class TarjetasActivity extends AppCompatActivity {
         Context context = this.getApplicationContext();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tarjetas);
-        getSupportActionBar().hide();
 
         Bundle extras=getIntent().getExtras();
         color= extras.getInt("Color");

@@ -2,6 +2,7 @@ package com.example.login_crud;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.R;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -74,7 +75,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
 //        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
 
         firebaseAuth = FirebaseAuth.getInstance();

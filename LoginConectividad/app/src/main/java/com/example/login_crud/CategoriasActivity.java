@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import com.example.R;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -38,8 +39,6 @@ public class CategoriasActivity extends AppCompatActivity {
         coloresUsados = traerCategorias(context);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categorias);
-        getSupportActionBar().hide();
-
 
         Button aniadirCategoria = (Button) findViewById(R.id.aniadirCategoria);
         aniadirCategoria.setOnClickListener(new View.OnClickListener() {

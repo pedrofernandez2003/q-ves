@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.R;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
