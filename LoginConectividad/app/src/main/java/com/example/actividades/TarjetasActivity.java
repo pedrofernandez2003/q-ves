@@ -64,7 +64,7 @@ public class TarjetasActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                aniadirTarjeta(v,nombreCategoria);
+                aniadirTarjeta(context,v,nombreCategoria);
 
             }
         });
@@ -171,7 +171,7 @@ public class TarjetasActivity extends AppCompatActivity {
     }
 
 
-    public void aniadirTarjeta(View view,String nombreCategoria) {
+    public void aniadirTarjeta(Context context, View view,String nombreCategoria) {
 
         LayoutInflater inflater = LayoutInflater.from(TarjetasActivity.this);
         View dialog_layout = inflater.inflate(R.layout.activity_aniadir_tarjeta, null);
@@ -196,9 +196,9 @@ public class TarjetasActivity extends AppCompatActivity {
                         insertarTarjeta(tarjeta,nombreCategoria);
 
 
-                        LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera2);
-                        llBotonera.removeAllViews();
-                        traerTarjetas(getApplicationContext(),nombreCategoria,color);
+                        GridLayout grid = findViewById(R.id.gridBotonera2);
+                        grid.removeAllViews();
+                        traerTarjetas(context,nombreCategoria,color);
 
                         a.dismiss();
                         
@@ -256,6 +256,16 @@ public class TarjetasActivity extends AppCompatActivity {
    private void traerTarjetas(Context context, String nombreCategoria, int color) {
         ArrayList<String> colores = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int widthCarta = (width*9)/20;
+        int heightCarta = (widthCarta*7)/5;
+        int marginCarta = width/50;
+
+        GridLayout gridCartas = findViewById(R.id.gridBotonera2);
+
         DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
             @Override
             public void traer(Object dato) {
@@ -264,15 +274,10 @@ public class TarjetasActivity extends AppCompatActivity {
                     public void traerDatos(ArrayList<Object> datos) {
                         for (Object tarjetaObject:datos) {
                             TarjetaSinCategoria tarjeta= (TarjetaSinCategoria) tarjetaObject;
+                            CardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjeta.getContenido(), tarjeta.getYapa());
                             System.out.println(tarjeta.getContenido()+" "+tarjeta.getYapa());
-                            LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera2);
-                            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
-                            Button button = new Button(context);
-                            button.setLayoutParams(lp);
-                            button.setText(tarjeta.getContenido() + " " + tarjeta.getYapa());
-                            button.setBackgroundColor(color);
-                            llBotonera.addView(button);
-                            button.setOnClickListener(new View.OnClickListener() {
+                            gridCartas.addView(carta);
+                            carta.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     if (ModoModificar){
@@ -307,7 +312,7 @@ public class TarjetasActivity extends AppCompatActivity {
                                                                     @Override
                                                                     public void eliminar(boolean eliminado) {
                                                                         if(eliminado) {
-                                                                            llBotonera.removeAllViews();
+                                                                            gridCartas.removeAllViews();
                                                                             traerTarjetas(context,nombreCategoria,color);
                                                                             a.dismiss();
                                                                         }
@@ -329,7 +334,7 @@ public class TarjetasActivity extends AppCompatActivity {
                                                         TarjetaSinCategoria tarjetaNueva= new TarjetaSinCategoria(contenidoTarjeta,yapaTarjeta);
                                                         modificarTarjeta(tarjeta,tarjetaNueva,nombreCategoria);
 
-                                                        llBotonera.removeAllViews();
+                                                        gridCartas.removeAllViews();
                                                         traerTarjetas(context,nombreCategoria,color);
 
                                                         a.dismiss();
@@ -347,20 +352,10 @@ public class TarjetasActivity extends AppCompatActivity {
             }
         });
 
-       DisplayMetrics displayMetrics = new DisplayMetrics();
-       getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-       int width = displayMetrics.widthPixels;
-
-       int widthCarta = (width*9)/20;
-       int heightCarta = (widthCarta*7)/5;
-       int marginCarta = width/50;
-
-       GridLayout gridCartas = findViewById(R.id.gridBotonera2);
-
-       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
-       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
-       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
-       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
+//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
+//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
+//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
+//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
     }
 }
 
