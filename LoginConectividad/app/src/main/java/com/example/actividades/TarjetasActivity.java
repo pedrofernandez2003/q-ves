@@ -2,6 +2,11 @@ package com.example.actividades;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,12 +14,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.FrameLayout.LayoutParams;
+
 import com.example.R;
+
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.listeners.onEliminarListener;
@@ -70,6 +84,92 @@ public class TarjetasActivity extends AppCompatActivity {
         });
         traerTarjetas(context,nombreCategoria,color);
     }
+
+    public CardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
+
+        // Crear la base
+        CardView carta = new CardView(this);
+        LayoutParams params = new LayoutParams(width, height);
+        params.setMargins(margin,margin,margin,margin);
+        carta.setLayoutParams(params);
+        carta.setBackgroundColor(-1644568);
+
+        // Crear el constraint layout
+        ConstraintLayout constraintLayout = new ConstraintLayout(this);
+        params = new LayoutParams(width, height);
+        constraintLayout.setLayoutParams(params);
+        constraintLayout.setId(ViewCompat.generateViewId());
+        carta.addView(constraintLayout);
+
+        // Crear el borde de arriba
+        CardView bordeTop = new CardView(this);
+        params = new LayoutParams(width, height/8);
+        bordeTop.setLayoutParams(params);
+        bordeTop.setBackgroundColor(color);
+        bordeTop.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(bordeTop);
+
+
+        // Crear el borde de abajo
+        CardView bordeBot = new CardView(this);
+        params = new LayoutParams(width, (height*3)/50);
+        bordeBot.setLayoutParams(params);
+        bordeBot.setBackgroundColor(color);
+        bordeBot.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(bordeBot);
+
+        //Crear el textview con la categoria
+        TextView textoCategoria = new TextView(this);
+        params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        textoCategoria.setLayoutParams(params);
+        textoCategoria.setText(categoria);
+        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
+        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.hlsimple));
+        textoCategoria.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(textoCategoria);
+
+        //Crear el textview para el contenido
+        TextView textoContenido = new TextView(this);
+        params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(margin, margin, margin, margin);
+        textoContenido.setLayoutParams(params);
+        textoContenido.setText(contenido);
+        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/15));
+        textoContenido.setGravity(Gravity.CENTER);
+        textoContenido.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(textoContenido);
+
+        //Crear la yapa
+        TextView yapa = new TextView(this);
+        params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(margin, margin, margin, margin);
+        yapa.setLayoutParams(params);
+        yapa.setText(yapaContenido);
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/20));
+        yapa.setGravity(Gravity.CENTER);
+        yapa.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(yapa);
+
+        //Constraints
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
+        set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 0);
+        set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+        set.connect(textoCategoria.getId(), ConstraintSet.TOP, bordeTop.getId(), ConstraintSet.BOTTOM);
+        set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(textoContenido.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(textoContenido.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(textoContenido.getId(), ConstraintSet.TOP, textoCategoria.getId(), ConstraintSet.BOTTOM,height/50);
+        set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
+        set.applyTo(constraintLayout);
+
+        return carta;
+
+    }
+
 
     public void aniadirTarjeta(View view,String nombreCategoria) {
 
@@ -246,6 +346,21 @@ public class TarjetasActivity extends AppCompatActivity {
                 });
             }
         });
+
+       DisplayMetrics displayMetrics = new DisplayMetrics();
+       getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+       int width = displayMetrics.widthPixels;
+
+       int widthCarta = (width*9)/20;
+       int heightCarta = (widthCarta*7)/5;
+       int marginCarta = width/50;
+
+       GridLayout gridCartas = findViewById(R.id.gridBotonera2);
+
+       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
+       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
+       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
+       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
     }
 }
 
