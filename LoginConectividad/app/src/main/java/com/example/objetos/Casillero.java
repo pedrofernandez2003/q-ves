@@ -13,9 +13,9 @@ public class Casillero implements Serializable {
         this.tarjeta=tarjeta;
     }
 
-    public Casillero(){
-        this.categoria = new Categoria();
-        this.tarjeta = new Tarjeta();
+    public Casillero(Categoria categoria){
+        this.categoria = categoria;
+        this.tarjeta = null;
     }
 
     public void setId(int id) {
