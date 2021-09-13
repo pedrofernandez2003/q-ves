@@ -29,7 +29,7 @@ public class JugarActivity extends AppCompatActivity  {
     //    private GameContext context;
     private Juego juego;
     private Partida partida;
-    private TextView turno;
+    private TextView turno, ronda;
     private Button botonTirarCarta;
 
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -57,6 +57,8 @@ public class JugarActivity extends AppCompatActivity  {
         registerReceiver(broadcastReceiver,intentFilter);
         juego= GameContext.getJuego();
         partida=GameContext.getPartidaActual();
+        ronda=findViewById(R.id.textView2);
+        ronda.setText(GameContext.getRonda());
         System.out.println(GameContext.getHijos().size());
         if (GameContext.getServers().size()==0){
             ArrayList<String> datos=new ArrayList<>();

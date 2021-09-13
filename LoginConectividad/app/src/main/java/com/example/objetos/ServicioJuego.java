@@ -106,6 +106,7 @@ public class ServicioJuego extends Service {
                                             break;
 
                                         case "partida_nueva":
+                                            GameContext.setRonda(GameContext.getRonda()+1);
                                             Intent intent= new Intent();
                                             intent.setAction("reiniciar");
                                             contexto.sendBroadcast(intent);
@@ -203,6 +204,7 @@ public class ServicioJuego extends Service {
                                                     Write escribir = new Write();
                                                     escribir.execute(msg, i);
                                                 }
+                                                GameContext.setRonda(GameContext.getRonda()+1);
                                             }
                                             else{
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {
