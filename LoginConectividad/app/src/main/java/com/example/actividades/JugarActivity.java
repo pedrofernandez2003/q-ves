@@ -40,9 +40,12 @@ public class JugarActivity extends AppCompatActivity  {
                     turno = findViewById(R.id.turno);
                     turno.setVisibility(View.VISIBLE);
                     break;
+                case "reiniciar":
+
             }
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +53,8 @@ public class JugarActivity extends AppCompatActivity  {
         mostrarPlantillaEnXml(GameContext.getJuego().getPlantilla(), this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("turno");
-        System.out.println("creo el broadcast");
+        intentFilter.addAction("reiniciar");//ver si sirve mas adelante
         registerReceiver(broadcastReceiver,intentFilter);
-//        context=GameContext.getGameContext();
         juego= GameContext.getJuego();
         partida=GameContext.getPartidaActual();
         System.out.println(GameContext.getHijos().size());
@@ -69,13 +71,14 @@ public class JugarActivity extends AppCompatActivity  {
             public void onClick(View v) {
                 if (GameContext.isEsMiTurno()){
                     ArrayList<String> datos=new ArrayList<>();
-                    datos.add(GameContext.getEquipo().getTarjetas().iterator().next().serializar());
+                    datos.add(GameContext.getEquipo().getTarjetas().iterator().next().serializar());//falta sacar la carta del mazo
                     datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
                     Mensaje mensaje=new Mensaje("jugada",datos);
                     String msg=mensaje.serializar();
                     System.out.println("mensaje enviado "+msg);
                     Write escribir = new Write();
                     escribir.execute(msg, 0);
+                    GameContext.setEsMiTurno(false);
                 }
                 else{
                     System.out.println();//poner un toast que diga no es tu turno

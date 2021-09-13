@@ -4,6 +4,7 @@ import com.example.objetos.manejoSockets.SendReceive;
 import com.example.objetos.manejoSockets.ThreadedEchoServer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GameContext extends Thread {
@@ -14,8 +15,11 @@ public class GameContext extends Thread {
     private static ArrayList<String> nombresEquipos=new ArrayList<>();
     private static Juego juego;
     private static Partida partidaActual;
+    private static int ronda;
     private static Equipo equipo;
     private static boolean esMiTurno;
+    private static HashMap<String, Integer> resultados=new HashMap<>();
+    private static int cantMensajesRecibidos=0; //los jugadores empiezan a mandar la cantidad de cartas que les quedan
 
     private GameContext(){}
     public static GameContext getGameContext() {
@@ -23,6 +27,18 @@ public class GameContext extends Thread {
             context = new GameContext();
         }
         return context;
+    }
+
+    public static int getCantMensajesRecibidos() {
+        return cantMensajesRecibidos;
+    }
+
+    public static void setCantMensajesRecibidos(int cantMensajesRecibidos) {
+        GameContext.cantMensajesRecibidos = cantMensajesRecibidos;
+    }
+
+    public static HashMap<String, Integer> getResultados() {
+        return resultados;
     }
 
     public static boolean isEsMiTurno() {
@@ -33,10 +49,17 @@ public class GameContext extends Thread {
         GameContext.partidaActual = partidaActual;
     }
 
+    public static int getRonda() {
+        return ronda;
+    }
+
+    public static void setRonda(int ronda) {
+        GameContext.ronda = ronda;
+    }
+
     public static void setEsMiTurno(boolean esMiTurno) {
         GameContext.esMiTurno = esMiTurno;
     }
-
 
     public static Partida getPartidaActual() {
         return partidaActual;

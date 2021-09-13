@@ -105,6 +105,21 @@ public class ServicioJuego extends Service {
                                             System.out.println(mapDatos.get("idJugador")+" tiro esta carta "+tarjeta.getContenido());
                                             break;
 
+                                        case "partida_nueva":
+                                            Intent intent= new Intent();
+                                            intent.setAction("reiniciar");
+                                            contexto.sendBroadcast(intent);
+                                            break;
+
+                                        case "terminar_juego":
+                                            datos=new ArrayList<>();
+                                            datos.add("{\"cantidadTarjetas\": \""+GameContext.getEquipo().getTarjetas().size()+"\"}");
+                                            datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(0)+"\"}");
+                                            mensaje=new Mensaje("misCartas",datos);
+                                            msg=mensaje.serializar();
+                                            escribir = new Write();
+                                            escribir.execute(msg, 0);
+
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -151,6 +166,7 @@ public class ServicioJuego extends Service {
                                                 e.printStackTrace();
                                             }
                                             String nombreEquipo= mapDatos.get("idJugador");
+                                            GameContext.getPartidaActual().setTurno(GameContext.getPartidaActual().getTurno()+1);//no se si esta bien aca
                                             for (int i=0;i<GameContext.getHijos().size();i++){
                                                 if(!GameContext.getNombresEquipos().get(i).equals(nombreEquipo)){ //para que no se lo mande al que jugo
                                                     ArrayList<String> datos=new ArrayList<>();
@@ -161,7 +177,54 @@ public class ServicioJuego extends Service {
                                                     Write escribir = new Write();
                                                     escribir.execute(msg, i);
                                                 }
+                                            }
+                                            boolean terminarPartida=true;
+                                            for (Casillero casillero:GameContext.getPartidaActual().getCasilleros()) {
+                                                if(casillero.getTarjeta()==null){
+                                                    terminarPartida=false;
+                                                    break;
+                                                }
+                                            }
+                                            if (!terminarPartida){
+                                                for (int i=0;i<GameContext.getHijos().size();i++) {
+                                                    ArrayList<String> datos=new ArrayList<>();
+                                                    datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(GameContext.getPartidaActual().getTurno())+"\"}");
+                                                    mensaje=new Mensaje("turno",datos);
+                                                    String msg=mensaje.serializar();
+                                                    Write escribir = new Write();
+                                                    escribir.execute(msg, i);
+                                                }
+                                            }
+                                            else if (GameContext.getRonda()!=GameContext.getJuego().getPartidas().size()){
+                                                for (int i=0;i<GameContext.getHijos().size();i++) {
+                                                    ArrayList<String> datos=new ArrayList<>();
+                                                    mensaje=new Mensaje("partida_nueva",datos);
+                                                    String msg=mensaje.serializar();
+                                                    Write escribir = new Write();
+                                                    escribir.execute(msg, i);
+                                                }
+                                            }
+                                            else{
+                                                for (int i=0;i<GameContext.getHijos().size();i++) {
+                                                    ArrayList<String> datos=new ArrayList<>();
+                                                    mensaje=new Mensaje("terminar_juego",datos);
+                                                    String msg=mensaje.serializar();
+                                                    Write escribir = new Write();
+                                                    escribir.execute(msg, i);
+                                                }
+                                            }
+                                            break;
 
+                                        case "misCartas":
+                                            int cantidadCartas= Integer.parseInt(mensaje.getDatos().get(0));
+                                            String nombreJugador= mensaje.getDatos().get(1);
+                                            GameContext.getResultados().put(nombreJugador,cantidadCartas);
+                                            GameContext.setCantMensajesRecibidos(GameContext.getCantMensajesRecibidos()+1);
+                                            if(GameContext.getCantMensajesRecibidos()==GameContext.getJuego().getEquipos().size()){
+                                                intent2= new Intent();
+                                                intent2.putExtra("ganador",obtenerGanardor());
+                                                intent2.setAction("ganador");
+                                                contexto.sendBroadcast(intent2);
                                             }
                                             break;
                                     }
@@ -175,6 +238,11 @@ public class ServicioJuego extends Service {
             }
         }
     };
+
+    public String obtenerGanardor(){
+        return "pepe";
+    }
+
     @Override
     public void onDestroy() {
         unregisterReceiver(broadcastReceiver);
