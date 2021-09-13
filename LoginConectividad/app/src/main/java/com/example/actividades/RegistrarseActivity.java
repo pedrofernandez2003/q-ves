@@ -32,7 +32,6 @@ public class RegistrarseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrarse);
-        getSupportActionBar().hide();
 
         // aca defino las dos variables para hacer el registro firebaseAuth que es la comunicacion con firebase donde lo registro
         // y awasomeValidation para que no se repitan mal y otras cosas

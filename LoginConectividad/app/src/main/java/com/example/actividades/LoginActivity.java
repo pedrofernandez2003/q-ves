@@ -63,7 +63,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
-//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -154,14 +153,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onStart() {
-        FirebaseUser user= firebaseAuth.getCurrentUser();
-        if(user!=null){
-            manejarUsuario(firebaseAuth.getCurrentUser());
-        }
-        super.onStart();
-    }
+//    @Override
+//    protected void onStart() {
+//        FirebaseUser user= firebaseAuth.getCurrentUser();
+//        if(user!=null){
+//            manejarUsuario(firebaseAuth.getCurrentUser());
+//        }
+//        super.onStart();
+//    }
 
 
 

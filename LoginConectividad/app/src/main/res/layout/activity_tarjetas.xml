@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -32,6 +32,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/llBotonera2" >
+    </LinearLayout>
 
     <GridLayout
         android:id="@+id/gridBotonera2"
@@ -58,4 +59,4 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.98"  />
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
