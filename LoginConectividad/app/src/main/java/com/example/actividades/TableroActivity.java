@@ -3,31 +3,49 @@ package com.example.actividades;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
 
+import com.example.objetos.Casillero;
 import com.example.objetos.Categoria;
+import com.example.objetos.GameContext;
 import com.example.objetos.Tarjeta;
 import com.example.R;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class TableroActivity extends AppCompatActivity {
     private LinearLayout verCartas;
     private Tarjeta tarjetaElegida;
+    private ArrayList<Casillero> casilleros;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablero_creable);
         verCartas = findViewById(R.id.verCartas);
 
+        ArrayList<Casillero> casilleros=GameContext.getPartidaActual().getCasilleros();
+        //ArrayList<Categoria> categorias=GameContext.getJuego().getPlantilla().getCategorias();
+        //HashSet<Tarjeta> tarjetasHashSet=GameContext.getEquipo().getTarjetas()
+
         ArrayList<Categoria> categorias= new ArrayList<>();
-        ArrayList<Tarjeta> tarjetasArray= new ArrayList<>();
+        HashSet<Tarjeta> tarjetasHashSet= new HashSet<>();
         ArrayList<Tarjeta> ejemploParaRellenar= new ArrayList<>();
 
         Tarjeta tarjeta1=new Tarjeta("prueba1","probandoooooo","categoria1");
@@ -46,23 +64,13 @@ public class TableroActivity extends AppCompatActivity {
         categorias.add(categoria2);
         categorias.add(categoria3);
 
-        tarjetasArray.add(tarjeta1);
-        tarjetasArray.add(tarjeta2);
-        tarjetasArray.add(tarjeta3);
-        tarjetasArray.add(tarjeta4);
-        tarjetasArray.add(tarjeta5);
-        tarjetasArray.add(tarjeta6);
-        tarjetasArray.add(tarjeta6);
-        tarjetasArray.add(tarjeta6);
-        tarjetasArray.add(tarjeta6);
-        tarjetasArray.add(tarjeta6);
-        tarjetasArray.add(tarjeta6);
-        tarjetasArray.add(tarjeta6);
-        tarjetasArray.add(tarjeta6);
-        tarjetasArray.add(tarjeta6);
-        tarjetasArray.add(tarjeta6);
-        tarjetasArray.add(tarjeta6);
-        tarjetasArray.add(tarjeta6);
+        tarjetasHashSet.add(tarjeta1);
+        tarjetasHashSet.add(tarjeta2);
+        tarjetasHashSet.add(tarjeta3);
+        tarjetasHashSet.add(tarjeta4);
+        tarjetasHashSet.add(tarjeta5);
+        tarjetasHashSet.add(tarjeta6);
+        tarjetasHashSet.add(tarjeta6);
 
 
         verCartas.setOnClickListener(new View.OnClickListener() {
@@ -76,21 +84,31 @@ public class TableroActivity extends AppCompatActivity {
                 db.setView(dialog_layout);
                 LinearLayout contenedorCartas=(LinearLayout) dialog_layout.findViewById(R.id.contenedorCartas);
 
-                for (int i = 0; i < tarjetasArray.size(); i++) {
-                    Tarjeta tarjetaARevisar=tarjetasArray.get(i);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT );
-                    Button button = new Button(getApplicationContext());
-                    button.setLayoutParams(lp);
-                    button.setText(tarjetaARevisar.getContenido());
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int width = displayMetrics.widthPixels;
+                int widthCarta = (width*5)/40;
+                int heightCarta = (widthCarta*14)/10;
+                int marginCarta = width/100;
+
+                for (Tarjeta tarjetaARevisar:tarjetasHashSet) {
+
+                    String nombreCategoria=tarjetaARevisar.getCategoria();
+                    String tarjetaContenido=tarjetaARevisar.getContenido();
+                    String tarjetaYapa=tarjetaARevisar.getYapa();
+                    int color=0; //si o si parece que tenia que iniciarlizarlo
 
                     for (int j=0; j < categorias.size(); j++){
                         Categoria categoriaARevisar=categorias.get(j);
                         if (categoriaARevisar.getNombre().equals(tarjetaARevisar.getCategoria())){
-                            button.setBackgroundColor(categoriaARevisar.getColor().getCodigo());
+                            color=categoriaARevisar.getColor().getCodigo();
                         }
                     }
-                    contenedorCartas.addView(button);
-                    button.setOnClickListener(new View.OnClickListener() {
+
+                    CardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria,tarjetaContenido,tarjetaYapa);
+                    contenedorCartas.addView(carta);
+
+                    carta.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             tarjetaElegida=tarjetaARevisar;
@@ -133,7 +151,18 @@ public class TableroActivity extends AppCompatActivity {
         // IDEA: deberia buscar entre todos los text para ver cual corresponde
         // con la categoria y cambiar algo como para decir "Estoy aca :D"
 
-        ArrayList<TextView> nombreCategoriasEnTablero=conseguirTextViews();
+
+        for (Casillero casillero:casilleros) {
+            if (casillero.getTarjeta() == null){
+                casillero.setTarjeta(tarjetaElegida);
+            }
+            else{
+
+            }
+        }
+
+
+        /*ArrayList<TextView> nombreCategoriasEnTablero=conseguirTextViews();
 
         for (TextView nombreCategoria:nombreCategoriasEnTablero) {
             System.out.println("Hola");
@@ -141,7 +170,7 @@ public class TableroActivity extends AppCompatActivity {
                 String prueba="Meti carta de esto";
                 nombreCategoria.setText(prueba);
             }
-        }
+        }*/
 
     }
 
@@ -160,4 +189,90 @@ public class TableroActivity extends AppCompatActivity {
         espaciosTexto.add(findViewById(R.id.icon_name_10));
         return espaciosTexto;
     }
+
+    public CardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
+
+        // Crear la base
+        CardView carta = new CardView(this);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
+        params.setMargins(margin,margin,margin,margin);
+        carta.setLayoutParams(params);
+        carta.setBackgroundColor(-1644568);
+
+        // Crear el constraint layout
+        ConstraintLayout constraintLayout = new ConstraintLayout(this);
+        params = new FrameLayout.LayoutParams(width, height);
+        constraintLayout.setLayoutParams(params);
+        constraintLayout.setId(ViewCompat.generateViewId());
+        carta.addView(constraintLayout);
+
+        // Crear el borde de arriba
+        CardView bordeTop = new CardView(this);
+        params = new FrameLayout.LayoutParams(width, height/8);
+        bordeTop.setLayoutParams(params);
+        bordeTop.setBackgroundColor(color);
+        bordeTop.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(bordeTop);
+
+
+        // Crear el borde de abajo
+        CardView bordeBot = new CardView(this);
+        params = new FrameLayout.LayoutParams(width, (height*3)/50);
+        bordeBot.setLayoutParams(params);
+        bordeBot.setBackgroundColor(color);
+        bordeBot.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(bordeBot);
+
+        //Crear el textview con la categoria
+        TextView textoCategoria = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        textoCategoria.setLayoutParams(params);
+        textoCategoria.setText(categoria);
+        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
+        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.hlsimple));
+        textoCategoria.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(textoCategoria);
+
+        //Crear el textview para el contenido
+        TextView textoContenido = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(margin, margin, margin, margin);
+        textoContenido.setLayoutParams(params);
+        textoContenido.setText(contenido);
+        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/15));
+        textoContenido.setGravity(Gravity.CENTER);
+        textoContenido.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(textoContenido);
+
+        //Crear la yapa
+        TextView yapa = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(margin, margin, margin, margin);
+        yapa.setLayoutParams(params);
+        yapa.setText(yapaContenido);
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/20));
+        yapa.setGravity(Gravity.CENTER);
+        yapa.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(yapa);
+
+        //Constraints
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
+        set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 0);
+        set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+        set.connect(textoCategoria.getId(), ConstraintSet.TOP, bordeTop.getId(), ConstraintSet.BOTTOM);
+        set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(textoContenido.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(textoContenido.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(textoContenido.getId(), ConstraintSet.TOP, textoCategoria.getId(), ConstraintSet.BOTTOM,height/50);
+        set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
+        set.applyTo(constraintLayout);
+
+        return carta;
+
+    }
+
 }
