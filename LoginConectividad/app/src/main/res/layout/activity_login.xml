@@ -15,62 +15,103 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/textView"
+
+        <!--        <TextView-->
+<!--            android:id="@+id/textView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/iniciar_sesion" />-->
+
+        <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/iniciar_sesion" />
+            tools:srcCompat="@tools:sample/avatars" />
 
-        <EditText
-            android:id="@+id/mail"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/mail"
-            android:inputType="textEmailAddress" />
+            android:orientation="vertical">
+            <EditText
+                        android:id="@+id/mail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Email"
+                        android:inputType="textPassword"
+                        android:drawablePadding="5dp"
+                        android:padding="15dp"
+                        android:layout_margin="10dp"/>
 
-        <EditText
-            android:id="@+id/contrasenia"
+                    <EditText
+                        android:id="@+id/contrasenia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Contraseña"
+                        android:inputType="textPassword"
+                        android:drawablePadding="5dp"
+                        android:padding="15dp"
+                        android:layout_margin="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/contrasenia"
-            android:inputType="textPassword" />
+            android:orientation="horizontal">
 
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/gmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/gmail"
-            android:layout_width="157dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="164dp" />
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp" />
-
-        <Button
-            android:id="@+id/olvideContrasenia"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/me_olvide_la_contrasenia" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/confirmarInicio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/iniciarr" />
+            <Button
+                android:id="@+id/confirmarInicio"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:text="Iniciar sesión" />
 
-        <Button
-            android:id="@+id/registrarseConMail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/registrarse_con_mail" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+            <TextView
+                android:id="@+id/olvideContrasenia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Olvidé la contraseña"
+                />
 
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" o " />
+            <TextView
+                android:id="@+id/registrarseConMail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Crear usuario"
+
+                />
+            </LinearLayout>
+
+        </LinearLayout>
 
 
     </LinearLayout>

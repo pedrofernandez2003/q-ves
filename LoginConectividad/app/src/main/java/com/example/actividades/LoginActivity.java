@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.R;
 
@@ -51,7 +52,8 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     EditText mailIngresado, contraseniaIngresada;
-    Button botonIngresar, botonRegistrarse,boton;
+    TextView olvideContrasenia, crearUsuario;
+    Button botonIngresar;
     AwesomeValidation awesomeValidation;
     private static final String TAG= "Login";
     private static final int RC_SIGN_IN=1;
@@ -82,17 +84,17 @@ public class LoginActivity extends AppCompatActivity {
         mailIngresado = (EditText) findViewById(R.id.mail);
         contraseniaIngresada = (EditText) findViewById(R.id.contrasenia);
         botonIngresar = (Button) findViewById(R.id.confirmarInicio);
-        botonRegistrarse = (Button) findViewById(R.id.registrarseConMail);
-        boton = (Button) findViewById(R.id.olvideContrasenia);
+        crearUsuario = (TextView) findViewById(R.id.registrarseConMail);
+        olvideContrasenia = (TextView) findViewById(R.id.olvideContrasenia);
 
-        boton.setOnClickListener(new View.OnClickListener() {
+        olvideContrasenia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent cambiarContrasenia = new Intent(LoginActivity.this, CambiarContraseniaActivity.class);
                 startActivity(cambiarContrasenia);
             }
         });
-        botonRegistrarse.setOnClickListener(new View.OnClickListener() {
+        crearUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent registrarse = new Intent(LoginActivity.this, RegistrarseActivity.class);
