@@ -1,6 +1,7 @@
 package com.example.actividades;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,16 +13,16 @@ import com.example.R;
 
 public class AdministradorActivity extends AppCompatActivity {
 
-    private Button crearJuego,iniciarJuego, administrarElementos;
+    private CardView crearJuego,iniciarJuego, administrarElementos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrador);
 
-        crearJuego = (Button) findViewById(R.id.crearJuego);
-        iniciarJuego = (Button) findViewById(R.id.iniciarJuego);
-        administrarElementos = (Button) findViewById(R.id.adminElementos);
+        crearJuego = (CardView) findViewById(R.id.crearJuego);
+        iniciarJuego = (CardView) findViewById(R.id.iniciarJuego);
+        administrarElementos = (CardView) findViewById(R.id.adminElementos);
         crearJuego.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

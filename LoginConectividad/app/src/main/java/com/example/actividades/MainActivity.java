@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         intentFilter.addAction("turno");
         registerReceiver(broadcastReceiver,intentFilter);
         startService(new Intent(this, ServicioJuego.class));
-        setContentView(R.layout.activity_mainhotspot);
+        setContentView(R.layout.activity_main);
         botonUnirse = (Button) findViewById(R.id.botonUnirse);
         turno = findViewById(R.id.turno);
         nombreEquipo =  (TextInputEditText) findViewById(R.id.nombreEquipo);

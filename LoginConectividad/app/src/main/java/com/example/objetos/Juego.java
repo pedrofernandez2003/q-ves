@@ -16,7 +16,9 @@ public class Juego implements Serializable {
         this.partidas=new ArrayList<Partida>();
         for (int i=0;i<plantilla.getCantPartidas();i++){
             ArrayList<Casillero> casilleros=new ArrayList<>();
+            System.out.println("cantidad de categorias: "+plantilla.getCategorias().size());
             for (int j=0;j<plantilla.getCategorias().size();j++){
+                System.out.println(plantilla.getCategorias().get(j).getNombre());
                 Casillero casillero=new Casillero(plantilla.getCategorias().get(j));
                 casillero.setId(j++);
                 casilleros.add(casillero);

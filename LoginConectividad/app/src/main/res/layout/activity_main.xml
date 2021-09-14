@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toTopOf="@+id/nombreEquipo"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="5dp"
-        tools:srcCompat="@drawable/logoqves" />
+        android:src="@drawable/logoqves" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/nombreEquipo"
