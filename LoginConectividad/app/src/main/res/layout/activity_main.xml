@@ -6,55 +6,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context=".MainActivity">
+    >
 
-
-    <Button
-        android:id="@+id/botonUnirse"
-        android:layout_width="282dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginLeft="55dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
-        android:text="@string/unirse"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nombreEquipo" />
-
-    <Button
-        android:id="@+id/iniciarSesion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="124dp"
-        android:layout_marginLeft="124dp"
-        android:layout_marginTop="92dp"
-        android:layout_marginEnd="124dp"
-        android:layout_marginRight="124dp"
-        android:layout_marginBottom="133dp"
-        android:layout_weight="1"
-        android:text="@string/iniciar_sesion"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/botonUnirse" />
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="400dp"
+        android:layout_height="298dp"
+        app:layout_constraintBottom_toTopOf="@+id/nombreEquipo"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="5dp"
+        tools:srcCompat="@drawable/logoqves" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/nombreEquipo"
         android:layout_width="282dp"
         android:layout_height="40dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginLeft="55dp"
-        android:layout_marginTop="384dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
         android:hint="Nombre del equipo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintBottom_toTopOf="@+id/iniciarSesion"
+        tools:layout_editor_absoluteX="55dp" />
+
+    <Button
+        android:id="@+id/botonUnirse"
+        android:layout_width="282dp"
+        android:layout_height="48dp"
+        android:text="@string/unirse"
+        app:layout_constraintTop_toBottomOf="@+id/nombreEquipo"
+        tools:layout_editor_absoluteX="55dp" />
+
+    <Button
+        android:id="@+id/iniciarSesion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/iniciar_sesion"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonUnirse"
+        tools:layout_editor_absoluteX="124dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
