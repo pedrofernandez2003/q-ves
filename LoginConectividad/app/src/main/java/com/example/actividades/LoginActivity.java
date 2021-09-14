@@ -124,8 +124,10 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 }
                             });
+                } else {
+                    Toast.makeText(getApplicationContext(), "El email o la contraseña estan vacios", Toast.LENGTH_SHORT).show();
+
                 }
-                Toast.makeText(getApplicationContext(), "El email o la contraseña estan vacios", Toast.LENGTH_SHORT).show();
             }
         });
 
