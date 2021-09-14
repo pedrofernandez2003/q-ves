@@ -21,22 +21,24 @@
         android:id="@+id/nombreEquipo"
         android:layout_width="282dp"
         android:layout_height="40dp"
-        android:hint="Nombre del equipo"
         android:fontFamily="@font/hlsimple"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        android:hint="Nombre del equipo"
         app:layout_constraintBottom_toTopOf="@+id/iniciarSesion"
-        tools:layout_editor_absoluteX="55dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <Button
         android:id="@+id/botonUnirse"
         android:layout_width="282dp"
         android:layout_height="48dp"
-        android:text="Jugar"
-        android:textColor="@color/white"
         android:backgroundTint="@color/purple_200"
         android:fontFamily="@font/hlsimple"
-        app:layout_constraintTop_toBottomOf="@+id/nombreEquipo"
-        tools:layout_editor_absoluteX="55dp" />
+        android:text="Jugar"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nombreEquipo" />
 
     <Button
         android:id="@+id/iniciarSesion"

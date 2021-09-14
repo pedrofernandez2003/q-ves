@@ -7,17 +7,18 @@ import android.widget.Button;
 import com.example.R;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 public class ModeradorActivity extends AppCompatActivity {
 
-    private Button crearJuego,iniciarJuego;
+    private CardView crearJuego,iniciarJuego;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moderador);
-        crearJuego = (Button) findViewById(R.id.crearJuego);
-        iniciarJuego = (Button) findViewById(R.id.iniciarJuego);
+        crearJuego = (CardView) findViewById(R.id.crearJuego);
+        iniciarJuego = (CardView) findViewById(R.id.iniciarJuego);
         crearJuego.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
