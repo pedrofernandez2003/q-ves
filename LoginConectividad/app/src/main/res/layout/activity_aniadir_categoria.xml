@@ -8,7 +8,10 @@
         android:id="@+id/nombreCategoria"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre de la categoría"
+        android:hint="Nombre"
+        android:textSize="24dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/hlsimple"
         android:inputType="text" />
 
 
@@ -26,7 +29,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:singleLine="true"
-            android:text="Color para la categoria" />
+            android:fontFamily="@font/hlsimple"
+            android:textSize="24dp"
+            android:text="Color" />
 
         <Spinner
             android:id="@+id/opcionesColor"

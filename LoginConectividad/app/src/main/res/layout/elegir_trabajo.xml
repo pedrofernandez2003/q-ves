@@ -9,11 +9,17 @@
         android:id="@+id/moderador"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Soy Moderador" />
+        android:text="Soy Moderador"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/purple_200"
+        android:fontFamily="@font/hlsimple"/>
     <Button
         android:id="@+id/administrador"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/moderador"
-        android:text="Soy Administrador" />
+        android:text="Soy Administrador"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/purple_200"
+        android:fontFamily="@font/hlsimple"/>
 </RelativeLayout>

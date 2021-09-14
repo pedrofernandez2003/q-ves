@@ -3,14 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <TextView
         android:id="@+id/titulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Crear juego"
-        android:textSize="32dp"
+        android:fontFamily="@font/hlsimple"
+        android:textSize="38dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +38,9 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Nombre:" />
+            android:text="Nombre:"
+            android:textSize="30dp"
+            android:fontFamily="@font/hlsimple"/>
 
         <EditText
             android:id="@+id/completarNombreJuego"
@@ -66,7 +70,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:singleLine="true"
-            android:text="Equipos:" />
+            android:text="Equipos:"
+            android:textSize="30dp"
+            android:fontFamily="@font/hlsimple"/>
 
         <EditText
             android:id="@+id/completarCantidadEquipos"
@@ -95,7 +101,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Seleccioná las categorias" />
+            android:text="categorias"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/purple_200"
+            android:fontFamily="@font/hlsimple"/>
 
     </LinearLayout>
 
@@ -121,7 +130,8 @@
             android:singleLine="true"
             android:textSize="14sp"
             android:textStyle="italic"
-            android:text="Aún no ha seleccionado categorias "
+            android:fontFamily="@font/hlsimple"
+            android:text="No ha seleccionado categorias "
             tools:layout_editor_absoluteX="3dp"
             tools:layout_editor_absoluteY="397dp"/>
 
@@ -153,7 +163,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Seleccioná los personajes" />
+            android:text="personajes"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/purple_200"
+            android:fontFamily="@font/hlsimple"/>
 
     </LinearLayout>
 
@@ -176,7 +189,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:singleLine="true"
-            android:text="Aún no ha seleccionado personajes "
+            android:fontFamily="@font/hlsimple"
+            android:text="No ha seleccionado personajes "
             android:textSize="14sp"
             android:textStyle="italic"
             tools:layout_editor_absoluteX="3dp"
@@ -188,6 +202,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Guardar"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/purple_200"
+        android:fontFamily="@font/hlsimple"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

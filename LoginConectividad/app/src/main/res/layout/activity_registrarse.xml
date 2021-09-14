@@ -36,6 +36,7 @@
             android:drawablePadding="5dp"
             android:ems="10"
             android:hint="Email"
+            android:fontFamily="@font/hlsimple"
             android:inputType="textEmailAddress"
             android:padding="15dp"
             tools:layout_editor_absoluteX="10dp"
@@ -47,7 +48,8 @@
             android:layout_height="wrap_content"
             android:drawablePadding="5dp"
             android:ems="10"
-            android:hint="Contraseña"
+            android:hint="Clave"
+            android:fontFamily="@font/hlsimple"
             android:inputType="textPassword"
             android:padding="15dp"
             tools:layout_editor_absoluteX="10dp"
@@ -68,7 +70,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Registarse"
+            android:text="Registrarse"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/purple_200"
+            android:fontFamily="@font/hlsimple"
+
             tools:layout_editor_absoluteX="143dp" />
 
 

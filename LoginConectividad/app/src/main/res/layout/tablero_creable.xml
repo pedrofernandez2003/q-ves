@@ -32,11 +32,17 @@
             android:layout_rowWeight="0.5"
             android:layout_gravity="fill"
             android:id="@+id/agarrarCarta"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/purple_200"
+            android:fontFamily="@font/hlsimple"
             android:text="Agarrar Carta" />
 
         <Button
             android:layout_columnWeight="1"
             android:layout_rowWeight="0.5"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/purple_200"
+            android:fontFamily="@font/hlsimple"
             android:layout_gravity="fill"
             android:id="@+id/pasar"
             android:text="Pasar" />

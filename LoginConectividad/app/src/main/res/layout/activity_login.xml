@@ -36,6 +36,7 @@
             android:drawablePadding="5dp"
             android:ems="10"
             android:hint="Email"
+            android:fontFamily="@font/hlsimple"
             android:inputType="textEmailAddress"
             android:padding="15dp"
             app:layout_constraintTop_toBottomOf="@+id/contrasenia"
@@ -48,7 +49,8 @@
             android:layout_height="wrap_content"
             android:drawablePadding="5dp"
             android:ems="10"
-            android:hint="Contraseña"
+            android:hint="Clave"
+            android:fontFamily="@font/hlsimple"
             android:inputType="textPassword"
             android:padding="15dp"
             app:layout_constraintTop_toBottomOf="@+id/mail"
@@ -69,7 +71,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Iniciar sesión"
+            android:text="Iniciar "
+            android:textColor="@color/white"
+            android:backgroundTint="@color/purple_200"
+            android:fontFamily="@font/hlsimple"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -86,19 +91,25 @@
                 android:id="@+id/olvideContrasenia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Olvidé la contraseña" />
+                android:text="Cambiar contraseña"
+                android:fontFamily="@font/hlsimple"
+                />
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" o " />
+                android:text=" o "
+                android:fontFamily="@font/hlsimple"
+                />
 
             <TextView
                 android:id="@+id/registrarseConMail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Crear usuario"
+                android:fontFamily="@font/hlsimple"
+
 
                 />
         </LinearLayout>

@@ -9,10 +9,12 @@ android:padding="16dp">
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:hint="@string/contenido"
-    android:inputType="text" />
+    android:inputType="text"
+    android:fontFamily="@font/hlsimple"/>
 
 <EditText
     android:id="@+id/yapa"
+    android:fontFamily="@font/hlsimple"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@id/contenido"

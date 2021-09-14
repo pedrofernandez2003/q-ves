@@ -22,6 +22,7 @@
         android:layout_width="282dp"
         android:layout_height="40dp"
         android:hint="Nombre del equipo"
+        android:fontFamily="@font/hlsimple"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:layout_constraintBottom_toTopOf="@+id/iniciarSesion"
         tools:layout_editor_absoluteX="55dp" />
@@ -30,7 +31,10 @@
         android:id="@+id/botonUnirse"
         android:layout_width="282dp"
         android:layout_height="48dp"
-        android:text="@string/unirse"
+        android:text="Jugar"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/purple_200"
+        android:fontFamily="@font/hlsimple"
         app:layout_constraintTop_toBottomOf="@+id/nombreEquipo"
         tools:layout_editor_absoluteX="55dp" />
 
@@ -39,10 +43,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/iniciar_sesion"
+        android:backgroundTint="@color/purple_200"
+        android:fontFamily="@font/hlsimple"
+        android:text="INICIAR"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/botonUnirse"
-        tools:layout_editor_absoluteX="124dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonUnirse" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

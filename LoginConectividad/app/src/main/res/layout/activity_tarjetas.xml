@@ -16,12 +16,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nueva tarjeta"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/purple_200"
+            android:fontFamily="@font/hlsimple"
             app:background="@color/white"
             app:backgroundTint="@color/black" />
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Editar tarjeta"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/purple_200"
+            android:fontFamily="@font/hlsimple"
             android:id="@+id/modificarTarjeta"
             app:background="@color/white"
             app:backgroundTint="@color/black" />
