@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.example.listeners.onTraerDatosListener;
 import com.example.objetos.Categoria;
+import com.example.objetos.Equipo;
 import com.example.objetos.GameContext;
 import com.example.objetos.Juego;
 import com.example.objetos.Mensaje;
@@ -45,7 +46,7 @@ import java.util.Random;
 public class TraerJuegosActivity extends AppCompatActivity {
     private static final String TAG = "";
     private int cantidadEquipos;
-    private TextView textoCargando, nombreRed, claveRed;
+    private TextView textoCargando, nombreRed, claveRed, cantidadEquiposTextView;
 
     private WifiManager wifiManager;
     private WifiConfiguration currentConfig;
@@ -66,6 +67,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_traer_juegos);
         cantidadEquipos=0;
         textoCargando = findViewById(R.id.textoCargando);
+        cantidadEquiposTextView = findViewById(R.id.cantidadEquipos);
         botonComenzarPartida = findViewById(R.id.botonComenzarPartida);
         nombreRed = findViewById(R.id.nombreRed);
         claveRed = findViewById(R.id.claveRed);
@@ -79,10 +81,12 @@ public class TraerJuegosActivity extends AppCompatActivity {
             public void onClick(View v) {
                 GameContext.setJuego(juego);
                 GameContext.setPartidaActual(juego.getPartidas().get(0));
+                GameContext.setRonda(1);
                 categorias = juego.getPlantilla().getCategorias();
                 ArrayList<HashSet<Tarjeta>> mazos = repartirTarjetas();
                 for (int i=0;i<GameContext.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
                     juego.setMazo(mazos.get(i));
+                    GameContext.getJuego().getEquipos().add(new Equipo(juego.getMazo(),GameContext.getNombresEquipos().get(i)));
                     String juegoSerializado=juego.serializar();
                     ArrayList<String> datos=new ArrayList<>();
                     datos.add(juegoSerializado);
@@ -107,6 +111,9 @@ public class TraerJuegosActivity extends AppCompatActivity {
                     if(GameContext.getHijos().size() >= cantidadEquipos){
                         botonComenzarPartida.setVisibility(View.VISIBLE);
                     }
+//                    else {
+//                        cantidadEquiposTextView.setText(Integer.parseInt((String) cantidadEquiposTextView.getText())+1);
+//                    }
                     break;
             }
         }
@@ -213,6 +220,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
                             juego= new Juego(plantilla);
                             cantidadEquipos=plantilla.getCantEquipos();
                             textoCargando.setVisibility(View.VISIBLE);
+                            cantidadEquiposTextView.setVisibility(View.VISIBLE);
                             nombreRed.setVisibility(View.VISIBLE);
                             claveRed.setVisibility(View.VISIBLE);
                             Intent intent= new Intent();

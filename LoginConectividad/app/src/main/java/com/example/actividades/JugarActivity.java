@@ -30,8 +30,9 @@ public class JugarActivity extends AppCompatActivity  {
     private Juego juego;
     private Partida partida;
     private TextView turno, ronda;
-    private Button botonTirarCarta;
+    private Button botonTirarCarta, botonPasarTurno;
 
+    Context appContext=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -41,7 +42,10 @@ public class JugarActivity extends AppCompatActivity  {
                     turno.setVisibility(View.VISIBLE);
                     break;
                 case "reiniciar":
-
+                    intent=new Intent();
+                    intent.setClass(appContext, this.getClass());
+                    startActivity(intent);
+                    break;
             }
         }
     };
@@ -58,7 +62,8 @@ public class JugarActivity extends AppCompatActivity  {
         juego= GameContext.getJuego();
         partida=GameContext.getPartidaActual();
         ronda=findViewById(R.id.textView2);
-        ronda.setText(GameContext.getRonda());
+        System.out.println("ronda: " +GameContext.getRonda());
+        ronda.setText("Ronda: "+GameContext.getRonda()+"/"+GameContext.getJuego().getPartidas().size());
         System.out.println(GameContext.getHijos().size());
         if (GameContext.getServers().size()==0){
             ArrayList<String> datos=new ArrayList<>();
@@ -68,12 +73,14 @@ public class JugarActivity extends AppCompatActivity  {
             escribir.execute(msg, 0);
         }
         botonTirarCarta=(Button)findViewById(R.id.agarrarCarta);
+        botonPasarTurno=(Button)findViewById(R.id.pasar);
         botonTirarCarta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (GameContext.isEsMiTurno()){
                     ArrayList<String> datos=new ArrayList<>();
                     datos.add(GameContext.getEquipo().getTarjetas().iterator().next().serializar());//falta sacar la carta del mazo
+                    GameContext.getEquipo().getTarjetas().remove(GameContext.getEquipo().getTarjetas().iterator().next());
                     datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
                     Mensaje mensaje=new Mensaje("jugada",datos);
                     String msg=mensaje.serializar();
@@ -81,9 +88,29 @@ public class JugarActivity extends AppCompatActivity  {
                     Write escribir = new Write();
                     escribir.execute(msg, 0);
                     GameContext.setEsMiTurno(false);
+                    turno.setVisibility(View.INVISIBLE);
+                    System.out.println("tarjetas restantes "+GameContext.getEquipo().getTarjetas().size());
                 }
                 else{
-                    System.out.println();//poner un toast que diga no es tu turno
+                    System.out.println("no es tu turno");//poner un toast que diga no es tu turno
+                }
+            }
+        });
+        botonPasarTurno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (GameContext.isEsMiTurno()){
+                    ArrayList<String> datos=new ArrayList<>();
+                    Mensaje mensaje=new Mensaje("pasarTurno",datos);
+                    String msg=mensaje.serializar();
+                    System.out.println("mensaje enviado "+msg);
+                    Write escribir = new Write();
+                    escribir.execute(msg, 0);
+                    GameContext.setEsMiTurno(false);
+                    turno.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    System.out.println("no es tu turno");//poner un toast que diga no es tu turno
                 }
             }
         });

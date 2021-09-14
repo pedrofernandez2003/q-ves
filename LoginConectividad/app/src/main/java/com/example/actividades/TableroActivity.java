@@ -40,7 +40,7 @@ public class TableroActivity extends AppCompatActivity {
         setContentView(R.layout.tablero_creable);
         verCartas = findViewById(R.id.verCartas);
 
-        ArrayList<Casillero> casilleros=GameContext.getPartidaActual().getCasilleros();
+//        ArrayList<Casillero> casilleros=GameContext.getPartidaActual().getCasilleros();
         //ArrayList<Categoria> categorias=GameContext.getJuego().getPlantilla().getCategorias();
         //HashSet<Tarjeta> tarjetasHashSet=GameContext.getEquipo().getTarjetas()
 

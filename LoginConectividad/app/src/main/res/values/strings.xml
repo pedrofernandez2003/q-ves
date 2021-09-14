@@ -73,6 +73,6 @@
         <item>NEGRO</item>
     </string-array>
     <string name="title_activity_cargando">Cargando</string>
+    <string name="cantidadEquipos">0</string>
 
-   
 </resources>

@@ -17,11 +17,12 @@ public class Juego implements Serializable {
         for (int i=0;i<plantilla.getCantPartidas();i++){
             ArrayList<Casillero> casilleros=new ArrayList<>();
             for (int j=0;j<plantilla.getCategorias().size();j++){
-                Casillero casillero=new Casillero(plantilla.getCategorias().get(i));
+                Casillero casillero=new Casillero(plantilla.getCategorias().get(j));
                 casillero.setId(j++);
                 casilleros.add(casillero);
             }
             Partida partida=new Partida(plantilla.getPersonajes().get(i),casilleros,0);
+            System.out.println("cantidad de casilleros: "+casilleros.size());
             this.partidas.add(partida);
         }
         this.equipos=new ArrayList<Equipo>();

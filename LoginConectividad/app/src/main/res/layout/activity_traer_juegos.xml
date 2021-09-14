@@ -38,6 +38,13 @@
         android:text="@string/nombreRed"
         android:visibility="invisible" />
 
+    <TextView
+        android:id="@+id/cantidadEquipos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cantidadEquipos"
+        android:visibility="invisible" />
+
     <Button
         android:id="@+id/botonComenzarPartida"
         android:layout_width="match_parent"
