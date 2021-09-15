@@ -85,12 +85,12 @@ public class JugarActivity extends AppCompatActivity  {
         ronda=findViewById(R.id.textView2);
         casilleros=GameContext.getPartidaActual().getCasilleros();
         categorias=GameContext.getJuego().getPlantilla().getCategorias();
-        tarjetasHashSet=GameContext.getEquipo().getTarjetas();
 
         System.out.println("ronda: " +GameContext.getRonda());
         ronda.setText("Ronda: "+GameContext.getRonda()+"/"+GameContext.getJuego().getPartidas().size());
         System.out.println(GameContext.getHijos().size());
         if (GameContext.getServers().size()==0){
+            tarjetasHashSet=GameContext.getEquipo().getTarjetas();
             ArrayList<String> datos=new ArrayList<>();
             Mensaje mensaje=new Mensaje("jugarListo",datos);
             String msg=mensaje.serializar();
@@ -198,6 +198,23 @@ public class JugarActivity extends AppCompatActivity  {
                             @Override
                             public void onClick(View view) {
                                 insertarTarjetaEnTablero();
+                                if (GameContext.isEsMiTurno()){
+                                    ArrayList<String> datos=new ArrayList<>();
+                                    datos.add(tarjetaElegida.serializar());//falta sacar la carta del mazo
+                                    GameContext.getEquipo().getTarjetas().remove(tarjetaElegida);
+                                    datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+                                    Mensaje mensaje=new Mensaje("jugada",datos);
+                                    String msg=mensaje.serializar();
+                                    System.out.println("mensaje enviado "+msg);
+                                    Write escribir = new Write();
+                                    escribir.execute(msg, 0);
+                                    GameContext.setEsMiTurno(false);
+                                    turno.setVisibility(View.INVISIBLE);
+                                    System.out.println("tarjetas restantes "+GameContext.getEquipo().getTarjetas().size());
+                                }
+                                else{
+                                    System.out.println("no es tu turno");//poner un toast que diga no es tu turno
+                                }
                                 a.dismiss();
                             }
                         });
@@ -435,6 +452,8 @@ public class JugarActivity extends AppCompatActivity  {
 
             TextView espacioTexto = espaciosTextos.get(i);
             espacioTexto.setText(nombre);
+            GameContext.getJuego().getPartidas().get(GameContext.getRonda()).getCasilleros().get(i).setId(espacioCarta.getId());
+
 
         }
     }
