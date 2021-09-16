@@ -103,6 +103,7 @@ public class ServicioJuego extends Service {
                                             } catch (JsonSyntaxException e) {
                                                 e.printStackTrace();
                                             }
+                                            GameContext.setTarjetaElegida(tarjeta);
                                             Intent intent= new Intent();
                                             intent.setAction("actualizar");
                                             contexto.sendBroadcast(intent);
@@ -177,6 +178,10 @@ public class ServicioJuego extends Service {
                                             else{
                                                 GameContext.getPartidaActual().setTurno(GameContext.getPartidaActual().getTurno()+1);//no se si esta bien aca
                                             }
+                                            GameContext.setTarjetaElegida(tarjeta);
+                                            Intent intent= new Intent();
+                                            intent.setAction("actualizar");
+                                            contexto.sendBroadcast(intent);
                                             for (int i=0;i<GameContext.getHijos().size();i++){
                                                 if(!GameContext.getNombresEquipos().get(i).equals(nombreEquipo)){ //para que no se lo mande al que jugo
                                                     ArrayList<String> datos=new ArrayList<>();
@@ -193,7 +198,7 @@ public class ServicioJuego extends Service {
                                             System.out.println("casilleros "+GameContext.getPartidaActual().getCasilleros().size());
                                             for (Casillero casillero:GameContext.getPartidaActual().getCasilleros()) {
                                                 if(casillero.getTarjeta()==null){
-                                                    casillero.setTarjeta(tarjeta);
+//                                                    casillero.setTarjeta(tarjeta);
                                                     terminarPartida=false;
                                                     break;
                                                 }

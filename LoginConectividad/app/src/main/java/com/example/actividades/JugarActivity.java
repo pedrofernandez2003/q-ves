@@ -458,9 +458,11 @@ public class JugarActivity extends AppCompatActivity  {
 
             TextView espacioTexto = espaciosTextos.get(i);
             espacioTexto.setText(nombre);
-            GameContext.getJuego().getPartidas().get(GameContext.getRonda()).getCasilleros().get(i).setId(espacioCarta.getId());
-
-
+            System.out.println("cambie el id: "+espacioCarta.getId());
+            System.out.println("ronda: "+GameContext.getRonda());
+            System.out.println("categoria: "+categorias.get(i).getNombre());
+            System.out.println("casillero: "+GameContext.getJuego().getPartidas().get(GameContext.getRonda()).getCasilleros().get(i).getCategoria().getNombre());
+            GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().get(i).setId(espacioCarta.getId());
         }
     }
 
