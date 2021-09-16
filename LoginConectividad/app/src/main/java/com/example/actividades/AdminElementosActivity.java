@@ -1,6 +1,7 @@
 package com.example.actividades;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +15,8 @@ public class AdminElementosActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrar_elementos);
-        Button tarjetasYCategorias = (Button) findViewById(R.id.tarjetasYCategorias);
-        Button personajes = (Button) findViewById(R.id.personajes);
+        CardView tarjetasYCategorias = (CardView) findViewById(R.id.tarjetasYCategorias);
+        CardView personajes = (CardView) findViewById(R.id.personajes);
 
         tarjetasYCategorias.setOnClickListener(new View.OnClickListener() {
             @Override
