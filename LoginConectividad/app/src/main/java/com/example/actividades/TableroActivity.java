@@ -164,6 +164,18 @@ public class TableroActivity extends AppCompatActivity {
             if (casillero.getTarjeta() == null && casillero.getCategoria().getNombre().equals(tarjetaElegida.getCategoria())){
                 casillero.setTarjeta(tarjetaElegida);
 
+
+                System.out.println(findViewById(R.id.cardView).getId());
+                System.out.println(findViewById(R.id.cardView2).getId());
+                System.out.println(findViewById(R.id.cardView3).getId());
+                System.out.println(findViewById(R.id.cardView4).getId());
+                System.out.println(findViewById(R.id.cardView5).getId());
+                System.out.println(findViewById(R.id.cardView6).getId());
+                System.out.println(findViewById(R.id.cardView7).getId());
+                System.out.println(findViewById(R.id.cardView8).getId());
+                System.out.println(findViewById(R.id.cardView9).getId());
+                System.out.println(findViewById(R.id.cardView10).getId());
+
                 CardView prueba= (CardView) findViewById(R.id.cardView2);//casillero.getId()
                 prueba.removeAllViews();
 

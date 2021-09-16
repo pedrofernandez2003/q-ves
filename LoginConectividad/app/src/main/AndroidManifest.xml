@@ -62,10 +62,6 @@
             android:screenOrientation="landscape">
         </activity>
         <activity android:name="com.example.actividades.SolicitarUbicacion">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name="com.example.actividades.TraerJuegosActivity">
         </activity>
@@ -73,6 +69,10 @@
         <activity android:name=".actividades.TableroActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
 

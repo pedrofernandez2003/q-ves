@@ -51,7 +51,7 @@ public class JugarActivity extends AppCompatActivity  {
     private TextView turno, ronda;
     private Button botonTirarCarta, botonPasarTurno;
     private LinearLayout verCartas;
-    private Tarjeta tarjetaElegida;
+    //private Tarjeta tarjetaElegida;
 
     Context appContext=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -67,6 +67,10 @@ public class JugarActivity extends AppCompatActivity  {
                     intent.setClass(appContext, this.getClass());
                     startActivity(intent);
                     break;
+
+                case "actualizar":
+                    insertarTarjetaEnTablero();
+                    break;
             }
         }
     };
@@ -79,6 +83,7 @@ public class JugarActivity extends AppCompatActivity  {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("turno");
         intentFilter.addAction("reiniciar");//ver si sirve mas adelante
+        intentFilter.addAction("actualizar");//ver si sirve mas adelante
         registerReceiver(broadcastReceiver,intentFilter);
         juego= GameContext.getJuego();
         partida=GameContext.getPartidaActual();
@@ -177,7 +182,7 @@ public class JugarActivity extends AppCompatActivity  {
                     carta.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            tarjetaElegida=tarjetaARevisar;
+                            GameContext.setTarjetaElegida(tarjetaARevisar);
                             System.out.println(tarjetaARevisar.getContenido());
                             //Drawable aaa=findViewById(R.drawable.border);
                             //carta.setBackground(aaa);
@@ -197,11 +202,12 @@ public class JugarActivity extends AppCompatActivity  {
                         b.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                insertarTarjetaEnTablero();
                                 if (GameContext.isEsMiTurno()){
+                                    insertarTarjetaEnTablero();
+
                                     ArrayList<String> datos=new ArrayList<>();
-                                    datos.add(tarjetaElegida.serializar());//falta sacar la carta del mazo
-                                    GameContext.getEquipo().getTarjetas().remove(tarjetaElegida);
+                                    datos.add(GameContext.getTarjetaElegida().serializar());//falta sacar la carta del mazo
+                                    GameContext.getEquipo().getTarjetas().remove(GameContext.getTarjetaElegida());
                                     datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
                                     Mensaje mensaje=new Mensaje("jugada",datos);
                                     String msg=mensaje.serializar();
@@ -236,10 +242,10 @@ public class JugarActivity extends AppCompatActivity  {
 
 
         for (Casillero casillero : casilleros) {
-            if (casillero.getTarjeta() == null && casillero.getCategoria().getNombre().equals(tarjetaElegida.getCategoria())) {
-                casillero.setTarjeta(tarjetaElegida);
+            if (casillero.getTarjeta() == null && casillero.getCategoria().getNombre().equals(GameContext.getTarjetaElegida().getCategoria())) {
+                casillero.setTarjeta(GameContext.getTarjetaElegida());
 
-                CardView prueba = (CardView) findViewById(R.id.cardView2);//casillero.getId()
+                CardView prueba = (CardView) findViewById(casillero.getId());//casillero.getId()
                 prueba.removeAllViews();
 
                 DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -250,8 +256,8 @@ public class JugarActivity extends AppCompatActivity  {
                 int marginCarta = width / 100;
                 int color = casillero.getCategoria().getColor().getCodigo();
                 String nombreCategoria = casillero.getCategoria().getNombre();
-                String tarjetaContenido = tarjetaElegida.getContenido();
-                String tarjetaYapa = tarjetaElegida.getYapa();
+                String tarjetaContenido = GameContext.getTarjetaElegida().getContenido();
+                String tarjetaYapa = GameContext.getTarjetaElegida().getYapa();
 
                 CardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjetaContenido, tarjetaYapa);
 

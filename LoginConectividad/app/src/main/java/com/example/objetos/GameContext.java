@@ -20,6 +20,7 @@ public class GameContext extends Thread {
     private static boolean esMiTurno;
     private static HashMap<String, Integer> resultados=new HashMap<>();
     private static int cantMensajesRecibidos=0; //los jugadores empiezan a mandar la cantidad de cartas que les quedan
+    private static Tarjeta tarjetaElegida;
 
     private GameContext(){}
     public static GameContext getGameContext() {
@@ -110,5 +111,13 @@ public class GameContext extends Thread {
 
     public static void setNombresEquipos(ArrayList<String> nombresEquipos) {
         GameContext.nombresEquipos = nombresEquipos;
+    }
+
+    public static Tarjeta getTarjetaElegida() {
+        return tarjetaElegida;
+    }
+
+    public static void setTarjetaElegida(Tarjeta tarjetaElegida) {
+        GameContext.tarjetaElegida = tarjetaElegida;
     }
 }

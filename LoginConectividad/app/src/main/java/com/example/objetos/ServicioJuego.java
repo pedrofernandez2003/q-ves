@@ -103,12 +103,15 @@ public class ServicioJuego extends Service {
                                             } catch (JsonSyntaxException e) {
                                                 e.printStackTrace();
                                             }
+                                            Intent intent= new Intent();
+                                            intent.setAction("actualizar");
+                                            contexto.sendBroadcast(intent);
                                             System.out.println(mapDatos.get("idJugador")+" tiro esta carta "+tarjeta.getContenido());
                                             break;
 
                                         case "partida_nueva":
                                             GameContext.setRonda(GameContext.getRonda()+1);
-                                            Intent intent= new Intent();
+                                            intent= new Intent();
                                             intent.setAction("reiniciar");
                                             contexto.sendBroadcast(intent);
                                             break;
