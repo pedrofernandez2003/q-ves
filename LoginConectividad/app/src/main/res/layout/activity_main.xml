@@ -12,10 +12,11 @@
         android:id="@+id/imageView2"
         android:layout_width="400dp"
         android:layout_height="298dp"
+        android:src="@drawable/logoqves"
         app:layout_constraintBottom_toTopOf="@+id/nombreEquipo"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="5dp"
-        android:src="@drawable/logoqves" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/nombreEquipo"
