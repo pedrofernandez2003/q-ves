@@ -58,7 +58,6 @@ public class ServicioJuego extends Service {
                                             try {
                                                 Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
                                                 GameContext.setJuego(juego);
-                                                GameContext.setPartidaActual(juego.getPartidas().get(0));
                                                 GameContext.setRonda(1);
                                                 Equipo equipo= new Equipo(juego.getMazo(),GameContext.getNombresEquipos().get(0));
                                                 GameContext.setEquipo(equipo);
@@ -155,7 +154,7 @@ public class ServicioJuego extends Service {
                                         case "jugarListo":
                                             for (int i=0;i<GameContext.getHijos().size();i++) {
                                                 ArrayList<String> datos=new ArrayList<>();
-                                                datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(GameContext.getPartidaActual().getTurno())+"\"}");
+                                                datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno())+"\"}");
                                                 mensaje=new Mensaje("turno",datos);
                                                 String msg=mensaje.serializar();
                                                 Write escribir = new Write();
@@ -172,11 +171,11 @@ public class ServicioJuego extends Service {
                                                 e.printStackTrace();
                                             }
                                             String nombreEquipo= mapDatos.get("idJugador");
-                                            if (GameContext.getPartidaActual().getTurno()==GameContext.getJuego().getEquipos().size()-1){
-                                                GameContext.getPartidaActual().setTurno(0);
+                                            if (GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno()==GameContext.getJuego().getEquipos().size()-1){
+                                                GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).setTurno(0);
                                             }
                                             else{
-                                                GameContext.getPartidaActual().setTurno(GameContext.getPartidaActual().getTurno()+1);//no se si esta bien aca
+                                                GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).setTurno(GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno()+1);//no se si esta bien aca
                                             }
                                             GameContext.setTarjetaElegida(tarjeta);
                                             Intent intent= new Intent();
@@ -195,10 +194,9 @@ public class ServicioJuego extends Service {
                                                 }
                                             }
                                             boolean terminarPartida=true;
-                                            System.out.println("casilleros "+GameContext.getPartidaActual().getCasilleros().size());
-                                            for (Casillero casillero:GameContext.getPartidaActual().getCasilleros()) {
+                                            System.out.println("casilleros "+GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().size());
+                                            for (Casillero casillero:GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros()) {
                                                 if(casillero.getTarjeta()==null){
-//                                                    casillero.setTarjeta(tarjeta);
                                                     terminarPartida=false;
                                                     break;
                                                 }
@@ -206,7 +204,7 @@ public class ServicioJuego extends Service {
                                             if (!terminarPartida){
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {
                                                     ArrayList<String> datos=new ArrayList<>();
-                                                    datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(GameContext.getPartidaActual().getTurno())+"\"}");
+                                                    datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno())+"\"}");
                                                     mensaje=new Mensaje("turno",datos);
                                                     String msg=mensaje.serializar();
                                                     Write escribir = new Write();
@@ -223,6 +221,9 @@ public class ServicioJuego extends Service {
                                                 }
                                                 System.out.println("termina la ronda");
                                                 GameContext.setRonda(GameContext.getRonda()+1);
+                                                intent= new Intent();
+                                                intent.setAction("reiniciar");
+                                                contexto.sendBroadcast(intent);
                                             }
                                             else{
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {
@@ -250,49 +251,49 @@ public class ServicioJuego extends Service {
                                             break;
 
                                         case "pasarTurno":
-                                            if (GameContext.getPartidaActual().getTurno()==GameContext.getJuego().getEquipos().size()-1){
-                                                GameContext.getPartidaActual().setTurno(0);
+                                            if (GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno()==GameContext.getJuego().getEquipos().size()-1){
+                                                GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).setTurno(0);
                                             }
                                             else{
-                                                GameContext.getPartidaActual().setTurno(GameContext.getPartidaActual().getTurno()+1);//no se si esta bien aca
+                                                GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).setTurno(GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno()+1);//no se si esta bien aca
                                             }
                                             //ver esto
-                                            terminarPartida=true;
-                                            for (Casillero casillero:GameContext.getPartidaActual().getCasilleros()) {
-                                                if(casillero.getTarjeta()==null){
-                                                    terminarPartida=false;
-                                                    break;
-                                                }
-                                            }
-                                            if (!terminarPartida){
+//                                            terminarPartida=true;
+//                                            for (Casillero casillero:GameContext.getPartidaActual().getCasilleros()) {
+//                                                if(casillero.getTarjeta()==null){
+//                                                    terminarPartida=false;
+//                                                    break;
+//                                                }
+//                                            }
+//                                            if (!terminarPartida){
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {
                                                     ArrayList<String> datos=new ArrayList<>();
-                                                    datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(GameContext.getPartidaActual().getTurno())+"\"}");
+                                                    datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno())+"\"}");
                                                     mensaje=new Mensaje("turno",datos);
                                                     String msg=mensaje.serializar();
                                                     Write escribir = new Write();
                                                     escribir.execute(msg, i);
                                                 }
-                                            }
-                                            else if (GameContext.getRonda()!=GameContext.getJuego().getPartidas().size()){
-                                                for (int i=0;i<GameContext.getHijos().size();i++) {
-                                                    ArrayList<String> datos=new ArrayList<>();
-                                                    mensaje=new Mensaje("partida_nueva",datos);
-                                                    String msg=mensaje.serializar();
-                                                    Write escribir = new Write();
-                                                    escribir.execute(msg, i);
-                                                }
-                                                GameContext.setRonda(GameContext.getRonda()+1);
-                                            }
-                                            else{
-                                                for (int i=0;i<GameContext.getHijos().size();i++) {
-                                                    ArrayList<String> datos=new ArrayList<>();
-                                                    mensaje=new Mensaje("terminar_juego",datos);
-                                                    String msg=mensaje.serializar();
-                                                    Write escribir = new Write();
-                                                    escribir.execute(msg, i);
-                                                }
-                                            }
+//                                            }
+//                                            else if (GameContext.getRonda()!=GameContext.getJuego().getPartidas().size()){
+//                                                for (int i=0;i<GameContext.getHijos().size();i++) {
+//                                                    ArrayList<String> datos=new ArrayList<>();
+//                                                    mensaje=new Mensaje("partida_nueva",datos);
+//                                                    String msg=mensaje.serializar();
+//                                                    Write escribir = new Write();
+//                                                    escribir.execute(msg, i);
+//                                                }
+//                                                GameContext.setRonda(GameContext.getRonda()+1);
+//                                            }
+//                                            else{
+//                                                for (int i=0;i<GameContext.getHijos().size();i++) {
+//                                                    ArrayList<String> datos=new ArrayList<>();
+//                                                    mensaje=new Mensaje("terminar_juego",datos);
+//                                                    String msg=mensaje.serializar();
+//                                                    Write escribir = new Write();
+//                                                    escribir.execute(msg, i);
+//                                                }
+//                                            }
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();

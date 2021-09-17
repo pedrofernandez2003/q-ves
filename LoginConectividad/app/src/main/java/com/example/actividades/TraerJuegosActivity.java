@@ -80,7 +80,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 GameContext.setJuego(juego);
-                GameContext.setPartidaActual(juego.getPartidas().get(0));
                 GameContext.setRonda(1);
                 categorias = juego.getPlantilla().getCategorias();
                 ArrayList<HashSet<Tarjeta>> mazos = repartirTarjetas();
@@ -227,7 +226,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
                             intent.setAction("crear server");
                             appContext.sendBroadcast(intent);
                             GameContext.setServer(server);
-                            GameContext.getServers().add(server);
+                            System.out.println("seteo el server");
                         }
                     });
                 }

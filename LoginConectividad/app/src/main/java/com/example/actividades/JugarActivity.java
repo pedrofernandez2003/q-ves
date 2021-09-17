@@ -52,7 +52,6 @@ public class JugarActivity extends AppCompatActivity  {
     private TextView turno, ronda;
     private Button botonTirarCarta, botonPasarTurno;
     private LinearLayout verCartas;
-    //private Tarjeta tarjetaElegida;
 
     Context appContext=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -75,8 +74,7 @@ public class JugarActivity extends AppCompatActivity  {
 
                     break;
                 case "reiniciar":
-                    intent=new Intent();
-                    intent.setClass(appContext, this.getClass());
+                    intent=new Intent(appContext,JugarActivity.class);
                     startActivity(intent);
                     break;
 
@@ -98,9 +96,9 @@ public class JugarActivity extends AppCompatActivity  {
         intentFilter.addAction("actualizar");//ver si sirve mas adelante
         registerReceiver(broadcastReceiver,intentFilter);
         juego= GameContext.getJuego();
-        partida=GameContext.getPartidaActual();
+        partida=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1);
         ronda=findViewById(R.id.textView2);
-        casilleros=GameContext.getPartidaActual().getCasilleros();
+        casilleros=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros();
         categorias=GameContext.getJuego().getPlantilla().getCategorias();
 
         System.out.println("ronda: " +GameContext.getRonda());
@@ -553,5 +551,10 @@ public class JugarActivity extends AppCompatActivity  {
         espaciosTexto.add(findViewById(R.id.icon_name_9));
         espaciosTexto.add(findViewById(R.id.icon_name_10));
         return espaciosTexto;
+    }
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(broadcastReceiver);
+        super.onDestroy();
     }
 }

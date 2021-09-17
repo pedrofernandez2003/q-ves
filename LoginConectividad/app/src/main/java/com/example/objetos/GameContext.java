@@ -14,7 +14,7 @@ public class GameContext extends Thread {
     private static ArrayList<SendReceive> hijos=new ArrayList<>();
     private static ArrayList<String> nombresEquipos=new ArrayList<>();
     private static Juego juego;
-    private static Partida partidaActual;
+//    private static Partida partidaActual;
     private static int ronda;
     private static Equipo equipo;
     private static boolean esMiTurno;
@@ -46,9 +46,6 @@ public class GameContext extends Thread {
         return esMiTurno;
     }
 
-    public static void setPartidaActual(Partida partidaActual) {
-        GameContext.partidaActual = partidaActual;
-    }
 
     public static int getRonda() {
         return ronda;
@@ -62,9 +59,6 @@ public class GameContext extends Thread {
         GameContext.esMiTurno = esMiTurno;
     }
 
-    public static Partida getPartidaActual() {
-        return partidaActual;
-    }
 
     public static Equipo getEquipo() {
         return equipo;
