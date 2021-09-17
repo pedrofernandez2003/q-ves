@@ -18,6 +18,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/hlsimple"
             android:text="@string/ingrese_el_mail_que_uso_para_registrarse">
         </TextView>
 
@@ -34,10 +35,14 @@
             android:id="@+id/confirmar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple_200"
+            android:fontFamily="@font/hlsimple"
             android:text="@string/confirmar" />
 
         <Button
             android:id="@+id/cancelar"
+            android:backgroundTint="@color/purple_200"
+            android:fontFamily="@font/hlsimple"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/cancelar" />
