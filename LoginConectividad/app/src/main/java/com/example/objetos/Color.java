@@ -2,8 +2,8 @@ package com.example.objetos;
 
 
 public  enum Color {
-    AMARILLO(0xfffed713), VERDE(0xff008000 ), CELESTE(0xff13c8f5), TURQUESA(0xff67e2aa),
-    AZUL(0xff0f3bee),  VIOLETA(0xff3D00FF),GRIS(0xff808080), ROJO(0xffC21807), ROSA(0xffE63C8E), NARANJA(0xffF04A00),
+    AMARILLO(0xfffed713), VERDE(0xff8dc63f ), CELESTE(0xff00aeef), TURQUESA(0xff00a79e),
+    AZUL(0xff1c75bc),  VIOLETA(0xff92278f),GRIS(0xff808080), ROJO(0xffed1d24), ROSA(0xffee2a7b), NARANJA(0xffF7941E),
     NEGRO(0xff1b1bbf), AZULOSCURO(0xff262262);
 
 //    private String nombre;
