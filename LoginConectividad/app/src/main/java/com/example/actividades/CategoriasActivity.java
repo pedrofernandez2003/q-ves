@@ -79,7 +79,7 @@ public class CategoriasActivity extends AppCompatActivity {
         CardView cardView = new CardView(this);
         LayoutParams params = new LayoutParams(width, height);
         params.setMargins(margin, margin, margin, margin);
-        cardView.setRadius(30f);
+        cardView.setRadius(30.0f);
         cardView.setBackgroundColor(color);
 
         cardView.setLayoutParams(params);
@@ -197,12 +197,9 @@ public class CategoriasActivity extends AppCompatActivity {
                     LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
                     coloresElegidos.add(categoria.getColor().toString());
-                    Button button = new Button(context);
-                    button.setLayoutParams(lp);
-                    button.setText(categoria.getNombre()+" "+categoria.getCantidadTarjetas());
-                    button.setBackgroundColor(categoria.getColor().getCodigo());
-                    llBotonera.addView(crearCartaCategoria(heightCarta, widthCarta, marginCarta, categoria.getNombre()+" "+categoria.getCantidadTarjetas(), categoria.getColor().getCodigo()));
-                    button.setOnClickListener(new View.OnClickListener() {
+                    CardView cartaCategoria = crearCartaCategoria(heightCarta, widthCarta, marginCarta, categoria.getNombre()+" "+categoria.getCantidadTarjetas(), categoria.getColor().getCodigo());
+                    llBotonera.addView(cartaCategoria);
+                    cartaCategoria.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (!ModoModificar){
