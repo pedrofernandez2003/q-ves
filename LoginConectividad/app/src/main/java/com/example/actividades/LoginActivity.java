@@ -116,9 +116,8 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
 
                                         manejarUsuario(firebaseAuth.getCurrentUser());
-
-                                        // Intent i = new Intent(LoginActivity.this, AdministradorActivity.class);
-                                        // startActivity(i);
+                                        Intent i = new Intent(LoginActivity.this, AdministradorActivity.class);
+                                        startActivity(i);
                                     } else {
                                         Toast.makeText(LoginActivity.this, "Todo mal", Toast.LENGTH_SHORT).show();
                                     }
