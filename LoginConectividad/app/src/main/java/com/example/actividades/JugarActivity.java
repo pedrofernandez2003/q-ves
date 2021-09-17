@@ -25,6 +25,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.objetos.Casillero;
 import com.example.objetos.Categoria;
@@ -59,8 +60,19 @@ public class JugarActivity extends AppCompatActivity  {
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()){
                 case "turno":
-                    turno = findViewById(R.id.turno);
-                    turno.setVisibility(View.VISIBLE);
+                    //turno = findViewById(R.id.turno);
+                    //turno.setVisibility(View.VISIBLE);
+
+                    LayoutInflater inflater=getLayoutInflater();
+                    View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                    TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                    text.setText("Es tu turno!");
+                    Toast toast= new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.BOTTOM,0,0);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(Layout);
+                    toast.show();
+
                     break;
                 case "reiniciar":
                     intent=new Intent();
@@ -119,10 +131,20 @@ public class JugarActivity extends AppCompatActivity  {
                     Write escribir = new Write();
                     escribir.execute(msg, 0);
                     GameContext.setEsMiTurno(false);
-                    turno.setVisibility(View.INVISIBLE);
+                    //turno.setVisibility(View.INVISIBLE);
                     System.out.println("tarjetas restantes "+GameContext.getEquipo().getTarjetas().size());
                 }
                 else{
+                    LayoutInflater inflater=getLayoutInflater();
+                    View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                    TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                    text.setText("No es tu turno");
+                    Toast toast= new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.BOTTOM,0,0);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(Layout);
+                    toast.show();
+
                     System.out.println("no es tu turno");//poner un toast que diga no es tu turno
                 }
             }
@@ -138,9 +160,19 @@ public class JugarActivity extends AppCompatActivity  {
                     Write escribir = new Write();
                     escribir.execute(msg, 0);
                     GameContext.setEsMiTurno(false);
-                    turno.setVisibility(View.INVISIBLE);
+                    //turno.setVisibility(View.INVISIBLE);
                 }
                 else{
+                    LayoutInflater inflater=getLayoutInflater();
+                    View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                    TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                    text.setText("No es tu turno");
+                    Toast toast= new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.BOTTOM,0,0);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(Layout);
+                    toast.show();
+
                     System.out.println("no es tu turno");//poner un toast que diga no es tu turno
                 }
             }
@@ -214,15 +246,35 @@ public class JugarActivity extends AppCompatActivity  {
                                         Write escribir = new Write();
                                         escribir.execute(msg, 0);
                                         GameContext.setEsMiTurno(false);
-                                        turno.setVisibility(View.INVISIBLE);
+                                        //turno.setVisibility(View.INVISIBLE);
                                         System.out.println("tarjetas restantes "+GameContext.getEquipo().getTarjetas().size());
                                     }
                                     else{
                                         System.out.println("Casillero ocupado");
+                                        LayoutInflater inflater=getLayoutInflater();
+                                        View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                                        TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                                        text.setText("Casillero ocupado");
+                                        Toast toast= new Toast(getApplicationContext());
+                                        toast.setGravity(Gravity.BOTTOM,0,0);
+                                        toast.setDuration(Toast.LENGTH_LONG);
+                                        toast.setView(Layout);
+                                        toast.show();
                                     }
 
                                 }
                                 else{
+
+                                    LayoutInflater inflater=getLayoutInflater();
+                                    View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                                    TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                                    text.setText("No es tu turno");
+                                    Toast toast= new Toast(getApplicationContext());
+                                    toast.setGravity(Gravity.BOTTOM,0,0);
+                                    toast.setDuration(Toast.LENGTH_LONG);
+                                    toast.setView(Layout);
+                                    toast.show();
+
                                     System.out.println("no es tu turno");//poner un toast que diga no es tu turno
                                 }
                                 a.dismiss();

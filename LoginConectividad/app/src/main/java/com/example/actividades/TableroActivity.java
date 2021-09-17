@@ -2,7 +2,6 @@ package com.example.actividades;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -14,6 +13,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -24,7 +24,6 @@ import androidx.core.view.ViewCompat;
 
 import com.example.objetos.Casillero;
 import com.example.objetos.Categoria;
-import com.example.objetos.GameContext;
 import com.example.objetos.Tarjeta;
 import com.example.R;
 
@@ -85,6 +84,7 @@ public class TableroActivity extends AppCompatActivity {
         verCartas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
                 LayoutInflater inflater = LayoutInflater.from(TableroActivity.this);
                 View dialog_layout = inflater.inflate(R.layout.ver_cartas, null);
