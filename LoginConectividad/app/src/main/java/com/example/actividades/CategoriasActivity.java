@@ -4,19 +4,27 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
+
 import com.example.R;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.listeners.onEliminarListener;
 import com.example.listeners.onInsertarListener;
@@ -62,6 +70,32 @@ public class CategoriasActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+    }
+
+    public CardView crearCartaCategoria(int height, int width, int margin, String nombreCategoria, int color){
+
+        CardView cardView = new CardView(this);
+        LayoutParams params = new LayoutParams(width, height);
+        params.setMargins(margin, margin, margin, margin);
+        cardView.setRadius(30f);
+        cardView.setBackgroundColor(color);
+
+        cardView.setLayoutParams(params);
+
+        TextView texto = new TextView(this);
+        params = new LayoutParams(width, height);
+        texto.setTextSize(height/8);
+        texto.setGravity(Gravity.CENTER);
+        texto.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
+        texto.setText(nombreCategoria);
+
+        cardView.addView(texto);
+        return cardView;
+
+
+
     }
 
     public void aniadirCategoria(ArrayList<String> coloresYaSeleccionados) {
@@ -147,11 +181,19 @@ public class CategoriasActivity extends AppCompatActivity {
 
     private ArrayList<String> traerCategorias(Context context)  {
         ArrayList<String> coloresElegidos = new ArrayList<>();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int widthCarta = (width*4)/5;
+        int heightCarta = (widthCarta*9)/20;
+        int marginCarta = width/50;
         DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
                 for (Object CategoriaObject:datos) {
                     CategoriaSinTarjetas categoria= (CategoriaSinTarjetas) CategoriaObject;
+                    System.out.println(categoria.getNombre());
+                    System.out.println(categoria.getColor());
                     LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
                     coloresElegidos.add(categoria.getColor().toString());
@@ -159,7 +201,7 @@ public class CategoriasActivity extends AppCompatActivity {
                     button.setLayoutParams(lp);
                     button.setText(categoria.getNombre()+" "+categoria.getCantidadTarjetas());
                     button.setBackgroundColor(categoria.getColor().getCodigo());
-                    llBotonera.addView(button);
+                    llBotonera.addView(crearCartaCategoria(heightCarta, widthCarta, marginCarta, categoria.getNombre()+" "+categoria.getCantidadTarjetas(), categoria.getColor().getCodigo()));
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
