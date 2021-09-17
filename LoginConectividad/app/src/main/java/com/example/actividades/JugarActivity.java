@@ -203,20 +203,24 @@ public class JugarActivity extends AppCompatActivity  {
                             @Override
                             public void onClick(View view) {
                                 if (GameContext.isEsMiTurno()){
-                                    insertarTarjetaEnTablero();
+                                    if (insertarTarjetaEnTablero()){
+                                        ArrayList<String> datos=new ArrayList<>();
+                                        datos.add(GameContext.getTarjetaElegida().serializar());//falta sacar la carta del mazo
+                                        GameContext.getEquipo().getTarjetas().remove(GameContext.getTarjetaElegida());
+                                        datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+                                        Mensaje mensaje=new Mensaje("jugada",datos);
+                                        String msg=mensaje.serializar();
+                                        System.out.println("mensaje enviado "+msg);
+                                        Write escribir = new Write();
+                                        escribir.execute(msg, 0);
+                                        GameContext.setEsMiTurno(false);
+                                        turno.setVisibility(View.INVISIBLE);
+                                        System.out.println("tarjetas restantes "+GameContext.getEquipo().getTarjetas().size());
+                                    }
+                                    else{
+                                        System.out.println("Casillero ocupado");
+                                    }
 
-                                    ArrayList<String> datos=new ArrayList<>();
-                                    datos.add(GameContext.getTarjetaElegida().serializar());//falta sacar la carta del mazo
-                                    GameContext.getEquipo().getTarjetas().remove(GameContext.getTarjetaElegida());
-                                    datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
-                                    Mensaje mensaje=new Mensaje("jugada",datos);
-                                    String msg=mensaje.serializar();
-                                    System.out.println("mensaje enviado "+msg);
-                                    Write escribir = new Write();
-                                    escribir.execute(msg, 0);
-                                    GameContext.setEsMiTurno(false);
-                                    turno.setVisibility(View.INVISIBLE);
-                                    System.out.println("tarjetas restantes "+GameContext.getEquipo().getTarjetas().size());
                                 }
                                 else{
                                     System.out.println("no es tu turno");//poner un toast que diga no es tu turno
@@ -236,16 +240,17 @@ public class JugarActivity extends AppCompatActivity  {
         });
     }
 
-    public void insertarTarjetaEnTablero() {
+    public boolean insertarTarjetaEnTablero() {
         // IDEA: deberia buscar entre todos los text para ver cual corresponde
         // con la categoria y cambiar algo como para decir "Estoy aca :D"
 
+        boolean insertoLaTarjeta=false;
 
         for (Casillero casillero : casilleros) {
             if (casillero.getTarjeta() == null && casillero.getCategoria().getNombre().equals(GameContext.getTarjetaElegida().getCategoria())) {
                 casillero.setTarjeta(GameContext.getTarjetaElegida());
 
-                CardView prueba = (CardView) findViewById(casillero.getId());//casillero.getId()
+                CardView prueba = (CardView) findViewById(casillero.getId());
                 prueba.removeAllViews();
 
                 DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -263,10 +268,12 @@ public class JugarActivity extends AppCompatActivity  {
 
                 prueba.addView(carta);
 
-            } else {
+                insertoLaTarjeta=true;
 
             }
+
         }
+        return insertoLaTarjeta;
     }
 
         public CardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
