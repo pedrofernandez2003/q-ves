@@ -225,8 +225,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
                             Intent intent= new Intent();
                             intent.setAction("crear server");
                             appContext.sendBroadcast(intent);
-                            GameContext.setServer(server);
-                            System.out.println("seteo el server");
                         }
                     });
                 }

@@ -104,7 +104,7 @@ public class JugarActivity extends AppCompatActivity  {
         System.out.println("ronda: " +GameContext.getRonda());
         ronda.setText("Ronda: "+GameContext.getRonda()+"/"+GameContext.getJuego().getPartidas().size());
         System.out.println(GameContext.getHijos().size());
-        if (GameContext.getServers().size()==0){
+        if (GameContext.getServer()==null){//para que solo lo hagan los equipos, esta bien?
             tarjetasHashSet=GameContext.getEquipo().getTarjetas();
             ArrayList<String> datos=new ArrayList<>();
             Mensaje mensaje=new Mensaje("jugarListo",datos);
@@ -281,11 +281,6 @@ public class JugarActivity extends AppCompatActivity  {
                     }
                 });
                 a.show();
-
-
-
-
-
             }
         });
     }

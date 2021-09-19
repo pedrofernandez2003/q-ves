@@ -136,6 +136,7 @@ public class ServicioJuego extends Service {
                 case "crear server":
                     server= new ThreadedEchoServer();
                     server.start();
+                    GameContext.setServer(server);
                     server.callbackMensaje=new conectarCallback() {
                         @Override
                         public void conectar(int estado, String buffer) {

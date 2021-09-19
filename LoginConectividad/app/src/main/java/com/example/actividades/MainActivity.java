@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             switch (intent.getAction()){
                 case "comenzar":
                     System.out.println("comienza");
+                    GameContext.setServer(null);//creo que no hace falta igual
                     empezarJuego();
                     break;
                 case "turno":
