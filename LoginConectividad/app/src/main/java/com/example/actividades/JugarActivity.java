@@ -84,6 +84,7 @@ public class JugarActivity extends AppCompatActivity  {
                     break;
 
                 case "ganador":
+                    System.out.println("llega el ganador");
                     LayoutInflater inflater2 = LayoutInflater.from(JugarActivity.this);
                     View dialog_layout = inflater2.inflate(R.layout.tablero_creable, null);
                     AlertDialog.Builder db = new AlertDialog.Builder(context);
@@ -117,7 +118,7 @@ public class JugarActivity extends AppCompatActivity  {
         ronda.setText("Ronda: "+GameContext.getRonda()+"/"+GameContext.getJuego().getPartidas().size());
         System.out.println(GameContext.getHijos().size());
         if (GameContext.getServer()==null){//para que solo lo hagan los equipos, esta bien?
-            tarjetasHashSet=GameContext.getEquipo().getTarjetas();
+//            tarjetasHashSet=GameContext.getEquipo().getTarjetas();
             ArrayList<String> datos=new ArrayList<>();
             Mensaje mensaje=new Mensaje("jugarListo",datos);
             String msg=mensaje.serializar();
@@ -141,7 +142,6 @@ public class JugarActivity extends AppCompatActivity  {
                         System.out.println("mensaje enviado "+msg);
                         Write escribir = new Write();
                         escribir.execute(msg, 0);
-//                        conseguirCartaDelMazoYPonerlaEnTusCartas();
                         puedeAgarrarCarta=false;
                     }
                     else{
@@ -217,6 +217,8 @@ public class JugarActivity extends AppCompatActivity  {
                     int widthCarta = (width*5)/40;
                     int heightCarta = (widthCarta*14)/10;
                     int marginCarta = width/100;
+
+                    tarjetasHashSet=GameContext.getEquipo().getTarjetas();
 
                     for (Tarjeta tarjetaARevisar:tarjetasHashSet) {
 

@@ -71,6 +71,7 @@ public class ServicioJuego extends Service {
                                             intent2.setAction("comenzar");
                                             contexto.sendBroadcast(intent2);
                                             break;
+
                                         case "conectar":
                                             System.out.println("me llego conectar");
                                             ArrayList<String> datos=new ArrayList<>();
@@ -80,6 +81,7 @@ public class ServicioJuego extends Service {
                                             Write escribir = new Write();
                                             escribir.execute(msg, 0);
                                             break;
+
                                         case "turno":
                                             HashMap<String, String> mapDatos=new HashMap<>();
                                             try {
@@ -97,6 +99,7 @@ public class ServicioJuego extends Service {
                                                 GameContext.setEsMiTurno(false);
                                             }
                                             break;
+
                                         case "actualizacion_tablero":
                                             Tarjeta tarjeta= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
                                             mapDatos=new HashMap<>();
@@ -133,6 +136,7 @@ public class ServicioJuego extends Service {
                                             msg=mensaje.serializar();
                                             escribir = new Write();
                                             escribir.execute(msg, 0);
+                                            break;
 
                                     }
                                 } catch (Exception e) {
@@ -252,6 +256,7 @@ public class ServicioJuego extends Service {
                                             break;
 
                                         case "misCartas":
+                                            System.out.println("me llegaron cartas");
                                             mapDatos=new HashMap<>();
                                             try {
                                                 mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
@@ -263,6 +268,7 @@ public class ServicioJuego extends Service {
                                             GameContext.getResultados().put(nombreJugador,cantidadCartas);
                                             GameContext.setCantMensajesRecibidos(GameContext.getCantMensajesRecibidos()+1);
                                             if(GameContext.getCantMensajesRecibidos()==GameContext.getJuego().getEquipos().size()){
+                                                System.out.println("me llegaron todas las cartas");
                                                 intent2= new Intent();
                                                 intent2.putExtra("ganador", obtenerGanador());
                                                 intent2.setAction("ganador");
@@ -294,9 +300,10 @@ public class ServicioJuego extends Service {
                                                 e.printStackTrace();
                                             }
                                             nombreEquipo= mapDatos.get("idJugador");
+                                            System.out.println("nombre equipo "+nombreEquipo);
                                             Tarjeta tarjetaARepartir=conseguirCarta();
                                             for (int i=0;i<GameContext.getHijos().size();i++){
-                                                if(!GameContext.getNombresEquipos().get(i).equals(nombreEquipo)){ //para que no se lo mande al que jugo
+                                                if(GameContext.getNombresEquipos().get(i).equals(nombreEquipo)){
                                                     ArrayList<String> datos=new ArrayList<>();
                                                     datos.add(tarjetaARepartir.serializar());
                                                     mensaje=new Mensaje("tarjetaMazo",datos);
@@ -306,7 +313,6 @@ public class ServicioJuego extends Service {
                                                     escribir.execute(msg, i);
                                                 }
                                             }
-
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -337,10 +343,10 @@ public class ServicioJuego extends Service {
     }
 
     public String obtenerGanador(){
-        ArrayList<String> nombreEquipos = (ArrayList<String>) GameContext.getResultados().keySet();
-        ArrayList<Integer> cantidadDeCartas = (ArrayList<Integer>) GameContext.getResultados().values();
-        String nombreEquipo = nombreEquipos.get(0);
-        Integer cartas = cantidadDeCartas.get(0);
+        Object[] nombreEquipos = GameContext.getResultados().keySet().toArray();
+        Object[] cantidadDeCartas = GameContext.getResultados().values().toArray();
+        String nombreEquipo = (String) nombreEquipos[0];
+        Integer cartas = (Integer) cantidadDeCartas[0];
         for(Map.Entry<String, Integer> equipo: GameContext.getResultados().entrySet()){
             if(equipo.getValue()<cartas){
                 nombreEquipo = equipo.getKey();
