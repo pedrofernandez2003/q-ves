@@ -202,6 +202,9 @@ public class ServicioJuego extends Service {
                                                     break;
                                                 }
                                             }
+                                            System.out.println("condicion terminar part: "+ GameContext.getRonda() + " " + GameContext.getJuego().getPartidas().size()+1);
+                                            System.out.println(GameContext.getJuego().getPartidas().size()+1);
+                                            System.out.println("terminar partida: "+terminarPartida);
                                             if (!terminarPartida){
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {
                                                     ArrayList<String> datos=new ArrayList<>();
@@ -212,7 +215,7 @@ public class ServicioJuego extends Service {
                                                     escribir.execute(msg, i);
                                                 }
                                             }
-                                            else if (GameContext.getRonda()!=GameContext.getJuego().getPartidas().size()){
+                                            else if (GameContext.getRonda()<GameContext.getJuego().getPartidas().size()){
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {
                                                     ArrayList<String> datos=new ArrayList<>();
                                                     mensaje=new Mensaje("partida_nueva",datos);
@@ -227,6 +230,7 @@ public class ServicioJuego extends Service {
                                                 contexto.sendBroadcast(intent);
                                             }
                                             else{
+                                                System.out.println("deberia terminar el juego");
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {
                                                     ArrayList<String> datos=new ArrayList<>();
                                                     mensaje=new Mensaje("terminar_juego",datos);
@@ -239,8 +243,14 @@ public class ServicioJuego extends Service {
                                             break;
 
                                         case "misCartas":
-                                            int cantidadCartas= Integer.parseInt(mensaje.getDatos().get(0));
-                                            String nombreJugador= mensaje.getDatos().get(1);
+                                            mapDatos=new HashMap<>();
+                                            try {
+                                                mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
+                                            } catch (JsonSyntaxException e) {
+                                                e.printStackTrace();
+                                            }
+                                            int cantidadCartas= Integer.parseInt(mapDatos.get("cantidadTarjetas"));
+                                            String nombreJugador= mapDatos.get("idJugador");
                                             GameContext.getResultados().put(nombreJugador,cantidadCartas);
                                             GameContext.setCantMensajesRecibidos(GameContext.getCantMensajesRecibidos()+1);
                                             if(GameContext.getCantMensajesRecibidos()==GameContext.getJuego().getEquipos().size()){

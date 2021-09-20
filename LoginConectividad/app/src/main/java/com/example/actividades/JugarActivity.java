@@ -62,11 +62,7 @@ public class JugarActivity extends AppCompatActivity  {
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()){
                 case "turno":
-                    //turno = findViewById(R.id.turno);
-                    //turno.setVisibility(View.VISIBLE);
-
                     puedeAgarrarCarta=true;
-
                     LayoutInflater inflater=getLayoutInflater();
                     View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
                     TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
@@ -76,8 +72,8 @@ public class JugarActivity extends AppCompatActivity  {
                     toast.setDuration(Toast.LENGTH_LONG);
                     toast.setView(Layout);
                     toast.show();
-
                     break;
+
                 case "reiniciar":
                     intent=new Intent(appContext,JugarActivity.class);
                     startActivity(intent);
@@ -85,6 +81,10 @@ public class JugarActivity extends AppCompatActivity  {
 
                 case "actualizar":
                     insertarTarjetaEnTablero();
+                    break;
+
+                case "ganador":
+                    System.out.println("el ganador es: "+intent.getStringExtra("ganador"));
                     break;
             }
         }
@@ -97,8 +97,9 @@ public class JugarActivity extends AppCompatActivity  {
         mostrarPlantillaEnXml(GameContext.getJuego().getPlantilla(), this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("turno");
-        intentFilter.addAction("reiniciar");//ver si sirve mas adelante
-        intentFilter.addAction("actualizar");//ver si sirve mas adelante
+        intentFilter.addAction("reiniciar");
+        intentFilter.addAction("actualizar");
+        intentFilter.addAction("ganador");
         registerReceiver(broadcastReceiver,intentFilter);
         juego= GameContext.getJuego();
         partida=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1);
@@ -548,10 +549,7 @@ public class JugarActivity extends AppCompatActivity  {
 
             TextView espacioTexto = espaciosTextos.get(i);
             espacioTexto.setText(nombre);
-            System.out.println("cambie el id: "+espacioCarta.getId());
-            System.out.println("ronda: "+GameContext.getRonda());
-            System.out.println("categoria: "+categorias.get(i).getNombre());
-            System.out.println("casillero: "+GameContext.getJuego().getPartidas().get(GameContext.getRonda()).getCasilleros().get(i).getCategoria().getNombre());
+
             GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().get(i).setId(espacioCarta.getId());
         }
     }
