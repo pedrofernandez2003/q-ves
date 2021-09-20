@@ -84,7 +84,13 @@ public class JugarActivity extends AppCompatActivity  {
                     break;
 
                 case "ganador":
-                    System.out.println("el ganador es: "+intent.getStringExtra("ganador"));
+                    LayoutInflater inflater2 = LayoutInflater.from(JugarActivity.this);
+                    View dialog_layout = inflater2.inflate(R.layout.tablero_creable, null);
+                    AlertDialog.Builder db = new AlertDialog.Builder(context);
+                    db.setView(dialog_layout);
+                    db.setTitle("Juego terminado");
+                    db.setMessage("el ganador es: "+intent.getStringExtra("ganador"));
+                    final AlertDialog a = db.create();
                     break;
             }
         }

@@ -19,6 +19,7 @@ import com.google.gson.JsonSyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Random;
 
 public class ServicioJuego extends Service {
@@ -263,7 +264,7 @@ public class ServicioJuego extends Service {
                                             GameContext.setCantMensajesRecibidos(GameContext.getCantMensajesRecibidos()+1);
                                             if(GameContext.getCantMensajesRecibidos()==GameContext.getJuego().getEquipos().size()){
                                                 intent2= new Intent();
-                                                intent2.putExtra("ganador",obtenerGanardor());
+                                                intent2.putExtra("ganador", obtenerGanador());
                                                 intent2.setAction("ganador");
                                                 contexto.sendBroadcast(intent2);
                                             }
@@ -335,8 +336,20 @@ public class ServicioJuego extends Service {
         return new Tarjeta();
     }
 
-    public String obtenerGanardor(){
-        return "pepe";
+    public String obtenerGanador(){
+        ArrayList<String> nombreEquipos = (ArrayList<String>) GameContext.getResultados().keySet();
+        ArrayList<Integer> cantidadDeCartas = (ArrayList<Integer>) GameContext.getResultados().values();
+        String nombreEquipo = nombreEquipos.get(0);
+        Integer cartas = cantidadDeCartas.get(0);
+        for(Map.Entry<String, Integer> equipo: GameContext.getResultados().entrySet()){
+            if(equipo.getValue()<cartas){
+                nombreEquipo = equipo.getKey();
+                cartas = equipo.getValue();
+            }
+
+        }
+
+        return nombreEquipo;
     }
 
     @Override
