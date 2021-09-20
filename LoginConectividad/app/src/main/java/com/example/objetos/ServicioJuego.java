@@ -18,6 +18,8 @@ import com.google.gson.JsonSyntaxException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Random;
 
 public class ServicioJuego extends Service {
     private ThreadedEchoServer server;
@@ -107,6 +109,12 @@ public class ServicioJuego extends Service {
                                             intent.setAction("actualizar");
                                             contexto.sendBroadcast(intent);
                                             System.out.println(mapDatos.get("idJugador")+" tiro esta carta "+tarjeta.getContenido());
+                                            break;
+
+                                        case "tarjetaMazo":
+                                            Tarjeta tarjetaNueva= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
+                                            System.out.println("me llego la tarjeta "+tarjetaNueva.getCategoria());
+                                            GameContext.getEquipo().getTarjetas().add(tarjetaNueva);
                                             break;
 
                                         case "partida_nueva":
@@ -268,43 +276,36 @@ public class ServicioJuego extends Service {
                                             else{
                                                 GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).setTurno(GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno()+1);//no se si esta bien aca
                                             }
-                                            //ver esto
-//                                            terminarPartida=true;
-//                                            for (Casillero casillero:GameContext.getPartidaActual().getCasilleros()) {
-//                                                if(casillero.getTarjeta()==null){
-//                                                    terminarPartida=false;
-//                                                    break;
-//                                                }
-//                                            }
-//                                            if (!terminarPartida){
-                                                for (int i=0;i<GameContext.getHijos().size();i++) {
+                                            for (int i=0;i<GameContext.getHijos().size();i++) {
+                                                ArrayList<String> datos=new ArrayList<>();
+                                                datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno())+"\"}");
+                                                mensaje=new Mensaje("turno",datos);
+                                                String msg=mensaje.serializar();
+                                                Write escribir = new Write();
+                                                escribir.execute(msg, i);
+                                            }
+
+                                        case "agarrarCarta":
+                                            mapDatos=new HashMap<>();
+                                            try {
+                                                mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
+                                            } catch (JsonSyntaxException e) {
+                                                e.printStackTrace();
+                                            }
+                                            nombreEquipo= mapDatos.get("idJugador");
+                                            Tarjeta tarjetaARepartir=conseguirCarta();
+                                            for (int i=0;i<GameContext.getHijos().size();i++){
+                                                if(!GameContext.getNombresEquipos().get(i).equals(nombreEquipo)){ //para que no se lo mande al que jugo
                                                     ArrayList<String> datos=new ArrayList<>();
-                                                    datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno())+"\"}");
-                                                    mensaje=new Mensaje("turno",datos);
+                                                    datos.add(tarjetaARepartir.serializar());
+                                                    mensaje=new Mensaje("tarjetaMazo",datos);
+                                                    System.out.println("mande una tarjeta del mazo");
                                                     String msg=mensaje.serializar();
                                                     Write escribir = new Write();
                                                     escribir.execute(msg, i);
                                                 }
-//                                            }
-//                                            else if (GameContext.getRonda()!=GameContext.getJuego().getPartidas().size()){
-//                                                for (int i=0;i<GameContext.getHijos().size();i++) {
-//                                                    ArrayList<String> datos=new ArrayList<>();
-//                                                    mensaje=new Mensaje("partida_nueva",datos);
-//                                                    String msg=mensaje.serializar();
-//                                                    Write escribir = new Write();
-//                                                    escribir.execute(msg, i);
-//                                                }
-//                                                GameContext.setRonda(GameContext.getRonda()+1);
-//                                            }
-//                                            else{
-//                                                for (int i=0;i<GameContext.getHijos().size();i++) {
-//                                                    ArrayList<String> datos=new ArrayList<>();
-//                                                    mensaje=new Mensaje("terminar_juego",datos);
-//                                                    String msg=mensaje.serializar();
-//                                                    Write escribir = new Write();
-//                                                    escribir.execute(msg, i);
-//                                                }
-//                                            }
+                                            }
+
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -316,6 +317,23 @@ public class ServicioJuego extends Service {
             }
         }
     };
+
+    public Tarjeta conseguirCarta() {
+        HashSet<Tarjeta> mazo=GameContext.getJuego().getMazo();
+
+        int size = mazo.size();
+        int item = new Random().nextInt(size);
+        int i = 0;
+
+        for (Tarjeta obj : mazo) {
+            if (i == item) {
+                GameContext.getJuego().getMazo().remove(obj);
+                return obj;
+            }
+            i++;
+        }
+        return new Tarjeta();
+    }
 
     public String obtenerGanardor(){
         return "pepe";

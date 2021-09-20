@@ -127,7 +127,15 @@ public class JugarActivity extends AppCompatActivity  {
 
                 if (GameContext.getServer()==null && GameContext.isEsMiTurno()){
                     if (puedeAgarrarCarta){
-                        conseguirCartaDelMazoYPonerlaEnTusCartas();
+                        GameContext.getEquipo().getTarjetas().add(GameContext.getEquipo().getTarjetas().iterator().next());
+                        ArrayList<String> datos=new ArrayList<>();
+                        datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+                        Mensaje mensaje=new Mensaje("agarrarCarta",datos);
+                        String msg=mensaje.serializar();
+                        System.out.println("mensaje enviado "+msg);
+                        Write escribir = new Write();
+                        escribir.execute(msg, 0);
+//                        conseguirCartaDelMazoYPonerlaEnTusCartas();
                         puedeAgarrarCarta=false;
                     }
                     else{
@@ -337,27 +345,27 @@ public class JugarActivity extends AppCompatActivity  {
         return insertoLaTarjeta;
     }
 
-    public void conseguirCartaDelMazoYPonerlaEnTusCartas() {
-        HashSet<Tarjeta> misTarjetas=GameContext.getEquipo().getTarjetas();
-        HashSet<Tarjeta> mazo=GameContext.getJuego().getMazo();
-
-        int size = mazo.size();
-        int item = new Random().nextInt(size);
-        int i = 0;
-
-        for (Tarjeta obj : mazo) {
-            if (i == item) {
-                misTarjetas.add(obj);
-                mazo.remove(obj);
-                break;
-            }
-            i++;
-        }
-
-        GameContext.getEquipo().setTarjetas(misTarjetas);
-        GameContext.getJuego().setMazo(mazo);
-
-    }
+//    public void conseguirCartaDelMazoYPonerlaEnTusCartas() {
+//        HashSet<Tarjeta> misTarjetas=GameContext.getEquipo().getTarjetas();
+//        HashSet<Tarjeta> mazo=GameContext.getJuego().getMazo();
+//
+//        int size = mazo.size();
+//        int item = new Random().nextInt(size);
+//        int i = 0;
+//
+//        for (Tarjeta obj : mazo) {
+//            if (i == item) {
+//                misTarjetas.add(obj);
+//                mazo.remove(obj);
+//                break;
+//            }
+//            i++;
+//        }
+//
+//        GameContext.getEquipo().setTarjetas(misTarjetas);
+//        GameContext.getJuego().setMazo(mazo);
+//
+//    }
 
 
     public CardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
