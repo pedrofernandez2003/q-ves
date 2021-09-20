@@ -2,6 +2,7 @@ package com.example.actividades;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -30,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 
 public class TableroActivity extends AppCompatActivity {
     private LinearLayout verCartas;
@@ -40,6 +42,9 @@ public class TableroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablero_creable);
         verCartas = findViewById(R.id.verCartas);
+
+
+
 
         //ArrayList<Casillero> casilleros=GameContext.getPartidaActual().getCasilleros();
         //ArrayList<Categoria> categorias=GameContext.getJuego().getPlantilla().getCategorias();
@@ -80,7 +85,8 @@ public class TableroActivity extends AppCompatActivity {
         casilleros.add(casillero2);
         casilleros.add(casillero3);
 
-
+        int item = new Random().nextInt(tarjetasHashSet.size());
+        System.out.println("Random: "+item);
 
         verCartas.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +134,6 @@ public class TableroActivity extends AppCompatActivity {
                             params.gravity = Gravity.TOP;
                             snackView.setLayoutParams(params);
                             snack.show();
-
 
                             //Drawable aaa=findViewById(R.drawable.border);
                             //carta.setBackground(aaa);

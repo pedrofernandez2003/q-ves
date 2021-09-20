@@ -42,6 +42,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 
 public class JugarActivity extends AppCompatActivity  {
     //    private GameContext context;
@@ -51,8 +52,9 @@ public class JugarActivity extends AppCompatActivity  {
     private ArrayList<Categoria> categorias;
     private HashSet<Tarjeta> tarjetasHashSet;
     private TextView turno, ronda;
-    private Button botonTirarCarta, botonPasarTurno;
-    private LinearLayout verCartas;
+    private Button botonAgarrarCarta, botonPasarTurno;
+    private LinearLayout botonVerCartas;
+    private Boolean puedeAgarrarCarta=true;
 
     Context appContext=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -62,6 +64,8 @@ public class JugarActivity extends AppCompatActivity  {
                 case "turno":
                     //turno = findViewById(R.id.turno);
                     //turno.setVisibility(View.VISIBLE);
+
+                    puedeAgarrarCarta=true;
 
                     LayoutInflater inflater=getLayoutInflater();
                     View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
@@ -113,25 +117,30 @@ public class JugarActivity extends AppCompatActivity  {
             Write escribir = new Write();
             escribir.execute(msg, 0);
         }
-        botonTirarCarta=(Button)findViewById(R.id.agarrarCarta);
+        botonAgarrarCarta=(Button)findViewById(R.id.agarrarCarta);
         botonPasarTurno=(Button)findViewById(R.id.pasar);
-        verCartas = findViewById(R.id.verCartas);
-        botonTirarCarta.setOnClickListener(new View.OnClickListener() {
+        botonVerCartas = findViewById(R.id.verCartas);
+        botonAgarrarCarta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (GameContext.isEsMiTurno()){
-                    ArrayList<String> datos=new ArrayList<>();
-                    datos.add(GameContext.getEquipo().getTarjetas().iterator().next().serializar());//falta sacar la carta del mazo
-                    GameContext.getEquipo().getTarjetas().remove(GameContext.getEquipo().getTarjetas().iterator().next());
-                    datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
-                    Mensaje mensaje=new Mensaje("jugada",datos);
-                    String msg=mensaje.serializar();
-                    System.out.println("mensaje enviado "+msg);
-                    Write escribir = new Write();
-                    escribir.execute(msg, 0);
-                    GameContext.setEsMiTurno(false);
-                    //turno.setVisibility(View.INVISIBLE);
-                    System.out.println("tarjetas restantes "+GameContext.getEquipo().getTarjetas().size());
+
+                if (GameContext.getServer()==null && GameContext.isEsMiTurno()){
+                    if (puedeAgarrarCarta){
+                        conseguirCartaDelMazoYPonerlaEnTusCartas();
+                        puedeAgarrarCarta=false;
+                    }
+                    else{
+                        LayoutInflater inflater=getLayoutInflater();
+                        View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                        TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                        text.setText("No podes agarrar mas cartas");
+                        Toast toast= new Toast(getApplicationContext());
+                        toast.setGravity(Gravity.BOTTOM,0,0);
+                        toast.setDuration(Toast.LENGTH_LONG);
+                        toast.setView(Layout);
+                        toast.show();
+                    }
+
                 }
                 else{
                     LayoutInflater inflater=getLayoutInflater();
@@ -143,8 +152,6 @@ public class JugarActivity extends AppCompatActivity  {
                     toast.setDuration(Toast.LENGTH_LONG);
                     toast.setView(Layout);
                     toast.show();
-
-                    System.out.println("no es tu turno");//poner un toast que diga no es tu turno
                 }
             }
         });
@@ -176,115 +183,119 @@ public class JugarActivity extends AppCompatActivity  {
                 }
             }
         });
-        verCartas.setOnClickListener(new View.OnClickListener() {
+
+        botonVerCartas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
-                View dialog_layout = inflater.inflate(R.layout.ver_cartas, null);
-                AlertDialog.Builder db = new AlertDialog.Builder(JugarActivity.this);
-                db.setView(dialog_layout);
-                LinearLayout contenedorCartas=(LinearLayout) dialog_layout.findViewById(R.id.contenedorCartas);
+                if (GameContext.getServer()==null){
 
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                int width = displayMetrics.widthPixels;
-                int widthCarta = (width*5)/40;
-                int heightCarta = (widthCarta*14)/10;
-                int marginCarta = width/100;
+                    LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
+                    View dialog_layout = inflater.inflate(R.layout.ver_cartas, null);
+                    AlertDialog.Builder db = new AlertDialog.Builder(JugarActivity.this);
+                    db.setView(dialog_layout);
+                    LinearLayout contenedorCartas=(LinearLayout) dialog_layout.findViewById(R.id.contenedorCartas);
 
-                for (Tarjeta tarjetaARevisar:tarjetasHashSet) {
+                    DisplayMetrics displayMetrics = new DisplayMetrics();
+                    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                    int width = displayMetrics.widthPixels;
+                    int widthCarta = (width*5)/40;
+                    int heightCarta = (widthCarta*14)/10;
+                    int marginCarta = width/100;
 
-                    String nombreCategoria=tarjetaARevisar.getCategoria();
-                    String tarjetaContenido=tarjetaARevisar.getContenido();
-                    String tarjetaYapa=tarjetaARevisar.getYapa();
-                    int color=0; //si o si parece que tenia que iniciarlizarlo
+                    for (Tarjeta tarjetaARevisar:tarjetasHashSet) {
 
-                    for (int j=0; j < categorias.size(); j++){
-                        Categoria categoriaARevisar=categorias.get(j);
-                        if (categoriaARevisar.getNombre().equals(tarjetaARevisar.getCategoria())){
-                            color=categoriaARevisar.getColor().getCodigo();
+                        String nombreCategoria=tarjetaARevisar.getCategoria();
+                        String tarjetaContenido=tarjetaARevisar.getContenido();
+                        String tarjetaYapa=tarjetaARevisar.getYapa();
+                        int color=0; //si o si parece que tenia que iniciarlizarlo
+
+                        for (int j=0; j < categorias.size(); j++){
+                            Categoria categoriaARevisar=categorias.get(j);
+                            if (categoriaARevisar.getNombre().equals(tarjetaARevisar.getCategoria())){
+                                color=categoriaARevisar.getColor().getCodigo();
+                            }
                         }
-                    }
 
-                    CardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria,tarjetaContenido,tarjetaYapa);
-                    contenedorCartas.addView(carta);
+                        CardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria,tarjetaContenido,tarjetaYapa);
+                        contenedorCartas.addView(carta);
 
-                    carta.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            GameContext.setTarjetaElegida(tarjetaARevisar);
-                            System.out.println("Tarjeta seleccionda: "+tarjetaARevisar.getContenido());
-                            Snackbar snack = Snackbar.make(findViewById(android.R.id.content),"Seleccionaste esa carta", Snackbar.LENGTH_SHORT);
-                            View snackView = snack.getView();
-                            FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
-                            params.gravity = Gravity.TOP;
-                            snackView.setLayoutParams(params);
-                            snack.show();
-
-                        }
-                    });
-                }
-
-                db.setPositiveButton("Enviar al tablero", null);
-                db.setNegativeButton("Atras", null);
-                final AlertDialog a = db.create();
-                a.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface dialog) {
-                        Button b = a.getButton(AlertDialog.BUTTON_POSITIVE);
-                        b.setOnClickListener(new View.OnClickListener() {
+                        carta.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (GameContext.isEsMiTurno()){
-                                    if (insertarTarjetaEnTablero()){
-                                        ArrayList<String> datos=new ArrayList<>();
-                                        datos.add(GameContext.getTarjetaElegida().serializar());//falta sacar la carta del mazo
-                                        GameContext.getEquipo().getTarjetas().remove(GameContext.getTarjetaElegida());
-                                        datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
-                                        Mensaje mensaje=new Mensaje("jugada",datos);
-                                        String msg=mensaje.serializar();
-                                        System.out.println("mensaje enviado "+msg);
-                                        Write escribir = new Write();
-                                        escribir.execute(msg, 0);
-                                        GameContext.setEsMiTurno(false);
-                                        //turno.setVisibility(View.INVISIBLE);
-                                        System.out.println("tarjetas restantes "+GameContext.getEquipo().getTarjetas().size());
+                                GameContext.setTarjetaElegida(tarjetaARevisar);
+                                System.out.println("Tarjeta seleccionda: "+tarjetaARevisar.getContenido());
+                                Snackbar snack = Snackbar.make(findViewById(android.R.id.content),"Seleccionaste esa carta", Snackbar.LENGTH_SHORT);
+                                View snackView = snack.getView();
+                                FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
+                                params.gravity = Gravity.TOP;
+                                snackView.setLayoutParams(params);
+                                snack.show();
+
+                            }
+                        });
+                    }
+
+                    db.setPositiveButton("Enviar al tablero", null);
+                    db.setNegativeButton("Atras", null);
+                    final AlertDialog a = db.create();
+                    a.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            Button b = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                            b.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if (GameContext.isEsMiTurno()){
+                                        if (insertarTarjetaEnTablero()){
+                                            ArrayList<String> datos=new ArrayList<>();
+                                            datos.add(GameContext.getTarjetaElegida().serializar());//falta sacar la carta del mazo
+                                            GameContext.getEquipo().getTarjetas().remove(GameContext.getTarjetaElegida());
+                                            datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+                                            Mensaje mensaje=new Mensaje("jugada",datos);
+                                            String msg=mensaje.serializar();
+                                            System.out.println("mensaje enviado "+msg);
+                                            Write escribir = new Write();
+                                            escribir.execute(msg, 0);
+                                            GameContext.setEsMiTurno(false);
+                                            //turno.setVisibility(View.INVISIBLE);
+                                            System.out.println("tarjetas restantes "+GameContext.getEquipo().getTarjetas().size());
+                                        }
+                                        else{
+                                            System.out.println("Casillero ocupado");
+                                            LayoutInflater inflater=getLayoutInflater();
+                                            View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                                            TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                                            text.setText("Casillero ocupado");
+                                            Toast toast= new Toast(getApplicationContext());
+                                            toast.setGravity(Gravity.BOTTOM,0,0);
+                                            toast.setDuration(Toast.LENGTH_LONG);
+                                            toast.setView(Layout);
+                                            toast.show();
+                                        }
                                     }
                                     else{
-                                        System.out.println("Casillero ocupado");
+
                                         LayoutInflater inflater=getLayoutInflater();
                                         View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
                                         TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
-                                        text.setText("Casillero ocupado");
+                                        text.setText("No es tu turno");
                                         Toast toast= new Toast(getApplicationContext());
                                         toast.setGravity(Gravity.BOTTOM,0,0);
                                         toast.setDuration(Toast.LENGTH_LONG);
                                         toast.setView(Layout);
                                         toast.show();
+
+                                        System.out.println("no es tu turno");//poner un toast que diga no es tu turno
                                     }
-
+                                    a.dismiss();
                                 }
-                                else{
+                            });
+                        }
+                    });
+                    a.show();
+                }
 
-                                    LayoutInflater inflater=getLayoutInflater();
-                                    View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
-                                    TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
-                                    text.setText("No es tu turno");
-                                    Toast toast= new Toast(getApplicationContext());
-                                    toast.setGravity(Gravity.BOTTOM,0,0);
-                                    toast.setDuration(Toast.LENGTH_LONG);
-                                    toast.setView(Layout);
-                                    toast.show();
-
-                                    System.out.println("no es tu turno");//poner un toast que diga no es tu turno
-                                }
-                                a.dismiss();
-                            }
-                        });
-                    }
-                });
-                a.show();
             }
         });
     }
@@ -325,7 +336,30 @@ public class JugarActivity extends AppCompatActivity  {
         return insertoLaTarjeta;
     }
 
-        public CardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
+    public void conseguirCartaDelMazoYPonerlaEnTusCartas() {
+        HashSet<Tarjeta> misTarjetas=GameContext.getEquipo().getTarjetas();
+        HashSet<Tarjeta> mazo=GameContext.getJuego().getMazo();
+
+        int size = mazo.size();
+        int item = new Random().nextInt(size);
+        int i = 0;
+
+        for (Tarjeta obj : mazo) {
+            if (i == item) {
+                misTarjetas.add(obj);
+                mazo.remove(obj);
+                break;
+            }
+            i++;
+        }
+
+        GameContext.getEquipo().setTarjetas(misTarjetas);
+        GameContext.getJuego().setMazo(mazo);
+
+    }
+
+
+    public CardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
 
             // Crear la base
             CardView carta = new CardView(this);
@@ -410,7 +444,7 @@ public class JugarActivity extends AppCompatActivity  {
 
         }
 
-        public ConstraintLayout crearConstraintTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
+    public ConstraintLayout crearConstraintTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
 
             // Crear la base
             CardView carta = new CardView(this);
