@@ -26,6 +26,7 @@ import com.example.objetos.Casillero;
 import com.example.objetos.Categoria;
 import com.example.objetos.Tarjeta;
 import com.example.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -121,6 +122,14 @@ public class TableroActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             tarjetaElegida=tarjetaARevisar;
                             System.out.println(tarjetaARevisar.getContenido());
+                            Snackbar snack = Snackbar.make(findViewById(android.R.id.content),"Seleccionaste esa carta", Snackbar.LENGTH_SHORT);
+                            View snackView = snack.getView();
+                            FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
+                            params.gravity = Gravity.TOP;
+                            snackView.setLayoutParams(params);
+                            snack.show();
+
+
                             //Drawable aaa=findViewById(R.drawable.border);
                             //carta.setBackground(aaa);
                             //cuando tenga las tarjetas correctas hacer esto de "Seleccionarlas"

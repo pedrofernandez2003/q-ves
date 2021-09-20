@@ -37,6 +37,7 @@ import com.example.objetos.Tarjeta;
 import com.example.objetos.manejoSockets.Write;
 import com.example.R;
 import com.example.objetos.Plantilla;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -213,10 +214,13 @@ public class JugarActivity extends AppCompatActivity  {
                         @Override
                         public void onClick(View view) {
                             GameContext.setTarjetaElegida(tarjetaARevisar);
-                            System.out.println(tarjetaARevisar.getContenido());
-                            //Drawable aaa=findViewById(R.drawable.border);
-                            //carta.setBackground(aaa);
-                            //cuando tenga las tarjetas correctas hacer esto de "Seleccionarlas"
+                            System.out.println("Tarjeta seleccionda: "+tarjetaARevisar.getContenido());
+                            Snackbar snack = Snackbar.make(findViewById(android.R.id.content),"Seleccionaste esa carta", Snackbar.LENGTH_SHORT);
+                            View snackView = snack.getView();
+                            FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
+                            params.gravity = Gravity.TOP;
+                            snackView.setLayoutParams(params);
+                            snack.show();
 
                         }
                     });
