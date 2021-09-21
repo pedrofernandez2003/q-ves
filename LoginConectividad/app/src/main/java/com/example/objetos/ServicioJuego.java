@@ -138,6 +138,21 @@ public class ServicioJuego extends Service {
                                             escribir.execute(msg, 0);
                                             break;
 
+                                        //ver esto
+                                        case "ganador":
+                                            mapDatos=new HashMap<>();
+                                            try {
+                                                mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);
+                                            } catch (JsonSyntaxException e) {
+                                                e.printStackTrace();
+                                            }
+                                            String nombreEquipo= mapDatos.get("ganador");
+                                            intent= new Intent();
+                                            intent.putExtra("ganador",nombreEquipo);
+                                            intent.setAction("ganador");
+                                            contexto.sendBroadcast(intent);
+                                            break;
+
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -269,6 +284,15 @@ public class ServicioJuego extends Service {
                                             GameContext.setCantMensajesRecibidos(GameContext.getCantMensajesRecibidos()+1);
                                             if(GameContext.getCantMensajesRecibidos()==GameContext.getJuego().getEquipos().size()){
                                                 System.out.println("me llegaron todas las cartas");
+                                                //ver esto
+                                                for (int i=0;i<GameContext.getHijos().size();i++) {//le manda a todos quien es el ganador
+                                                    ArrayList<String> datos=new ArrayList<>();
+                                                    datos.add("{\"ganador\": \""+obtenerGanador()+"\"}");
+                                                    mensaje=new Mensaje("ganador",datos);
+                                                    String msg=mensaje.serializar();
+                                                    Write escribir = new Write();
+                                                    escribir.execute(msg, i);
+                                                }
                                                 intent2= new Intent();
                                                 intent2.putExtra("ganador", obtenerGanador());
                                                 intent2.setAction("ganador");
