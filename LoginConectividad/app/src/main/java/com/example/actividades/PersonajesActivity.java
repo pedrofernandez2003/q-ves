@@ -115,7 +115,6 @@ public class PersonajesActivity extends AppCompatActivity {
             // Get the Uri of data
             filePath = data.getData();
             try {
-
                 // Setting image on image view using Bitmap
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),
                                 filePath);
@@ -187,53 +186,6 @@ public class PersonajesActivity extends AppCompatActivity {
                 }
                                                                       });
 
-
-            // adding listeners on upload
-            // or failure of image
-            // ref.getDownloadUrl() implementar esto y guardar este token en la base. Despues con el picasso agarrarla
-//            ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                                @Override
-//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
-//                                {
-//                                    // Image uploaded successfully
-//                                    // Dismiss dialog
-//                                    Map<String, Object> personajeAInsertar = new HashMap<>();
-//                                    personajeAInsertar.put("nombre",UUID.randomUUID().toString());
-//                                    if(taskSnapshot.getTask().isComplete()) {
-//                                        personajeAInsertar.put("token", ref.getDownloadUrl().getResult().toString());
-//                                    }
-//
-//                                    DataManager.getDb().collection("personajes")
-//                                            .add(personajeAInsertar).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                        @Override
-//                                        public void onSuccess(DocumentReference documentReference) {
-//                                            Toast.makeText(PersonajesActivity.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    })
-//                                            .addOnFailureListener(new OnFailureListener() {
-//                                                @Override
-//                                                public void onFailure(@NonNull Exception e) {
-//
-//                                                }
-//                                            });
-//                                }
-//
-//                            })
-//
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e)
-//                        {
-//
-//                            // Error, Image not uploaded
-//                            progressDialog.dismiss();
-//                            Toast
-//                                    .makeText(PersonajesActivity.this,
-//                                            "Failed " + e.getMessage(),
-//                                            Toast.LENGTH_SHORT)
-//                                    .show();
-//                        }
-//                    });
         }
     }
 }

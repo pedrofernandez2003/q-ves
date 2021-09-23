@@ -12,8 +12,10 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.Person;
 
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.content.Context;
@@ -27,6 +29,7 @@ import com.example.objetos.Equipo;
 import com.example.objetos.GameContext;
 import com.example.objetos.Juego;
 import com.example.objetos.Mensaje;
+import com.example.objetos.Personaje;
 import com.example.objetos.Tarjeta;
 import com.example.objetos.manejoSockets.ThreadedEchoServer;
 import com.example.objetos.manejoSockets.Write;
@@ -35,8 +38,12 @@ import com.example.dataManagers.DataManagerPlantillas;
 import com.example.objetos.Plantilla;
 import com.example.objetos.ServicioJuego;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -79,6 +86,10 @@ public class TraerJuegosActivity extends AppCompatActivity {
         botonComenzarPartida.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                for(Personaje personaje: juego.getPlantilla().getPersonajes()){
+                    personaje.setNombre(traerPersonajesb64(personaje.getNombre()));
+
+                }
                 GameContext.setJuego(juego);
                 GameContext.setRonda(1);
                 categorias = juego.getPlantilla().getCategorias();
@@ -118,6 +129,27 @@ public class TraerJuegosActivity extends AppCompatActivity {
         }
     };
 
+
+
+    private String traerPersonajesb64(String url) {
+
+        try {
+            URL imageUrl = new URL(url);
+            URLConnection ucon = imageUrl.openConnection();
+            InputStream is = ucon.getInputStream();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int read = 0;
+            while ((read = is.read(buffer, 0, buffer.length)) != -1) {
+                baos.write(buffer, 0, read);
+            }
+            baos.flush();
+            return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+        } catch (Exception e) {
+            Log.d("Error", e.toString());
+        }
+        return null;
+    }
     private HashSet<Tarjeta> tresTarjetasPorCategoria(){
         int cantidadPartidas = juego.getPartidas().size();
         categorias = juego.getPlantilla().getCategorias();

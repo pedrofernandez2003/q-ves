@@ -31,6 +31,8 @@ android {
 }
 
 dependencies {
+    implementation 'id.zelory:compressor:3.0.0'
+
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
     implementation 'com.google.firebase:firebase-storage'
     implementation 'com.android.support:multidex:1.0.3'
