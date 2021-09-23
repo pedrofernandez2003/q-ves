@@ -9,10 +9,6 @@ public class Equipo implements Serializable {
     private HashSet<Tarjeta>tarjetas;
     private String nombre;
 
-    public Equipo(HashSet<Tarjeta> tarjetas, String nombre, int id){
-        this.nombre=nombre;
-        this.tarjetas=tarjetas;
-    }
     public Equipo(HashSet<Tarjeta> tarjetas, String nombre){
         this.nombre=nombre;
         this.tarjetas=tarjetas;

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class GameContext extends Thread {
+public class GameContext{
     private static GameContext context;
     private static ThreadedEchoServer server;
     private static ArrayList<SendReceive> hijos=new ArrayList<>();
