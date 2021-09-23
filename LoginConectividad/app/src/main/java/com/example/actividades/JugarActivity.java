@@ -86,12 +86,13 @@ public class JugarActivity extends AppCompatActivity  {
                 case "ganador":
                     System.out.println("llega el ganador");
                     LayoutInflater inflater2 = LayoutInflater.from(JugarActivity.this);
-                    View dialog_layout = inflater2.inflate(R.layout.tablero_creable, null);
+                    View dialog_layout = inflater2.inflate(R.layout.ganador, null);
                     AlertDialog.Builder db = new AlertDialog.Builder(context);
                     db.setView(dialog_layout);
                     db.setTitle("Juego terminado");
                     db.setMessage("el ganador es: "+intent.getStringExtra("ganador"));
                     final AlertDialog a = db.create();
+                    a.show();
                     break;
             }
         }
@@ -134,7 +135,6 @@ public class JugarActivity extends AppCompatActivity  {
 
                 if (GameContext.getServer()==null && GameContext.isEsMiTurno()){
                     if (puedeAgarrarCarta){
-                        GameContext.getEquipo().getTarjetas().add(GameContext.getEquipo().getTarjetas().iterator().next());
                         ArrayList<String> datos=new ArrayList<>();
                         datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
                         Mensaje mensaje=new Mensaje("agarrarCarta",datos);

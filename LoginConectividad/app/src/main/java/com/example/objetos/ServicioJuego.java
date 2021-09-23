@@ -130,15 +130,13 @@ public class ServicioJuego extends Service {
 
                                         case "terminar_juego":
                                             datos=new ArrayList<>();
-                                            datos.add("{\"cantidadTarjetas\": \""+GameContext.getEquipo().getTarjetas().size()+"\"}");
-                                            datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(0)+"\"}");
+                                            datos.add("{\"cantidadTarjetas\": \""+GameContext.getEquipo().getTarjetas().size()+"\",\"idJugador\": \""+GameContext.getNombresEquipos().get(0)+"\"}");
                                             mensaje=new Mensaje("misCartas",datos);
                                             msg=mensaje.serializar();
                                             escribir = new Write();
                                             escribir.execute(msg, 0);
                                             break;
 
-                                        //ver esto
                                         case "ganador":
                                             mapDatos=new HashMap<>();
                                             try {
@@ -278,23 +276,24 @@ public class ServicioJuego extends Service {
                                             } catch (JsonSyntaxException e) {
                                                 e.printStackTrace();
                                             }
+
                                             int cantidadCartas= Integer.parseInt(mapDatos.get("cantidadTarjetas"));
                                             String nombreJugador= mapDatos.get("idJugador");
                                             GameContext.getResultados().put(nombreJugador,cantidadCartas);
                                             GameContext.setCantMensajesRecibidos(GameContext.getCantMensajesRecibidos()+1);
                                             if(GameContext.getCantMensajesRecibidos()==GameContext.getJuego().getEquipos().size()){
-                                                System.out.println("me llegaron todas las cartas");
+                                                String ganador= obtenerGanador();
                                                 //ver esto
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {//le manda a todos quien es el ganador
                                                     ArrayList<String> datos=new ArrayList<>();
-                                                    datos.add("{\"ganador\": \""+obtenerGanador()+"\"}");
+                                                    datos.add("{\"ganador\": \""+ganador+"\"}");
                                                     mensaje=new Mensaje("ganador",datos);
                                                     String msg=mensaje.serializar();
                                                     Write escribir = new Write();
                                                     escribir.execute(msg, i);
                                                 }
                                                 intent2= new Intent();
-                                                intent2.putExtra("ganador", obtenerGanador());
+                                                intent2.putExtra("ganador", ganador);
                                                 intent2.setAction("ganador");
                                                 contexto.sendBroadcast(intent2);
                                             }
@@ -372,13 +371,15 @@ public class ServicioJuego extends Service {
         String nombreEquipo = (String) nombreEquipos[0];
         Integer cartas = (Integer) cantidadDeCartas[0];
         for(Map.Entry<String, Integer> equipo: GameContext.getResultados().entrySet()){
+            System.out.println("entre al for");
             if(equipo.getValue()<cartas){
+                System.out.println("entre al if");
                 nombreEquipo = equipo.getKey();
                 cartas = equipo.getValue();
             }
 
         }
-
+        System.out.println("el ganador es: "+nombreEquipo);
         return nombreEquipo;
     }
 
