@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/plantillas"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="15dp"
+        app:cardCornerRadius="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.9"
-        app:cardCornerRadius="40dp" >
+        app:layout_constraintWidth_percent="0.9">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -27,23 +28,23 @@
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="340dp"
+                    android:layout_width="280dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center"
-                    app:cardBackgroundColor="#fc03b1"
                     android:layout_marginTop="15dp"
+                    app:cardBackgroundColor="#20639b"
                     app:cardCornerRadius="15dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poertsen_one_regular"
+                        android:gravity="center"
                         android:text="choli ek c ex"
                         android:textAlignment="center"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:textSize="40dp"
-                        android:fontFamily="@font/poertsen_one_regular"
-                        android:textColor="@color/white"/>
+                        android:textColor="@color/white"
+                        android:textSize="40dp" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -53,8 +54,79 @@
 
         </ScrollView>
 
-
-
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/nunito_extra_bold"
+        android:text="Esperando jugadores yass..."
+        android:textColor="#d64700"
+        app:layout_constraintStart_toStartOf="@+id/plantillas"
+        app:layout_constraintTop_toBottomOf="@+id/plantillas" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/plantillas"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout7"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout7"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout7">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="2dp"
+            android:src="@drawable/ic_person"
+            app:tint="#ff9931" />
+
+        <TextView
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:fontFamily="@font/poertsen_one_regular"
+            android:gravity="center"
+            android:text="4"
+            android:textAlignment="center"
+            android:textColor="#ff9931"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:layout_editor_absoluteY="339dp" />
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_play"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout6"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout7"
+        app:tint="@color/grey" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
