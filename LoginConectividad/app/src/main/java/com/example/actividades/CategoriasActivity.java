@@ -48,7 +48,7 @@ public class CategoriasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categorias);
 
-        Button aniadirCategoria = (Button) findViewById(R.id.aniadirCategoria);
+        Button aniadirCategoria = (Button) findViewById(R.id.aniadirCategoría);
         aniadirCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
