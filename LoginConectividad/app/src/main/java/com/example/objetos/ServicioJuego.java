@@ -11,14 +11,20 @@ import androidx.annotation.Nullable;
 
 import com.example.interfaces.conectarCallback;
 import com.example.objetos.manejoSockets.ClientClass;
+import com.example.objetos.manejoSockets.HTTPServer;
 import com.example.objetos.manejoSockets.ThreadedEchoServer;
 import com.example.objetos.manejoSockets.Write;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -159,6 +165,13 @@ public class ServicioJuego extends Service {
                     };
                     break;
                 case "crear server":
+                    System.out.println("IP mod: " + getIPAddress(true));
+                    try {
+                        HTTPServer httpServer=new HTTPServer();
+                        httpServer.start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     server= new ThreadedEchoServer();
                     server.start();
                     GameContext.setServer(server);
@@ -401,6 +414,33 @@ public class ServicioJuego extends Service {
         }
         System.out.println("el ganador es: "+nombreEquipo);
         return nombreEquipo;
+    }
+
+    public static String getIPAddress(boolean useIPv4) {
+        try {
+            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface intf : interfaces) {
+                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
+                for (InetAddress addr : addrs) {
+                    if (!addr.isLoopbackAddress()) {
+                        String sAddr = addr.getHostAddress();
+                        boolean isIPv4 = sAddr.indexOf(':') < 0;
+
+                        if (useIPv4) {
+                            if (isIPv4)
+                                return sAddr;
+                        } else {
+                            if (!isIPv4) {
+                                int delim = sAddr.indexOf('%');
+                                return delim < 0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+        }
+        return "";
     }
 
     @Override

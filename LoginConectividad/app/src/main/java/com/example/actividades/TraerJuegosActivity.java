@@ -1,21 +1,20 @@
 package com.example.actividades;
 import android.Manifest;
 import android.content.BroadcastReceiver;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.Person;
-
 import android.os.Handler;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.content.Context;
@@ -37,17 +36,14 @@ import com.example.R;
 import com.example.dataManagers.DataManagerPlantillas;
 import com.example.objetos.Plantilla;
 import com.example.objetos.ServicioJuego;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 
 public class TraerJuegosActivity extends AppCompatActivity {
@@ -86,10 +82,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
         botonComenzarPartida.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(Personaje personaje: juego.getPlantilla().getPersonajes()){
-                    personaje.setNombre(traerPersonajesb64(personaje.getNombre()));
-
-                }
                 GameContext.setJuego(juego);
                 GameContext.setRonda(1);
                 categorias = juego.getPlantilla().getCategorias();
@@ -129,27 +121,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
         }
     };
 
-
-
-    private String traerPersonajesb64(String url) {
-
-        try {
-            URL imageUrl = new URL(url);
-            URLConnection ucon = imageUrl.openConnection();
-            InputStream is = ucon.getInputStream();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int read = 0;
-            while ((read = is.read(buffer, 0, buffer.length)) != -1) {
-                baos.write(buffer, 0, read);
-            }
-            baos.flush();
-            return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-        } catch (Exception e) {
-            Log.d("Error", e.toString());
-        }
-        return null;
-    }
     private HashSet<Tarjeta> tresTarjetasPorCategoria(){
         int cantidadPartidas = juego.getPartidas().size();
         categorias = juego.getPlantilla().getCategorias();
@@ -259,6 +230,25 @@ public class TraerJuegosActivity extends AppCompatActivity {
                             appContext.sendBroadcast(intent);
                         }
                     });
+                    for (Personaje personaje:plantilla.getPersonajes()) {
+                        Picasso.with(appCcontext).load(personaje.getFoto()).into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                descargarImagen(bitmap,personaje.getFoto());
+
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Drawable errorDrawable) {
+                                System.out.println("fallo");
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -270,31 +260,29 @@ public class TraerJuegosActivity extends AppCompatActivity {
         startActivity(partida);
     }
 
-    public static String getIPAddress(boolean useIPv4) {
-        try {
-            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces) {
-                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-                for (InetAddress addr : addrs) {
-                    if (!addr.isLoopbackAddress()) {
-                        String sAddr = addr.getHostAddress();
-                        boolean isIPv4 = sAddr.indexOf(':') < 0;
+    private String descargarImagen(Bitmap bitmapImage, String nombre){
+        System.out.println("descargue una imagen");
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/personajes
+        File directory = cw.getDir("personajes", Context.MODE_PRIVATE);
+        // Create personajes
+        File mypath=new File(directory,nombre+".png");
 
-                        if (useIPv4) {
-                            if (isIPv4)
-                                return sAddr;
-                        } else {
-                            if (!isIPv4) {
-                                int delim = sAddr.indexOf('%');
-                                return delim < 0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
-                            }
-                        }
-                    }
-                }
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (Exception ex) {
         }
-        return "";
+        return directory.getAbsolutePath();
     }
 
     private void hotspotDetailsDialog() {

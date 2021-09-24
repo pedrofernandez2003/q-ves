@@ -635,13 +635,8 @@ public class JugarActivity extends AppCompatActivity  {
         ArrayList<TextView> espaciosTextos = conseguirTextViews();
         ArrayList<Categoria> categorias = plantilla.getCategorias();
         ImageView imageView = (ImageView) findViewById(R.id.personaje);
-        byte[] imageBytes;
-//Image String es una entrada del array de cosas en b64
-        imageBytes = Base64.decode(plantilla.getPersonajes().get(GameContext.getRonda()-1).getNombre(), Base64.DEFAULT);
-        Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-        imageView.setImageBitmap(decodedImage);
-//        Picasso.with(imageView.getContext()).load("https://firebasestorage.googleapis.com/v0/b/qves-ddf27.appspot.com/o/images%2Foutput-onlinejpgtools.jpg?alt=media&token=ebf53013-726c-4d13-bc6c-5f7bc7fbc47e"
-//        ).into(imageView);
+        Picasso.with(imageView.getContext()).load("https://firebasestorage.googleapis.com/v0/b/qves-ddf27.appspot.com/o/images%2Foutput-onlinejpgtools.jpg?alt=media&token=ebf53013-726c-4d13-bc6c-5f7bc7fbc47e"
+        ).into(imageView);
 
         for (int i = 0; i < 10; i++) {
             System.out.println(categorias.get(i).getNombre());

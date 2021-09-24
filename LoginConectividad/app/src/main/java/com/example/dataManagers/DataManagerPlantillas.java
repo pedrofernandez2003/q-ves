@@ -46,8 +46,10 @@ public class DataManagerPlantillas extends DataManager {
                         ArrayList<Categoria>categorias=new ArrayList<>();
                         ArrayList<String>personajesBase=(ArrayList<String>) document.getData().get("personajes");
                         ArrayList<Personaje>personajes=new ArrayList<>();
+                        int contador=0;
                         for (String url:personajesBase){
-                            Personaje personaje=new Personaje("",url);
+                            contador++;
+                            Personaje personaje=new Personaje(url,(String) document.getData().get("nombre")+"_imagen_"+contador);
                             personajes.add(personaje);
                         }
                         String mailModerador= (String) document.getData().get("moderador");
