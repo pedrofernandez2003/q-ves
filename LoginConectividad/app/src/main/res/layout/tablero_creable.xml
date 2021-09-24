@@ -446,6 +446,7 @@
                 app:layout_constraintWidth_percent="0.20">
 
                 <LinearLayout
+                    android:id="@+id/anularCarta"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center">
@@ -456,7 +457,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/hlsimple"
-                        android:text="Anuladas"
+                        android:text="Anular"
                         android:textColor="@android:color/white"
                         android:textSize="14sp" />
 

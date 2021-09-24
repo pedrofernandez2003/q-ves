@@ -150,7 +150,6 @@ public class ServicioJuego extends Service {
                                             intent.setAction("ganador");
                                             contexto.sendBroadcast(intent);
                                             break;
-
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -188,6 +187,9 @@ public class ServicioJuego extends Service {
                                                 escribir.execute(msg, i);
                                             }
                                             break;
+
+
+
                                         case "jugada":
                                             System.out.println("buffer "+buffer +"\n mensaje"+mensaje.getDatos().get(0));
                                             Tarjeta tarjeta= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
@@ -268,6 +270,24 @@ public class ServicioJuego extends Service {
                                             }
                                             break;
 
+                                        case "notificarModeradorSobreAnulacion":
+                                            Tarjeta tarjetaAAnular= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
+                                            intent2= new Intent();
+                                            //intent2.putExtra("", ganador); como poner tarjeta no se
+                                            intent2.setAction("notificarModerador");
+                                            contexto.sendBroadcast(intent2);
+                                            break;
+
+                                        case "anular_carta":
+                                            tarjetaAAnular= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
+                                            mapDatos=new HashMap<>();
+                                            try {
+                                                mapDatos = json.fromJson(mensaje.getDatos().get(1),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
+                                            } catch (JsonSyntaxException e) {
+                                                e.printStackTrace();
+                                            }
+                                            nombreEquipo= mapDatos.get("idJugador");
+                                            break;
                                         case "misCartas":
                                             System.out.println("me llegaron cartas");
                                             mapDatos=new HashMap<>();

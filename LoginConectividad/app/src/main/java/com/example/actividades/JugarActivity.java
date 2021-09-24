@@ -24,7 +24,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,6 +39,7 @@ import com.example.objetos.Juego;
 import com.example.objetos.Mensaje;
 import com.example.objetos.Partida;
 import com.example.objetos.Tarjeta;
+import com.example.objetos.TarjetaSinCategoria;
 import com.example.objetos.manejoSockets.Write;
 import com.example.R;
 import com.example.objetos.Plantilla;
@@ -56,7 +59,7 @@ public class JugarActivity extends AppCompatActivity  {
     private HashSet<Tarjeta> tarjetasHashSet;
     private TextView turno, ronda;
     private Button botonAgarrarCarta, botonPasarTurno;
-    private LinearLayout botonVerCartas;
+    private LinearLayout botonVerCartas,botonAnularCarta;
     private Boolean puedeAgarrarCarta=true;
 
     Context appContext=this;
@@ -97,6 +100,24 @@ public class JugarActivity extends AppCompatActivity  {
                     final AlertDialog a = db.create();
                     a.show();
                     break;
+
+                case "notificarModerador":
+                    boolean anuladoCorrectamente;
+                    //Le sale el alertdialog y si pone que si el boolean es true, si no es false :D
+                    ArrayList<String> datos=new ArrayList<>();
+                    datos.add(GameContext.getTarjetaElegida().serializar());
+                    //datos.add("{\"anuladoCorrectamente\": \""+anuladoCorrectamente+"\"}"); //como poner booleano, no se :)
+                    Mensaje mensaje=new Mensaje("notificarModeradorSobreAnulacion",datos);
+                    String msg=mensaje.serializar();
+                    System.out.println("mensaje enviado "+msg);
+                    Write escribir = new Write();
+                    escribir.execute(msg, 0);
+                    break;
+
+                case "anularCarta":
+                    // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
+                    sacarTarjetaDelTablero();
+                    break;
             }
         }
     };
@@ -132,6 +153,54 @@ public class JugarActivity extends AppCompatActivity  {
         botonAgarrarCarta=(Button)findViewById(R.id.agarrarCarta);
         botonPasarTurno=(Button)findViewById(R.id.pasar);
         botonVerCartas = findViewById(R.id.verCartas);
+        botonAnularCarta = findViewById(R.id.anularCarta);
+        botonAnularCarta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (GameContext.getServer()==null && GameContext.isEsMiTurno()){
+                    LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
+                    View dialog_layout = inflater.inflate(R.layout.anular_carta, null);
+                    AlertDialog.Builder db = new AlertDialog.Builder(getApplicationContext());
+                    db.setView(dialog_layout);
+                    db.setTitle("Anular Tarjeta");
+                    db.setPositiveButton("Enviar propuesta", null);
+                    db.setNegativeButton("Atras", null);
+                    final AlertDialog a = db.create();
+
+                    a.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            Button si = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                            Button no = a.getButton(AlertDialog.BUTTON_NEGATIVE);
+                            no.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    a.dismiss();
+                                }
+                            });
+                            si.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    //MANDARLE AL MODERADOR ESTO DE QUE SE QUIERE DEBIR ESTE TARJETA, QUE ESTA EN GAMECONTEXT.GETTARJETAELEJIDA
+                                    ArrayList<String> datos=new ArrayList<>();
+                                    datos.add(GameContext.getTarjetaElegida().serializar());
+                                    datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+                                    Mensaje mensaje=new Mensaje("notificarModeradorSobreAnulacion",datos);
+                                    String msg=mensaje.serializar();
+                                    System.out.println("mensaje enviado "+msg);
+                                    Write escribir = new Write();
+                                    escribir.execute(msg, 0);
+
+                                    a.dismiss();
+                                }
+                            });
+                        }
+                    });
+                    a.show();
+                }
+            }
+        });
         botonAgarrarCarta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,7 +270,6 @@ public class JugarActivity extends AppCompatActivity  {
                 }
             }
         });
-
         botonVerCartas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -321,8 +389,6 @@ public class JugarActivity extends AppCompatActivity  {
     }
 
     public boolean insertarTarjetaEnTablero() {
-        // IDEA: deberia buscar entre todos los text para ver cual corresponde
-        // con la categoria y cambiar algo como para decir "Estoy aca :D"
 
         boolean insertoLaTarjeta=false;
 
@@ -356,6 +422,20 @@ public class JugarActivity extends AppCompatActivity  {
         return insertoLaTarjeta;
     }
 
+    public void sacarTarjetaDelTablero() {
+        GameContext.getTarjetaElegida().getCategoria();
+        for (Casillero casillero:casilleros) {
+            if (casillero.getCategoria().getNombre().equals(GameContext.getTarjetaElegida().getCategoria())) {
+
+                CardView prueba = (CardView) findViewById(casillero.getId());
+                prueba.removeAllViews();
+
+                //aca hacer parte diseño para que sea como antes
+                LinearLayout categoria;
+                //prueba.addView(categoria);
+            }
+        }
+    }
 //    public void conseguirCartaDelMazoYPonerlaEnTusCartas() {
 //        HashSet<Tarjeta> misTarjetas=GameContext.getEquipo().getTarjetas();
 //        HashSet<Tarjeta> mazo=GameContext.getJuego().getMazo();
