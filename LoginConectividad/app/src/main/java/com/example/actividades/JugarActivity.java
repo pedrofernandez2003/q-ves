@@ -410,21 +410,21 @@ public class JugarActivity extends AppCompatActivity  {
     public void traerImagen() {
         System.out.println("entre a la funcion");
         ImageView imageView = (ImageView) findViewById(R.id.personaje);
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://10.137.94.185:5880/";
+//        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://100.111.34.159:5880/";
         System.out.println("llego");
         ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() { // Bitmap listener
                     @Override
                     public void onResponse(Bitmap response) {
                         // Do something with response
-
-
+                        System.out.println("trajo la imagen "+response.toString());
+                        response = Bitmap.createScaledBitmap(response, 400, 400, false);
+                        imageView.setImageBitmap(response);
                     }
                 },
-                1000, // Image width
-                1000, // Image height
-                ImageView.ScaleType.CENTER_CROP, // Image scale type
-                Bitmap.Config.RGB_565, //Image decode configuration
+                0, // Image width
+                0, // Image height
+                null, // Image scale type
                 new Response.ErrorListener() { // Error listener
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -435,7 +435,7 @@ public class JugarActivity extends AppCompatActivity  {
                 }
         );
         // Add ImageRequest to the RequestQueue
-        queue.add(imageRequest);
+        Volley.newRequestQueue(this).add(imageRequest);
     }
 
     public boolean insertarTarjetaEnTablero() {
