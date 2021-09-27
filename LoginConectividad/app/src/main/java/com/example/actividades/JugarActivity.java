@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -32,6 +33,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.objetos.Casillero;
 import com.example.objetos.Categoria;
 import com.example.objetos.GameContext;
@@ -46,9 +55,17 @@ import com.example.objetos.Plantilla;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
+
+import fi.iki.elonen.NanoHTTPD;
 
 public class JugarActivity extends AppCompatActivity  {
     //    private GameContext context;
@@ -201,6 +218,7 @@ public class JugarActivity extends AppCompatActivity  {
                 }
             }
         });
+
         botonAgarrarCarta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -242,6 +260,7 @@ public class JugarActivity extends AppCompatActivity  {
                 }
             }
         });
+
         botonPasarTurno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -388,6 +407,37 @@ public class JugarActivity extends AppCompatActivity  {
         });
     }
 
+    public void traerImagen() {
+        System.out.println("entre a la funcion");
+        ImageView imageView = (ImageView) findViewById(R.id.personaje);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://10.137.94.185:5880/";
+        System.out.println("llego");
+        ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() { // Bitmap listener
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        // Do something with response
+
+
+                    }
+                },
+                1000, // Image width
+                1000, // Image height
+                ImageView.ScaleType.CENTER_CROP, // Image scale type
+                Bitmap.Config.RGB_565, //Image decode configuration
+                new Response.ErrorListener() { // Error listener
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Do something with error response
+                        error.printStackTrace();
+                        System.out.println("error "+error.toString());
+                    }
+                }
+        );
+        // Add ImageRequest to the RequestQueue
+        queue.add(imageRequest);
+    }
+
     public boolean insertarTarjetaEnTablero() {
 
         boolean insertoLaTarjeta=false;
@@ -436,28 +486,6 @@ public class JugarActivity extends AppCompatActivity  {
             }
         }
     }
-//    public void conseguirCartaDelMazoYPonerlaEnTusCartas() {
-//        HashSet<Tarjeta> misTarjetas=GameContext.getEquipo().getTarjetas();
-//        HashSet<Tarjeta> mazo=GameContext.getJuego().getMazo();
-//
-//        int size = mazo.size();
-//        int item = new Random().nextInt(size);
-//        int i = 0;
-//
-//        for (Tarjeta obj : mazo) {
-//            if (i == item) {
-//                misTarjetas.add(obj);
-//                mazo.remove(obj);
-//                break;
-//            }
-//            i++;
-//        }
-//
-//        GameContext.getEquipo().setTarjetas(misTarjetas);
-//        GameContext.getJuego().setMazo(mazo);
-//
-//    }
-
 
     public CardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
 
@@ -634,9 +662,10 @@ public class JugarActivity extends AppCompatActivity  {
         ArrayList<CardView> espacioCartas = conseguirCardViews();
         ArrayList<TextView> espaciosTextos = conseguirTextViews();
         ArrayList<Categoria> categorias = plantilla.getCategorias();
-        ImageView imageView = (ImageView) findViewById(R.id.personaje);
-        Picasso.with(imageView.getContext()).load("https://firebasestorage.googleapis.com/v0/b/qves-ddf27.appspot.com/o/images%2Foutput-onlinejpgtools.jpg?alt=media&token=ebf53013-726c-4d13-bc6c-5f7bc7fbc47e"
-        ).into(imageView);
+//        ImageView imageView = (ImageView) findViewById(R.id.personaje);
+        traerImagen();
+//        Picasso.with(imageView.getContext()).load("https://firebasestorage.googleapis.com/v0/b/qves-ddf27.appspot.com/o/images%2Foutput-onlinejpgtools.jpg?alt=media&token=ebf53013-726c-4d13-bc6c-5f7bc7fbc47e"
+//        ).into(imageView);
 
         for (int i = 0; i < 10; i++) {
             System.out.println(categorias.get(i).getNombre());

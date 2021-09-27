@@ -9,6 +9,9 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
 import com.example.interfaces.conectarCallback;
 import com.example.objetos.manejoSockets.ClientClass;
 import com.example.objetos.manejoSockets.HTTPServer;
@@ -30,6 +33,7 @@ import java.util.Random;
 
 public class ServicioJuego extends Service {
     private ThreadedEchoServer server;
+    private HTTPServer httpServer;
 
     @Nullable
     @Override
@@ -167,8 +171,7 @@ public class ServicioJuego extends Service {
                 case "crear server":
                     System.out.println("IP mod: " + getIPAddress(true));
                     try {
-                        HTTPServer httpServer=new HTTPServer();
-                        httpServer.start();
+                        httpServer=new HTTPServer();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -446,6 +449,8 @@ public class ServicioJuego extends Service {
     @Override
     public void onDestroy() {
         unregisterReceiver(broadcastReceiver);
+        httpServer.stop();
+        httpServer.closeAllConnections();
         super.onDestroy();
     }
 }

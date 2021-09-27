@@ -32,16 +32,23 @@ public class HTTPServer extends NanoHTTPD {
     @Override
     public Response serve(IHTTPSession session) {
         FileInputStream fis = null;
-        File f=null;
+        File f = null;
         try {
-            f =new File("/data/data/yourapp/app_data/personajes", session.getParameters().get("url").get(0));
+//            f = new File("/data/data/yourapp/app_data/personajes", session.getParameters().get("url").get(0));
+            f = new File("/data/user/0/com.example.login_crud/app_personajes/", "insa_imagen_1.png");
             fis = new FileInputStream(f);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return new NanoHTTPD.Response(NanoHTTPD.Response.Status.OK, "image/png", fis, f.length());
-        //        String msg = "<html><body><h1>Hello server</h1>\n";
+
+        try {
+            return newFixedLengthResponse(Response.Status.OK, "image/png", fis, fis.available());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+//                String msg = "<html><body><h1>Hello server</h1>\n";
 //        Map<String, String> parms = session.getParms();
 //        if (parms.get("username") == null) {
 //            msg += "<form action='?' method='get'>\n  <p>Your name: <input type='text' name='username'></p>\n" + "</form>\n";

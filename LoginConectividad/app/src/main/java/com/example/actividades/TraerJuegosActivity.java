@@ -234,7 +234,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
                         Picasso.with(appCcontext).load(personaje.getFoto()).into(new Target() {
                             @Override
                             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                descargarImagen(bitmap,personaje.getFoto());
+                                descargarImagen(bitmap,personaje.getNombre());
 
                             }
 
@@ -267,7 +267,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
         File directory = cw.getDir("personajes", Context.MODE_PRIVATE);
         // Create personajes
         File mypath=new File(directory,nombre+".png");
-
+        System.out.println(mypath.getAbsolutePath());
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(mypath);
