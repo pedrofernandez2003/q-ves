@@ -81,7 +81,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
         wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         currentConfig=new WifiConfiguration();
         juego=new Juego();
-        mostrarPlantillas(this.getApplicationContext());
+        mostrarPlantillas(juego.getPlantilla().getModerador(), this.getApplicationContext());
 
         botonComenzarPartida.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,8 +230,8 @@ public class TraerJuegosActivity extends AppCompatActivity {
         return mazoPorEquipo;
     }
     Context appContext=this;
-    private void mostrarPlantillas(Context appCcontext)  {
-        DataManagerPlantillas.traerPlantillas(new onTraerDatosListener() {
+    private void mostrarPlantillas(String moderador,Context appCcontext)  {
+        DataManagerPlantillas.traerPlantillas(moderador,new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
                 for (Object PlantillaObject:datos) {

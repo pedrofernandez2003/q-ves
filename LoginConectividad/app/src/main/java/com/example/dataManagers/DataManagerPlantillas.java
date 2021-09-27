@@ -30,9 +30,9 @@ public class DataManagerPlantillas extends DataManager {
         super();
     }
 
-    public static void traerPlantillas(onTraerDatosListener listener) {
+    public static void traerPlantillas(String moderador,onTraerDatosListener listener) {
         ArrayList<Object> plantillas = new ArrayList<Object>();
-        DataManager.getDb().collection("plantillas").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DataManager.getDb().collection("plantillas").whereEqualTo("usuario", moderador).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
