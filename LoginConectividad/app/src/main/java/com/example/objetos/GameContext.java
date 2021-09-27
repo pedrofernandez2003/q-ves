@@ -19,6 +19,7 @@ public class GameContext{
     private static HashMap<String, Integer> resultados=new HashMap<>();
     private static int cantMensajesRecibidos=0; //los jugadores empiezan a mandar la cantidad de cartas que les quedan
     private static Tarjeta tarjetaElegida;
+    private static Tarjeta tarjetaAnulada;
 
     private GameContext(){}
     public static GameContext getGameContext() {
@@ -108,5 +109,13 @@ public class GameContext{
 
     public static void setTarjetaElegida(Tarjeta tarjetaElegida) {
         GameContext.tarjetaElegida = tarjetaElegida;
+    }
+
+    public static Tarjeta getTarjetaAnulada() {
+        return tarjetaAnulada;
+    }
+
+    public static void setTarjetaAnulada(Tarjeta tarjetaAnulada) {
+        GameContext.tarjetaAnulada = tarjetaAnulada;
     }
 }
