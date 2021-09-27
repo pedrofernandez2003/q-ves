@@ -1,8 +1,11 @@
 package com.example.actividades;
 import android.Manifest;
+import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.view.Gravity;
+import android.widget.FrameLayout.LayoutParams;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -11,20 +14,24 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.Person;
 
 import android.os.Handler;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.content.Context;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.listeners.onTraerDatosListener;
 import com.example.objetos.Categoria;
+import com.example.objetos.Color;
 import com.example.objetos.Equipo;
 import com.example.objetos.GameContext;
 import com.example.objetos.Juego;
@@ -37,6 +44,7 @@ import com.example.R;
 import com.example.dataManagers.DataManagerPlantillas;
 import com.example.objetos.Plantilla;
 import com.example.objetos.ServicioJuego;
+import com.google.android.gms.common.util.Hex;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -231,34 +239,50 @@ public class TraerJuegosActivity extends AppCompatActivity {
     }
     Context appContext=this;
     private void mostrarPlantillas(String moderador,Context appCcontext)  {
+        System.out.println("moderador"+moderador);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int widthPlantilla = (width*4)/5;
+        int heightPlantilla = widthPlantilla/4;
         DataManagerPlantillas.traerPlantillas(moderador,new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
-                for (Object PlantillaObject:datos) {
-                    Plantilla plantilla= (Plantilla) PlantillaObject;
-                    LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
-                    Button button = new Button(appCcontext);
-                    button.setLayoutParams(lp);
-                    button.setText(plantilla.getNombre());
-                    button.setBackgroundColor(999999);
-                    llBotonera.addView(button);
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @RequiresApi(api = Build.VERSION_CODES.O)
-                        @Override
-                        public void onClick(View v) {
-                            turnOnHotspot();
-                            juego= new Juego(plantilla);
-                            cantidadEquipos=plantilla.getCantEquipos();
-                            textoCargando.setVisibility(View.VISIBLE);
-                            cantidadEquiposTextView.setVisibility(View.VISIBLE);
-                            nombreRed.setVisibility(View.VISIBLE);
-                            claveRed.setVisibility(View.VISIBLE);
-                            Intent intent= new Intent();
-                            intent.setAction("crear server");
-                            appContext.sendBroadcast(intent);
-                        }
-                    });
+                if(datos.size()>0) {
+                    for (Object PlantillaObject : datos) {
+                        Plantilla plantilla = (Plantilla) PlantillaObject;
+                        LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        Button button = new Button(appCcontext);
+                        button.setLayoutParams(lp);
+                        button.setText(plantilla.getNombre());
+                        button.setBackgroundColor(999999);
+                        CardView cardView = new CardView(appCcontext);
+                        LayoutParams params= new LayoutParams(widthPlantilla, heightPlantilla);
+                        params.gravity= Gravity.CENTER;
+                        cardView.setCardBackgroundColor(getResources().getColor(R.color.azul_plantilla));
+                        cardView.setRadius(40);
+                        cardView.setLayoutParams(params);
+                        button.setOnClickListener(new View.OnClickListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.O)
+                            @Override
+                            public void onClick(View v) {
+                                turnOnHotspot();
+                                juego = new Juego(plantilla);
+                                cantidadEquipos = plantilla.getCantEquipos();
+                                textoCargando.setVisibility(View.VISIBLE);
+                                cantidadEquiposTextView.setVisibility(View.VISIBLE);
+                                nombreRed.setVisibility(View.VISIBLE);
+                                claveRed.setVisibility(View.VISIBLE);
+                                Intent intent = new Intent();
+                                intent.setAction("crear server");
+                                appContext.sendBroadcast(intent);
+                            }
+                        });
+                    }
+                }
+                else{
+
                 }
             }
         });

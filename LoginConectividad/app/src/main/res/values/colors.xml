@@ -5,7 +5,8 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-     <color name="colorPrimary">#008577</color>
+    <color name="green_light">#9ec481</color>
+    <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="grey">#848282</color>
@@ -15,4 +16,8 @@
     <color name="lightorange">#A6FFA500</color>
     <color name="black">#000000</color>
     <color name="skyblue">#4BB4E9</color>
+    <color name="azul_plantilla">#20639b</color>
+    <color name="verde_nuevaPlantilla">#5f9b89</color>
+    <color name="naranja_intenso">#d64700</color>
+    <color name="naranja_claro">#ff9931</color>
 </resources>
