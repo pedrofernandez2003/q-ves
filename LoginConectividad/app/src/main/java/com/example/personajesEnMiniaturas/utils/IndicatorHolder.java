@@ -7,12 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import com.example.R;
 
-
-/**
- * Author CodeBoy722
- *
- * recyclerViewPagerImageIndicator's ViewHolder
- */
 public class IndicatorHolder extends RecyclerView.ViewHolder{
 
     public ImageView image;

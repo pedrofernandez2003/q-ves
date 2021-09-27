@@ -8,12 +8,6 @@ import android.widget.ImageView;
 import com.example.R;
 
 
-/**
- *Author CodeBoy722
- *
- * picture_Adapter's ViewHolder
- */
-
 public class PicHolder extends RecyclerView.ViewHolder{
 
     public ImageView picture;

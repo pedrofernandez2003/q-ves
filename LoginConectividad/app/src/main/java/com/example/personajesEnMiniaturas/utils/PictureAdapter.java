@@ -13,24 +13,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 
-/**
- * Author CodeBoy722
- *
- * A RecyclerView Adapter class that's populates a RecyclerView with images from
- * a folder on the device external storage
- */
 public class PictureAdapter extends RecyclerView.Adapter<PicHolder> {
 
     private ArrayList<PictureFacer> pictureList;
     private Context pictureContx;
     private final itemClickListener picListerner;
 
-    /**
-     *
-     * @param pictureList ArrayList of pictureFacer objects
-     * @param pictureContx The Activities Context
-     * @param picListerner An interface for listening to clicks on the RecyclerView's items
-     */
     public PictureAdapter(ArrayList<PictureFacer> pictureList, Context pictureContx, itemClickListener picListerner) {
         this.pictureList = pictureList;
         this.pictureContx = pictureContx;
@@ -55,7 +43,6 @@ public class PictureAdapter extends RecyclerView.Adapter<PicHolder> {
                 .apply(new RequestOptions().centerCrop())
                 .into(holder.picture);
 
-//        setTransitionName(holder.picture, String.valueOf(position) + "_image");
 
         holder.picture.setOnClickListener(new View.OnClickListener() {
             @Override

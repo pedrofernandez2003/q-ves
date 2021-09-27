@@ -38,7 +38,7 @@ public class SendReceive extends Thread {
                 bytes = inputStream.read(buffer);
                 if (bytes > 0) {
                     if ((byte)'>'== buffer[0]){
-                        callbackMensaje.mensajeRecibido(MESSAGE_READ, bufferAcumulado);//no funciona
+                        callbackMensaje.mensajeRecibido(MESSAGE_READ, bufferAcumulado);
                         bufferAcumulado="";
                     }
                     else   {

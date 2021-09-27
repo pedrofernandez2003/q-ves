@@ -63,15 +63,6 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
                 @Override
                 public void traerPersonaje(ArrayList<PictureFacer> datos) {
                     for (PictureFacer personaje : datos) {
-//                        if( getIntent().getExtras() != null)
-//                        {
-//                            personajesElegidos = getIntent().getStringArrayListExtra("personajes");
-//                            if( getIntent().getStringArrayListExtra("personajes").contains(personaje.getPicturePath())){
-//                                System.out.println("Imagen que viene de la clase: "+personaje.getPicturePath());
-//
-//                            }
-//                        }
-                        System.out.println(datos);
 
                         allpictures.add(personaje);
                     }
@@ -132,11 +123,6 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
                 .commit();
     }
 
-
-    @Override
-    public void onPicClicked(String pictureFolderPath, String folderName) {
-
-    }
 
 
     private void traerPersonajes(onTraerPersonajesListener listener) {

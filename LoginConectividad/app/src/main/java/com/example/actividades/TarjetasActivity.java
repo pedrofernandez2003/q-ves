@@ -351,14 +351,5 @@ public class TarjetasActivity extends AppCompatActivity {
                 });
             }
         });
-
-//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
-//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
-//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
-//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
     }
 }
-
-/*IDEA, PARA CATEGORIA ACTIVITY
- QUE CUANDO TOQUES EL BOTON CAMBIE UN BOOLEANO GLOBAL
- Y EN EL ONCLICK SI ES TRUE SEA PARA MODIFICAR LA CATEGORIA Y SI ES FALSE ENTRA A LAS TARJETAS*/

@@ -6,10 +6,7 @@ import android.util.AttributeSet;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * Author CodeBoy722
- * A custom RecyclerView with GridLayout AutoFit Behavior
- */
+
 public class AutoFitRecyclerView extends RecyclerView {
 
     private int columnWidth = -1;

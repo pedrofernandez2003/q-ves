@@ -1,10 +1,6 @@
 package com.example.personajesEnMiniaturas.utils;
 
-/**
- * Author CodeBoy722
- *
- * Custom class for holding data of images on the device external storage
- */
+
 public class PictureFacer {
 
     private String picturName;

@@ -9,10 +9,6 @@ public class TarjetaSinCategoria {
         this.yapa = yapa;
     }
 
-    public TarjetaSinCategoria() {
-    }
-
-
     public String  getContenido() {
         return contenido;
     }

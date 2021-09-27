@@ -14,21 +14,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 
-/**
- * Author CodeBoy722
- */
 public class RecyclerViewPagerImageIndicator extends RecyclerView.Adapter<IndicatorHolder> {
 
     ArrayList<PictureFacer> pictureList;
     Context pictureContx;
     private final imageIndicatorListener imageListerner;
 
-    /**
-     *
-     * @param pictureList ArrayList of pictureFacer objects
-     * @param pictureContx The Activity of fragment context
-     * @param imageListerner Interface for communication between adapter and fragment
-     */
     public RecyclerViewPagerImageIndicator(ArrayList<PictureFacer> pictureList, Context pictureContx, imageIndicatorListener imageListerner) {
         this.pictureList = pictureList;
         this.pictureContx = pictureContx;

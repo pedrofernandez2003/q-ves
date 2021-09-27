@@ -26,13 +26,6 @@ import java.util.ArrayList;
 import static androidx.core.view.ViewCompat.setTransitionName;
 
 
-/**
- * Author: CodeBoy722
- *
- * this fragment handles the browsing of all images in an ArrayList of pictureFacer passed in the constructor
- * the images are loaded in a ViewPager an a RecyclerView is used as a pager indicator for
- * each image in the ViewPager
- */
 public class PictureBrowserFragment extends Fragment implements imageIndicatorListener {
 
     private  ArrayList<PictureFacer> allImages = new ArrayList<>();
@@ -153,22 +146,15 @@ public class PictureBrowserFragment extends Fragment implements imageIndicatorLi
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        /**
-         * initialisation of the recyclerView visibility control integers
-         */
+        //initialisation of the recyclerView visibility control integers
         viewVisibilityController = 0;
         viewVisibilitylooper = 0;
-
-        /**
-         * setting up the viewPager with images
-         */
+        //setting up the viewPager with images
         imagePager = view.findViewById(R.id.imagePager);
         pagingImages = new ImagesPagerAdapter();
         imagePager.setAdapter(pagingImages);
         imagePager.setOffscreenPageLimit(3);
         imagePager.setCurrentItem(position);
-
         indicatorRecycler = view.findViewById(R.id.indicatorRecycler);
         indicatorRecycler.hasFixedSize();
         RecyclerView.Adapter indicatorAdapter = new RecyclerViewPagerImageIndicator(allImages,getContext(),this);
