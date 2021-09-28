@@ -1,5 +1,6 @@
 package com.example.actividades;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,6 +18,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.DhcpInfo;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
@@ -81,8 +84,11 @@ public class JugarActivity extends AppCompatActivity  {
     private Button botonAgarrarCarta, botonPasarTurno;
     private LinearLayout botonVerCartas,botonAnularCarta;
     private Boolean puedeAgarrarCarta=true;
+    private String ultimoEquipoQueTiroCarta;
     private WifiManager wifiManager;
     private DhcpInfo d;
+
+
 
     Context appContext=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -109,6 +115,9 @@ public class JugarActivity extends AppCompatActivity  {
 
                 case "actualizar":
                     insertarTarjetaEnTablero();
+                    ultimoEquipoQueTiroCarta=intent.getStringExtra("equipo");
+                    // crear variable que sea jugador que tiro carta y actualizarlo aca con el que jugp
+
                     break;
 
                 case "ganador":
@@ -124,21 +133,17 @@ public class JugarActivity extends AppCompatActivity  {
                     break;
 
                 case "notificarModerador":
-                    boolean anuladoCorrectamente;
                     //Le sale el alertdialog y si pone que si el boolean es true, si no es false :D
-                    ArrayList<String> datos=new ArrayList<>();
-                    datos.add(GameContext.getTarjetaElegida().serializar());
-                    //datos.add("{\"anuladoCorrectamente\": \""+anuladoCorrectamente+"\"}"); //como poner booleano, no se :)
-                    Mensaje mensaje=new Mensaje("notificarModeradorSobreAnulacion",datos);
-                    String msg=mensaje.serializar();
-                    System.out.println("mensaje enviado "+msg);
-                    Write escribir = new Write();
-                    escribir.execute(msg, 0);
+                    System.out.println("Soy el moderador que va validar la anulacion");
+                    ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
+                    crearAlertDialogSobreAnulacion();
                     break;
 
                 case "anularCarta":
+                    System.out.println("Hola soy un usuario que va a anular la tarjeta en su tablero");
+
                     // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
-                    sacarTarjetaDelTablero();
+//                    sacarTarjetaDelTablero();
                     break;
             }
         }
@@ -156,6 +161,8 @@ public class JugarActivity extends AppCompatActivity  {
         intentFilter.addAction("reiniciar");
         intentFilter.addAction("actualizar");
         intentFilter.addAction("ganador");
+        intentFilter.addAction("notificarModerador");
+        intentFilter.addAction("anularCarta");
         registerReceiver(broadcastReceiver,intentFilter);
         juego= GameContext.getJuego();
         partida=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1);
@@ -182,9 +189,11 @@ public class JugarActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 if (GameContext.getServer()==null && GameContext.isEsMiTurno()){
+                    //hacer que tambien este aca la tarjeta a la izquierda del texto para que este lindo :D
+
                     LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
                     View dialog_layout = inflater.inflate(R.layout.anular_carta, null);
-                    AlertDialog.Builder db = new AlertDialog.Builder(getApplicationContext());
+                    AlertDialog.Builder db = new AlertDialog.Builder(JugarActivity.this);
                     db.setView(dialog_layout);
                     db.setTitle("Anular Tarjeta");
                     db.setPositiveButton("Enviar propuesta", null);
@@ -205,11 +214,12 @@ public class JugarActivity extends AppCompatActivity  {
                             si.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    System.out.println("Soy el usuario que va a intentar anular");
 
                                     //MANDARLE AL MODERADOR ESTO DE QUE SE QUIERE DEBIR ESTE TARJETA, QUE ESTA EN GAMECONTEXT.GETTARJETAELEJIDA
                                     ArrayList<String> datos=new ArrayList<>();
                                     datos.add(GameContext.getTarjetaElegida().serializar());
-                                    datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+                                    datos.add("{\"idJugador\": \""+ultimoEquipoQueTiroCarta+"\"}");
                                     Mensaje mensaje=new Mensaje("notificarModeradorSobreAnulacion",datos);
                                     String msg=mensaje.serializar();
                                     System.out.println("mensaje enviado "+msg);
@@ -477,7 +487,7 @@ public class JugarActivity extends AppCompatActivity  {
         }
         return insertoLaTarjeta;
     }
-
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) //CHEQUEAR ESTO, QUE ES POR EL FONT_FEATURE_SETTINGS
     public void sacarTarjetaDelTablero() {
         GameContext.getTarjetaElegida().getCategoria();
         for (Casillero casillero:casilleros) {
@@ -486,13 +496,91 @@ public class JugarActivity extends AppCompatActivity  {
                 CardView prueba = (CardView) findViewById(casillero.getId());
                 prueba.removeAllViews();
 
-                //aca hacer parte diseño para que sea como antes
-                LinearLayout categoria;
+                // deberia funcionar, o eso espero :(
+                LinearLayout categoria=new LinearLayout(JugarActivity.this);
+                categoria.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                categoria.setGravity(Gravity.CENTER);
+
+                TextView categoriaTxt=new TextView(JugarActivity.this);
+                categoriaTxt.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                categoriaTxt.setGravity(Gravity.CENTER);
+                categoriaTxt.setFontFeatureSettings(String.valueOf(R.font.hlsimple));
+                categoriaTxt.setTextColor(getResources().getColor(R.color.white));
+                categoriaTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+                categoriaTxt.setText(casillero.getCategoria().getNombre());
                 //prueba.addView(categoria);
             }
         }
     }
 
+    public void crearAlertDialogSobreAnulacion(){
+
+        LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
+        View dialog_layout = inflater.inflate(R.layout.anular_carta, null);
+        AlertDialog.Builder db = new AlertDialog.Builder(JugarActivity.this);
+        db.setView(dialog_layout);
+        db.setTitle("Anular Tarjeta");
+        db.setPositiveButton("Aceptar propuesta", null);
+        db.setNegativeButton("Rechazar propuesta", null);
+        final AlertDialog a = db.create();
+
+        a.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button si = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button no = a.getButton(AlertDialog.BUTTON_NEGATIVE);
+                no.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent intent= new Intent();
+                        intent.putExtra("equipoDeCartaAnulada", ultimoEquipoQueTiroCarta);
+                        intent.putExtra("anuladoCorrectamente", false);
+                        intent.setAction("enviar_anular_carta");
+                        JugarActivity.this.sendBroadcast(intent);
+
+
+                        System.out.println("Soy el moderador que rechazo la anulacion");
+//                        ArrayList<String> datos=new ArrayList<>();
+//                        datos.add("{\"idJugador\": \""+ultimoEquipoQueTiroCarta+"\"}");
+//                        datos.add("{\"anuladoCorrectamente\": \""+Boolean.valueOf(false).toString()+"\"}");
+//                        Mensaje mensaje=new Mensaje("notificarModeradorSobreAnulacion",datos);
+//                        String msg=mensaje.serializar();
+//                        System.out.println("mensaje enviado "+msg);
+//                        Write escribir = new Write();
+//                        escribir.execute(msg, 0);
+
+                        a.dismiss();
+                    }
+                });
+                si.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //charlar con pepo si es un msg o un intent
+                        System.out.println("Soy el moderador que avalo la anulacion");
+
+                        Intent intent= new Intent();
+                        intent.putExtra("equipoDeCartaAnulada", ultimoEquipoQueTiroCarta);
+                        intent.putExtra("anuladoCorrectamente", true);
+                        intent.setAction("enviar_anular_carta");
+                        JugarActivity.this.sendBroadcast(intent);
+
+//                        ArrayList<String> datos=new ArrayList<>();
+//                        datos.add("{\"idJugador\": \""+ultimoEquipoQueTiroCarta+"\"}");
+//                        datos.add("{\"anuladoCorrectamente\": \""+Boolean.valueOf(true).toString()+"\"}");
+//                        Mensaje mensaje=new Mensaje("anular_carta",datos);
+//                        String msg=mensaje.serializar();
+//                        System.out.println("mensaje enviado "+msg);
+//                        Write escribir = new Write();
+//                        escribir.execute(msg, 0);
+
+                        a.dismiss();
+                    }
+                });
+            }
+        });
+        a.show();
+    }
     public CardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
 
             // Crear la base

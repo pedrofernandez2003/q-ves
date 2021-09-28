@@ -37,6 +37,7 @@ public class HTTPServer extends NanoHTTPD {
         try {
             f = new File("data/user/0/com.example.login_crud/app_personajes/", session.getParameters().get("imagen").get(0)+".png");
 //            f = new File("/data/user/0/com.example.login_crud/app_personajes/", "insa_imagen_1.png");
+
             fis = new FileInputStream(f);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
