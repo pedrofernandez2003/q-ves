@@ -1,7 +1,9 @@
 package com.example.actividades;
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -16,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.content.Context;
 import android.widget.Button;
@@ -59,6 +62,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private ThreadedEchoServer server;
     private ArrayList<Categoria> categorias;
     private Boolean cantidadExacta = true;
+    private Boolean click=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,16 +222,53 @@ public class TraerJuegosActivity extends AppCompatActivity {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void onClick(View v) {
-                            turnOnHotspot();
-                            juego= new Juego(plantilla);
-                            cantidadEquipos=plantilla.getCantEquipos();
-                            textoCargando.setVisibility(View.VISIBLE);
-                            cantidadEquiposTextView.setVisibility(View.VISIBLE);
-                            nombreRed.setVisibility(View.VISIBLE);
-                            claveRed.setVisibility(View.VISIBLE);
-                            Intent intent= new Intent();
-                            intent.setAction("crear server");
-                            appContext.sendBroadcast(intent);
+                            LayoutInflater inflater = LayoutInflater.from(TraerJuegosActivity.this);
+
+                            View dialog_layout = inflater.inflate(R.layout.confirmacion_accion, null);
+                            TextView seleccionado = dialog_layout.findViewById(R.id.confirmarSelección);
+
+                            AlertDialog.Builder db = new AlertDialog.Builder(TraerJuegosActivity.this);
+                            db.setView(dialog_layout);
+                            db.setTitle("Confirmar selección");
+                            db.setPositiveButton("Sí", null);
+                            db.setNegativeButton("Deshacer", null);
+                            final AlertDialog a = db.create();
+
+                            a.setOnShowListener(new DialogInterface.OnShowListener() {
+                                @Override
+                                public void onShow(DialogInterface dialog) {
+                                    Button si = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                                    if(click){
+                                       si.setEnabled(false);
+                                    }
+                                    Button no = a.getButton(AlertDialog.BUTTON_NEGATIVE);
+                                    no.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            a.dismiss();
+                                        }
+                                    });
+                                    si.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick (View view){
+                                                turnOnHotspot();
+                                                juego = new Juego(plantilla);
+                                                cantidadEquipos = plantilla.getCantEquipos();
+                                                textoCargando.setVisibility(View.VISIBLE);
+                                                cantidadEquiposTextView.setVisibility(View.VISIBLE);
+                                                nombreRed.setVisibility(View.VISIBLE);
+                                                claveRed.setVisibility(View.VISIBLE);
+                                                Intent intent = new Intent();
+                                                intent.setAction("crear server");
+                                                appContext.sendBroadcast(intent);
+                                                a.dismiss();
+                                                click = true;
+                                            }
+                                    });
+                                }
+                            });
+                            a.show();
+
                         }
                     });
                     for (Personaje personaje:plantilla.getPersonajes()) {

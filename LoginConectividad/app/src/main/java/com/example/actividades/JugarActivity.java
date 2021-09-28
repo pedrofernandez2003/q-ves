@@ -141,10 +141,10 @@ public class JugarActivity extends AppCompatActivity  {
             case "anularCarta":
                 System.out.println("Hola soy un usuario que va a anular la tarjeta en su tablero");
 
-                // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
-               sacarTarjetaDelTablero();
-                break;
-        }
+                    // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
+                    sacarTarjetaDelTablero();
+                    break;
+            }
         }
     };
 
@@ -238,6 +238,7 @@ public class JugarActivity extends AppCompatActivity  {
         botonAgarrarCarta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (GameContext.getServer()==null && GameContext.isEsMiTurno()){
                     if (puedeAgarrarCarta){
                         ArrayList<String> datos=new ArrayList<>();
@@ -307,7 +308,9 @@ public class JugarActivity extends AppCompatActivity  {
         botonVerCartas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (GameContext.getServer()==null){
+
                     LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
                     View dialog_layout = inflater.inflate(R.layout.ver_cartas, null);
                     AlertDialog.Builder db = new AlertDialog.Builder(JugarActivity.this);
@@ -446,6 +449,7 @@ public class JugarActivity extends AppCompatActivity  {
                     }
                 }
         );
+        // Add ImageRequest to the RequestQueue
         Volley.newRequestQueue(this).add(imageRequest);
     }
 
