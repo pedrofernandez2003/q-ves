@@ -33,7 +33,6 @@ import com.example.objetos.Juego;
 import com.example.objetos.Mensaje;
 import com.example.objetos.Personaje;
 import com.example.objetos.Tarjeta;
-import com.example.objetos.manejoSockets.ThreadedEchoServer;
 import com.example.objetos.manejoSockets.Write;
 import com.example.R;
 import com.example.dataManagers.DataManagerPlantillas;
@@ -59,7 +58,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
     private Juego juego;
     private Button botonComenzarPartida;
-    private ThreadedEchoServer server;
     private ArrayList<Categoria> categorias;
     private Boolean cantidadExacta = true;
     private Boolean click=false;
@@ -369,17 +367,19 @@ public class TraerJuegosActivity extends AppCompatActivity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onStop() {
-        turnOffHotspot();
-        super.onStop();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onDestroy() {
-        turnOffHotspot();
-        super.onDestroy();
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    @Override
+//    protected void onStop() {
+//        turnOffHotspot();
+//        stopService(new Intent(this, ServicioJuego.class));
+//        super.onStop();
+//    }
+//
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    @Override
+//    protected void onDestroy() {
+//        turnOffHotspot();
+//        stopService(new Intent(this, ServicioJuego.class));
+//        super.onDestroy();
+//    }
 }

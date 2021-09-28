@@ -143,7 +143,7 @@ public class JugarActivity extends AppCompatActivity  {
                 case "anularCarta":
                     System.out.println("Hola soy un usuario que va a anular la tarjeta en su tablero");
                     ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
-                    boolean anuladoCorrectamente=intent.getBooleanExtra("equipoDeCartaAnulada",true);
+                    boolean anuladoCorrectamente=intent.getBooleanExtra("anuladoCorrectamente",true);
                     // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
                     sacarTarjetaDelTablero();
                     if (anuladoCorrectamente && GameContext.getEquipo().getNombre().equals(ultimoEquipoQueTiroCarta)) {
@@ -227,7 +227,7 @@ public class JugarActivity extends AppCompatActivity  {
                                 @Override
                                 public void onClick(View view) {
                                     System.out.println("Soy el usuario que va a intentar anular");
-
+                                    GameContext.setTarjetaAnulada(GameContext.getTarjetaElegida());
                                     //MANDARLE AL MODERADOR ESTO DE QUE SE QUIERE DEBIR ESTE TARJETA, QUE ESTA EN GAMECONTEXT.GETTARJETAELEJIDA
                                     ArrayList<String> datos=new ArrayList<>();
                                     datos.add(GameContext.getTarjetaElegida().serializar());
