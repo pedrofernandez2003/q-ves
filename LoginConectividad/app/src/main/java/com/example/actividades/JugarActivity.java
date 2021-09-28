@@ -88,61 +88,74 @@ public class JugarActivity extends AppCompatActivity  {
     private WifiManager wifiManager;
     private DhcpInfo d;
 
+
+
     Context appContext=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onReceive(Context context, Intent intent) {
-        switch (intent.getAction()){
-            case "turno":
-                puedeAgarrarCarta=true;
-                LayoutInflater inflater=getLayoutInflater();
-                View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
-                TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
-                text.setText("Es tu turno!");
-                Toast toast= new Toast(getApplicationContext());
-                toast.setGravity(Gravity.BOTTOM,0,0);
-                toast.setDuration(Toast.LENGTH_LONG);
-                toast.setView(Layout);
-                toast.show();
-                break;
+            switch (intent.getAction()){
+                case "turno":
+                    puedeAgarrarCarta=true;
+                    LayoutInflater inflater=getLayoutInflater();
+                    View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                    TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                    text.setText("Es tu turno!");
+                    Toast toast= new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.BOTTOM,0,0);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(Layout);
+                    toast.show();
+                    break;
 
-            case "reiniciar":
-                intent=new Intent(appContext,JugarActivity.class);
-                startActivity(intent);
-                break;
+                case "reiniciar":
+                    intent=new Intent(appContext,JugarActivity.class);
+                    startActivity(intent);
+                    break;
 
-            case "actualizar":
-                insertarTarjetaEnTablero();
-                ultimoEquipoQueTiroCarta=intent.getStringExtra("equipo");
-                // crear variable que sea jugador que tiro carta y actualizarlo aca con el que jugp
+                case "actualizar":
+                    insertarTarjetaEnTablero();
+                    ultimoEquipoQueTiroCarta=intent.getStringExtra("equipo");
+                    // crear variable que sea jugador que tiro carta y actualizarlo aca con el que jugp
 
-                break;
+                    break;
 
-            case "ganador":
-                System.out.println("llega el ganador");
-                LayoutInflater inflater2 = LayoutInflater.from(JugarActivity.this);
-                View dialog_layout = inflater2.inflate(R.layout.ganador, null);
-                AlertDialog.Builder db = new AlertDialog.Builder(context);
-                db.setView(dialog_layout);
-                db.setTitle("Juego terminado");
-                db.setMessage("el ganador es: "+intent.getStringExtra("ganador"));
-                final AlertDialog a = db.create();
-                a.show();
-                break;
+                case "ganador":
+                    System.out.println("llega el ganador");
+                    LayoutInflater inflater2 = LayoutInflater.from(JugarActivity.this);
+                    View dialog_layout = inflater2.inflate(R.layout.ganador, null);
+                    AlertDialog.Builder db = new AlertDialog.Builder(context);
+                    db.setView(dialog_layout);
+                    db.setTitle("Juego terminado");
+                    db.setMessage("el ganador es: "+intent.getStringExtra("ganador"));
+                    final AlertDialog a = db.create();
+                    a.show();
+                    break;
 
-            case "notificarModerador":
-                //Le sale el alertdialog y si pone que si el boolean es true, si no es false :D
-                System.out.println("Soy el moderador que va validar la anulacion");
-                ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
-                crearAlertDialogSobreAnulacion();
-                break;
+                case "notificarModerador":
+                    //Le sale el alertdialog y si pone que si el boolean es true, si no es false :D
+                    System.out.println("Soy el moderador que va validar la anulacion");
+                    ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
+                    crearAlertDialogSobreAnulacion();
+                    break;
 
-            case "anularCarta":
-                System.out.println("Hola soy un usuario que va a anular la tarjeta en su tablero");
-
+                case "anularCarta":
+                    System.out.println("Hola soy un usuario que va a anular la tarjeta en su tablero");
+                    ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
+                    boolean anuladoCorrectamente=intent.getBooleanExtra("equipoDeCartaAnulada",true);
                     // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
                     sacarTarjetaDelTablero();
+                    if (anuladoCorrectamente && GameContext.getEquipo().getNombre().equals(ultimoEquipoQueTiroCarta)) {
+                        ArrayList<String> datos=new ArrayList<>();
+                        datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+                        Mensaje mensaje=new Mensaje("agarrarCarta",datos);
+                        String msg=mensaje.serializar();
+                        System.out.println("mensaje enviado "+msg);
+                        Write escribir = new Write();
+                        escribir.execute(msg, 0);
+                        puedeAgarrarCarta=false;
+                    }
                     break;
             }
         }
@@ -488,9 +501,9 @@ public class JugarActivity extends AppCompatActivity  {
     }
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) //CHEQUEAR ESTO, QUE ES POR EL FONT_FEATURE_SETTINGS
     public void sacarTarjetaDelTablero() {
-        GameContext.getTarjetaElegida().getCategoria();
         for (Casillero casillero:casilleros) {
-            if (casillero.getCategoria().getNombre().equals(GameContext.getTarjetaElegida().getCategoria())) {
+            if (casillero.getCategoria().getNombre().equals(GameContext.getTarjetaAnulada().getCategoria())) {
+
 
                 CardView prueba = (CardView) findViewById(casillero.getId());
                 prueba.removeAllViews();
@@ -503,11 +516,14 @@ public class JugarActivity extends AppCompatActivity  {
                 TextView categoriaTxt=new TextView(JugarActivity.this);
                 categoriaTxt.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 categoriaTxt.setGravity(Gravity.CENTER);
-                categoriaTxt.setFontFeatureSettings(String.valueOf(R.font.hlsimple));
+                //categoriaTxt.setFontFeatureSettings(String.valueOf(R.font.hlsimple));
                 categoriaTxt.setTextColor(getResources().getColor(R.color.white));
                 categoriaTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
                 categoriaTxt.setText(casillero.getCategoria().getNombre());
                 //prueba.addView(categoria);
+                categoria.addView(categoriaTxt);
+                prueba.addView(categoria);
+
             }
         }
     }
