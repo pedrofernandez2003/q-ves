@@ -15,8 +15,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.DhcpInfo;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -78,6 +81,8 @@ public class JugarActivity extends AppCompatActivity  {
     private Button botonAgarrarCarta, botonPasarTurno;
     private LinearLayout botonVerCartas,botonAnularCarta;
     private Boolean puedeAgarrarCarta=true;
+    private WifiManager wifiManager;
+    private DhcpInfo d;
 
     Context appContext=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -143,6 +148,8 @@ public class JugarActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablero_creable);
+        wifiManager= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        d=wifiManager.getDhcpInfo();
         mostrarPlantillaEnXml(GameContext.getJuego().getPlantilla(), this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("turno");
@@ -407,13 +414,12 @@ public class JugarActivity extends AppCompatActivity  {
         });
     }
 
-    public void traerImagen() {
+    public void traerImagen(Plantilla plantilla) {
         System.out.println("entre a la funcion");
         ImageView imageView = (ImageView) findViewById(R.id.personaje);
-//        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://100.111.34.159:5880/";
+        String url = "http://"+ Formatter.formatIpAddress(d.gateway)+":5880/imagenes?imagen="+plantilla.getPersonajes().get(GameContext.getRonda()-1).getNombre();
         System.out.println("llego");
-        ImageRequest imageRequest = new ImageRequest(url, new Response.Listener<Bitmap>() { // Bitmap listener
+        ImageRequest imageRequest = new ImageRequest(url,new Response.Listener<Bitmap>() { // Bitmap listener
                     @Override
                     public void onResponse(Bitmap response) {
                         // Do something with response
@@ -663,7 +669,7 @@ public class JugarActivity extends AppCompatActivity  {
         ArrayList<TextView> espaciosTextos = conseguirTextViews();
         ArrayList<Categoria> categorias = plantilla.getCategorias();
 //        ImageView imageView = (ImageView) findViewById(R.id.personaje);
-        traerImagen();
+        traerImagen(plantilla);
 //        Picasso.with(imageView.getContext()).load("https://firebasestorage.googleapis.com/v0/b/qves-ddf27.appspot.com/o/images%2Foutput-onlinejpgtools.jpg?alt=media&token=ebf53013-726c-4d13-bc6c-5f7bc7fbc47e"
 //        ).into(imageView);
 

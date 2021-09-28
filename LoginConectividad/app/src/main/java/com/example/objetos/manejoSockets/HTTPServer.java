@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import fi.iki.elonen.NanoHTTPD;
@@ -34,8 +35,8 @@ public class HTTPServer extends NanoHTTPD {
         FileInputStream fis = null;
         File f = null;
         try {
-//            f = new File("/data/data/yourapp/app_data/personajes", session.getParameters().get("url").get(0));
-            f = new File("/data/user/0/com.example.login_crud/app_personajes/", "insa_imagen_1.png");
+            f = new File("data/user/0/com.example.login_crud/app_personajes/", session.getParameters().get("imagen").get(0)+".png");
+//            f = new File("/data/user/0/com.example.login_crud/app_personajes/", "insa_imagen_1.png");
             fis = new FileInputStream(f);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
