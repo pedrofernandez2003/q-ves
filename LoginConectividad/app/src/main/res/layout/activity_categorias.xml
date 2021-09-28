@@ -67,6 +67,7 @@
             app:cardBackgroundColor="#B83C70">
 
             <TextView
+                android:id="@+id/textoEditarCategoria"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -177,6 +177,8 @@ public class CrearJuegoActivity extends AppCompatActivity  {
                         public void insertar(boolean insertado) {
                             if (insertado) {
                                 Toast.makeText(CrearJuegoActivity.this, "Plantilla guardada", Toast.LENGTH_SHORT).show();
+                                Intent traerJuegosIntent = new Intent(CrearJuegoActivity.this, TraerJuegosActivity.class);
+                                startActivity(traerJuegosIntent);
                             } else {
                                 Toast.makeText(CrearJuegoActivity.this, "No se ha podido guardar", Toast.LENGTH_SHORT).show();
                             }

@@ -48,7 +48,7 @@ public class CategoriasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categorias);
 
-        Button aniadirCategoria = (Button) findViewById(R.id.aniadirCategoría);
+        CardView aniadirCategoria = (CardView) findViewById(R.id.aniadirCategoría);
         aniadirCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,17 +56,18 @@ public class CategoriasActivity extends AppCompatActivity {
                 aniadirCategoria(coloresUsados);
             }
         });
-        Button modificarCategoria= (Button) findViewById(R.id.modificarCategoria);
+        CardView modificarCategoria= (CardView) findViewById(R.id.modificarCategoria);
+        TextView textoEditarCategoria= findViewById(R.id.textoEditarCategoria);
         modificarCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 ModoModificar=!ModoModificar;
                 if (ModoModificar){
-                    modificarCategoria.setText("Salir del modo editable");
+                    textoEditarCategoria.setText("Salir del modo editable");
                 }
                 else{
-                    modificarCategoria.setText("Editar categoria");
+                    textoEditarCategoria.setText("Editar categoria");
                 }
             }
         });

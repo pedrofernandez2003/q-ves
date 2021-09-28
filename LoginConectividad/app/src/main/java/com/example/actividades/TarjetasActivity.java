@@ -59,7 +59,7 @@ public class TarjetasActivity extends AppCompatActivity {
         color= extras.getInt("Color");
         nombreCategoria= extras.getString("Nombre");
 
-        Button aniadirTarjeta = (Button) findViewById(R.id.aniadirTarjeta);
+        CardView aniadirTarjeta = (CardView) findViewById(R.id.aniadirTarjeta);
         aniadirTarjeta.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -68,16 +68,17 @@ public class TarjetasActivity extends AppCompatActivity {
 
             }
         });
-        Button modificarTarjeta= (Button) findViewById(R.id.modificarTarjeta);
+        CardView modificarTarjeta= (CardView) findViewById(R.id.modificarTarjeta);
+        TextView textoModificarTarjeta=findViewById(R.id.textoModificarTarjeta);
         modificarTarjeta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ModoModificar=!ModoModificar;
                 if (ModoModificar){
-                    modificarTarjeta.setText("Salir del modo editable");
+                    textoModificarTarjeta.setText("Salir del modo editable");
                 }
                 else{
-                    modificarTarjeta.setText("Editar tarjeta");
+                    textoModificarTarjeta.setText("Editar tarjeta");
                 }
 
             }

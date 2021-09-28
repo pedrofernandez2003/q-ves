@@ -320,4 +320,25 @@ public class TraerJuegosActivity extends AppCompatActivity {
             }, new Handler());
         }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void turnOffHotspot() {
+        if (hotspotReservation != null) {
+            hotspotReservation.close();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onStop() {
+        turnOffHotspot();
+        super.onStop();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onDestroy() {
+        turnOffHotspot();
+        super.onDestroy();
+    }
 }
