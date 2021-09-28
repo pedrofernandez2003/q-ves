@@ -4,7 +4,9 @@ import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.Image;
 import android.view.Gravity;
+import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
@@ -17,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.Person;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.os.Handler;
 import android.util.Base64;
@@ -26,6 +29,7 @@ import android.view.View;
 import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -67,7 +71,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private WifiConfiguration currentConfig;
     private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
     private Juego juego;
-    private Button botonComenzarPartida;
+    private ImageView botonComenzarPartida;
     private ThreadedEchoServer server;
     private ArrayList<Categoria> categorias;
     private Boolean cantidadExacta = true;
@@ -89,35 +93,12 @@ public class TraerJuegosActivity extends AppCompatActivity {
         wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         currentConfig=new WifiConfiguration();
         juego=new Juego();
+        System.out.println("moderador"+juego.getPlantilla().getModerador());
+        System.out.println("moderador"+juego.getPlantilla());
+
         mostrarPlantillas(juego.getPlantilla().getModerador(), this.getApplicationContext());
 
-        botonComenzarPartida.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for(Personaje personaje: juego.getPlantilla().getPersonajes()){
-                    personaje.setNombre(traerPersonajesb64(personaje.getNombre()));
 
-                }
-                GameContext.setJuego(juego);
-                GameContext.setRonda(1);
-                categorias = juego.getPlantilla().getCategorias();
-                ArrayList<HashSet<Tarjeta>> mazos = repartirTarjetas();
-                for (int i=0;i<GameContext.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
-                    juego.setMazo(mazos.get(i));
-                    GameContext.getJuego().getEquipos().add(new Equipo(juego.getMazo(),GameContext.getNombresEquipos().get(i)));
-                    String juegoSerializado=juego.serializar();
-                    ArrayList<String> datos=new ArrayList<>();
-                    datos.add(juegoSerializado);
-                    datos.add("\"turno\":"+i);
-                    Mensaje mensaje=new Mensaje("comenzar",datos);
-                    String msg=mensaje.serializar();
-                    System.out.println(msg);
-                    Write escribir = new Write();
-                    escribir.execute(msg,i);
-                }
-                empezarJuego();
-            }
-        });
     }
 
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -127,7 +108,34 @@ public class TraerJuegosActivity extends AppCompatActivity {
             switch (intent.getAction()){
                 case "nuevo equipo":
                     if(GameContext.getHijos().size() >= cantidadEquipos){
-                        botonComenzarPartida.setVisibility(View.VISIBLE);
+                        botonComenzarPartida.setColorFilter(R.color.green_light);
+                        botonComenzarPartida.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                for(Personaje personaje: juego.getPlantilla().getPersonajes()){
+                                    personaje.setNombre(traerPersonajesb64(personaje.getNombre()));
+
+                                }
+                                GameContext.setJuego(juego);
+                                GameContext.setRonda(1);
+                                categorias = juego.getPlantilla().getCategorias();
+                                ArrayList<HashSet<Tarjeta>> mazos = repartirTarjetas();
+                                for (int i=0;i<GameContext.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
+                                    juego.setMazo(mazos.get(i));
+                                    GameContext.getJuego().getEquipos().add(new Equipo(juego.getMazo(),GameContext.getNombresEquipos().get(i)));
+                                    String juegoSerializado=juego.serializar();
+                                    ArrayList<String> datos=new ArrayList<>();
+                                    datos.add(juegoSerializado);
+                                    datos.add("\"turno\":"+i);
+                                    Mensaje mensaje=new Mensaje("comenzar",datos);
+                                    String msg=mensaje.serializar();
+                                    System.out.println(msg);
+                                    Write escribir = new Write();
+                                    escribir.execute(msg,i);
+                                }
+                                empezarJuego();
+                            }
+                        });
                     }
 //                    else {
 //                        cantidadEquiposTextView.setText(Integer.parseInt((String) cantidadEquiposTextView.getText())+1);
@@ -240,6 +248,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
     Context appContext=this;
     private void mostrarPlantillas(String moderador,Context appCcontext)  {
         System.out.println("moderador"+moderador);
+        System.out.println("moderador"+moderador);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
@@ -248,22 +257,33 @@ public class TraerJuegosActivity extends AppCompatActivity {
         DataManagerPlantillas.traerPlantillas(moderador,new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
+                System.out.println("datos"+datos);
+
                 if(datos.size()>0) {
                     for (Object PlantillaObject : datos) {
                         Plantilla plantilla = (Plantilla) PlantillaObject;
                         LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        Button button = new Button(appCcontext);
-                        button.setLayoutParams(lp);
-                        button.setText(plantilla.getNombre());
-                        button.setBackgroundColor(999999);
+                        llBotonera.setGravity(Gravity.CENTER_HORIZONTAL);
                         CardView cardView = new CardView(appCcontext);
                         LayoutParams params= new LayoutParams(widthPlantilla, heightPlantilla);
-                        params.gravity= Gravity.CENTER;
+                        params.setMargins(0,25,0,0);
                         cardView.setCardBackgroundColor(getResources().getColor(R.color.azul_plantilla));
                         cardView.setRadius(40);
+                        params.gravity = Gravity.CENTER;
                         cardView.setLayoutParams(params);
-                        button.setOnClickListener(new View.OnClickListener() {
+                        TextView texto = new TextView(appCcontext);
+                        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        texto.setLayoutParams(params);
+                        texto.setText(plantilla.getNombre());
+                        params.gravity = Gravity.CENTER;
+                        texto.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                        texto.setTextSize((widthPlantilla)/25);
+                        texto.setTextColor(getResources().getColor(R.color.white));
+                        texto.setTypeface(ResourcesCompat.getFont(appCcontext, R.font.poertsen_one_regular));
+                        texto.setGravity(Gravity.CENTER);
+                        cardView.addView(texto);
+                        llBotonera.addView(cardView);
+                        cardView.setOnClickListener(new View.OnClickListener() {
                             @RequiresApi(api = Build.VERSION_CODES.O)
                             @Override
                             public void onClick(View v) {
@@ -280,9 +300,14 @@ public class TraerJuegosActivity extends AppCompatActivity {
                             }
                         });
                     }
-                }
-                else{
-
+//                    ImageView nuevaPlantilla = new ImageView(appCcontext);
+//                    LayoutParams params = new LayoutParams(80,80);
+//                    params.setMargins(0, 20, 0, 0);
+//                    params.gravity = Gravity.CENTER;
+//                    nuevaPlantilla.setLayoutParams(params);
+//                    nuevaPlantilla.setImageResource(R.drawable.ic_add_outline);
+//                    nuevaPlantilla.setColorFilter(R.color.green_light);
+//                    ((LinearLayout) findViewById(R.id.llBotonera)).addView(nuevaPlantilla);
                 }
             }
         });
