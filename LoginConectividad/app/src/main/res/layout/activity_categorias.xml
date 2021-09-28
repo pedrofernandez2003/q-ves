@@ -12,17 +12,17 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+        <LinearLayout
 
-                android:id="@+id/llBotonera"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:orientation="vertical">
+            android:id="@+id/llBotonera"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="vertical">
 
-            </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 
 
@@ -67,6 +67,7 @@
             app:cardBackgroundColor="#B83C70">
 
             <TextView
+                android:id="@+id/textoEditarCategoria"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

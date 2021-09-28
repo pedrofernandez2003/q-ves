@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-
     <LinearLayout
         android:id="@+id/linearLayout5"
         android:layout_width="match_parent"
@@ -28,7 +26,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Añadir Tarjeta"
+                android:text="Añadir tarjeta"
                 android:textSize="23sp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/poertsen_one_regular"
@@ -47,9 +45,10 @@
             app:cardBackgroundColor="#A8E10C" >
 
             <TextView
+                android:id="@+id/textoModificarTarjeta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Modificar Categoría"
+                android:text="Modificar tarjeta"
                 android:textAlignment="center"
                 android:fontFamily="@font/poertsen_one_regular"
                 android:textColor="@color/white"

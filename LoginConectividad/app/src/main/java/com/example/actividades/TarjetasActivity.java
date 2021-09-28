@@ -59,7 +59,7 @@ public class TarjetasActivity extends AppCompatActivity {
         color= extras.getInt("Color");
         nombreCategoria= extras.getString("Nombre");
 
-        Button aniadirTarjeta = (Button) findViewById(R.id.aniadirTarjeta);
+        CardView aniadirTarjeta = (CardView) findViewById(R.id.aniadirTarjeta);
         aniadirTarjeta.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -68,16 +68,17 @@ public class TarjetasActivity extends AppCompatActivity {
 
             }
         });
-        Button modificarTarjeta= (Button) findViewById(R.id.modificarTarjeta);
+        CardView modificarTarjeta= (CardView) findViewById(R.id.modificarTarjeta);
+        TextView textoModificarTarjeta=findViewById(R.id.textoModificarTarjeta);
         modificarTarjeta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ModoModificar=!ModoModificar;
                 if (ModoModificar){
-                    modificarTarjeta.setText("Salir del modo editable");
+                    textoModificarTarjeta.setText("Salir del modo editable");
                 }
                 else{
-                    modificarTarjeta.setText("Editar tarjeta");
+                    textoModificarTarjeta.setText("Editar tarjeta");
                 }
 
             }
@@ -201,7 +202,7 @@ public class TarjetasActivity extends AppCompatActivity {
                         traerTarjetas(context,nombreCategoria,color);
 
                         a.dismiss();
-                        
+
                     }
                 });
             }
@@ -253,7 +254,7 @@ public class TarjetasActivity extends AppCompatActivity {
         startActivity(new Intent(this, CategoriasActivity.class));
     }
 
-   private void traerTarjetas(Context context, String nombreCategoria, int color) {
+    private void traerTarjetas(Context context, String nombreCategoria, int color) {
         ArrayList<String> colores = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -277,6 +278,7 @@ public class TarjetasActivity extends AppCompatActivity {
                             CardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjeta.getContenido(), tarjeta.getYapa());
                             System.out.println(tarjeta.getContenido()+" "+tarjeta.getYapa());
                             gridCartas.addView(carta);
+                            System.out.println(carta);
 
                             carta.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -296,6 +298,8 @@ public class TarjetasActivity extends AppCompatActivity {
                                         db.setTitle("Nueva Tarjeta");
                                         db.setPositiveButton("Modificar", null);
                                         db.setNegativeButton("Eliminar", null);
+
+
 
                                         final AlertDialog a = db.create();
                                         a.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -352,5 +356,14 @@ public class TarjetasActivity extends AppCompatActivity {
                 });
             }
         });
+
+//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
+//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
+//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
+//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
     }
 }
+
+/*IDEA, PARA CATEGORIA ACTIVITY
+ QUE CUANDO TOQUES EL BOTON CAMBIE UN BOOLEANO GLOBAL
+ Y EN EL ONCLICK SI ES TRUE SEA PARA MODIFICAR LA CATEGORIA Y SI ES FALSE ENTRA A LAS TARJETAS*/
