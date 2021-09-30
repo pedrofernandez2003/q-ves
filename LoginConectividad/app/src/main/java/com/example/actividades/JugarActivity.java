@@ -156,7 +156,9 @@ public class JugarActivity extends AppCompatActivity  {
                     // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
                     sacarTarjetaDelTablero();
                     if (GameContext.getServer()==null){
+                        System.out.println("anulado correctamente "+anuladoCorrectamente);
                         if (anuladoCorrectamente && GameContext.getEquipo().getNombre().equals(ultimoEquipoQueTiroCarta)) {
+                            System.out.println("mando agarrar carta");
                             ArrayList<String> datos=new ArrayList<>();
                             datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
                             Mensaje mensaje=new Mensaje("agarrarCarta",datos);

@@ -102,30 +102,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        botonComenzarPartida.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GameContext.setJuego(juego);
-                GameContext.setRonda(1);
-                categorias = juego.getPlantilla().getCategorias();
-                ArrayList<HashSet<Tarjeta>> mazos = repartirTarjetas();
-                for (int i=0;i<GameContext.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
-                    juego.setMazo(mazos.get(i));
-                    GameContext.getJuego().getEquipos().add(new Equipo(juego.getMazo(),GameContext.getNombresEquipos().get(i)));
-                    String juegoSerializado=juego.serializar();
-                    ArrayList<String> datos=new ArrayList<>();
-                    datos.add(juegoSerializado);
-                    datos.add("\"turno\":"+i);
-                    Mensaje mensaje=new Mensaje("comenzar",datos);
-                    String msg=mensaje.serializar();
-                    System.out.println(msg);
-                    Write escribir = new Write();
-                    escribir.execute(msg,i);
-                }
-                empezarJuego();
-            }
-        });
     }
 
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -134,12 +110,37 @@ public class TraerJuegosActivity extends AppCompatActivity {
             System.out.println("accion traer juegos: "+intent.getAction());
             switch (intent.getAction()){
                 case "nuevo equipo":
+                    int nuevaCantEquipos= Integer.parseInt((String) cantidadEquiposTextView.getText()) + 1;
+                    System.out.println("texto "+cantidadEquiposTextView.getText());
+                    System.out.println("dsdf "+cantidadEquiposTextView.getText().getClass().toString());
+                    System.out.println("nuevo "+nuevaCantEquipos);
+                    cantidadEquiposTextView.setText(String.valueOf(nuevaCantEquipos));
                     if(GameContext.getHijos().size() >= cantidadEquipos){
                         botonComenzarPartida.setVisibility(View.VISIBLE);
+                        botonComenzarPartida.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                GameContext.setJuego(juego);
+                                GameContext.setRonda(1);
+                                categorias = juego.getPlantilla().getCategorias();
+                                ArrayList<HashSet<Tarjeta>> mazos = repartirTarjetas();
+                                for (int i=0;i<GameContext.getHijos().size();i++){ //le manda a todos los hijos la informacion de la partida
+                                    juego.setMazo(mazos.get(i));
+                                    GameContext.getJuego().getEquipos().add(new Equipo(juego.getMazo(),GameContext.getNombresEquipos().get(i)));
+                                    String juegoSerializado=juego.serializar();
+                                    ArrayList<String> datos=new ArrayList<>();
+                                    datos.add(juegoSerializado);
+                                    datos.add("\"turno\":"+i);
+                                    Mensaje mensaje=new Mensaje("comenzar",datos);
+                                    String msg=mensaje.serializar();
+                                    System.out.println(msg);
+                                    Write escribir = new Write();
+                                    escribir.execute(msg,i);
+                                }
+                                empezarJuego();
+                            }
+                        });
                     }
-//                    else {
-//                        cantidadEquiposTextView.setText(Integer.parseInt((String) cantidadEquiposTextView.getText())+1);
-//                    }
                     break;
             }
         }
