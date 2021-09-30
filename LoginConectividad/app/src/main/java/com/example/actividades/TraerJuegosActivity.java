@@ -1,5 +1,6 @@
 package com.example.actividades;
 import android.Manifest;
+
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContextWrapper;
@@ -8,6 +9,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.graphics.drawable.Drawable;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -15,13 +19,19 @@ import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.res.ResourcesCompat;
+
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.content.Context;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,6 +43,7 @@ import com.example.objetos.Juego;
 import com.example.objetos.Mensaje;
 import com.example.objetos.Personaje;
 import com.example.objetos.Tarjeta;
+import com.example.objetos.manejoSockets.ThreadedEchoServer;
 import com.example.objetos.manejoSockets.Write;
 import com.example.R;
 import com.example.dataManagers.DataManagerPlantillas;
@@ -57,10 +68,12 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private WifiConfiguration currentConfig;
     private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
     private Juego juego;
-    private Button botonComenzarPartida;
+    private ImageView botonComenzarPartida;
+    private ThreadedEchoServer server;
     private ArrayList<Categoria> categorias;
     private Boolean cantidadExacta = true;
     private Boolean click=false;
+    private ImageView agregarPlantilla;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +84,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
         startService(new Intent(this, ServicioJuego.class));
         setContentView(R.layout.activity_traer_juegos);
         cantidadEquipos=0;
+        agregarPlantilla = findViewById(R.id.agregarPlantilla);
         textoCargando = findViewById(R.id.textoCargando);
         cantidadEquiposTextView = findViewById(R.id.cantidadEquipos);
         botonComenzarPartida = findViewById(R.id.botonComenzarPartida);
@@ -79,7 +93,15 @@ public class TraerJuegosActivity extends AppCompatActivity {
         wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         currentConfig=new WifiConfiguration();
         juego=new Juego();
-        mostrarPlantillas(this.getApplicationContext());
+        mostrarPlantillas(juego.getPlantilla().getModerador(), this.getApplicationContext());
+
+        agregarPlantilla.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TraerJuegosActivity.this,CrearJuegoActivity.class);
+                startActivity(intent);
+            }
+        });
 
         botonComenzarPartida.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,50 +225,73 @@ public class TraerJuegosActivity extends AppCompatActivity {
         return mazoPorEquipo;
     }
     Context appContext=this;
-    private void mostrarPlantillas(Context appCcontext)  {
-        DataManagerPlantillas.traerPlantillas(new onTraerDatosListener() {
+    private void mostrarPlantillas(String moderador,Context appCcontext)  {
+        System.out.println("moderador"+moderador);
+        System.out.println("moderador"+moderador);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int widthPlantilla = (width*4)/5;
+        int heightPlantilla = widthPlantilla/4;
+        DataManagerPlantillas.traerPlantillas(moderador,new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
-                for (Object PlantillaObject:datos) {
-                    Plantilla plantilla= (Plantilla) PlantillaObject;
-                    LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
-                    Button button = new Button(appCcontext);
-                    button.setLayoutParams(lp);
-                    button.setText(plantilla.getNombre());
-                    button.setBackgroundColor(999999);
-                    llBotonera.addView(button);
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @RequiresApi(api = Build.VERSION_CODES.O)
-                        @Override
-                        public void onClick(View v) {
-                            LayoutInflater inflater = LayoutInflater.from(TraerJuegosActivity.this);
+                System.out.println("datos"+datos);
+                if(datos.size()>0) {
+                    for (Object PlantillaObject : datos) {
+                        Plantilla plantilla = (Plantilla) PlantillaObject;
+                        LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
+                        llBotonera.setGravity(Gravity.CENTER_HORIZONTAL);
+                        CardView cardView = new CardView(appCcontext);
+                        LayoutParams params= new LayoutParams(widthPlantilla, heightPlantilla);
+                        params.setMargins(0,25,0,0);
+                        cardView.setCardBackgroundColor(getResources().getColor(R.color.azul_plantilla));
+                        cardView.setRadius(40);
+                        params.gravity = Gravity.CENTER;
+                        cardView.setLayoutParams(params);
+                        TextView texto = new TextView(appCcontext);
+                        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        texto.setLayoutParams(params);
+                        texto.setText(plantilla.getNombre());
+                        params.gravity = Gravity.CENTER;
+                        texto.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                        texto.setTextSize((widthPlantilla)/25);
+                        texto.setTextColor(getResources().getColor(R.color.white));
+                        texto.setTypeface(ResourcesCompat.getFont(appCcontext, R.font.poertsen_one_regular));
+                        texto.setGravity(Gravity.CENTER);
+                        cardView.addView(texto);
+                        llBotonera.addView(cardView);
+                        cardView.setOnClickListener(new View.OnClickListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.O)
+                            @Override
+                            public void onClick(View v) {
+                                LayoutInflater inflater = LayoutInflater.from(TraerJuegosActivity.this);
 
-                            View dialog_layout = inflater.inflate(R.layout.confirmacion_accion, null);
-                            TextView seleccionado = dialog_layout.findViewById(R.id.confirmarSelección);
+                                View dialog_layout = inflater.inflate(R.layout.confirmacion_accion, null);
+                                TextView seleccionado = dialog_layout.findViewById(R.id.confirmarSelección);
 
-                            AlertDialog.Builder db = new AlertDialog.Builder(TraerJuegosActivity.this);
-                            db.setView(dialog_layout);
-                            db.setTitle("Confirmar selección");
-                            db.setPositiveButton("Sí", null);
-                            db.setNegativeButton("Deshacer", null);
-                            final AlertDialog a = db.create();
+                                AlertDialog.Builder db = new AlertDialog.Builder(TraerJuegosActivity.this);
+                                db.setView(dialog_layout);
+                                db.setTitle("Confirmar selección");
+                                db.setPositiveButton("Sí", null);
+                                db.setNegativeButton("Deshacer", null);
+                                final AlertDialog a = db.create();
 
-                            a.setOnShowListener(new DialogInterface.OnShowListener() {
-                                @Override
-                                public void onShow(DialogInterface dialog) {
-                                    Button si = a.getButton(AlertDialog.BUTTON_POSITIVE);
-                                    if(click){
-                                       si.setEnabled(false);
-                                    }
-                                    Button no = a.getButton(AlertDialog.BUTTON_NEGATIVE);
-                                    no.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            a.dismiss();
+                                a.setOnShowListener(new DialogInterface.OnShowListener() {
+                                    @Override
+                                    public void onShow(DialogInterface dialog) {
+                                        Button si = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                                        if(click){
+                                            si.setEnabled(false);
                                         }
-                                    });
-                                    si.setOnClickListener(new View.OnClickListener() {
+                                        Button no = a.getButton(AlertDialog.BUTTON_NEGATIVE);
+                                        no.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                a.dismiss();
+                                            }
+                                        });
+                                        si.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick (View view){
                                                 turnOnHotspot();
@@ -262,31 +307,32 @@ public class TraerJuegosActivity extends AppCompatActivity {
                                                 a.dismiss();
                                                 click = true;
                                             }
-                                    });
-                                }
-                            });
-                            a.show();
-
-                        }
-                    });
-                    for (Personaje personaje:plantilla.getPersonajes()) {
-                        Picasso.with(appCcontext).load(personaje.getFoto()).into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                descargarImagen(bitmap,personaje.getNombre());
-
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Drawable errorDrawable) {
-                                System.out.println("fallo");
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                        });
+                                    }
+                                });
+                                a.show();
 
                             }
                         });
+                        for (Personaje personaje:plantilla.getPersonajes()) {
+                            Picasso.with(appCcontext).load(personaje.getFoto()).into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    descargarImagen(bitmap,personaje.getNombre());
+
+                                }
+
+                                @Override
+                                public void onBitmapFailed(Drawable errorDrawable) {
+                                    System.out.println("fallo");
+                                }
+
+                                @Override
+                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -371,7 +417,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
 //    @Override
 //    protected void onStop() {
 //        turnOffHotspot();
-//        stopService(new Intent(this, ServicioJuego.class));
 //        super.onStop();
 //    }
 //
@@ -379,7 +424,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
 //    @Override
 //    protected void onDestroy() {
 //        turnOffHotspot();
-//        stopService(new Intent(this, ServicioJuego.class));
 //        super.onDestroy();
 //    }
 }
