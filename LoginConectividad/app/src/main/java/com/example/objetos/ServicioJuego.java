@@ -503,11 +503,13 @@ public class ServicioJuego extends Service {
         return "";
     }
 
+
     @Override
     public void onDestroy() {
         unregisterReceiver(broadcastReceiver);
         httpServer.stop();
         httpServer.closeAllConnections();
+//        server.destroy();
         super.onDestroy();
     }
 }

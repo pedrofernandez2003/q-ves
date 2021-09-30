@@ -196,13 +196,12 @@ public class TarjetasActivity extends AppCompatActivity {
                         TarjetaSinCategoria tarjeta= new TarjetaSinCategoria(contenidoTarjeta,yapaTarjeta);
                         insertarTarjeta(tarjeta,nombreCategoria);
 
-
                         GridLayout grid = findViewById(R.id.gridBotonera2);
                         grid.removeAllViews();
                         traerTarjetas(context,nombreCategoria,color);
 
                         a.dismiss();
-                        
+
                     }
                 });
             }
@@ -254,7 +253,7 @@ public class TarjetasActivity extends AppCompatActivity {
         startActivity(new Intent(this, CategoriasActivity.class));
     }
 
-   private void traerTarjetas(Context context, String nombreCategoria, int color) {
+    private void traerTarjetas(Context context, String nombreCategoria, int color) {
         ArrayList<String> colores = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -278,6 +277,7 @@ public class TarjetasActivity extends AppCompatActivity {
                             CardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjeta.getContenido(), tarjeta.getYapa());
                             System.out.println(tarjeta.getContenido()+" "+tarjeta.getYapa());
                             gridCartas.addView(carta);
+
                             carta.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -352,14 +352,5 @@ public class TarjetasActivity extends AppCompatActivity {
                 });
             }
         });
-
-//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
-//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
-//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
-//       gridCartas.addView(crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "le gusta la cerveza fria, la tele fuerte y los homosexuales locas locas sii", "la yapa yasssss"));
     }
 }
-
-/*IDEA, PARA CATEGORIA ACTIVITY
- QUE CUANDO TOQUES EL BOTON CAMBIE UN BOOLEANO GLOBAL
- Y EN EL ONCLICK SI ES TRUE SEA PARA MODIFICAR LA CATEGORIA Y SI ES FALSE ENTRA A LAS TARJETAS*/

@@ -143,7 +143,7 @@ public class JugarActivity extends AppCompatActivity  {
                 case "anularCarta":
                     System.out.println("Hola soy un usuario que va a anular la tarjeta en su tablero");
                     ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
-                    boolean anuladoCorrectamente=intent.getBooleanExtra("equipoDeCartaAnulada",true);
+                    boolean anuladoCorrectamente=intent.getBooleanExtra("anuladoCorrectamente",true);
                     // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
                     sacarTarjetaDelTablero();
                     if (anuladoCorrectamente && GameContext.getEquipo().getNombre().equals(ultimoEquipoQueTiroCarta)) {
@@ -227,7 +227,7 @@ public class JugarActivity extends AppCompatActivity  {
                                 @Override
                                 public void onClick(View view) {
                                     System.out.println("Soy el usuario que va a intentar anular");
-
+                                    GameContext.setTarjetaAnulada(GameContext.getTarjetaElegida());
                                     //MANDARLE AL MODERADOR ESTO DE QUE SE QUIERE DEBIR ESTE TARJETA, QUE ESTA EN GAMECONTEXT.GETTARJETAELEJIDA
                                     ArrayList<String> datos=new ArrayList<>();
                                     datos.add(GameContext.getTarjetaElegida().serializar());
@@ -442,14 +442,14 @@ public class JugarActivity extends AppCompatActivity  {
         String url = "http://"+ Formatter.formatIpAddress(d.gateway)+":5880/imagenes?imagen="+plantilla.getPersonajes().get(GameContext.getRonda()-1).getNombre();
         System.out.println("llego");
         ImageRequest imageRequest = new ImageRequest(url,new Response.Listener<Bitmap>() { // Bitmap listener
-                    @Override
-                    public void onResponse(Bitmap response) {
-                        // Do something with response
-                        System.out.println("trajo la imagen "+response.toString());
-                        response = Bitmap.createScaledBitmap(response, 400, 400, false);
-                        imageView.setImageBitmap(response);
-                    }
-                },
+            @Override
+            public void onResponse(Bitmap response) {
+                // Do something with response
+                System.out.println("trajo la imagen "+response.toString());
+                response = Bitmap.createScaledBitmap(response, 400, 400, false);
+                imageView.setImageBitmap(response);
+            }
+        },
                 0, // Image width
                 0, // Image height
                 null, // Image scale type
@@ -598,174 +598,174 @@ public class JugarActivity extends AppCompatActivity  {
     }
     public CardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
 
-            // Crear la base
-            CardView carta = new CardView(this);
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
-            params.setMargins(margin,margin,margin,margin);
-            carta.setLayoutParams(params);
-            carta.setBackgroundColor(-1644568);
+        // Crear la base
+        CardView carta = new CardView(this);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
+        params.setMargins(margin,margin,margin,margin);
+        carta.setLayoutParams(params);
+        carta.setBackgroundColor(-1644568);
 
-            // Crear el constraint layout
-            ConstraintLayout constraintLayout = new ConstraintLayout(this);
-            params = new FrameLayout.LayoutParams(width, height);
-            constraintLayout.setLayoutParams(params);
-            constraintLayout.setId(ViewCompat.generateViewId());
-            carta.addView(constraintLayout);
+        // Crear el constraint layout
+        ConstraintLayout constraintLayout = new ConstraintLayout(this);
+        params = new FrameLayout.LayoutParams(width, height);
+        constraintLayout.setLayoutParams(params);
+        constraintLayout.setId(ViewCompat.generateViewId());
+        carta.addView(constraintLayout);
 
-            // Crear el borde de arriba
-            CardView bordeTop = new CardView(this);
-            params = new FrameLayout.LayoutParams(width, height/8);
-            bordeTop.setLayoutParams(params);
-            bordeTop.setBackgroundColor(color);
-            bordeTop.setId(ViewCompat.generateViewId());
-            constraintLayout.addView(bordeTop);
+        // Crear el borde de arriba
+        CardView bordeTop = new CardView(this);
+        params = new FrameLayout.LayoutParams(width, height/8);
+        bordeTop.setLayoutParams(params);
+        bordeTop.setBackgroundColor(color);
+        bordeTop.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(bordeTop);
 
 
-            // Crear el borde de abajo
-            CardView bordeBot = new CardView(this);
-            params = new FrameLayout.LayoutParams(width, (height*3)/50);
-            bordeBot.setLayoutParams(params);
-            bordeBot.setBackgroundColor(color);
-            bordeBot.setId(ViewCompat.generateViewId());
-            constraintLayout.addView(bordeBot);
+        // Crear el borde de abajo
+        CardView bordeBot = new CardView(this);
+        params = new FrameLayout.LayoutParams(width, (height*3)/50);
+        bordeBot.setLayoutParams(params);
+        bordeBot.setBackgroundColor(color);
+        bordeBot.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(bordeBot);
 
-            //Crear el textview con la categoria
-            TextView textoCategoria = new TextView(this);
-            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            textoCategoria.setLayoutParams(params);
-            textoCategoria.setText(categoria);
-            textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
-            textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.hlsimple));
-            textoCategoria.setId(ViewCompat.generateViewId());
-            constraintLayout.addView(textoCategoria);
+        //Crear el textview con la categoria
+        TextView textoCategoria = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        textoCategoria.setLayoutParams(params);
+        textoCategoria.setText(categoria);
+        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
+        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.hlsimple));
+        textoCategoria.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(textoCategoria);
 
-            //Crear el textview para el contenido
-            TextView textoContenido = new TextView(this);
-            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(margin, margin, margin, margin);
-            textoContenido.setLayoutParams(params);
-            textoContenido.setText(contenido);
-            textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/15));
-            textoContenido.setGravity(Gravity.CENTER);
-            textoContenido.setId(ViewCompat.generateViewId());
-            constraintLayout.addView(textoContenido);
+        //Crear el textview para el contenido
+        TextView textoContenido = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(margin, margin, margin, margin);
+        textoContenido.setLayoutParams(params);
+        textoContenido.setText(contenido);
+        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/15));
+        textoContenido.setGravity(Gravity.CENTER);
+        textoContenido.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(textoContenido);
 
-            //Crear la yapa
-            TextView yapa = new TextView(this);
-            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(margin, margin, margin, margin);
-            yapa.setLayoutParams(params);
-            yapa.setText(yapaContenido);
-            yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/20));
-            yapa.setGravity(Gravity.CENTER);
-            yapa.setId(ViewCompat.generateViewId());
-            constraintLayout.addView(yapa);
+        //Crear la yapa
+        TextView yapa = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(margin, margin, margin, margin);
+        yapa.setLayoutParams(params);
+        yapa.setText(yapaContenido);
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/20));
+        yapa.setGravity(Gravity.CENTER);
+        yapa.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(yapa);
 
-            //Constraints
-            ConstraintSet set = new ConstraintSet();
-            set.clone(constraintLayout);
-            set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 0);
-            set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
-            set.connect(textoCategoria.getId(), ConstraintSet.TOP, bordeTop.getId(), ConstraintSet.BOTTOM);
-            set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-            set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-            set.connect(textoContenido.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-            set.connect(textoContenido.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-            set.connect(textoContenido.getId(), ConstraintSet.TOP, textoCategoria.getId(), ConstraintSet.BOTTOM,height/50);
-            set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-            set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-            set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
-            set.applyTo(constraintLayout);
+        //Constraints
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
+        set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 0);
+        set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+        set.connect(textoCategoria.getId(), ConstraintSet.TOP, bordeTop.getId(), ConstraintSet.BOTTOM);
+        set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(textoContenido.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(textoContenido.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(textoContenido.getId(), ConstraintSet.TOP, textoCategoria.getId(), ConstraintSet.BOTTOM,height/50);
+        set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
+        set.applyTo(constraintLayout);
 
-            return carta;
+        return carta;
 
-        }
+    }
 
     public ConstraintLayout crearConstraintTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
 
-            // Crear la base
-            CardView carta = new CardView(this);
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
-            params.setMargins(margin,margin,margin,margin);
-            carta.setLayoutParams(params);
-            carta.setBackgroundColor(-1644568);
+        // Crear la base
+        CardView carta = new CardView(this);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
+        params.setMargins(margin,margin,margin,margin);
+        carta.setLayoutParams(params);
+        carta.setBackgroundColor(-1644568);
 
-            // Crear el constraint layout
-            ConstraintLayout constraintLayout = new ConstraintLayout(this);
-            params = new FrameLayout.LayoutParams(width, height);
-            constraintLayout.setLayoutParams(params);
-            constraintLayout.setId(ViewCompat.generateViewId());
-            constraintLayout.setBackgroundColor(-1644568);
-            carta.addView(constraintLayout);
+        // Crear el constraint layout
+        ConstraintLayout constraintLayout = new ConstraintLayout(this);
+        params = new FrameLayout.LayoutParams(width, height);
+        constraintLayout.setLayoutParams(params);
+        constraintLayout.setId(ViewCompat.generateViewId());
+        constraintLayout.setBackgroundColor(-1644568);
+        carta.addView(constraintLayout);
 
-            // Crear el borde de arriba
-            CardView bordeTop = new CardView(this);
-            params = new FrameLayout.LayoutParams(width, height/8);
-            bordeTop.setLayoutParams(params);
-            bordeTop.setBackgroundColor(color);
-            bordeTop.setId(ViewCompat.generateViewId());
-            constraintLayout.addView(bordeTop);
+        // Crear el borde de arriba
+        CardView bordeTop = new CardView(this);
+        params = new FrameLayout.LayoutParams(width, height/8);
+        bordeTop.setLayoutParams(params);
+        bordeTop.setBackgroundColor(color);
+        bordeTop.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(bordeTop);
 
 
-            // Crear el borde de abajo
-            CardView bordeBot = new CardView(this);
-            params = new FrameLayout.LayoutParams(width, (height*3)/50);
-            bordeBot.setLayoutParams(params);
-            bordeBot.setBackgroundColor(color);
-            bordeBot.setId(ViewCompat.generateViewId());
-            constraintLayout.addView(bordeBot);
+        // Crear el borde de abajo
+        CardView bordeBot = new CardView(this);
+        params = new FrameLayout.LayoutParams(width, (height*3)/50);
+        bordeBot.setLayoutParams(params);
+        bordeBot.setBackgroundColor(color);
+        bordeBot.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(bordeBot);
 
-            //Crear el textview con la categoria
-            TextView textoCategoria = new TextView(this);
-            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            textoCategoria.setLayoutParams(params);
-            textoCategoria.setText(categoria);
-            textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
-            textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.hlsimple));
-            textoCategoria.setId(ViewCompat.generateViewId());
-            constraintLayout.addView(textoCategoria);
+        //Crear el textview con la categoria
+        TextView textoCategoria = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        textoCategoria.setLayoutParams(params);
+        textoCategoria.setText(categoria);
+        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
+        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.hlsimple));
+        textoCategoria.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(textoCategoria);
 
-            //Crear el textview para el contenido
-            TextView textoContenido = new TextView(this);
-            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(margin, margin, margin, margin);
-            textoContenido.setLayoutParams(params);
-            textoContenido.setText(contenido);
-            textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/15));
-            textoContenido.setGravity(Gravity.CENTER);
-            textoContenido.setId(ViewCompat.generateViewId());
-            constraintLayout.addView(textoContenido);
+        //Crear el textview para el contenido
+        TextView textoContenido = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(margin, margin, margin, margin);
+        textoContenido.setLayoutParams(params);
+        textoContenido.setText(contenido);
+        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/15));
+        textoContenido.setGravity(Gravity.CENTER);
+        textoContenido.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(textoContenido);
 
-            //Crear la yapa
-            TextView yapa = new TextView(this);
-            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(margin, margin, margin, margin);
-            yapa.setLayoutParams(params);
-            yapa.setText(yapaContenido);
-            yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/20));
-            yapa.setGravity(Gravity.CENTER);
-            yapa.setId(ViewCompat.generateViewId());
-            constraintLayout.addView(yapa);
+        //Crear la yapa
+        TextView yapa = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(margin, margin, margin, margin);
+        yapa.setLayoutParams(params);
+        yapa.setText(yapaContenido);
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/20));
+        yapa.setGravity(Gravity.CENTER);
+        yapa.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(yapa);
 
-            //Constraints
-            ConstraintSet set = new ConstraintSet();
-            set.clone(constraintLayout);
-            set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 0);
-            set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
-            set.connect(textoCategoria.getId(), ConstraintSet.TOP, bordeTop.getId(), ConstraintSet.BOTTOM);
-            set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-            set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-            set.connect(textoContenido.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-            set.connect(textoContenido.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-            set.connect(textoContenido.getId(), ConstraintSet.TOP, textoCategoria.getId(), ConstraintSet.BOTTOM,height/50);
-            set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-            set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-            set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
-            set.applyTo(constraintLayout);
+        //Constraints
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
+        set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 0);
+        set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+        set.connect(textoCategoria.getId(), ConstraintSet.TOP, bordeTop.getId(), ConstraintSet.BOTTOM);
+        set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(textoContenido.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(textoContenido.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(textoContenido.getId(), ConstraintSet.TOP, textoCategoria.getId(), ConstraintSet.BOTTOM,height/50);
+        set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
+        set.applyTo(constraintLayout);
 
-            return constraintLayout;
+        return constraintLayout;
 
-        }
+    }
 
     public void mostrarPlantillaEnXml(Plantilla plantilla, Context context) {
         ArrayList<CardView> espacioCartas = conseguirCardViews();
