@@ -11,7 +11,7 @@
         android:hint="Nombre"
         android:textSize="24dp"
         android:textColor="@color/black"
-        android:fontFamily="@font/hlsimple"
+        android:fontFamily="@font/poertsen_one_regular"
         android:inputType="text" />
 
 
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:singleLine="true"
-            android:fontFamily="@font/hlsimple"
+            android:fontFamily="@font/poertsen_one_regular"
             android:textSize="24dp"
             android:text="Color" />
 

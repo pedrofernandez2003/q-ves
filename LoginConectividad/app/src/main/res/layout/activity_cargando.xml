@@ -6,17 +6,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
         android:id="@+id/cargando"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="178dp"
-        android:layout_marginLeft="178dp"
         android:layout_marginEnd="173dp"
-        android:layout_marginRight="173dp"
-        android:layout_marginBottom="352dp"
+        android:fontFamily="@font/poertsen_one_regular"
         android:text="@string/textoCargando"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="379dp"
+        android:layout_height="181dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/loading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cargando" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,11 +10,11 @@ android:padding="16dp">
     android:layout_height="wrap_content"
     android:hint="@string/contenido"
     android:inputType="text"
-    android:fontFamily="@font/hlsimple"/>
+    android:fontFamily="@font/poertsen_one_regular"/>
 
 <EditText
     android:id="@+id/yapa"
-    android:fontFamily="@font/hlsimple"
+    android:fontFamily="@font/poertsen_one_regular"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@id/contenido"
