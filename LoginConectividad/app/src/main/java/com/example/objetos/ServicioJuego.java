@@ -377,6 +377,7 @@ public class ServicioJuego extends Service {
                                                 Write escribir = new Write();
                                                 escribir.execute(msg, i);
                                             }
+                                            break;
 
                                         case "agarrarCarta":
                                             mapDatos=new HashMap<>();
@@ -436,6 +437,9 @@ public class ServicioJuego extends Service {
                         Write escribir = new Write();
                         escribir.execute(msg, i);
                     }
+                    intent= new Intent();
+                    intent.setAction("anularCarta");
+                    contexto.sendBroadcast(intent);
                     break;
             }
         }
