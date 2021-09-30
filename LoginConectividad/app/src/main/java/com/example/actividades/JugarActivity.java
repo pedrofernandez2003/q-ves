@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.DhcpInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -168,6 +169,7 @@ public class JugarActivity extends AppCompatActivity  {
                             escribir.execute(msg, 0);
                             puedeAgarrarCarta=false;
                         }
+
                     }
                     break;
             }
@@ -514,7 +516,7 @@ public class JugarActivity extends AppCompatActivity  {
         }
         return insertoLaTarjeta;
     }
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP) //CHEQUEAR ESTO, QUE ES POR EL FONT_FEATURE_SETTINGS
+
     public void sacarTarjetaDelTablero() {
         for (Casillero casillero:casilleros) {
             if (casillero.getCategoria().getNombre().equals(GameContext.getTarjetaAnulada().getCategoria())) {
@@ -531,11 +533,14 @@ public class JugarActivity extends AppCompatActivity  {
                 TextView categoriaTxt=new TextView(JugarActivity.this);
                 categoriaTxt.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 categoriaTxt.setGravity(Gravity.CENTER);
-                //categoriaTxt.setFontFeatureSettings(String.valueOf(R.font.hlsimple));
+                Typeface typeface = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) { //un miedo esto
+                    typeface = getResources().getFont(R.font.hlsimple);
+                }
+                categoriaTxt.setTypeface(typeface);
                 categoriaTxt.setTextColor(getResources().getColor(R.color.white));
                 categoriaTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
                 categoriaTxt.setText(casillero.getCategoria().getNombre());
-                //prueba.addView(categoria);
                 categoria.addView(categoriaTxt);
                 prueba.addView(categoria);
 
