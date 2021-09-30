@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.FrameLayout.LayoutParams;
@@ -90,21 +91,21 @@ public class TarjetasActivity extends AppCompatActivity {
 
         // Crear la base
         CardView carta = new CardView(this);
-        LayoutParams params = new LayoutParams(width, height);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
         params.setMargins(margin,margin,margin,margin);
         carta.setLayoutParams(params);
         carta.setBackgroundColor(-1644568);
 
         // Crear el constraint layout
         ConstraintLayout constraintLayout = new ConstraintLayout(this);
-        params = new LayoutParams(width, height);
+        params = new FrameLayout.LayoutParams(width, height);
         constraintLayout.setLayoutParams(params);
         constraintLayout.setId(ViewCompat.generateViewId());
         carta.addView(constraintLayout);
 
         // Crear el borde de arriba
         CardView bordeTop = new CardView(this);
-        params = new LayoutParams(width, height/8);
+        params = new FrameLayout.LayoutParams(width, height/8);
         bordeTop.setLayoutParams(params);
         bordeTop.setBackgroundColor(color);
         bordeTop.setId(ViewCompat.generateViewId());
@@ -113,7 +114,7 @@ public class TarjetasActivity extends AppCompatActivity {
 
         // Crear el borde de abajo
         CardView bordeBot = new CardView(this);
-        params = new LayoutParams(width, (height*3)/50);
+        params = new FrameLayout.LayoutParams(width, (height*3)/50);
         bordeBot.setLayoutParams(params);
         bordeBot.setBackgroundColor(color);
         bordeBot.setId(ViewCompat.generateViewId());
@@ -121,7 +122,7 @@ public class TarjetasActivity extends AppCompatActivity {
 
         //Crear el textview con la categoria
         TextView textoCategoria = new TextView(this);
-        params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         textoCategoria.setLayoutParams(params);
         textoCategoria.setText(categoria);
         textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
@@ -131,7 +132,7 @@ public class TarjetasActivity extends AppCompatActivity {
 
         //Crear el textview para el contenido
         TextView textoContenido = new TextView(this);
-        params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(margin, margin, margin, margin);
         textoContenido.setLayoutParams(params);
         textoContenido.setText(contenido);
@@ -142,7 +143,7 @@ public class TarjetasActivity extends AppCompatActivity {
 
         //Crear la yapa
         TextView yapa = new TextView(this);
-        params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(margin, margin, margin, margin);
         yapa.setLayoutParams(params);
         yapa.setText(yapaContenido);
@@ -254,9 +255,6 @@ public class TarjetasActivity extends AppCompatActivity {
     }
 
     private void traerTarjetas(Context context, String nombreCategoria, int color) {
-        ArrayList<String> colores = new ArrayList<>();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;

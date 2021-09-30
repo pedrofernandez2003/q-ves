@@ -560,14 +560,7 @@ public class JugarActivity extends AppCompatActivity  {
 
 
                         System.out.println("Soy el moderador que rechazo la anulacion");
-//                        ArrayList<String> datos=new ArrayList<>();
-//                        datos.add("{\"idJugador\": \""+ultimoEquipoQueTiroCarta+"\"}");
-//                        datos.add("{\"anuladoCorrectamente\": \""+Boolean.valueOf(false).toString()+"\"}");
-//                        Mensaje mensaje=new Mensaje("notificarModeradorSobreAnulacion",datos);
-//                        String msg=mensaje.serializar();
-//                        System.out.println("mensaje enviado "+msg);
-//                        Write escribir = new Write();
-//                        escribir.execute(msg, 0);
+
 
                         a.dismiss();
                     }
@@ -583,16 +576,6 @@ public class JugarActivity extends AppCompatActivity  {
                         intent.putExtra("anuladoCorrectamente", true);
                         intent.setAction("enviar_anular_carta");
                         JugarActivity.this.sendBroadcast(intent);
-
-//                        ArrayList<String> datos=new ArrayList<>();
-//                        datos.add("{\"idJugador\": \""+ultimoEquipoQueTiroCarta+"\"}");
-//                        datos.add("{\"anuladoCorrectamente\": \""+Boolean.valueOf(true).toString()+"\"}");
-//                        Mensaje mensaje=new Mensaje("anular_carta",datos);
-//                        String msg=mensaje.serializar();
-//                        System.out.println("mensaje enviado "+msg);
-//                        Write escribir = new Write();
-//                        escribir.execute(msg, 0);
-
                         a.dismiss();
                     }
                 });
