@@ -146,15 +146,17 @@ public class JugarActivity extends AppCompatActivity  {
                     boolean anuladoCorrectamente=intent.getBooleanExtra("anuladoCorrectamente",true);
                     // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
                     sacarTarjetaDelTablero();
-                    if (anuladoCorrectamente && GameContext.getEquipo().getNombre().equals(ultimoEquipoQueTiroCarta)) {
-                        ArrayList<String> datos=new ArrayList<>();
-                        datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
-                        Mensaje mensaje=new Mensaje("agarrarCarta",datos);
-                        String msg=mensaje.serializar();
-                        System.out.println("mensaje enviado "+msg);
-                        Write escribir = new Write();
-                        escribir.execute(msg, 0);
-                        puedeAgarrarCarta=false;
+                    if (GameContext.getServer()==null){
+                        if (anuladoCorrectamente && GameContext.getEquipo().getNombre().equals(ultimoEquipoQueTiroCarta)) {
+                            ArrayList<String> datos=new ArrayList<>();
+                            datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+                            Mensaje mensaje=new Mensaje("agarrarCarta",datos);
+                            String msg=mensaje.serializar();
+                            System.out.println("mensaje enviado "+msg);
+                            Write escribir = new Write();
+                            escribir.execute(msg, 0);
+                            puedeAgarrarCarta=false;
+                        }
                     }
                     break;
             }
@@ -318,6 +320,7 @@ public class JugarActivity extends AppCompatActivity  {
                 }
             }
         });
+
         botonVerCartas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -384,6 +387,7 @@ public class JugarActivity extends AppCompatActivity  {
                                 public void onClick(View view) {
                                     if (GameContext.isEsMiTurno()){
                                         if (insertarTarjetaEnTablero()){
+                                            GameContext.setTarjetaAnulada(GameContext.getTarjetaElegida());
                                             ArrayList<String> datos=new ArrayList<>();
                                             datos.add(GameContext.getTarjetaElegida().serializar());//falta sacar la carta del mazo
                                             GameContext.getEquipo().getTarjetas().remove(GameContext.getTarjetaElegida());
