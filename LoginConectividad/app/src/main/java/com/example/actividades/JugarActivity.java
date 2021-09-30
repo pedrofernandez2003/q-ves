@@ -400,7 +400,7 @@ public class JugarActivity extends AppCompatActivity  {
                                 public void onClick(View view) {
                                     if (GameContext.isEsMiTurno()){
                                         if (insertarTarjetaEnTablero()){
-                                            GameContext.setTarjetaAnulada(GameContext.getTarjetaElegida());
+//                                            GameContext.setTarjetaAnulada(GameContext.getTarjetaElegida());
                                             ArrayList<String> datos=new ArrayList<>();
                                             datos.add(GameContext.getTarjetaElegida().serializar());//falta sacar la carta del mazo
                                             GameContext.getEquipo().getTarjetas().remove(GameContext.getTarjetaElegida());
