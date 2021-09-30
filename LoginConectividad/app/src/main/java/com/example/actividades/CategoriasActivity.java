@@ -5,15 +5,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,7 +27,9 @@ import com.example.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.widget.TextViewCompat;
 
 import com.example.listeners.onEliminarListener;
 import com.example.listeners.onInsertarListener;
@@ -80,17 +85,36 @@ public class CategoriasActivity extends AppCompatActivity {
         CardView cardView = new CardView(this);
         LayoutParams params = new LayoutParams(width, height);
         params.setMargins(margin, margin, margin, margin);
-        cardView.setRadius(30.0f);
-        cardView.setBackgroundColor(color);
-
+        cardView.setRadius(50.0f);
+        cardView.setCardBackgroundColor(color);
         cardView.setLayoutParams(params);
+
+        ConstraintLayout constraintLayout = new ConstraintLayout(this);
+        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        constraintLayout.setLayoutParams(params);
+
+        TextView categoria = new TextView(this);
+        params = new LayoutParams((width*3)/5, height/2);
+        categoria.setGravity(Gravity.CENTER_VERTICAL);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            categoria.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        }
+        categoria.setTypeface(ResourcesCompat.getFont(this,R.font.poertsen_one_regular));
+        params.setMargins(height/4, 15,0,0);
 
         TextView texto = new TextView(this);
         params = new LayoutParams(width, height);
-        texto.setTextSize(height/8);
+        texto.setTextSize(height/14);
         texto.setGravity(Gravity.CENTER);
         texto.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
         texto.setText(nombreCategoria);
+        texto.setLayoutParams(params);
+
+        ImageView cartitas = new ImageView(this);
+        params = new LayoutParams((height*2)/3, (height*2)/3);
+        // cartitas.setImageResource(ResourcesCompat.getDrawable(R.drawable.ic_cartas));
+
+
 
         cardView.addView(texto);
         return cardView;
@@ -186,7 +210,7 @@ public class CategoriasActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int widthCarta = (width*4)/5;
-        int heightCarta = (widthCarta*9)/20;
+        int heightCarta = (widthCarta*12)/35;
         int marginCarta = width/50;
         DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
             @Override
