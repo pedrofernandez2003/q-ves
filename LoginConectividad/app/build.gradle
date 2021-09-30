@@ -10,7 +10,7 @@ android {
     defaultConfig {
         multiDexEnabled true
         applicationId "com.example.login_crud"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -71,4 +71,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.2.2'
     testImplementation 'junit:junit:4.+'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
+
 }

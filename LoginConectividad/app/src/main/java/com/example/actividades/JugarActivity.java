@@ -128,9 +128,18 @@ public class JugarActivity extends AppCompatActivity  {
                     AlertDialog.Builder db = new AlertDialog.Builder(context);
                     db.setView(dialog_layout);
                     db.setTitle("Juego terminado");
-                    db.setMessage("el ganador es: "+intent.getStringExtra("ganador"));
+                    db.setMessage("El ganador es: "+intent.getStringExtra("ganador"));
+                    db.setPositiveButton("Volver a inicio", null);
                     final AlertDialog a = db.create();
                     a.show();
+                    Button volverAInicio = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                    volverAInicio.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(JugarActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                     break;
 
                 case "notificarModerador":
@@ -147,7 +156,9 @@ public class JugarActivity extends AppCompatActivity  {
                     // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
                     sacarTarjetaDelTablero();
                     if (GameContext.getServer()==null){
+                        System.out.println("anulado correctamente "+anuladoCorrectamente);
                         if (anuladoCorrectamente && GameContext.getEquipo().getNombre().equals(ultimoEquipoQueTiroCarta)) {
+                            System.out.println("mando agarrar carta");
                             ArrayList<String> datos=new ArrayList<>();
                             datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
                             Mensaje mensaje=new Mensaje("agarrarCarta",datos);

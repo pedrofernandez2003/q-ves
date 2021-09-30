@@ -25,7 +25,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:text="Personajes"
-                android:fontFamily="@font/hlsimple"
+                android:fontFamily="@font/poertsen_one_regular"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -38,7 +38,7 @@
                 android:layout_marginLeft="70dp"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/purple_200"
-                android:fontFamily="@font/hlsimple"
+                android:fontFamily="@font/poertsen_one_regular"
                 android:inputType="textPersonName"
                 android:text="Aceptar"
                 />

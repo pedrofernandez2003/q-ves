@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Crear juego"
-        android:fontFamily="@font/hlsimple"
+        android:fontFamily="@font/poertsen_one_regular"
         android:textSize="38dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,7 @@
             android:singleLine="true"
             android:text="Nombre:"
             android:textSize="30dp"
-            android:fontFamily="@font/hlsimple"/>
+            android:fontFamily="@font/poertsen_one_regular"/>
 
         <EditText
             android:id="@+id/completarNombreJuego"
@@ -72,7 +72,7 @@
             android:singleLine="true"
             android:text="Equipos:"
             android:textSize="30dp"
-            android:fontFamily="@font/hlsimple"/>
+            android:fontFamily="@font/poertsen_one_regular"/>
 
         <EditText
             android:id="@+id/completarCantidadEquipos"
@@ -104,7 +104,7 @@
             android:text="categorias"
             android:textColor="@color/white"
             android:backgroundTint="@color/purple_200"
-            android:fontFamily="@font/hlsimple"/>
+            android:fontFamily="@font/poertsen_one_regular"/>
 
     </LinearLayout>
 
@@ -130,7 +130,7 @@
             android:singleLine="true"
             android:textSize="14sp"
             android:textStyle="italic"
-            android:fontFamily="@font/hlsimple"
+            android:fontFamily="@font/poertsen_one_regular"
             android:text="No ha seleccionado categorias "
             tools:layout_editor_absoluteX="3dp"
             tools:layout_editor_absoluteY="397dp"/>
@@ -166,7 +166,7 @@
             android:text="personajes"
             android:textColor="@color/white"
             android:backgroundTint="@color/purple_200"
-            android:fontFamily="@font/hlsimple"/>
+            android:fontFamily="@font/poertsen_one_regular"/>
 
     </LinearLayout>
 
@@ -189,7 +189,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:singleLine="true"
-            android:fontFamily="@font/hlsimple"
+            android:fontFamily="@font/poertsen_one_regular"
             android:text="No ha seleccionado personajes "
             android:textSize="14sp"
             android:textStyle="italic"
@@ -204,7 +204,7 @@
         android:text="Guardar"
         android:textColor="@color/white"
         android:backgroundTint="@color/purple_200"
-        android:fontFamily="@font/hlsimple"
+        android:fontFamily="@font/poertsen_one_regular"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
