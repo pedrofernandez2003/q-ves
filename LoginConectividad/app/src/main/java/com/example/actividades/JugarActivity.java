@@ -535,7 +535,7 @@ public class JugarActivity extends AppCompatActivity  {
                 categoriaTxt.setGravity(Gravity.CENTER);
                 Typeface typeface = null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) { //un miedo esto
-                    typeface = getResources().getFont(R.font.hlsimple);
+                    typeface = getResources().getFont(R.font.poertsen_one_regular);
                 }
                 categoriaTxt.setTypeface(typeface);
                 categoriaTxt.setTextColor(getResources().getColor(R.color.white));
