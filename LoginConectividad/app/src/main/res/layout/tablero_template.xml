@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:screenOrientation="landscape">
 
+    
+    
     <GridLayout
         android:columnCount="1"
         android:rowCount="4"
@@ -13,16 +15,16 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/guideline6"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
         <ImageView
             android:layout_columnWeight="1"
-            android:layout_rowWeight="5"
+            android:layout_rowWeight="6"
             android:layout_gravity="fill"
             android:id="@+id/personaje"
             tools:src="@tools:sample/avatars" />
@@ -33,7 +35,8 @@
             android:layout_gravity="fill"
             android:id="@+id/agarrarCarta"
             android:textColor="@color/white"
-            android:backgroundTint="@color/purple_200"
+            android:theme="@style/AppTheme"
+            android:background="@color/black"
             android:fontFamily="@font/poertsen_one_regular"
             android:text="Agarrar Carta" />
 
@@ -42,6 +45,7 @@
             android:layout_rowWeight="0.5"
             android:textColor="@color/white"
             android:backgroundTint="@color/purple_200"
+            android:background="@color/black"
             android:fontFamily="@font/poertsen_one_regular"
             android:layout_gravity="fill"
             android:id="@+id/pasar"
@@ -52,6 +56,7 @@
             android:fontFamily="@font/poertsen_one_regular"
             android:gravity="center"
             android:layout_columnWeight="1"
+            android:paddingTop="3dp"
             android:layout_rowWeight="0.1"
             android:layout_gravity="fill"
             android:text="Ronda : 3/7"
@@ -64,10 +69,10 @@
         android:id="@+id/constraint_layout0"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline7"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toTopOf="@+id/guideline6">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
@@ -92,7 +97,7 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="28sp"
+                    android:textSize="23sp"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -122,7 +127,7 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="28sp"
+                    android:textSize="23sp"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -152,7 +157,7 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="28sp"
+                    android:textSize="23sp"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -182,7 +187,7 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="28sp"
+                    android:textSize="23sp"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -212,7 +217,7 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="28sp"
+                    android:textSize="23sp"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -242,7 +247,7 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="28sp"
+                    android:textSize="23sp"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -272,7 +277,7 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="28sp"
+                    android:textSize="23sp"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -302,7 +307,7 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="28sp"
+                    android:textSize="23sp"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -332,7 +337,7 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="28sp"
+                    android:textSize="23sp"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -362,7 +367,7 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="28sp"
+                    android:textSize="23sp"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -393,7 +398,7 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text="Anular"
                     android:textColor="@android:color/white"
-                    android:textSize="28dp"
+                    android:textSize="23dp"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -423,7 +428,7 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text="Ver Cartas"
                     android:textColor="@android:color/white"
-                    android:textSize="28sp"
+                    android:textSize="23sp"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -448,33 +453,33 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.3" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.35" />
+<!--    <androidx.constraintlayout.widget.Guideline-->
+<!--        android:id="@+id/guideline4"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintGuide_percent="0.35" />-->
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95" />
+<!--    <androidx.constraintlayout.widget.Guideline-->
+<!--        android:id="@+id/guideline5"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintGuide_percent="0.95" />-->
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.03" />
+<!--    <androidx.constraintlayout.widget.Guideline-->
+<!--        android:id="@+id/guideline6"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintGuide_percent="0.03" />-->
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.97" />
+<!--    <androidx.constraintlayout.widget.Guideline-->
+<!--        android:id="@+id/guideline7"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintGuide_percent="0.97" />-->
 
     <TextView
         android:id="@+id/turno"

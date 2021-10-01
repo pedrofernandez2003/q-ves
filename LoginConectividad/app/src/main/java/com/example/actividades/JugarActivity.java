@@ -350,9 +350,9 @@ public class JugarActivity extends AppCompatActivity  {
                     DisplayMetrics displayMetrics = new DisplayMetrics();
                     getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                     int width = displayMetrics.widthPixels;
-                    int widthCarta = (width*5)/40;
-                    int heightCarta = (widthCarta*14)/10;
-                    int marginCarta = width/100;
+                    int widthCarta = width/6;
+                    int heightCarta = widthCarta;
+                    int marginCarta = width/60;
 
                     tarjetasHashSet=GameContext.getEquipo().getTarjetas();
 
@@ -498,9 +498,9 @@ public class JugarActivity extends AppCompatActivity  {
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int width = displayMetrics.widthPixels;
-                int widthCarta = (width * 4) / 40;
-                int heightCarta = (widthCarta * 14) / 10;
-                int marginCarta = width / 100;
+                int widthCarta = width / 4;
+                int heightCarta = widthCarta  ;
+                int marginCarta = width / 60;
                 int color = casillero.getCategoria().getColor().getCodigo();
                 String nombreCategoria = casillero.getCategoria().getNombre();
                 String tarjetaContenido = GameContext.getTarjetaElegida().getContenido();
@@ -638,7 +638,7 @@ public class JugarActivity extends AppCompatActivity  {
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         textoCategoria.setLayoutParams(params);
         textoCategoria.setText(categoria);
-        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/6);
+        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
         textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
         textoCategoria.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoCategoria);
@@ -649,7 +649,7 @@ public class JugarActivity extends AppCompatActivity  {
         params.setMargins(margin, margin, margin, margin);
         textoContenido.setLayoutParams(params);
         textoContenido.setText(contenido);
-        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/8));
+        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/12));
         textoContenido.setGravity(Gravity.CENTER);
         textoContenido.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoContenido);
@@ -660,7 +660,7 @@ public class JugarActivity extends AppCompatActivity  {
         params.setMargins(margin, margin, margin, margin);
         yapa.setLayoutParams(params);
         yapa.setText(yapaContenido);
-        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/20));
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/17));
         yapa.setGravity(Gravity.CENTER);
         yapa.setId(ViewCompat.generateViewId());
         constraintLayout.addView(yapa);
