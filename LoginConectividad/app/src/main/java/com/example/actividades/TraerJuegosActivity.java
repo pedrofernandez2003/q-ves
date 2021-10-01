@@ -64,6 +64,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private int cantidadEquipos;
     private TextView textoCargando, nombreRed, claveRed, cantidadEquiposTextView;
 
+    private Button descargarImagenes;
     private WifiManager wifiManager;
     private WifiConfiguration currentConfig;
     private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
@@ -86,6 +87,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
         cantidadEquipos=0;
         agregarPlantilla = findViewById(R.id.agregarPlantilla);
         textoCargando = findViewById(R.id.textoCargando);
+        descargarImagenes = findViewById(R.id.descargarImagenes);
         cantidadEquiposTextView = findViewById(R.id.cantidadEquipos);
         botonComenzarPartida = findViewById(R.id.botonComenzarPartida);
         nombreRed = findViewById(R.id.nombreRed);
