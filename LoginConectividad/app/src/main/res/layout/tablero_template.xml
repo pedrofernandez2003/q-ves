@@ -49,6 +49,8 @@
 
         <TextView
             android:id="@+id/textView2"
+            android:fontFamily="@font/poertsen_one_regular"
+            android:gravity="center"
             android:layout_columnWeight="1"
             android:layout_rowWeight="0.1"
             android:layout_gravity="fill"
@@ -90,7 +92,8 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="28sp"
+                    android:gravity="center"/>
 
             </LinearLayout>
 
@@ -119,7 +122,8 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="28sp"
+                    android:gravity="center"/>
 
             </LinearLayout>
 
@@ -148,7 +152,8 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="28sp"
+                    android:gravity="center"/>
 
             </LinearLayout>
 
@@ -177,7 +182,8 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="28sp"
+                    android:gravity="center"/>
 
             </LinearLayout>
 
@@ -206,7 +212,8 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="28sp"
+                    android:gravity="center"/>
 
             </LinearLayout>
 
@@ -235,7 +242,8 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="28sp"
+                    android:gravity="center"/>
 
             </LinearLayout>
 
@@ -264,7 +272,8 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="28sp"
+                    android:gravity="center"/>
 
             </LinearLayout>
 
@@ -293,7 +302,8 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="28sp"
+                    android:gravity="center"/>
 
             </LinearLayout>
 
@@ -322,7 +332,8 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="28sp"
+                    android:gravity="center"/>
 
             </LinearLayout>
 
@@ -351,7 +362,8 @@
                     android:fontFamily="@font/poertsen_one_regular"
                     android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="28sp"
+                    android:gravity="center"/>
 
             </LinearLayout>
 
@@ -361,13 +373,14 @@
             android:id="@+id/cardView11"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:cardBackgroundColor="#FFFFFF"
+            app:cardBackgroundColor="#000000"
             app:layout_constraintTop_toBottomOf="@id/cardView7"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/cardView10"
             app:layout_constraintRight_toLeftOf="@id/cardView12">
 
             <LinearLayout
+                android:id="@+id/anularCarta"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center">
@@ -378,9 +391,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/poertsen_one_regular"
-                    android:text=""
+                    android:text="Anular"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="28dp"
+                    android:gravity="center"/>
 
             </LinearLayout>
 
@@ -390,7 +404,7 @@
             android:id="@+id/cardView12"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:cardBackgroundColor="#FFFFFF"
+            app:cardBackgroundColor="#666666"
             app:layout_constraintTop_toBottomOf="@id/cardView8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/cardView11"
@@ -407,9 +421,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/poertsen_one_regular"
-                    android:text=""
+                    android:text="Ver Cartas"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="28sp"
+                    android:gravity="center"/>
 
             </LinearLayout>
 

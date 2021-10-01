@@ -59,6 +59,7 @@ import com.example.objetos.TarjetaSinCategoria;
 import com.example.objetos.manejoSockets.Write;
 import com.example.R;
 import com.example.objetos.Plantilla;
+import com.facebook.internal.ImageRequest;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
@@ -179,7 +180,7 @@ public class JugarActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tablero_creable);
+        setContentView(R.layout.tablero_template);
         wifiManager= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         d=wifiManager.getDhcpInfo();
         mostrarPlantillaEnXml(GameContext.getJuego().getPlantilla(), this);
@@ -637,7 +638,7 @@ public class JugarActivity extends AppCompatActivity  {
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         textoCategoria.setLayoutParams(params);
         textoCategoria.setText(categoria);
-        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
+        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/6);
         textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
         textoCategoria.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoCategoria);
@@ -648,7 +649,7 @@ public class JugarActivity extends AppCompatActivity  {
         params.setMargins(margin, margin, margin, margin);
         textoContenido.setLayoutParams(params);
         textoContenido.setText(contenido);
-        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/15));
+        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/8));
         textoContenido.setGravity(Gravity.CENTER);
         textoContenido.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoContenido);
