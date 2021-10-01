@@ -128,21 +128,23 @@ public class ServicioJuego extends Service {
                                             break;
 
                                         case "actualizacion_tablero_anulacion":
-                                            mapDatos=new HashMap<>();
-                                            try {
-                                                mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);
-                                            } catch (JsonSyntaxException e) {
-                                                e.printStackTrace();
-                                            }
-                                            String equipo=mapDatos.get("idJugador");
-                                            tarjeta= json.fromJson(mapDatos.get("Tarjeta"), Tarjeta.class);
+                                            System.out.println("entre actualizacion_tablero_anulacion");
+//                                            mapDatos=new HashMap<>();
+//                                            try {
+//                                                mapDatos = json.fromJson(mensaje.getDatos().get(1),HashMap.class);
+//                                            } catch (JsonSyntaxException e) {
+//                                                e.printStackTrace();
+//                                            }
+                                            tarjeta= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
                                             GameContext.setTarjetaAnulada(tarjeta);
-                                            Boolean anuladoCorrectamente=Boolean.parseBoolean(mapDatos.get("anuladoCorrectamente"));
-                                            intent= new Intent();
-                                            intent.putExtra("equipoDeCartaAnulada", equipo);
-                                            intent.putExtra("anuladoCorrectamente", anuladoCorrectamente);
-                                            intent.setAction("anularCarta");
-                                            contexto.sendBroadcast(intent);
+//                                            String equipo=mapDatos.get("idJugador");
+//                                            System.out.println("se seteo la tarjeta anulada "+tarjeta.getCategoria());
+//                                            Boolean anuladoCorrectamente=Boolean.parseBoolean(mapDatos.get("anuladoCorrectamente"));
+//                                            intent= new Intent();
+//                                            intent.putExtra("equipoDeCartaAnulada", equipo);
+//                                            intent.putExtra("anuladoCorrectamente", anuladoCorrectamente);
+//                                            intent.setAction("anularCartaJugar");
+//                                            contexto.sendBroadcast(intent);
                                             break;
 
                                         case "tarjetaMazo":
@@ -421,7 +423,9 @@ public class ServicioJuego extends Service {
                     System.out.println("Soy Servicio que le avisa a todos");
                     for (int i=0;i<GameContext.getHijos().size();i++) {//le manda a todos quien es el ganador
                         ArrayList<String> datos=new ArrayList<>();
-                        datos.add("{\"anuladoCorrectamente\": \""+Boolean.valueOf(anuladoCorrectamente).toString()+"\",\"idJugador\": \""+equipoDeCartaAnulada+"\", \"Tarjeta\": \""+GameContext.getTarjetaAnulada().serializar()+"\"}");
+//                        datos.add("{\"anuladoCorrectamente\": \""+Boolean.valueOf(anuladoCorrectamente).toString()+"\",\"idJugador\": \""+equipoDeCartaAnulada+"\", \"Tarjeta\": \""+GameContext.getTarjetaAnulada().serializar()+"\"}");
+                        datos.add(GameContext.getTarjetaAnulada().serializar());
+                        datos.add("{\"anuladoCorrectamente\": \""+Boolean.valueOf(anuladoCorrectamente).toString()+"\",\"idJugador\": \""+equipoDeCartaAnulada+"\"}");
                         Mensaje mensaje=new Mensaje("actualizacion_tablero_anulacion",datos);
                         String msg=mensaje.serializar();
                         System.out.println("mensaje enviado "+msg);
@@ -429,7 +433,9 @@ public class ServicioJuego extends Service {
                         escribir.execute(msg, i);
                     }
                     intent= new Intent();
-                    intent.setAction("anularCarta");
+                    intent.putExtra("equipoDeCartaAnulada", equipoDeCartaAnulada);
+                    intent.putExtra("anuladoCorrectamente", anuladoCorrectamente);
+                    intent.setAction("anularCartaJugar");
                     contexto.sendBroadcast(intent);
                     break;
             }

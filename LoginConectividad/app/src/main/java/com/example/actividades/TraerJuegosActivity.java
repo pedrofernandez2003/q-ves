@@ -130,7 +130,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
                                     String juegoSerializado=juego.serializar();
                                     ArrayList<String> datos=new ArrayList<>();
                                     datos.add(juegoSerializado);
-                                    datos.add("\"turno\":"+i);
+                                    datos.add("\"turno\":"+ i);
                                     Mensaje mensaje=new Mensaje("comenzar",datos);
                                     String msg=mensaje.serializar();
                                     System.out.println(msg);

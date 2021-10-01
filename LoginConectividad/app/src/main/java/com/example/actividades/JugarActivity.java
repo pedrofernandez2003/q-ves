@@ -59,7 +59,7 @@ import com.example.objetos.TarjetaSinCategoria;
 import com.example.objetos.manejoSockets.Write;
 import com.example.R;
 import com.example.objetos.Plantilla;
-import com.facebook.internal.ImageRequest;
+//import com.facebook.internal.ImageRequest;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
@@ -151,8 +151,8 @@ public class JugarActivity extends AppCompatActivity  {
                     crearAlertDialogSobreAnulacion();
                     break;
 
-                case "anularCarta":
-                    System.out.println("Hola soy un usuario que va a anular la tarjeta en su tablero");
+                case "anularCartaJugar":
+                    System.out.println("llegue anularCarta");
                     ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
                     boolean anuladoCorrectamente=intent.getBooleanExtra("anuladoCorrectamente",true);
                     // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
@@ -190,7 +190,7 @@ public class JugarActivity extends AppCompatActivity  {
         intentFilter.addAction("actualizar");
         intentFilter.addAction("ganador");
         intentFilter.addAction("notificarModerador");
-        intentFilter.addAction("anularCarta");
+        intentFilter.addAction("anularCartaJugar");
         registerReceiver(broadcastReceiver,intentFilter);
         juego= GameContext.getJuego();
         partida=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1);
@@ -587,12 +587,11 @@ public class JugarActivity extends AppCompatActivity  {
                     public void onClick(View view) {
                         //charlar con pepo si es un msg o un intent
                         System.out.println("Soy el moderador que avalo la anulacion");
-
                         Intent intent= new Intent();
                         intent.putExtra("equipoDeCartaAnulada", ultimoEquipoQueTiroCarta);
                         intent.putExtra("anuladoCorrectamente", true);
                         intent.setAction("enviar_anular_carta");
-                        JugarActivity.this.sendBroadcast(intent);
+                        appContext.sendBroadcast(intent);
                         a.dismiss();
                     }
                 });

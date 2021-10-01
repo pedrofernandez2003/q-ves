@@ -416,6 +416,7 @@
             app:layout_constraintRight_toRightOf="parent">
 
             <LinearLayout
+                android:id="@+id/verCartas"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center">
