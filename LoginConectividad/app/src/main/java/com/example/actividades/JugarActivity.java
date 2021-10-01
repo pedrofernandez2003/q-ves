@@ -638,7 +638,7 @@ public class JugarActivity extends AppCompatActivity  {
         textoCategoria.setLayoutParams(params);
         textoCategoria.setText(categoria);
         textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
-        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.hlsimple));
+        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
         textoCategoria.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoCategoria);
 
@@ -724,7 +724,7 @@ public class JugarActivity extends AppCompatActivity  {
         textoCategoria.setLayoutParams(params);
         textoCategoria.setText(categoria);
         textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
-        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.hlsimple));
+        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
         textoCategoria.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoCategoria);
 
@@ -734,7 +734,7 @@ public class JugarActivity extends AppCompatActivity  {
         params.setMargins(margin, margin, margin, margin);
         textoContenido.setLayoutParams(params);
         textoContenido.setText(contenido);
-        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/15));
+        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/12));
         textoContenido.setGravity(Gravity.CENTER);
         textoContenido.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoContenido);
