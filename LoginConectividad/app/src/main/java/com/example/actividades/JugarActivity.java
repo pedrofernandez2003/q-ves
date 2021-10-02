@@ -151,10 +151,6 @@ public class JugarActivity extends AppCompatActivity  {
                     crearAlertDialogSobreAnulacion();
                     break;
 
-                case "prueba":
-                    System.out.println("prueba");
-                    break;
-
                 case "anularCartaJugar":
                     System.out.println("llegue anularCarta");
                     ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
@@ -174,7 +170,6 @@ public class JugarActivity extends AppCompatActivity  {
                             escribir.execute(msg, 0);
                             puedeAgarrarCarta=false;
                         }
-
                     }
                     break;
             }
@@ -194,7 +189,6 @@ public class JugarActivity extends AppCompatActivity  {
         intentFilter.addAction("actualizar");
         intentFilter.addAction("ganador");
         intentFilter.addAction("mostrarDialog");
-        intentFilter.addAction("prueba");
         intentFilter.addAction("anularCartaJugar");
         registerReceiver(broadcastReceiver,intentFilter);
         juego= GameContext.getJuego();
@@ -559,6 +553,7 @@ public class JugarActivity extends AppCompatActivity  {
     }
 
     public void crearAlertDialogSobreAnulacion(){
+        System.out.println("cree el dialog");
 
         LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
         View dialog_layout = inflater.inflate(R.layout.anular_carta, null);
@@ -577,17 +572,22 @@ public class JugarActivity extends AppCompatActivity  {
                 no.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        for (int i=0;i<GameContext.getHijos().size();i++) {
+                            ArrayList<String> datos=new ArrayList<>();
+                            datos.add(GameContext.getTarjetaAnulada().serializar());
+                            datos.add("{\"anuladoCorrectamente\": \""+false+"\",\"idJugador\": \""+ultimoEquipoQueTiroCarta+"\"}");
+                            Mensaje mensaje=new Mensaje("actualizacion_tablero_anulacion",datos);
+                            String msg=mensaje.serializar();
+                            System.out.println("mensaje enviado "+msg);
+                            Write escribir = new Write();
+                            escribir.execute(msg, i);
+                        }
                         Intent intent= new Intent();
                         intent.putExtra("equipoDeCartaAnulada", ultimoEquipoQueTiroCarta);
                         intent.putExtra("anuladoCorrectamente", false);
-                        intent.setAction("enviar_anular_carta");
-                        JugarActivity.this.sendBroadcast(intent);
-
-
+                        intent.setAction("anularCartaJugar");
+                        appContext.sendBroadcast(intent);
                         System.out.println("Soy el moderador que rechazo la anulacion");
-
-
                         a.dismiss();
                     }
                 });
@@ -793,11 +793,7 @@ public class JugarActivity extends AppCompatActivity  {
         ArrayList<CardView> espacioCartas = conseguirCardViews();
         ArrayList<TextView> espaciosTextos = conseguirTextViews();
         ArrayList<Categoria> categorias = plantilla.getCategorias();
-//        ImageView imageView = (ImageView) findViewById(R.id.personaje);
         traerImagen(plantilla);
-//        Picasso.with(imageView.getContext()).load("https://firebasestorage.googleapis.com/v0/b/qves-ddf27.appspot.com/o/images%2Foutput-onlinejpgtools.jpg?alt=media&token=ebf53013-726c-4d13-bc6c-5f7bc7fbc47e"
-//        ).into(imageView);
-
         for (int i = 0; i < 10; i++) {
             System.out.println(categorias.get(i).getNombre());
             int codigoColor=categorias.get(i).getColor().getCodigo();
@@ -842,6 +838,49 @@ public class JugarActivity extends AppCompatActivity  {
         espaciosTexto.add(findViewById(R.id.icon_name_10));
         return espaciosTexto;
     }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
+        }
+        else{
+            showSystemUI();
+        }
+    }
+
+    private void hideSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        // Set the content to appear under the system bars so that the
+                        // content doesn't resize when the system bars hide and show.
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
+
+    // Shows the system bars by removing all the flags
+    // except for the ones that make the content appear under the system bars.
+    private void showSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(broadcastReceiver);
+        super.onPause();
+    }
+
     @Override
     protected void onDestroy() {
         unregisterReceiver(broadcastReceiver);

@@ -320,10 +320,10 @@ public class ServicioJuego extends Service {
 
                                             nombreEquipo= mapDatos.get("idJugador");
                                             GameContext.setTarjetaAnulada(tarjetaAnulada);
-                                            intent2= new Intent();
-                                            intent2.putExtra("equipoDeCartaAnulada", nombreEquipo);
-                                            intent2.setAction("prueba");
-                                            contexto.sendBroadcast(intent2);
+                                            intent= new Intent();
+                                            intent.putExtra("equipoDeCartaAnulada", nombreEquipo);
+                                            intent.setAction("mostrarDialog");
+                                            contexto.sendBroadcast(intent);
                                             break;
 
                                         case "misCartas":
@@ -476,7 +476,6 @@ public class ServicioJuego extends Service {
         unregisterReceiver(broadcastReceiver);
         httpServer.stop();
         httpServer.closeAllConnections();
-//        server.destroy();
         super.onDestroy();
     }
 }

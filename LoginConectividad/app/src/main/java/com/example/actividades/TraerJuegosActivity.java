@@ -17,8 +17,13 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -70,7 +75,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
     private Juego juego;
     private ImageView botonComenzarPartida;
-    private ThreadedEchoServer server;
     private ArrayList<Categoria> categorias;
     private Boolean cantidadExacta = true;
     private Boolean click=false;
@@ -134,6 +138,19 @@ public class TraerJuegosActivity extends AppCompatActivity {
                 }
             }
         });
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void handleOnBackPressed() {//que apague el hotspot y despues vaya para atras
+//                turnOffHotspot();
+                Intent intent=new Intent(appContext,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        };
+
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -143,12 +160,9 @@ public class TraerJuegosActivity extends AppCompatActivity {
             switch (intent.getAction()){
                 case "nuevo equipo":
                     int nuevaCantEquipos= Integer.parseInt((String) cantidadEquiposTextView.getText()) + 1;
-                    System.out.println("texto "+cantidadEquiposTextView.getText());
-                    System.out.println("dsdf "+cantidadEquiposTextView.getText().getClass().toString());
-                    System.out.println("nuevo "+nuevaCantEquipos);
                     cantidadEquiposTextView.setText(String.valueOf(nuevaCantEquipos));
                     if(GameContext.getHijos().size() >= cantidadEquipos){
-                        botonComenzarPartida.setVisibility(View.VISIBLE);
+                        botonComenzarPartida.setColorFilter(appContext.getResources().getColor(R.color.azul_plantilla));
                         botonComenzarPartida.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -259,8 +273,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
     }
     Context appContext=this;
     private void mostrarPlantillas(String moderador,Context appCcontext)  {
-        System.out.println("moderador"+moderador);
-        System.out.println("moderador"+moderador);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
@@ -424,21 +436,17 @@ public class TraerJuegosActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void turnOffHotspot() {
         if (hotspotReservation != null) {
+            System.out.println("apague el hotspot");
             hotspotReservation.close();
         }
     }
 
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    @Override
-//    protected void onStop() {
-//        turnOffHotspot();
-//        super.onStop();
-//    }
-//
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    @Override
-//    protected void onDestroy() {
-//        turnOffHotspot();
-//        super.onDestroy();
-//    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onDestroy() {
+        System.out.println("entre onDestroy");
+        stopService(new Intent(this, ServicioJuego.class));
+        turnOffHotspot();
+        super.onDestroy();
+    }
 }
