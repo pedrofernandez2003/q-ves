@@ -75,6 +75,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private Boolean cantidadExacta = true;
     private Boolean click=false;
     private ImageView agregarPlantilla;
+    private ArrayList<Plantilla> plantillas=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,35 @@ public class TraerJuegosActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(TraerJuegosActivity.this,CrearJuegoActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        descargarImagenes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("tocaste descargar");
+                for (Plantilla plantilla:plantillas){
+                    for (Personaje personaje:plantilla.getPersonajes()) {
+                            Picasso.with(appContext).load(personaje.getFoto()).into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    descargarImagen(bitmap,personaje.getNombre());
+
+                                }
+
+                                @Override
+                                public void onBitmapFailed(Drawable errorDrawable) {
+                                    System.out.println("fallo");
+                                    System.out.println(errorDrawable);
+                                }
+
+                                @Override
+                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                }
+                            });
+                        }
+                }
             }
         });
     }
@@ -243,6 +273,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
                 if(datos.size()>0) {
                     for (Object PlantillaObject : datos) {
                         Plantilla plantilla = (Plantilla) PlantillaObject;
+                        plantillas.add(plantilla);
                         LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
                         llBotonera.setGravity(Gravity.CENTER_HORIZONTAL);
                         CardView cardView = new CardView(appCcontext);
@@ -317,25 +348,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
 
                             }
                         });
-                        for (Personaje personaje:plantilla.getPersonajes()) {
-                            Picasso.with(appCcontext).load(personaje.getFoto()).into(new Target() {
-                                @Override
-                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                    descargarImagen(bitmap,personaje.getNombre());
-
-                                }
-
-                                @Override
-                                public void onBitmapFailed(Drawable errorDrawable) {
-                                    System.out.println("fallo");
-                                }
-
-                                @Override
-                                public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                                }
-                            });
-                        }
                     }
                 }
             }

@@ -144,11 +144,15 @@ public class JugarActivity extends AppCompatActivity  {
                     });
                     break;
 
-                case "notificarModerador":
+                case "mostrarDialog":
                     //Le sale el alertdialog y si pone que si el boolean es true, si no es false :D
                     System.out.println("Soy el moderador que va validar la anulacion");
                     ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
                     crearAlertDialogSobreAnulacion();
+                    break;
+
+                case "prueba":
+                    System.out.println("prueba");
                     break;
 
                 case "anularCartaJugar":
@@ -189,7 +193,8 @@ public class JugarActivity extends AppCompatActivity  {
         intentFilter.addAction("reiniciar");
         intentFilter.addAction("actualizar");
         intentFilter.addAction("ganador");
-        intentFilter.addAction("notificarModerador");
+        intentFilter.addAction("mostrarDialog");
+        intentFilter.addAction("prueba");
         intentFilter.addAction("anularCartaJugar");
         registerReceiver(broadcastReceiver,intentFilter);
         juego= GameContext.getJuego();
@@ -457,8 +462,13 @@ public class JugarActivity extends AppCompatActivity  {
     public void traerImagen(Plantilla plantilla) {
         System.out.println("entre a la funcion");
         ImageView imageView = (ImageView) findViewById(R.id.personaje);
-        String url = "http://"+ Formatter.formatIpAddress(d.gateway)+":5880/imagenes?imagen="+plantilla.getPersonajes().get(GameContext.getRonda()-1).getNombre();
-        System.out.println("llego");
+        String url="";
+        if(GameContext.getServer()==null){// si es el server es su propia direccion
+            url = "http://"+ Formatter.formatIpAddress(d.gateway)+":5880/imagenes?imagen="+plantilla.getPersonajes().get(GameContext.getRonda()-1).getNombre();
+        }
+        else{
+            url = "http://"+ Formatter.formatIpAddress(d.ipAddress)+":5880/imagenes?imagen="+plantilla.getPersonajes().get(GameContext.getRonda()-1).getNombre();
+        }
         ImageRequest imageRequest = new ImageRequest(url,new Response.Listener<Bitmap>() { // Bitmap listener
             @Override
             public void onResponse(Bitmap response) {
@@ -521,8 +531,7 @@ public class JugarActivity extends AppCompatActivity  {
     public void sacarTarjetaDelTablero() {
         for (Casillero casillero:casilleros) {
             if (casillero.getCategoria().getNombre().equals(GameContext.getTarjetaAnulada().getCategoria())) {
-
-
+                casillero.setTarjeta(null);
                 CardView prueba = (CardView) findViewById(casillero.getId());
                 prueba.removeAllViews();
 
@@ -587,10 +596,20 @@ public class JugarActivity extends AppCompatActivity  {
                     public void onClick(View view) {
                         //charlar con pepo si es un msg o un intent
                         System.out.println("Soy el moderador que avalo la anulacion");
+                        for (int i=0;i<GameContext.getHijos().size();i++) {
+                            ArrayList<String> datos=new ArrayList<>();
+                            datos.add(GameContext.getTarjetaAnulada().serializar());
+                            datos.add("{\"anuladoCorrectamente\": \""+true+"\",\"idJugador\": \""+ultimoEquipoQueTiroCarta+"\"}");
+                            Mensaje mensaje=new Mensaje("actualizacion_tablero_anulacion",datos);
+                            String msg=mensaje.serializar();
+                            System.out.println("mensaje enviado "+msg);
+                            Write escribir = new Write();
+                            escribir.execute(msg, i);
+                        }
                         Intent intent= new Intent();
                         intent.putExtra("equipoDeCartaAnulada", ultimoEquipoQueTiroCarta);
                         intent.putExtra("anuladoCorrectamente", true);
-                        intent.setAction("enviar_anular_carta");
+                        intent.setAction("anularCartaJugar");
                         appContext.sendBroadcast(intent);
                         a.dismiss();
                     }
