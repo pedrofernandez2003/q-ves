@@ -398,6 +398,7 @@ public class JugarActivity extends AppCompatActivity  {
                             public void onClick(View view) {
 
                                 GameContext.setTarjetaElegida(tarjetaARevisar);
+                                //poner que le cambie el color del borde en vez de mostrar ese modal
                                 System.out.println("Tarjeta seleccionda: "+tarjetaARevisar.getContenido());
                                 Snackbar snack = Snackbar.make(findViewById(android.R.id.content),"Seleccionaste esa carta", Snackbar.LENGTH_SHORT);
                                 View snackView = snack.getView();

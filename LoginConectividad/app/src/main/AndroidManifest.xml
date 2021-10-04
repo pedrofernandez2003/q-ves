@@ -42,6 +42,7 @@
         <activity android:name="com.example.actividades.ModeradorActivity" />
         <activity android:name="com.example.actividades.AdminElementosActivity" />
         <activity android:name="com.example.actividades.AdministradorActivity" />
+        <activity android:name="com.example.actividades.AdministrarPlantillasActivity" />
         <activity android:name="com.example.actividades.CrearJuegoActivity" >
         </activity>
         <activity android:name="com.example.actividades.LoginActivity" >

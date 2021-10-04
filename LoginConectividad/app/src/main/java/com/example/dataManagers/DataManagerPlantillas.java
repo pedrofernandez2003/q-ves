@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.example.listeners.onEliminarListener;
 import com.example.listeners.onInsertarListener;
 import com.example.listeners.onTraerDatoListener;
 import com.example.listeners.onTraerDatosListener;
@@ -102,5 +103,45 @@ public class DataManagerPlantillas extends DataManager {
 
                     }
                 });
+    }
+    public static void traerIdPlantilla( String nombre, onTraerDatoListener listener) {
+        DataManager.getDb().collection("categorias").whereEqualTo("nombre", nombre).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String TAG = "";
+                String id = "";
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        id = document.getId();
+                    }
+                    listener.traer((Object) id);
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
+    public static void eliminarPlantilla(String nombre, onEliminarListener listener) {
+        traerIdPlantilla(nombre, new onTraerDatoListener() {
+            @Override
+            public void traer(Object dato) {
+                DataManager.getDb().collection("plantillas").document((String)dato)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                listener.eliminar(true);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                listener.eliminar(false);
+                            }
+                        });
+            }
+        });
+
     }
 }

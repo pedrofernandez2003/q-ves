@@ -11,7 +11,7 @@ import androidx.cardview.widget.CardView;
 
 public class ModeradorActivity extends AppCompatActivity {
 
-    private CardView crearJuego,iniciarJuego;
+    private CardView crearJuego,iniciarJuego, administrarPlantillas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +19,7 @@ public class ModeradorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_moderador);
         crearJuego = (CardView) findViewById(R.id.crearJuego);
         iniciarJuego = (CardView) findViewById(R.id.iniciarJuego);
+        administrarPlantillas = (CardView) findViewById(R.id.adminElementos);
         crearJuego.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -30,6 +31,14 @@ public class ModeradorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(ModeradorActivity.this, TraerJuegosActivity.class);
+                startActivity(i);
+            }
+        });
+
+        administrarPlantillas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(ModeradorActivity.this, AdministrarPlantillasActivity.class);
                 startActivity(i);
             }
         });

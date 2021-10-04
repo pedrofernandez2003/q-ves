@@ -488,9 +488,11 @@ public class ServicioJuego extends Service {
     @Override
     public void onDestroy() {
         unregisterReceiver(broadcastReceiver);
-        if (httpServer.isAlive()){
+        try {
             httpServer.stop();
             httpServer.closeAllConnections();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         super.onDestroy();
     }
