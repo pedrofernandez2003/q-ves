@@ -8,6 +8,7 @@
 
     <LinearLayout
         android:id="@+id/carta"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
@@ -18,7 +19,7 @@
             android:id="@+id/textView"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="@string/desea_intentar_anular_la_tarjeta_jugada_por_el_ltimo_equipo"
+            android:text="¿Quiere Anular Esta Tarjeta?"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

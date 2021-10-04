@@ -91,7 +91,7 @@ public class PersonajesActivity extends AppCompatActivity {
 
         // Defining Implicit Intent to mobile gallery
         Intent intent = new Intent();
-        intent.setType("image/*");
+        intent.setType("image/png");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(
                 Intent.createChooser(
