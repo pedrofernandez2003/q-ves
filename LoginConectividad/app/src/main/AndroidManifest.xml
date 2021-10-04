@@ -48,12 +48,6 @@
         <activity android:name="com.example.actividades.LoginActivity" >
         </activity>
         <activity android:name="com.example.actividades.CategoriasActivity" >
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
         </activity>
         <activity android:name="com.example.actividades.PersonajesActivity">
         </activity>
@@ -69,7 +63,10 @@
             android:screenOrientation="landscape">
         </activity>
         <activity android:name="com.example.actividades.SolicitarUbicacion">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name="com.example.actividades.TraerJuegosActivity">
         </activity>

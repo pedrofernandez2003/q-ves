@@ -105,7 +105,7 @@ public class DataManagerPlantillas extends DataManager {
                 });
     }
     public static void traerIdPlantilla( String nombre, onTraerDatoListener listener) {
-        DataManager.getDb().collection("categorias").whereEqualTo("nombre", nombre).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DataManager.getDb().collection("plantillas").whereEqualTo("nombre", nombre).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 String TAG = "";
@@ -123,6 +123,7 @@ public class DataManagerPlantillas extends DataManager {
     }
 
     public static void eliminarPlantilla(String nombre, onEliminarListener listener) {
+        System.out.println("pla");
         traerIdPlantilla(nombre, new onTraerDatoListener() {
             @Override
             public void traer(Object dato) {

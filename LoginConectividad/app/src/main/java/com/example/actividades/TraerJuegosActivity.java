@@ -351,7 +351,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
                             cantPersonas.setTypeface(getResources().getFont(R.font.poertsen_one_regular));
                         }
                         cantPersonas.setTextColor(getResources().getColor(R.color.white));
-                        cantPersonas.setText("2");
+                        cantPersonas.setText(plantilla.getCantEquipos()+"");
                         cantPersonas.setTextSize(width/50);
 
                         cantPersonas.setId(ViewCompat.generateViewId());
@@ -360,7 +360,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
                             cantRondas.setTypeface(getResources().getFont(R.font.poertsen_one_regular));
                         }
                         cantRondas.setTextColor(getResources().getColor(R.color.white));
-                        cantRondas.setText("2");
+                        cantRondas.setText(plantilla.getCantPartidas()+"");
                         cantRondas.setTextSize(width/50);
 
                         cantRondas.setId(ViewCompat.generateViewId());

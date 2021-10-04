@@ -26,8 +26,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
 
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -140,24 +142,107 @@ public class AdministrarPlantillasActivity extends AppCompatActivity {
                         plantillas.add(plantilla);
                         LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
                         llBotonera.setGravity(Gravity.CENTER_HORIZONTAL);
+
                         CardView cardView = new CardView(appCcontext);
-                        LayoutParams params = new LayoutParams(widthPlantilla, heightPlantilla);
-                        params.setMargins(0, 25, 0, 0);
+                        LayoutParams params= new LayoutParams(widthPlantilla, heightPlantilla);
+                        params.setMargins(0,25,0,0);
                         cardView.setCardBackgroundColor(getResources().getColor(R.color.azul_plantilla));
                         cardView.setRadius(40);
                         params.gravity = Gravity.CENTER;
                         cardView.setLayoutParams(params);
+
+                        ConstraintLayout constraintLayout = new ConstraintLayout(appCcontext);
+                        params = new LayoutParams(widthPlantilla, heightPlantilla);
+                        constraintLayout.setLayoutParams(params);
+                        constraintLayout.setId(ViewCompat.generateViewId());
+                        constraintLayout.setBackgroundColor(getResources().getColor(R.color.azul_plantilla));
+                        cardView.addView(constraintLayout);
+
+
                         TextView texto = new TextView(appCcontext);
-                        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        params = new LayoutParams((widthPlantilla*7)/10, ViewGroup.LayoutParams.MATCH_PARENT);
                         texto.setLayoutParams(params);
                         texto.setText(plantilla.getNombre());
                         params.gravity = Gravity.CENTER;
                         texto.setGravity(View.TEXT_ALIGNMENT_CENTER);
-                        texto.setTextSize((widthPlantilla) / 25);
+                        texto.setTextSize((widthPlantilla)/25);
                         texto.setTextColor(getResources().getColor(R.color.white));
                         texto.setTypeface(ResourcesCompat.getFont(appCcontext, R.font.poertsen_one_regular));
                         texto.setGravity(Gravity.CENTER);
-                        cardView.addView(texto);
+                        texto.setId(ViewCompat.generateViewId());
+
+
+                        ImageView persona = new ImageView(appCcontext);
+                        params = new LayoutParams(width/10, width/10);
+                        params.setMargins(0, heightPlantilla/20, 0, heightPlantilla/40);
+                        persona.setLayoutParams(params);
+                        persona.setColorFilter(getResources().getColor(R.color.white));
+                        persona.setId(ViewCompat.generateViewId());
+                        persona.setImageDrawable(getResources().getDrawable(R.drawable.ic_person));
+
+
+                        ImageView ruleta = new ImageView(appCcontext);
+                        params = new LayoutParams(width/10, width/10);
+                        params.setMargins(0, heightPlantilla/40, 0, heightPlantilla/20);
+                        ruleta.setLayoutParams(params);
+                        ruleta.setColorFilter(getResources().getColor(R.color.white));
+                        ruleta.setId(ViewCompat.generateViewId());
+                        ruleta.setImageDrawable(getResources().getDrawable(R.drawable.ic_roulette));
+
+                        TextView cantPersonas = new TextView(appCcontext);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            cantPersonas.setTypeface(getResources().getFont(R.font.poertsen_one_regular));
+                        }
+                        cantPersonas.setTextColor(getResources().getColor(R.color.white));
+                        cantPersonas.setText(plantilla.getCantEquipos()+"");
+                        cantPersonas.setTextSize(width/50);
+
+                        cantPersonas.setId(ViewCompat.generateViewId());
+                        TextView cantRondas = new TextView(appCcontext);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            cantRondas.setTypeface(getResources().getFont(R.font.poertsen_one_regular));
+                        }
+                        cantRondas.setTextColor(getResources().getColor(R.color.white));
+                        cantRondas.setText(plantilla.getCantPartidas()+"");
+                        cantRondas.setTextSize(width/50);
+
+                        cantRondas.setId(ViewCompat.generateViewId());
+                        constraintLayout.addView(texto);
+                        constraintLayout.addView(cantPersonas);
+                        constraintLayout.addView(cantRondas);
+                        constraintLayout.addView(ruleta);
+                        constraintLayout.addView(persona);
+                        ConstraintSet set = new ConstraintSet();
+
+                        set.clone(constraintLayout);
+                        set.connect(texto.getId(), ConstraintSet.RIGHT, persona.getId(), ConstraintSet.LEFT);
+                        set.connect(texto.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+                        set.connect(texto.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+                        set.connect(texto.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT);
+
+                        set.connect(persona.getId(), ConstraintSet.RIGHT, cantPersonas.getId(), ConstraintSet.LEFT);
+                        set.connect(persona.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+                        set.connect(persona.getId(), ConstraintSet.BOTTOM, ruleta.getId(), ConstraintSet.TOP);
+                        set.connect(persona.getId(), ConstraintSet.LEFT, texto.getId(), ConstraintSet.RIGHT);
+
+
+                        set.connect(ruleta.getId(), ConstraintSet.TOP, persona.getId(), ConstraintSet.BOTTOM);
+                        set.connect(ruleta.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+                        set.connect(ruleta.getId(), ConstraintSet.RIGHT, cantRondas.getId(), ConstraintSet.LEFT);
+                        set.connect(ruleta.getId(), ConstraintSet.LEFT, texto.getId(), ConstraintSet.RIGHT);
+
+                        set.connect(cantPersonas.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+                        set.connect(cantPersonas.getId(), ConstraintSet.BOTTOM, cantRondas.getId(), ConstraintSet.TOP);
+                        set.connect(cantPersonas.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
+                        set.connect(cantPersonas.getId(), ConstraintSet.LEFT, persona.getId(), ConstraintSet.RIGHT);
+
+                        set.connect(cantRondas.getId(), ConstraintSet.TOP, cantPersonas.getId(), ConstraintSet.BOTTOM);
+                        set.connect(cantRondas.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+                        set.connect(cantRondas.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
+                        set.connect(cantRondas.getId(), ConstraintSet.LEFT, ruleta.getId(), ConstraintSet.RIGHT);
+
+                        set.applyTo(constraintLayout);
+
                         llBotonera.addView(cardView);
                         cardView.setOnClickListener(new View.OnClickListener() {
                             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -167,10 +252,10 @@ public class AdministrarPlantillasActivity extends AppCompatActivity {
 
                                 View dialog_layout = inflater.inflate(R.layout.confirmacion_accion, null);
                                 TextView seleccionado = dialog_layout.findViewById(R.id.confirmarSelección);
-
+                                seleccionado.setText("¿Desea eliminar la plantilla?");
                                 AlertDialog.Builder db = new AlertDialog.Builder(AdministrarPlantillasActivity.this);
                                 db.setView(dialog_layout);
-                                db.setTitle("Eliminar");
+                                db.setTitle("Eliminar plantilla");
                                 db.setPositiveButton("Sí", null);
                                 db.setNegativeButton("No", null);
                                 final AlertDialog a = db.create();
@@ -196,8 +281,12 @@ public class AdministrarPlantillasActivity extends AppCompatActivity {
                                                     @Override
                                                     public void eliminar(boolean eliminado) {
                                                         Toast.makeText(getApplicationContext(), "Plantilla eliminada", Toast.LENGTH_SHORT).show();
+                                                        Intent intent=new Intent(AdministrarPlantillasActivity.this, AdministrarPlantillasActivity.class);
+                                                        startActivity(intent);
+                                                        finish();
                                                     }
-                                                });                                          }
+                                                });
+                                            }
                                         });
                                     }
                                 });
