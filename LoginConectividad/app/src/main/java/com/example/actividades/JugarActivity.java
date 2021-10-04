@@ -239,12 +239,24 @@ public class JugarActivity extends AppCompatActivity  {
 
                     int color=0;
 
-                    for (int j=0; j < GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().size(); j++){
+                    for (Categoria categoria:GameContext.getJuego().getPlantilla().getCategorias()) {
+                        if (categoria.getNombre().equals(GameContext.getTarjetaElegida().getCategoria())){
+                            color=categoria.getColor().getCodigo();
+                        }
+                    }
+                    /*for (int j=0; j < GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().size(); j++){
                         Casillero casilleroARevisar=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().get(j);
                         if (casilleroARevisar.getCategoria().getNombre().equals(GameContext.getTarjetaElegida().getCategoria())){
                             color=casilleroARevisar.getCategoria().getColor().getCodigo();
                         }
-                    }
+                    }*/
+                    /* DEBERIA FUNCIONAR PERO CREO QUE YA LO PROBAMOS Y NO FUNCIONO :(
+                    for (int j=0; j < categorias.size(); j++){
+                        Categoria categoriaARevisar=categorias.get(j);
+                        if (categoriaARevisar.getNombre().equals(tarjetaARevisar.getCategoria())){
+                            color=categoriaARevisar.getColor().getCodigo();
+                        }
+                    }*/
 
                     LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
                     View dialog_layout = inflater.inflate(R.layout.anular_carta, null);
@@ -598,12 +610,25 @@ public class JugarActivity extends AppCompatActivity  {
         int marginCarta = width/30;
         int color=0;
 
+        for (Categoria categoria:GameContext.getJuego().getPlantilla().getCategorias()) {
+            if (categoria.getNombre().equals(GameContext.getTarjetaAnulada().getCategoria())){
+                color=categoria.getColor().getCodigo();
+            }
+        }
+        /*
         for (int j=0; j < GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().size(); j++){
             Casillero casilleroARevisar=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().get(j);
             if (casilleroARevisar.getCategoria().getNombre().equals(GameContext.getTarjetaAnulada().getCategoria())){
                 color=casilleroARevisar.getCategoria().getColor().getCodigo();
             }
-        }
+        }*/
+        /* DEBERIA FUNCIONAR PERO CREO QUE YA LO PROBAMOS Y NO FUNCIONO :(
+        for (int j=0; j < categorias.size(); j++){
+            Categoria categoriaARevisar=categorias.get(j);
+            if (categoriaARevisar.getNombre().equals(tarjetaARevisar.getCategoria())){
+                color=categoriaARevisar.getColor().getCodigo();
+            }
+        }*/
 
 
         LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
