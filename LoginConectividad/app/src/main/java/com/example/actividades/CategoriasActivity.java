@@ -111,11 +111,15 @@ public class CategoriasActivity extends AppCompatActivity {
         texto.setLayoutParams(params);
 
         ImageView cartitas = new ImageView(this);
-        params = new LayoutParams((height*2)/3, (height*2)/3);
-        // cartitas.setImageResource(ResourcesCompat.getDrawable(R.drawable.ic_cartas));
+        params = new LayoutParams((height)/5, (height)/5);
+        cartitas.setImageDrawable(getResources().getDrawable(R.drawable.ic_cartas));
+        cartitas.setColorFilter(getResources().getColor(R.color.white));
 
+        TextView cantCartas = new TextView(this);
+        params = new LayoutParams((height*7)/5, (height*7)/5);
+        cantCartas.setTextColor(getResources().getColor(R.color.white));
 
-
+        cardView.addView(cartitas);
         cardView.addView(texto);
         return cardView;
 
