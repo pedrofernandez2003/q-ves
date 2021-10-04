@@ -239,10 +239,10 @@ public class JugarActivity extends AppCompatActivity  {
 
                     int color=0;
 
-                    for (int j=0; j < categorias.size(); j++){
-                        Categoria categoriaARevisar=categorias.get(j);
-                        if (categoriaARevisar.getNombre().equals(GameContext.getTarjetaAnulada().getCategoria())){
-                            color=categoriaARevisar.getColor().getCodigo();
+                    for (int j=0; j < GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().size(); j++){
+                        Casillero casilleroARevisar=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().get(j);
+                        if (casilleroARevisar.getCategoria().getNombre().equals(GameContext.getTarjetaElegida().getCategoria())){
+                            color=casilleroARevisar.getCategoria().getColor().getCodigo();
                         }
                     }
 
@@ -577,7 +577,7 @@ public class JugarActivity extends AppCompatActivity  {
                 }
                 categoriaTxt.setTypeface(typeface);
                 categoriaTxt.setTextColor(getResources().getColor(R.color.white));
-                categoriaTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
+                categoriaTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP,23);
                 categoriaTxt.setText(casillero.getCategoria().getNombre());
                 categoria.addView(categoriaTxt);
                 prueba.addView(categoria);
@@ -598,10 +598,10 @@ public class JugarActivity extends AppCompatActivity  {
         int marginCarta = width/30;
         int color=0;
 
-        for (int j=0; j < categorias.size(); j++){
-            Categoria categoriaARevisar=categorias.get(j);
-            if (categoriaARevisar.getNombre().equals(GameContext.getTarjetaAnulada().getCategoria())){
-                color=categoriaARevisar.getColor().getCodigo();
+        for (int j=0; j < GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().size(); j++){
+            Casillero casilleroARevisar=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().get(j);
+            if (casilleroARevisar.getCategoria().getNombre().equals(GameContext.getTarjetaAnulada().getCategoria())){
+                color=casilleroARevisar.getCategoria().getColor().getCodigo();
             }
         }
 

@@ -50,7 +50,7 @@
                             android:gravity="center"
                             android:text="caracteristicas"
                             android:autoSizeTextType="uniform"
-                            android:breakStrategy="balanced"
+                            android:breakStrategy="simple"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             app:layout_constraintBottom_toBottomOf="parent"

@@ -1,5 +1,7 @@
 package com.example.actividades;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -110,10 +113,15 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         personajes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    guardarDatos(plantillaNueva, mItemSelected.getText().toString());
-                    Intent intent = new Intent(CrearJuegoActivity.this, ImageDisplay.class);
-                    intent.putExtra("personajes", plantillaNueva.getUrls());
-                    startActivity(intent);
+                    if(guardarDatos(plantillaNueva, mItemSelected.getText().toString())) {
+                        Intent intent = new Intent(CrearJuegoActivity.this, ImageDisplay.class);
+                        intent.putExtra("personajes", plantillaNueva.getUrls());
+                        startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(CrearJuegoActivity.this, "Debe elegir 10 categorías", Toast.LENGTH_SHORT).show();
+
+                    }
             }
         });
 
@@ -171,20 +179,21 @@ public class CrearJuegoActivity extends AppCompatActivity  {
             public void onClick(View v) {
                 if (verificarCamposCompletos()) {
                     plantillaNueva.setUsuario(user.getEmail());
-                    guardarDatos(plantillaNueva, mItemSelected.getText().toString());
-                    DataManagerPlantillas.insertarPlantilla(plantillaNueva, new onInsertarListener() {
-                        @Override
-                        public void insertar(boolean insertado) {
-                            if (insertado) {
-                                Toast.makeText(CrearJuegoActivity.this, "Plantilla guardada", Toast.LENGTH_SHORT).show();
-                                Intent traerJuegosIntent = new Intent(CrearJuegoActivity.this, TraerJuegosActivity.class);
-                                startActivity(traerJuegosIntent);
-                            } else {
-                                Toast.makeText(CrearJuegoActivity.this, "No se ha podido guardar", Toast.LENGTH_SHORT).show();
+                    if (guardarDatos(plantillaNueva, mItemSelected.getText().toString())) {
+                        DataManagerPlantillas.insertarPlantilla(plantillaNueva, new onInsertarListener() {
+                            @Override
+                            public void insertar(boolean insertado) {
+                                if (insertado) {
+                                    Toast.makeText(CrearJuegoActivity.this, "Plantilla guardada", Toast.LENGTH_SHORT).show();
+                                    Intent traerJuegosIntent = new Intent(CrearJuegoActivity.this, TraerJuegosActivity.class);
+                                    startActivity(traerJuegosIntent);
+                                } else {
+                                    Toast.makeText(CrearJuegoActivity.this, "No se ha podido guardar", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
 
+                    }
                 }
                 else{
                     Toast.makeText(CrearJuegoActivity.this, "Ingrese todos los datos antes de continuar", Toast.LENGTH_SHORT).show();
@@ -193,6 +202,16 @@ public class CrearJuegoActivity extends AppCompatActivity  {
             }
         });
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void handleOnBackPressed() {//que apague el hotspot y despues vaya para atras
+                Intent intent=new Intent(CrearJuegoActivity.this,AdminElementosActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
 
 
 
@@ -217,11 +236,18 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         return true;
     }
 
-    private void guardarDatos(PlantillaNueva plantillaNueva, String categoriasSeleccionadas) {
+    private boolean guardarDatos(PlantillaNueva plantillaNueva, String categoriasSeleccionadas) {
         plantillaNueva.setNombrePlantilla(nombreJuego.getText().toString());
         plantillaNueva.setCantidadEquipos(cantidadEquipos.getText().toString());
         ArrayList<String> categorias = new ArrayList<>(Arrays.asList(categoriasSeleccionadas.split(",")));
         plantillaNueva.setCategoriasElegidas(categorias);
+        if(categorias.size()==10) {
+            return true;
+        }
+        else{
+
+            return false;
+        }
 
     }
 

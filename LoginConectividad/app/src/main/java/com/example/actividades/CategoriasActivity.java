@@ -30,7 +30,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
 import androidx.core.widget.TextViewCompat;
 
 import com.example.listeners.onEliminarListener;
@@ -92,7 +94,8 @@ public class CategoriasActivity extends AppCompatActivity {
 
     }
 
-    public CardView crearCartaCategoria(int height, int width, int margin, String nombreCategoria, int color){
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public CardView crearCartaCategoria(int height, int width, int margin, String nombreCategoria, int numCartas, int color){
 
         CardView cardView = new CardView(this);
         LayoutParams params = new LayoutParams(width, height);
@@ -104,6 +107,8 @@ public class CategoriasActivity extends AppCompatActivity {
         ConstraintLayout constraintLayout = new ConstraintLayout(this);
         params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         constraintLayout.setLayoutParams(params);
+        constraintLayout.setId(ViewCompat.generateViewId());
+        cardView.addView(constraintLayout);
 
         TextView categoria = new TextView(this);
         params = new LayoutParams((width*3)/5, height/2);
@@ -111,28 +116,57 @@ public class CategoriasActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             categoria.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         }
-        categoria.setTypeface(ResourcesCompat.getFont(this,R.font.poertsen_one_regular));
         params.setMargins(height/4, 15,0,0);
-
-        TextView texto = new TextView(this);
-        params = new LayoutParams(width, height);
-        texto.setTextSize(height/14);
-        texto.setGravity(Gravity.CENTER);
-        texto.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
-        texto.setText(nombreCategoria);
-        texto.setLayoutParams(params);
+        categoria.setTextSize(height/14);
+        categoria.setGravity(Gravity.CENTER);
+        categoria.setText(nombreCategoria);
+        categoria.setTextColor(getResources().getColor(R.color.white));
+        categoria.setTypeface(getResources().getFont(R.font.poertsen_one_regular));
+        categoria.setLayoutParams(params);
+        categoria.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(categoria);
 
         ImageView cartitas = new ImageView(this);
-        params = new LayoutParams((height)/5, (height)/5);
+        params = new LayoutParams((height)/3, (height)/3);
+        cartitas.setLayoutParams(params);
+
         cartitas.setImageDrawable(getResources().getDrawable(R.drawable.ic_cartas));
         cartitas.setColorFilter(getResources().getColor(R.color.white));
+        cartitas.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(cartitas);
 
         TextView cantCartas = new TextView(this);
-        params = new LayoutParams((height*7)/5, (height*7)/5);
+        params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         cantCartas.setTextColor(getResources().getColor(R.color.white));
+        cantCartas.setTypeface(getResources().getFont(R.font.poertsen_one_regular));
+        cantCartas.setText(""+numCartas);
+        cantCartas.setTextSize(height/12);
+        cantCartas.setLayoutParams(params);
+        cantCartas.setId(ViewCompat.generateViewId());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            categoria.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        }
+        constraintLayout.addView(cantCartas);
 
-        cardView.addView(cartitas);
-        cardView.addView(texto);
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
+        set.connect(categoria.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+        set.connect(categoria.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+        set.connect(categoria.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT);
+        set.connect(categoria.getId(), ConstraintSet.RIGHT, cantCartas.getId(), ConstraintSet.LEFT);
+
+        set.connect(cartitas.getId(), ConstraintSet.TOP, cantCartas.getId(), ConstraintSet.TOP);
+        set.connect(cartitas.getId(), ConstraintSet.BOTTOM, cantCartas.getId(), ConstraintSet.BOTTOM);
+        set.connect(cartitas.getId(), ConstraintSet.RIGHT, cantCartas.getId(), ConstraintSet.LEFT);
+//        set.connect(cartitas.getId(), ConstraintSet.LEFT, categoria.getId(), ConstraintSet.RIGHT);
+//
+        set.connect(cantCartas.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+        set.connect(cantCartas.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+        set.connect(cantCartas.getId(), ConstraintSet.LEFT, categoria.getId(), ConstraintSet.RIGHT);
+        set.connect(cantCartas.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
+
+        set.applyTo(constraintLayout);
+
         return cardView;
 
 
@@ -229,6 +263,7 @@ public class CategoriasActivity extends AppCompatActivity {
         int heightCarta = (widthCarta*12)/35;
         int marginCarta = width/50;
         DataManagerCategoria.traerCategorias(new onTraerDatosListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void traerDatos(ArrayList<Object> datos) {
                 for (Object CategoriaObject:datos) {
@@ -238,7 +273,7 @@ public class CategoriasActivity extends AppCompatActivity {
                     LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
                     coloresElegidos.add(categoria.getColor().toString());
-                    CardView cartaCategoria = crearCartaCategoria(heightCarta, widthCarta, marginCarta, categoria.getNombre()+" "+categoria.getCantidadTarjetas(), categoria.getColor().getCodigo());
+                    CardView cartaCategoria = crearCartaCategoria(heightCarta, widthCarta, marginCarta, categoria.getNombre(), categoria.getCantidadTarjetas(), categoria.getColor().getCodigo());
                     llBotonera.addView(cartaCategoria);
                     cartaCategoria.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -352,4 +387,3 @@ public class CategoriasActivity extends AppCompatActivity {
 
 }
 
-//CHARLAR CON TINCHO TEMA COLORES

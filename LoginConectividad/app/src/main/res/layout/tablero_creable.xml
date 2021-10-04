@@ -106,6 +106,7 @@
                         android:layout_gravity="center"
                         android:fontFamily="@font/poertsen_one_regular"
                         android:text=""
+                        android:autoSizeTextType="uniform"
                         android:textColor="@android:color/white"
                         android:textSize="14sp" />
 
@@ -133,6 +134,8 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:autoSizeTextType="uniform"
+
                         android:id="@+id/icon_name_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -166,6 +169,8 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:autoSizeTextType="uniform"
+
                         android:id="@+id/icon_name_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -199,6 +204,8 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:autoSizeTextType="uniform"
+
                         android:id="@+id/icon_name_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -246,6 +253,8 @@
                     android:gravity="center">
 
                     <TextView
+                        android:autoSizeTextType="uniform"
+
                         android:id="@+id/icon_name_5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -278,6 +287,8 @@
                     android:gravity="center">
 
                     <TextView
+                        android:autoSizeTextType="uniform"
+
                         android:id="@+id/icon_name_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -310,6 +321,8 @@
                     android:gravity="center">
 
                     <TextView
+                        android:autoSizeTextType="uniform"
+
                         android:id="@+id/icon_name_7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -342,6 +355,8 @@
                     android:gravity="center">
 
                     <TextView
+                        android:autoSizeTextType="uniform"
+
                         android:id="@+id/icon_name_8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -387,6 +402,8 @@
                     android:gravity="center">
 
                     <TextView
+                        android:autoSizeTextType="uniform"
+
                         android:id="@+id/icon_name_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -419,6 +436,8 @@
                     android:gravity="center">
 
                     <TextView
+                        android:autoSizeTextType="uniform"
+
                         android:id="@+id/icon_name_9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -451,7 +470,8 @@
                     android:layout_height="match_parent"
                     android:gravity="center">
 
-                    <TextView
+                    <TextView                            android:autoSizeTextType="uniform"
+
                         android:id="@+id/icon_name_anuladas"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -485,6 +505,8 @@
                     android:gravity="center">
 
                     <TextView
+                        android:autoSizeTextType="uniform"
+
                         android:id="@+id/icon_name_verCartas"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
