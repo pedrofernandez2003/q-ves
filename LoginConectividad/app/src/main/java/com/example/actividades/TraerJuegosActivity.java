@@ -54,6 +54,7 @@ import com.example.R;
 import com.example.dataManagers.DataManagerPlantillas;
 import com.example.objetos.Plantilla;
 import com.example.objetos.ServicioJuego;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -80,10 +81,14 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private Boolean click=false;
     private ImageView agregarPlantilla;
     private ArrayList<Plantilla> plantillas=new ArrayList<>();
+    private FirebaseAuth firebaseAuth;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        turnOffHotspot();
+        firebaseAuth = FirebaseAuth.getInstance();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("nuevo equipo");
         registerReceiver(broadcastReceiver,intentFilter);
@@ -100,7 +105,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
         wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         currentConfig=new WifiConfiguration();
         juego=new Juego();
-        mostrarPlantillas(juego.getPlantilla().getModerador(), this.getApplicationContext());
+        mostrarPlantillas(firebaseAuth.getCurrentUser().getEmail(), this.getApplicationContext());
 
         agregarPlantilla.setOnClickListener(new View.OnClickListener() {
             @Override

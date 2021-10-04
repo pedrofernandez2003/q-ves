@@ -20,14 +20,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <pl.droidsonroids.gif.GifImageView
-        android:layout_width="379dp"
-        android:layout_height="181dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/loading"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cargando" />
+<!--    <pl.droidsonroids.gif.GifImageView-->
+<!--        android:layout_width="379dp"-->
+<!--        android:layout_height="181dp"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:src="@drawable/loading"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/cargando" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

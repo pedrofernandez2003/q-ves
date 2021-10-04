@@ -96,7 +96,7 @@ public class PersonajesActivity extends AppCompatActivity {
         startActivityForResult(
                 Intent.createChooser(
                         intent,
-                        "Select Image from here..."),
+                        "Seleccionar imagen"),
                 PICK_IMAGE_REQUEST);
     }
 
@@ -137,7 +137,7 @@ public class PersonajesActivity extends AppCompatActivity {
             // Code for showing progressDialog while uploading
             ProgressDialog progressDialog
                     = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
+            progressDialog.setTitle("Cargando...");
             progressDialog.show();
 
             // Defining the child of storageReference
@@ -169,7 +169,7 @@ public class PersonajesActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
                                             progressDialog.dismiss();
-                                            Toast.makeText(PersonajesActivity.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(PersonajesActivity.this, "Imagen subida correctamente", Toast.LENGTH_SHORT).show();
 
                                         }
                                     })
@@ -184,7 +184,7 @@ public class PersonajesActivity extends AppCompatActivity {
 
                     }
                 }
-                                                                      });
+            });
 
         }
     }

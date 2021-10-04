@@ -114,12 +114,9 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-
                                         manejarUsuario(firebaseAuth.getCurrentUser());
-                                        Intent i = new Intent(LoginActivity.this, AdministradorActivity.class);
-                                        startActivity(i);
                                     } else {
-                                        Toast.makeText(LoginActivity.this, "Todo mal", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginActivity.this, "Email o contraseña incorrectos", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -308,7 +305,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void elegirTrabajo() {
-
         LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
         View dialog_layout = inflater.inflate(R.layout.elegir_trabajo, null);
         AlertDialog.Builder db = new AlertDialog.Builder(this);

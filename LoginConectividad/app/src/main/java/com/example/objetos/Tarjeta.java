@@ -15,8 +15,8 @@ public class Tarjeta implements Serializable {
     }
 
     public Tarjeta(){
-        this.contenido = "cosas";
-        this.yapa = "cosas yapa";
+        this.contenido = "";
+        this.yapa = "";
     }
 
     public String getCategoria() {

@@ -341,6 +341,7 @@ public class JugarActivity extends AppCompatActivity  {
 
                 if (GameContext.getServer()==null){
 
+                    hideSystemUI();
                     LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
                     View dialog_layout = inflater.inflate(R.layout.ver_cartas, null);
                     AlertDialog.Builder db = new AlertDialog.Builder(JugarActivity.this);
@@ -503,9 +504,9 @@ public class JugarActivity extends AppCompatActivity  {
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int width = displayMetrics.widthPixels;
-                int widthCarta = width / 4;
-                int heightCarta = widthCarta  ;
-                int marginCarta = width / 60;
+                int widthCarta = width / 7;
+                int heightCarta = widthCarta;
+                int marginCarta = width / 45;
                 int color = casillero.getCategoria().getColor().getCodigo();
                 String nombreCategoria = casillero.getCategoria().getNombre();
                 String tarjetaContenido = GameContext.getTarjetaElegida().getContenido();
@@ -544,7 +545,7 @@ public class JugarActivity extends AppCompatActivity  {
                 }
                 categoriaTxt.setTypeface(typeface);
                 categoriaTxt.setTextColor(getResources().getColor(R.color.white));
-                categoriaTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+                categoriaTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP,16);
                 categoriaTxt.setText(casillero.getCategoria().getNombre());
                 categoria.addView(categoriaTxt);
                 prueba.addView(categoria);
@@ -754,28 +755,28 @@ public class JugarActivity extends AppCompatActivity  {
         carta.addView(constraintLayout);
 
         // Crear el borde de arriba
-        CardView bordeTop = new CardView(this);
-        params = new FrameLayout.LayoutParams(width, height/8);
-        bordeTop.setLayoutParams(params);
-        bordeTop.setBackgroundColor(color);
-        bordeTop.setId(ViewCompat.generateViewId());
-        constraintLayout.addView(bordeTop);
+//        CardView bordeTop = new CardView(this);
+//        params = new FrameLayout.LayoutParams(width, height/8);
+//        bordeTop.setLayoutParams(params);
+//        bordeTop.setBackgroundColor(color);
+//        bordeTop.setId(ViewCompat.generateViewId());
+//        constraintLayout.addView(bordeTop);
 
 
         // Crear el borde de abajo
-        CardView bordeBot = new CardView(this);
-        params = new FrameLayout.LayoutParams(width, (height*3)/50);
-        bordeBot.setLayoutParams(params);
-        bordeBot.setBackgroundColor(color);
-        bordeBot.setId(ViewCompat.generateViewId());
-        constraintLayout.addView(bordeBot);
+//        CardView bordeBot = new CardView(this);
+//        params = new FrameLayout.LayoutParams(width, (height*3)/50);
+//        bordeBot.setLayoutParams(params);
+//        bordeBot.setBackgroundColor(color);
+//        bordeBot.setId(ViewCompat.generateViewId());
+//        constraintLayout.addView(bordeBot);
 
         //Crear el textview con la categoria
         TextView textoCategoria = new TextView(this);
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         textoCategoria.setLayoutParams(params);
         textoCategoria.setText(categoria);
-        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
+        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/6);
         textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
         textoCategoria.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoCategoria);
@@ -786,7 +787,7 @@ public class JugarActivity extends AppCompatActivity  {
         params.setMargins(margin, margin, margin, margin);
         textoContenido.setLayoutParams(params);
         textoContenido.setText(contenido);
-        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/12));
+        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/8));
         textoContenido.setGravity(Gravity.CENTER);
         textoContenido.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoContenido);
@@ -797,7 +798,7 @@ public class JugarActivity extends AppCompatActivity  {
         params.setMargins(margin, margin, margin, margin);
         yapa.setLayoutParams(params);
         yapa.setText(yapaContenido);
-        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/17));
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/10));
         yapa.setGravity(Gravity.CENTER);
         yapa.setId(ViewCompat.generateViewId());
         constraintLayout.addView(yapa);
@@ -805,9 +806,9 @@ public class JugarActivity extends AppCompatActivity  {
         //Constraints
         ConstraintSet set = new ConstraintSet();
         set.clone(constraintLayout);
-        set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 0);
-        set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
-        set.connect(textoCategoria.getId(), ConstraintSet.TOP, bordeTop.getId(), ConstraintSet.BOTTOM);
+//        set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 0);
+//        set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+        set.connect(textoCategoria.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP,0);
         set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
         set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
         set.connect(textoContenido.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
@@ -815,7 +816,7 @@ public class JugarActivity extends AppCompatActivity  {
         set.connect(textoContenido.getId(), ConstraintSet.TOP, textoCategoria.getId(), ConstraintSet.BOTTOM,height/50);
         set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
         set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-        set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
+        set.connect(yapa.getId(), ConstraintSet.BOTTOM,  constraintLayout.getId(), ConstraintSet.BOTTOM,0);
         set.applyTo(constraintLayout);
 
         return carta;

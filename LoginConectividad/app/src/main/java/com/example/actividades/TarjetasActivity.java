@@ -126,7 +126,7 @@ public class TarjetasActivity extends AppCompatActivity {
         textoCategoria.setLayoutParams(params);
         textoCategoria.setText(categoria);
         textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
-        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.hlsimple));
+        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
         textoCategoria.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoCategoria);
 

@@ -384,15 +384,27 @@ public class ServicioJuego extends Service {
                                             nombreEquipo= mapDatos.get("idJugador");
                                             System.out.println("nombre equipo "+nombreEquipo);
                                             Tarjeta tarjetaARepartir=conseguirCarta();
-                                            for (int i=0;i<GameContext.getHijos().size();i++){
-                                                if(GameContext.getNombresEquipos().get(i).equals(nombreEquipo)){
+                                            if (tarjetaARepartir.getContenido().equals("")){
+                                                for (int i=0;i<GameContext.getHijos().size();i++) {
                                                     ArrayList<String> datos=new ArrayList<>();
-                                                    datos.add(tarjetaARepartir.serializar());
-                                                    mensaje=new Mensaje("tarjetaMazo",datos);
-                                                    System.out.println("mande una tarjeta del mazo");
+                                                    mensaje=new Mensaje("terminar_juego",datos);
                                                     String msg=mensaje.serializar();
                                                     Write escribir = new Write();
                                                     escribir.execute(msg, i);
+                                                }
+                                                System.out.println("termina el juego");
+                                            }
+                                            else{
+                                                for (int i=0;i<GameContext.getHijos().size();i++){
+                                                    if(GameContext.getNombresEquipos().get(i).equals(nombreEquipo)){
+                                                        ArrayList<String> datos=new ArrayList<>();
+                                                        datos.add(tarjetaARepartir.serializar());
+                                                        mensaje=new Mensaje("tarjetaMazo",datos);
+                                                        System.out.println("mande una tarjeta del mazo");
+                                                        String msg=mensaje.serializar();
+                                                        Write escribir = new Write();
+                                                        escribir.execute(msg, i);
+                                                    }
                                                 }
                                             }
                                             break;
@@ -412,15 +424,17 @@ public class ServicioJuego extends Service {
         HashSet<Tarjeta> mazo=GameContext.getJuego().getMazo();
 
         int size = mazo.size();
-        int item = new Random().nextInt(size);
-        int i = 0;
+        if (size>0){
+            int item = new Random().nextInt(size);
+            int i = 0;
 
-        for (Tarjeta obj : mazo) {
-            if (i == item) {
-                GameContext.getJuego().getMazo().remove(obj);
-                return obj;
+            for (Tarjeta obj : mazo) {
+                if (i == item) {
+                    GameContext.getJuego().getMazo().remove(obj);
+                    return obj;
+                }
+                i++;
             }
-            i++;
         }
         return new Tarjeta();
     }
@@ -474,8 +488,10 @@ public class ServicioJuego extends Service {
     @Override
     public void onDestroy() {
         unregisterReceiver(broadcastReceiver);
-        httpServer.stop();
-        httpServer.closeAllConnections();
+        if (httpServer.isAlive()){
+            httpServer.stop();
+            httpServer.closeAllConnections();
+        }
         super.onDestroy();
     }
 }
