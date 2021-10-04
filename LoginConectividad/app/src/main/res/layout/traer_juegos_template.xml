@@ -42,21 +42,20 @@
 
                         <TextView
                             android:id="@+id/choli"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_width="170dp"
+                            android:layout_height="0dp"
                             android:layout_gravity="center"
                             android:layout_marginHorizontal="5dp"
-                            android:autoSizeTextType="uniform"
                             android:fontFamily="@font/poertsen_one_regular"
                             android:gravity="center"
-                            android:text="choli ek c ex snatch my wig"
+                            android:text="caracteristicas"
+                            android:autoSizeTextType="uniform"
+                            android:breakStrategy="balanced"
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.0"
-                            app:layout_constraintWidth_percent="0.6" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="0dp"
@@ -76,6 +75,7 @@
                                 android:src="@drawable/ic_person"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toTopOf="@id/img_rondas"
                                 app:tint="@color/white" />
 
                             <TextView
@@ -92,6 +92,18 @@
                                 app:layout_constraintStart_toEndOf="@+id/img_person"
                                 app:layout_constraintTop_toTopOf="@+id/img_person" />
 
+                            <ImageView
+                                android:id="@+id/img_rondas"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                app:layout_constraintTop_toBottomOf="@id/img_person"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toLeftOf="@id/cantRondas"
+                                android:src="@drawable/ic_roulette"
+                                app:tint="@color/white"
+                                />
+
                             <TextView
                                 android:id="@+id/cantRondas"
                                 android:layout_width="0dp"
@@ -103,7 +115,7 @@
                                 android:textColor="@color/white"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/img_rondas"
                                 app:layout_constraintTop_toBottomOf="@+id/img_person" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>

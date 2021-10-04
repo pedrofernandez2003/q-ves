@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
@@ -25,8 +26,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
 
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -57,6 +61,8 @@ import com.example.objetos.ServicioJuego;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -293,6 +299,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
                         plantillas.add(plantilla);
                         LinearLayout llBotonera = (LinearLayout) findViewById(R.id.llBotonera);
                         llBotonera.setGravity(Gravity.CENTER_HORIZONTAL);
+
                         CardView cardView = new CardView(appCcontext);
                         LayoutParams params= new LayoutParams(widthPlantilla, heightPlantilla);
                         params.setMargins(0,25,0,0);
@@ -300,8 +307,17 @@ public class TraerJuegosActivity extends AppCompatActivity {
                         cardView.setRadius(40);
                         params.gravity = Gravity.CENTER;
                         cardView.setLayoutParams(params);
+
+                        ConstraintLayout constraintLayout = new ConstraintLayout(appCcontext);
+                        params = new LayoutParams(widthPlantilla, heightPlantilla);
+                        constraintLayout.setLayoutParams(params);
+                        constraintLayout.setId(ViewCompat.generateViewId());
+                        constraintLayout.setBackgroundColor(getResources().getColor(R.color.azul_plantilla));
+                        cardView.addView(constraintLayout);
+
+
                         TextView texto = new TextView(appCcontext);
-                        params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        params = new LayoutParams((widthPlantilla*7)/10, ViewGroup.LayoutParams.MATCH_PARENT);
                         texto.setLayoutParams(params);
                         texto.setText(plantilla.getNombre());
                         params.gravity = Gravity.CENTER;
@@ -310,7 +326,80 @@ public class TraerJuegosActivity extends AppCompatActivity {
                         texto.setTextColor(getResources().getColor(R.color.white));
                         texto.setTypeface(ResourcesCompat.getFont(appCcontext, R.font.poertsen_one_regular));
                         texto.setGravity(Gravity.CENTER);
-                        cardView.addView(texto);
+                        texto.setId(ViewCompat.generateViewId());
+
+
+                        ImageView persona = new ImageView(appCcontext);
+                        params = new LayoutParams(width/10, width/10);
+                        params.setMargins(0, heightPlantilla/20, 0, heightPlantilla/40);
+                        persona.setLayoutParams(params);
+                        persona.setColorFilter(getResources().getColor(R.color.white));
+                        persona.setId(ViewCompat.generateViewId());
+                        persona.setImageDrawable(getResources().getDrawable(R.drawable.ic_person));
+
+
+                        ImageView ruleta = new ImageView(appCcontext);
+                        params = new LayoutParams(width/10, width/10);
+                        params.setMargins(0, heightPlantilla/40, 0, heightPlantilla/20);
+                        ruleta.setLayoutParams(params);
+                        ruleta.setColorFilter(getResources().getColor(R.color.white));
+                        ruleta.setId(ViewCompat.generateViewId());
+                        ruleta.setImageDrawable(getResources().getDrawable(R.drawable.ic_roulette));
+
+                        TextView cantPersonas = new TextView(appCcontext);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            cantPersonas.setTypeface(getResources().getFont(R.font.poertsen_one_regular));
+                        }
+                        cantPersonas.setTextColor(getResources().getColor(R.color.white));
+                        cantPersonas.setText("2");
+                        cantPersonas.setTextSize(width/50);
+
+                        cantPersonas.setId(ViewCompat.generateViewId());
+                        TextView cantRondas = new TextView(appCcontext);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            cantRondas.setTypeface(getResources().getFont(R.font.poertsen_one_regular));
+                        }
+                        cantRondas.setTextColor(getResources().getColor(R.color.white));
+                        cantRondas.setText("2");
+                        cantRondas.setTextSize(width/50);
+
+                        cantRondas.setId(ViewCompat.generateViewId());
+                        constraintLayout.addView(texto);
+                        constraintLayout.addView(cantPersonas);
+                        constraintLayout.addView(cantRondas);
+                        constraintLayout.addView(ruleta);
+                        constraintLayout.addView(persona);
+                        ConstraintSet set = new ConstraintSet();
+
+                        set.clone(constraintLayout);
+                        set.connect(texto.getId(), ConstraintSet.RIGHT, persona.getId(), ConstraintSet.LEFT);
+                        set.connect(texto.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+                        set.connect(texto.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+                        set.connect(texto.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT);
+
+                        set.connect(persona.getId(), ConstraintSet.RIGHT, cantPersonas.getId(), ConstraintSet.LEFT);
+                        set.connect(persona.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+                        set.connect(persona.getId(), ConstraintSet.BOTTOM, ruleta.getId(), ConstraintSet.TOP);
+                        set.connect(persona.getId(), ConstraintSet.LEFT, texto.getId(), ConstraintSet.RIGHT);
+
+
+                        set.connect(ruleta.getId(), ConstraintSet.TOP, persona.getId(), ConstraintSet.BOTTOM);
+                        set.connect(ruleta.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+                        set.connect(ruleta.getId(), ConstraintSet.RIGHT, cantRondas.getId(), ConstraintSet.LEFT);
+                        set.connect(ruleta.getId(), ConstraintSet.LEFT, texto.getId(), ConstraintSet.RIGHT);
+
+                        set.connect(cantPersonas.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+                        set.connect(cantPersonas.getId(), ConstraintSet.BOTTOM, cantRondas.getId(), ConstraintSet.TOP);
+                        set.connect(cantPersonas.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
+                        set.connect(cantPersonas.getId(), ConstraintSet.LEFT, persona.getId(), ConstraintSet.RIGHT);
+
+                        set.connect(cantRondas.getId(), ConstraintSet.TOP, cantPersonas.getId(), ConstraintSet.BOTTOM);
+                        set.connect(cantRondas.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+                        set.connect(cantRondas.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
+                        set.connect(cantRondas.getId(), ConstraintSet.LEFT, ruleta.getId(), ConstraintSet.RIGHT);
+
+                        set.applyTo(constraintLayout);
+
                         llBotonera.addView(cardView);
                         cardView.setOnClickListener(new View.OnClickListener() {
                             @RequiresApi(api = Build.VERSION_CODES.O)
