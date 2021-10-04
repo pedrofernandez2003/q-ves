@@ -11,6 +11,7 @@ import android.text.format.Formatter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.objetos.Equipo;
 import com.example.objetos.GameContext;
@@ -48,13 +49,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 dhcpInfo=wifiManager.getDhcpInfo();
                 String codigo = formatIP(dhcpInfo.gateway);
-                Intent intent= new Intent();
-                intent.setAction("unirse");
-                intent.putExtra("codigo",codigo);
-                appContext.sendBroadcast(intent);
-                GameContext.setEquipo(new Equipo());
-                GameContext.getNombresEquipos().add(nombreEquipo.getText().toString());
-                setContentView(R.layout.cargando);
+                if (!codigo.equals("0.0.0.0")){
+                    Intent intent= new Intent();
+                    intent.setAction("unirse");
+                    intent.putExtra("codigo",codigo);
+                    appContext.sendBroadcast(intent);
+                    GameContext.setEquipo(new Equipo());
+                    GameContext.getNombresEquipos().add(nombreEquipo.getText().toString());
+                    setContentView(R.layout.cargando);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "No esta conectado a la red", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

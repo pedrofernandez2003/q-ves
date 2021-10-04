@@ -25,6 +25,8 @@ import android.widget.Toolbar;
 
 import com.example.R;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -38,6 +40,7 @@ import com.example.listeners.onTraerDatoListener;
 import com.example.listeners.onTraerDatosListener;
 import com.example.objetos.CategoriaSinTarjetas;
 import com.example.dataManagers.DataManagerCategoria;
+import com.example.objetos.Usuario;
 
 import java.util.ArrayList;
 
@@ -76,7 +79,16 @@ public class CategoriasActivity extends AppCompatActivity {
                 }
             }
         });
-
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void handleOnBackPressed() {//que apague el hotspot y despues vaya para atras
+                Intent intent=new Intent(CategoriasActivity.this,AdminElementosActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
 
     }
 

@@ -18,6 +18,7 @@ import com.example.R;
 
 
 import com.example.dataManagers.DataManager;
+import com.example.objetos.Usuario;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -60,13 +61,14 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth firebaseAuth;
     private CallbackManager mCallbackManager;
+    private Usuario usuario;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
-
+        usuario=Usuario.getUsuario();
         firebaseAuth = FirebaseAuth.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
 
@@ -107,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String mail = mailIngresado.getText().toString();
                 String pass = contraseniaIngresada.getText().toString();
-
+                usuario.setMail(mail);
                 if (!mail.isEmpty() & !pass.isEmpty()) {
                     firebaseAuth.signInWithEmailAndPassword(mail, pass)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -237,11 +239,13 @@ public class LoginActivity extends AppCompatActivity {
                         if (document.getData().get("UID").equals(user.getUid())){
                             estaEnLaBase=true;
                             if (document.getData().get("ocupacion").equals("Administrador")){
+                                usuario.setRol("administrador");
                                 Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
                                 startActivity(intent);
                                 LoginActivity.this.finish();
                             }
                             else{
+                                usuario.setRol("moderador");
                                 Intent intent = new Intent(getApplicationContext(), ModeradorActivity.class);
                                 startActivity(intent);
                                 LoginActivity.this.finish();

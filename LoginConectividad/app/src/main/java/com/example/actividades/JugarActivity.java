@@ -57,6 +57,7 @@ import com.example.objetos.Mensaje;
 import com.example.objetos.Partida;
 import com.example.objetos.Tarjeta;
 import com.example.objetos.TarjetaSinCategoria;
+import com.example.objetos.Usuario;
 import com.example.objetos.manejoSockets.Write;
 import com.example.R;
 import com.example.objetos.Plantilla;
@@ -139,8 +140,18 @@ public class JugarActivity extends AppCompatActivity  {
                     volverAInicio.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(JugarActivity.this, MainActivity.class);
+                            Intent intent;
+                            if (GameContext.getServer()==null){
+                                intent = new Intent(JugarActivity.this, MainActivity.class);
+                            }
+                            else if (Usuario.getUsuario().getRol().equals("administrador")){
+                                intent = new Intent(JugarActivity.this, AdminElementosActivity.class);
+                            }
+                            else {
+                                intent = new Intent(JugarActivity.this, ModeradorActivity.class);
+                            }
                             startActivity(intent);
+                            finish();
                         }
                     });
                     break;

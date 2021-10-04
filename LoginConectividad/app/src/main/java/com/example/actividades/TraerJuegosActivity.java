@@ -52,6 +52,7 @@ import com.example.objetos.Juego;
 import com.example.objetos.Mensaje;
 import com.example.objetos.Personaje;
 import com.example.objetos.Tarjeta;
+import com.example.objetos.Usuario;
 import com.example.objetos.manejoSockets.ThreadedEchoServer;
 import com.example.objetos.manejoSockets.Write;
 import com.example.R;
@@ -85,7 +86,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private ArrayList<Categoria> categorias;
     private Boolean cantidadExacta = true;
     private Boolean click=false;
-    private ImageView agregarPlantilla;
     private ArrayList<Plantilla> plantillas=new ArrayList<>();
     private FirebaseAuth firebaseAuth;
 
@@ -101,7 +101,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
         startService(new Intent(this, ServicioJuego.class));
         setContentView(R.layout.activity_traer_juegos);
         cantidadEquipos=0;
-        agregarPlantilla = findViewById(R.id.agregarPlantilla);
         textoCargando = findViewById(R.id.textoCargando);
         descargarImagenes = findViewById(R.id.descargarImagenes);
         cantidadEquiposTextView = findViewById(R.id.cantidadEquipos);
@@ -113,13 +112,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
         juego=new Juego();
         mostrarPlantillas(firebaseAuth.getCurrentUser().getEmail(), this.getApplicationContext());
 
-        agregarPlantilla.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TraerJuegosActivity.this,CrearJuegoActivity.class);
-                startActivity(intent);
-            }
-        });
 
         descargarImagenes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,9 +146,16 @@ public class TraerJuegosActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void handleOnBackPressed() {//que apague el hotspot y despues vaya para atras
-//                turnOffHotspot();
-                Intent intent=new Intent(appContext,MainActivity.class);
-                startActivity(intent);
+                turnOffHotspot();
+                Intent intent;
+                if(Usuario.getUsuario().getRol().equals("administrador")){
+
+                    intent=new Intent(TraerJuegosActivity.this,AdministradorActivity.class);
+                }
+                else{
+                    intent=new Intent(TraerJuegosActivity.this,ModeradorActivity.class);
+                }
+               startActivity(intent);
                 finish();
             }
         };

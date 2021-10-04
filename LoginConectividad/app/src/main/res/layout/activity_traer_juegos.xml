@@ -27,40 +27,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:orientation="vertical">
-
-                <!--                <androidx.cardview.widget.CardView-->
-                <!--                    android:layout_width="340dp"-->
-                <!--                    android:layout_height="80dp"-->
-                <!--                    android:layout_gravity="center"-->
-                <!--                    android:layout_marginTop="15dp"-->
-                <!--                    app:cardBackgroundColor="#20639b"-->
-                <!--                    app:cardCornerRadius="15dp">-->
-
-                <!--                    <TextView-->
-                <!--                        android:layout_width="335dp"-->
-                <!--                        android:layout_height="match_parent"-->
-                <!--                        android:layout_gravity="center"-->
-                <!--                        android:fontFamily="@font/poertsen_one_regular"-->
-                <!--                        android:gravity="center"-->
-                <!--                        android:text="choli ek c ex"-->
-                <!--                        android:textAlignment="center"-->
-                <!--                        android:textColor="@color/white"-->
-                <!--                        android:textSize="30dp" />-->
-
-                <!--                </androidx.cardview.widget.CardView>-->
-
-
-                <ImageView
-                    android:id="@+id/agregarPlantilla"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_add_outline"
-                    app:tint="#5f9b89"
-                    android:layout_marginTop="15dp"
-                    android:layout_gravity="center" />
-
-
-
             </LinearLayout>
 
 
