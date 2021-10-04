@@ -2,6 +2,7 @@ package com.example.actividades;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -15,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -102,7 +104,7 @@ public class prueba2 extends AppCompatActivity {
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int width = displayMetrics.widthPixels;
                 int widthCarta = width/6;
-                int heightCarta = (widthCarta*20)/15;
+                int heightCarta = (widthCarta*20)/16;
                 int marginCarta = width/60;
 
                 for (Tarjeta tarjetaARevisar:tarjetasHashSet) {
@@ -243,14 +245,36 @@ public class prueba2 extends AppCompatActivity {
         carta.setLayoutParams(params);
         carta.setBackgroundColor(-1644568);
 
+        View lineaHorizontal= new View(this);
+        FrameLayout.LayoutParams paramsBorderHorizontal = new FrameLayout.LayoutParams(width, height/34);
+        lineaHorizontal.setLayoutParams(paramsBorderHorizontal);
+        lineaHorizontal.setId(ViewCompat.generateViewId());
+        lineaHorizontal.setBackgroundColor(Color.GRAY);
+
+
+        View lineaHorizontal2= new View(this);
+        lineaHorizontal2.setLayoutParams(paramsBorderHorizontal);
+        lineaHorizontal2.setId(ViewCompat.generateViewId());
+        lineaHorizontal2.setBackgroundColor(Color.GRAY);
+
+        View lineaVertical= new View(this);
+        FrameLayout.LayoutParams paramsBorderVertical = new FrameLayout.LayoutParams(width/34, height);
+        lineaVertical.setLayoutParams(paramsBorderVertical);
+        lineaVertical.setId(ViewCompat.generateViewId());
+        lineaVertical.setBackgroundColor(Color.GRAY);
 
         // Crear el constraint layout
         ConstraintLayout constraintLayout = new ConstraintLayout(this);
         params = new FrameLayout.LayoutParams(width, height);
         constraintLayout.setLayoutParams(params);
         constraintLayout.setId(ViewCompat.generateViewId());
-        constraintLayout.setBackground(AppCompatResources.getDrawable(this,R.drawable.border));
+        //constraintLayout.setBackground(AppCompatResources.getDrawable(this,R.drawable.border));
         carta.addView(constraintLayout);
+
+        carta.addView(lineaVertical);
+        carta.addView(lineaHorizontal);
+        carta.addView(lineaHorizontal2);
+
 
         // Crear el borde de arriba
         CardView bordeTop = new CardView(this);
@@ -304,8 +328,16 @@ public class prueba2 extends AppCompatActivity {
         //Constraints
         ConstraintSet set = new ConstraintSet();
         set.clone(constraintLayout);
-        set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 5);
-        set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM, 5);
+        set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+
+        //set.connect(lineaHorizontal.getId(),ConstraintSet.BOTTOM, bordeTop.getId(), ConstraintSet.TOP);
+
+        set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
+
+        //set.connect(lineaVertical.getId(),ConstraintSet.END, constraintLayout.getId(), ConstraintSet.START);
+        //set.connect(lineaVertical.getId(),ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        //set.connect(lineaHorizontal2.getId(),ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.BOTTOM);
+
         set.connect(textoCategoria.getId(), ConstraintSet.TOP, bordeTop.getId(), ConstraintSet.BOTTOM);
         set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
         set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
