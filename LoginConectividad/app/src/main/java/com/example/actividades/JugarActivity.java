@@ -219,6 +219,22 @@ public class JugarActivity extends AppCompatActivity  {
                 if (GameContext.getServer()==null && GameContext.isEsMiTurno()){
                     //hacer que tambien este aca la tarjeta a la izquierda del texto para que este lindo :D
 
+                    DisplayMetrics displayMetrics = new DisplayMetrics();
+                    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                    int width = displayMetrics.widthPixels;
+                    int widthCarta = (width*9)/35;
+                    int heightCarta = (widthCarta*7)/6;
+                    int marginCarta = width/30;
+
+                    int color=0;
+
+                    for (int j=0; j < categorias.size(); j++){
+                        Categoria categoriaARevisar=categorias.get(j);
+                        if (categoriaARevisar.getNombre().equals(GameContext.getTarjetaAnulada().getCategoria())){
+                            color=categoriaARevisar.getColor().getCodigo();
+                        }
+                    }
+
                     LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
                     View dialog_layout = inflater.inflate(R.layout.anular_carta, null);
                     AlertDialog.Builder db = new AlertDialog.Builder(JugarActivity.this);
@@ -226,7 +242,10 @@ public class JugarActivity extends AppCompatActivity  {
                     db.setTitle("Anular Tarjeta");
                     db.setPositiveButton("Enviar propuesta", null);
                     db.setNegativeButton("Atras", null);
+                    LinearLayout prueba=(LinearLayout) dialog_layout.findViewById(R.id.carta);
+                    prueba.addView(crearTarjeta(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
                     final AlertDialog a = db.create();
+
 
                     a.setOnShowListener(new DialogInterface.OnShowListener() {
                         @Override
@@ -377,6 +396,7 @@ public class JugarActivity extends AppCompatActivity  {
                         carta.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+
                                 GameContext.setTarjetaElegida(tarjetaARevisar);
                                 System.out.println("Tarjeta seleccionda: "+tarjetaARevisar.getContenido());
                                 Snackbar snack = Snackbar.make(findViewById(android.R.id.content),"Seleccionaste esa carta", Snackbar.LENGTH_SHORT);
@@ -557,6 +577,23 @@ public class JugarActivity extends AppCompatActivity  {
     public void crearAlertDialogSobreAnulacion(){
         System.out.println("cree el dialog");
 
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int widthCarta = (width*9)/35;
+        int heightCarta = (widthCarta*7)/6;
+        int marginCarta = width/30;
+        int color=0;
+
+        for (int j=0; j < categorias.size(); j++){
+            Categoria categoriaARevisar=categorias.get(j);
+            if (categoriaARevisar.getNombre().equals(GameContext.getTarjetaAnulada().getCategoria())){
+                color=categoriaARevisar.getColor().getCodigo();
+            }
+        }
+
+
         LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
         View dialog_layout = inflater.inflate(R.layout.anular_carta, null);
         AlertDialog.Builder db = new AlertDialog.Builder(JugarActivity.this);
@@ -564,6 +601,8 @@ public class JugarActivity extends AppCompatActivity  {
         db.setTitle("Anular Tarjeta");
         db.setPositiveButton("Aceptar propuesta", null);
         db.setNegativeButton("Rechazar propuesta", null);
+        LinearLayout prueba=(LinearLayout) dialog_layout.findViewById(R.id.carta);
+        prueba.addView(crearTarjeta(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
         final AlertDialog a = db.create();
 
         a.setOnShowListener(new DialogInterface.OnShowListener() {

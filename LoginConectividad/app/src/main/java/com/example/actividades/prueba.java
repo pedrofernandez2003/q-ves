@@ -40,9 +40,10 @@ public class prueba extends AppCompatActivity {
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int width = displayMetrics.widthPixels;
-                int widthCarta = (width*9)/40;
-                int heightCarta = (widthCarta*7)/10;
-                int marginCarta = width/100;
+                int widthCarta = (width*9)/35;
+                int heightCarta = (widthCarta*7)/6;
+                int marginCarta = width/30;
+
 
                 LayoutInflater inflater = LayoutInflater.from(prueba.this);
                 View dialog_layout = inflater.inflate(R.layout.anular_carta, null);
@@ -120,8 +121,9 @@ public class prueba extends AppCompatActivity {
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         textoCategoria.setLayoutParams(params);
         textoCategoria.setText(categoria);
-        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
-        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.hlsimple));
+        textoCategoria.setGravity(Gravity.CENTER);
+        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/8);
+        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
         textoCategoria.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoCategoria);
 
@@ -131,7 +133,8 @@ public class prueba extends AppCompatActivity {
         params.setMargins(margin, margin, margin, margin);
         textoContenido.setLayoutParams(params);
         textoContenido.setText(contenido);
-        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/15));
+        textoContenido.setGravity(Gravity.CENTER);
+        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/12));
         textoContenido.setGravity(Gravity.CENTER);
         textoContenido.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoContenido);
@@ -141,8 +144,9 @@ public class prueba extends AppCompatActivity {
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(margin, margin, margin, margin);
         yapa.setLayoutParams(params);
+        yapa.setGravity(Gravity.CENTER);
         yapa.setText(yapaContenido);
-        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/20));
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/15));
         yapa.setGravity(Gravity.CENTER);
         yapa.setId(ViewCompat.generateViewId());
         constraintLayout.addView(yapa);
