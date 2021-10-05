@@ -161,10 +161,11 @@
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:fontFamily="@font/poertsen_one_regular"
-                    android:text="Administrar plantillas"
+                    android:text="Plantillas"
+                    android:autoSizeTextType="uniform"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
-                    android:textSize="30sp" />
+                    android:textSize="46sp" />
 
                 <ImageView
                     android:layout_width="80dp"

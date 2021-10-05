@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import com.example.R;
+import com.example.objetos.Plantilla;
 
 
 public class AdminElementosActivity extends AppCompatActivity  {
@@ -20,6 +21,7 @@ public class AdminElementosActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_administrar_elementos);
         CardView tarjetasYCategorias = (CardView) findViewById(R.id.tarjetasYCategorias);
         CardView personajes = (CardView) findViewById(R.id.personajes);
+        CardView plantillas=  findViewById(R.id.adminElementos);
 
         tarjetasYCategorias.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +39,13 @@ public class AdminElementosActivity extends AppCompatActivity  {
                     }
          });
 
+    plantillas.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent i = new Intent(AdminElementosActivity.this, AdministrarPlantillasActivity.class);
+            startActivity(i);
+        }
+    });
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
