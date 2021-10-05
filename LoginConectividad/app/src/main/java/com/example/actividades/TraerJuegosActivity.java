@@ -329,7 +329,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
 
 
                         ImageView persona = new ImageView(appCcontext);
-                        params = new LayoutParams(width/10, width/10);
+                        params = new LayoutParams(width/12, width/12);
                         params.setMargins(0, heightPlantilla/20, 0, heightPlantilla/40);
                         persona.setLayoutParams(params);
                         persona.setColorFilter(getResources().getColor(R.color.white));
@@ -338,7 +338,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
 
 
                         ImageView ruleta = new ImageView(appCcontext);
-                        params = new LayoutParams(width/10, width/10);
+                        params = new LayoutParams(width/12, width/12);
                         params.setMargins(0, heightPlantilla/40, 0, heightPlantilla/20);
                         ruleta.setLayoutParams(params);
                         ruleta.setColorFilter(getResources().getColor(R.color.white));
