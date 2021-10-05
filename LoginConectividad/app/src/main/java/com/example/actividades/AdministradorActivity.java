@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class AdministradorActivity extends AppCompatActivity {
 
-    private CardView crearJuego,iniciarJuego, administrarElementos;
+    private CardView crearJuego,iniciarJuego, administrarElementos, administrarPlantillas;
     private FloatingActionButton cerrarSesion;
     FirebaseAuth firebase;
 
@@ -33,6 +33,7 @@ public class AdministradorActivity extends AppCompatActivity {
         firebase = FirebaseAuth.getInstance();
         cerrarSesion = findViewById(R.id.fab);
         cerrarSesion.bringToFront();
+        administrarPlantillas = (CardView) findViewById(R.id.adminElementos);
         crearJuego = (CardView) findViewById(R.id.crearJuego);
         iniciarJuego = (CardView) findViewById(R.id.iniciarJuego);
         administrarElementos = (CardView) findViewById(R.id.adminElementos);
@@ -85,6 +86,14 @@ public class AdministradorActivity extends AppCompatActivity {
             }
 
 
+        });
+
+        administrarPlantillas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(AdministradorActivity.this, AdministrarPlantillasActivity.class);
+                startActivity(i);
+            }
         });
         iniciarJuego.setOnClickListener(new View.OnClickListener() {
                     @Override
