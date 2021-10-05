@@ -169,6 +169,17 @@ public class JugarActivity extends AppCompatActivity  {
                     boolean anuladoCorrectamente=intent.getBooleanExtra("anuladoCorrectamente",true);
                     // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
                     sacarTarjetaDelTablero();
+                    if(GameContext.isEsMiTurno()){
+                        inflater=getLayoutInflater();
+                        Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                        text = (TextView) Layout.findViewById(R.id.toastTextView);
+                        text.setText("Es tu turno!");
+                        toast= new Toast(getApplicationContext());
+                        toast.setGravity(Gravity.BOTTOM,0,0);
+                        toast.setDuration(Toast.LENGTH_LONG);
+                        toast.setView(Layout);
+                        toast.show();
+                    }
                     if (GameContext.getServer()==null){
                         System.out.println("anulado correctamente "+anuladoCorrectamente);
                         if (anuladoCorrectamente && GameContext.getEquipo().getNombre().equals(ultimoEquipoQueTiroCarta)) {
@@ -240,23 +251,29 @@ public class JugarActivity extends AppCompatActivity  {
                     int color=0;
 
                     for (Categoria categoria:GameContext.getJuego().getPlantilla().getCategorias()) {
+                        System.out.println("Color de GameContext.getJuego.getPlantilla.getCategorias: "+categoria.getColor().getCodigo());
                         if (categoria.getNombre().equals(GameContext.getTarjetaElegida().getCategoria())){
+                            System.out.println("Entre en el if de Color de GameContext.getJuego.getPlantilla.getCategorias:");
                             color=categoria.getColor().getCodigo();
                         }
                     }
-                    /*for (int j=0; j < GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().size(); j++){
+                    for (int j=0; j < GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().size(); j++){
                         Casillero casilleroARevisar=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().get(j);
+                        System.out.println("Color de GameContext.getJuego.getPlantilla.getCategorias: "+casilleroARevisar.getCategoria().getColor().getCodigo());
                         if (casilleroARevisar.getCategoria().getNombre().equals(GameContext.getTarjetaElegida().getCategoria())){
+                            System.out.println("Entre en el if de Color de GameContext.getJuego.getPartidas.get(...)");
                             color=casilleroARevisar.getCategoria().getColor().getCodigo();
                         }
-                    }*/
-                    /* DEBERIA FUNCIONAR PERO CREO QUE YA LO PROBAMOS Y NO FUNCIONO :(
+                    }
+
                     for (int j=0; j < categorias.size(); j++){
                         Categoria categoriaARevisar=categorias.get(j);
-                        if (categoriaARevisar.getNombre().equals(tarjetaARevisar.getCategoria())){
+                        System.out.println("Color de GameContext.getJuego.getPlantilla.getCategorias: "+categoriaARevisar.getColor().getCodigo());
+                        if (categoriaARevisar.getNombre().equals(GameContext.getTarjetaElegida().getCategoria())){
+                            System.out.println("Entre en el if de Color de categorias.get(j)");
                             color=categoriaARevisar.getColor().getCodigo();
                         }
-                    }*/
+                    }
 
                     LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
                     View dialog_layout = inflater.inflate(R.layout.anular_carta, null);
@@ -266,7 +283,7 @@ public class JugarActivity extends AppCompatActivity  {
                     db.setPositiveButton("Enviar propuesta", null);
                     db.setNegativeButton("Atras", null);
                     LinearLayout prueba=(LinearLayout) dialog_layout.findViewById(R.id.carta);
-                    prueba.addView(crearTarjeta(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
+                    prueba.addView(crearTarjetaAnular(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
                     final AlertDialog a = db.create();
 
 
@@ -312,6 +329,15 @@ public class JugarActivity extends AppCompatActivity  {
 
                 if (GameContext.getServer()==null && GameContext.isEsMiTurno()){
                     if (puedeAgarrarCarta){
+                        LayoutInflater inflater=getLayoutInflater();
+                        View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                        TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                        text.setText("Agarraste una carta");
+                        Toast toast= new Toast(getApplicationContext());
+                        toast.setGravity(Gravity.BOTTOM,0,0);
+                        toast.setDuration(Toast.LENGTH_LONG);
+                        toast.setView(Layout);
+                        toast.show();
                         ArrayList<String> datos=new ArrayList<>();
                         datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
                         Mensaje mensaje=new Mensaje("agarrarCarta",datos);
@@ -352,6 +378,15 @@ public class JugarActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 if (GameContext.isEsMiTurno()){
+                    LayoutInflater inflater=getLayoutInflater();
+                    View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                    TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                    text.setText("Pasaste el turno");
+                    Toast toast= new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.BOTTOM,0,0);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(Layout);
+                    toast.show();
                     ArrayList<String> datos=new ArrayList<>();
                     Mensaje mensaje=new Mensaje("pasarTurno",datos);
                     String msg=mensaje.serializar();
@@ -606,7 +641,7 @@ public class JugarActivity extends AppCompatActivity  {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         int widthCarta = (width*9)/35;
-        int heightCarta = (widthCarta*7)/6;
+        int heightCarta = (widthCarta*7)/8;
         int marginCarta = width/30;
         int color=0;
 
@@ -639,7 +674,7 @@ public class JugarActivity extends AppCompatActivity  {
         db.setPositiveButton("Aceptar propuesta", null);
         db.setNegativeButton("Rechazar propuesta", null);
         LinearLayout prueba=(LinearLayout) dialog_layout.findViewById(R.id.carta);
-        prueba.addView(crearTarjeta(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
+        prueba.addView(crearTarjetaAnular(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
         final AlertDialog a = db.create();
 
         a.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -818,8 +853,10 @@ public class JugarActivity extends AppCompatActivity  {
 
         // Crear la base
         CardView carta = new CardView(this);
+        width = findViewById(R.id.cardView).getWidth() - 20;
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
-        params.setMargins(margin,margin,margin,margin);
+        params.setMargins( 0,margin, 0,margin);
+        params.gravity = Gravity.CENTER_HORIZONTAL;
         carta.setLayoutParams(params);
         carta.setBackgroundColor(-1644568);
 
@@ -830,16 +867,16 @@ public class JugarActivity extends AppCompatActivity  {
         constraintLayout.setId(ViewCompat.generateViewId());
         carta.addView(constraintLayout);
 
-        // Crear el borde de arriba
+//        // Crear el borde de arriba
 //        CardView bordeTop = new CardView(this);
 //        params = new FrameLayout.LayoutParams(width, height/8);
 //        bordeTop.setLayoutParams(params);
 //        bordeTop.setBackgroundColor(color);
 //        bordeTop.setId(ViewCompat.generateViewId());
 //        constraintLayout.addView(bordeTop);
-
-
-        // Crear el borde de abajo
+//
+//
+//        // Crear el borde de abajo
 //        CardView bordeBot = new CardView(this);
 //        params = new FrameLayout.LayoutParams(width, (height*3)/50);
 //        bordeBot.setLayoutParams(params);
@@ -899,7 +936,7 @@ public class JugarActivity extends AppCompatActivity  {
 
     }
 
-    public ConstraintLayout crearConstraintTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
+    public CardView crearTarjetaAnular(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
 
         // Crear la base
         CardView carta = new CardView(this);
@@ -913,7 +950,6 @@ public class JugarActivity extends AppCompatActivity  {
         params = new FrameLayout.LayoutParams(width, height);
         constraintLayout.setLayoutParams(params);
         constraintLayout.setId(ViewCompat.generateViewId());
-        constraintLayout.setBackgroundColor(-1644568);
         carta.addView(constraintLayout);
 
         // Crear el borde de arriba
@@ -938,7 +974,7 @@ public class JugarActivity extends AppCompatActivity  {
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         textoCategoria.setLayoutParams(params);
         textoCategoria.setText(categoria);
-        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
+        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/6);
         textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
         textoCategoria.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoCategoria);
@@ -949,7 +985,7 @@ public class JugarActivity extends AppCompatActivity  {
         params.setMargins(margin, margin, margin, margin);
         textoContenido.setLayoutParams(params);
         textoContenido.setText(contenido);
-        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/12));
+        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/8));
         textoContenido.setGravity(Gravity.CENTER);
         textoContenido.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoContenido);
@@ -960,7 +996,7 @@ public class JugarActivity extends AppCompatActivity  {
         params.setMargins(margin, margin, margin, margin);
         yapa.setLayoutParams(params);
         yapa.setText(yapaContenido);
-        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/20));
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/10));
         yapa.setGravity(Gravity.CENTER);
         yapa.setId(ViewCompat.generateViewId());
         constraintLayout.addView(yapa);
@@ -981,9 +1017,10 @@ public class JugarActivity extends AppCompatActivity  {
         set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
         set.applyTo(constraintLayout);
 
-        return constraintLayout;
+        return carta;
 
     }
+
 
     public void mostrarPlantillaEnXml(Plantilla plantilla, Context context) {
         ArrayList<CardView> espacioCartas = conseguirCardViews();
