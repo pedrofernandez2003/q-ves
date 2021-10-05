@@ -122,7 +122,7 @@ public class JugarActivity extends AppCompatActivity  {
                     db.setTitle(intent.getStringExtra("motivoGanador"));
                     System.out.println("titulo"+ intent.getStringExtra("motivoGanador"));
                     db.setMessage("El ganador es: "+intent.getStringExtra("ganador"));
-                    db.setPositiveButton("Volver a inicio", null);
+                    db.setPositiveButton("Volver", null);
                     final AlertDialog a = db.create();
                     a.show();
                     Button volverAInicio = a.getButton(AlertDialog.BUTTON_POSITIVE);

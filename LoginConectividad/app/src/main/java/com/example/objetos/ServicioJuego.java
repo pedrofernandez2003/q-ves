@@ -180,8 +180,15 @@ public class ServicioJuego extends Service {
                                                 e.printStackTrace();
                                             }
                                             String nombreEquipo= mapDatos.get("ganador");
+                                            boolean mazoVacio= Boolean.parseBoolean(mapDatos.get("mazoVacio"));
                                             intent= new Intent();
                                             intent.putExtra("ganador",nombreEquipo);
+                                            if(mazoVacio) {
+                                                intent.putExtra("motivoGanador", "El mazo se ha quedado sin cartas");
+                                            }
+                                            else{
+                                                intent.putExtra("motivoGanador", "Juego terminado");
+                                            }
                                             intent.setAction("ganador");
                                             contexto.sendBroadcast(intent);
                                             break;
@@ -347,7 +354,7 @@ public class ServicioJuego extends Service {
                                                 //ver esto
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {//le manda a todos quien es el ganador
                                                     ArrayList<String> datos=new ArrayList<>();
-                                                    datos.add("{\"ganador\": \""+ganador+"\"}");
+                                                    datos.add("{\"ganador\": \"" + ganador + "\",\"mazoVacio\":\"" + (GameContext.getJuego().getMazo().size() <= 0) + "\"}");
                                                     mensaje=new Mensaje("ganador",datos);
                                                     String msg=mensaje.serializar();
                                                     Write escribir = new Write();
@@ -361,7 +368,7 @@ public class ServicioJuego extends Service {
                                                 else{
                                                     intent2.putExtra("motivoGanador", "Juego terminado");
                                                 }
-                                                System.out.println("titulo"+ intent2.getStringExtra("motivoGanador"));
+                                                System.out.println("titulo servicio"+ intent2.getStringExtra("motivoGanador"));
                                                 intent2.setAction("ganador");
                                                 contexto.sendBroadcast(intent2);
                                             }
