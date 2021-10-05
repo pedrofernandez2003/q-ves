@@ -116,8 +116,7 @@ public class CategoriasActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             categoria.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         }
-        params.setMargins(height/4, 15,0,0);
-        categoria.setTextSize(height/14);
+        params.setMargins(0, 15,0,0);
         categoria.setGravity(Gravity.CENTER);
         categoria.setText(nombreCategoria);
         categoria.setTextColor(getResources().getColor(R.color.white));
@@ -129,18 +128,20 @@ public class CategoriasActivity extends AppCompatActivity {
         ImageView cartitas = new ImageView(this);
         params = new LayoutParams((height)/3, (height)/3);
         cartitas.setLayoutParams(params);
-
         cartitas.setImageDrawable(getResources().getDrawable(R.drawable.ic_cartas));
         cartitas.setColorFilter(getResources().getColor(R.color.white));
         cartitas.setId(ViewCompat.generateViewId());
         constraintLayout.addView(cartitas);
 
         TextView cantCartas = new TextView(this);
-        params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params = new LayoutParams((height)/2, (height)/2);
+        params.setMargins(0, 0, width/10, 0);
         cantCartas.setTextColor(getResources().getColor(R.color.white));
         cantCartas.setTypeface(getResources().getFont(R.font.poertsen_one_regular));
         cantCartas.setText(""+numCartas);
-        cantCartas.setTextSize(height/12);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            cantCartas.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        }
         cantCartas.setLayoutParams(params);
         cantCartas.setId(ViewCompat.generateViewId());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -153,16 +154,15 @@ public class CategoriasActivity extends AppCompatActivity {
         set.connect(categoria.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
         set.connect(categoria.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
         set.connect(categoria.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT);
-        set.connect(categoria.getId(), ConstraintSet.RIGHT, cantCartas.getId(), ConstraintSet.LEFT);
+        set.connect(categoria.getId(), ConstraintSet.RIGHT, cartitas.getId(), ConstraintSet.LEFT);
 
-        set.connect(cartitas.getId(), ConstraintSet.TOP, cantCartas.getId(), ConstraintSet.TOP);
-        set.connect(cartitas.getId(), ConstraintSet.BOTTOM, cantCartas.getId(), ConstraintSet.BOTTOM);
+        set.connect(cartitas.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
+        set.connect(cartitas.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
         set.connect(cartitas.getId(), ConstraintSet.RIGHT, cantCartas.getId(), ConstraintSet.LEFT);
 //        set.connect(cartitas.getId(), ConstraintSet.LEFT, categoria.getId(), ConstraintSet.RIGHT);
 //
-        set.connect(cantCartas.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
-        set.connect(cantCartas.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
-        set.connect(cantCartas.getId(), ConstraintSet.LEFT, categoria.getId(), ConstraintSet.RIGHT);
+        set.connect(cantCartas.getId(), ConstraintSet.TOP, cartitas.getId(), ConstraintSet.TOP);
+        set.connect(cantCartas.getId(), ConstraintSet.BOTTOM, cartitas.getId(), ConstraintSet.BOTTOM);
         set.connect(cantCartas.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
 
         set.applyTo(constraintLayout);
