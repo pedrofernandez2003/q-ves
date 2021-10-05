@@ -1,7 +1,9 @@
 package com.example.actividades;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.DhcpInfo;
@@ -10,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,7 +27,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.objetos.ServicioJuego;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
     private WifiManager wifiManager;
@@ -32,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private Button botonUnirse, botonIniciarSesion;
     private TextInputEditText nombreEquipo;
     private TextView turno;
+    private FloatingActionButton cerrarSesion;
+    FirebaseAuth firebase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +49,17 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(broadcastReceiver,intentFilter);
         startService(new Intent(this, ServicioJuego.class));
         setContentView(R.layout.activity_main);
+        cerrarSesion = findViewById(R.id.fab);
         botonUnirse = (Button) findViewById(R.id.botonUnirse);
         turno = findViewById(R.id.turno);
         nombreEquipo =  (TextInputEditText) findViewById(R.id.nombreEquipo);
         botonIniciarSesion=(Button)findViewById(R.id.iniciarSesion);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         Context appContext=this;
+        firebase = FirebaseAuth.getInstance();
+        if (firebase.getCurrentUser()==null){//si no inicio sesion no muestra el boton
+            cerrarSesion.setVisibility(View.INVISIBLE);
+        }
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -82,6 +94,49 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        cerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+
+                View dialog_layout = inflater.inflate(R.layout.confirmacion_accion, null);
+                TextView seleccionado = dialog_layout.findViewById(R.id.confirmarSelección);
+                seleccionado.setText("¿Quiere cerrar la sesión?");
+                AlertDialog.Builder db = new AlertDialog.Builder(MainActivity.this);
+                db.setView(dialog_layout);
+                db.setTitle("Cerrar sesión");
+                db.setPositiveButton("Sí", null);
+                db.setNegativeButton("Cancelar", null);
+                final AlertDialog a = db.create();
+
+                a.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        Button si = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                        Button no = a.getButton(AlertDialog.BUTTON_NEGATIVE);
+                        no.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                a.dismiss();
+                            }
+                        });
+                        si.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick (View view){
+                                firebase.signOut();
+                                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                });
+                a.show();
+
+            }
+
+
+        });
 
         botonIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class AdministradorActivity extends AppCompatActivity {
 
-    private CardView crearJuego,iniciarJuego, administrarElementos, administrarPlantillas;
+    private CardView crearJuego,iniciarJuego, administrarElementos;
     private FloatingActionButton cerrarSesion;
     FirebaseAuth firebase;
 
