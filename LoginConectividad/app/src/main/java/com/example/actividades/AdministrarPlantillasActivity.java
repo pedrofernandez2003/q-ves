@@ -12,18 +12,13 @@ import android.graphics.Bitmap;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
-import android.graphics.drawable.Drawable;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ActionMode;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -111,18 +106,7 @@ public class AdministrarPlantillasActivity extends AppCompatActivity {
         });
 
 
-//        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-//            @RequiresApi(api = Build.VERSION_CODES.O)
-//            @Override
-//            public void handleOnBackPressed() {//que apague el hotspot y despues vaya para atras
-////                turnOffHotspot();
-//                Intent intent=new Intent(appContext,MainActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        };
 
-//        this.getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     

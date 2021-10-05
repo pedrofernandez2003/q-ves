@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,6 +19,8 @@ import com.example.objetos.Equipo;
 import com.example.objetos.GameContext;
 import com.example.R;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.objetos.ServicioJuego;
@@ -44,6 +48,19 @@ public class MainActivity extends AppCompatActivity {
         botonIniciarSesion=(Button)findViewById(R.id.iniciarSesion);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         Context appContext=this;
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void handleOnBackPressed() {//Saca la aplicación
+                Intent intent=new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        };
+
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
         botonUnirse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,12 +74,14 @@ public class MainActivity extends AppCompatActivity {
                     GameContext.setEquipo(new Equipo());
                     GameContext.getNombresEquipos().add(nombreEquipo.getText().toString());
                     setContentView(R.layout.cargando);
+                    volverAtras();
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "No esta conectado a la red", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No está conectado a la red", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
 
         botonIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +113,20 @@ public class MainActivity extends AppCompatActivity {
 
     public String formatIP(int IpAddress) {
         return Formatter.formatIpAddress(IpAddress);
+    }
+
+    public void volverAtras() {
+            OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void handleOnBackPressed() {
+                    Intent intent=new Intent(MainActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            };
+
+            this.getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     private void empezarJuego(){

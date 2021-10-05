@@ -10,6 +10,7 @@
         android:id="@+id/confirmarSelección"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="¿Quiere continuar con la selección?"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

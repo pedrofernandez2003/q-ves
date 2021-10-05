@@ -6,17 +6,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/cargando"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/detalleNombreJuego"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="178dp"
-        android:layout_marginLeft="178dp"
-        android:layout_marginEnd="173dp"
-        android:layout_marginRight="173dp"
-        android:layout_marginBottom="352dp"
-        android:text="@string/textoCargando"
+        android:layout_marginLeft="8dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/cantidadEquipos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poertsen_one_regular"
+            android:text="Esperando jugadores"
+            android:textSize="18dp"
+            android:layout_marginLeft="35dp"/>
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="140dp"
+            android:layout_height="50dp"
+            android:src="@drawable/cargando"
+            android:layout_gravity="left"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.783"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
