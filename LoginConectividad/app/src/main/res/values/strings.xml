@@ -72,6 +72,8 @@
         <item>NARANJA</item>
         <item>NEGRO</item>
         <item>AZULOSCURO</item>
+        <item>MARRON</item>
+        <item>GRANATE</item>
     </string-array>
     <string name="title_activity_cargando">Cargando</string>
     <string name="cantidadEquipos">0</string>

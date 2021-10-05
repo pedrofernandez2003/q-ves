@@ -60,6 +60,7 @@ import com.example.objetos.Usuario;
 import com.example.objetos.manejoSockets.Write;
 import com.example.R;
 import com.example.objetos.Plantilla;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -79,6 +80,7 @@ public class JugarActivity extends AppCompatActivity  {
     private String ultimoEquipoQueTiroCarta;
     private WifiManager wifiManager;
     private DhcpInfo d;
+    private FloatingActionButton indicadorTurno;
 
 
 
@@ -162,13 +164,13 @@ public class JugarActivity extends AppCompatActivity  {
                     // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
                     sacarTarjetaDelTablero();
                     if(GameContext.isEsMiTurno()){
+                        indicadorTurno.setVisibility(View.VISIBLE);
                         inflater=getLayoutInflater();
                         Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
                         text = (TextView) Layout.findViewById(R.id.toastTextView);
                         text.setText("Es tu turno!");
                         toast= new Toast(getApplicationContext());
                         toast.setGravity(Gravity.BOTTOM,0,0);
-                        toast.setDuration(Toast.LENGTH_LONG);
                         toast.setView(Layout);
                         toast.show();
                     }
@@ -210,6 +212,7 @@ public class JugarActivity extends AppCompatActivity  {
         intentFilter.addAction("anularCartaJugar");
         intentFilter.addAction("nuevaTarjeta");
         registerReceiver(broadcastReceiver,intentFilter);
+        indicadorTurno= findViewById(R.id.indicadorTurno);
         juego= GameContext.getJuego();
         partida=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1);
         ronda=findViewById(R.id.textView2);
@@ -488,7 +491,7 @@ public class JugarActivity extends AppCompatActivity  {
                                             Write escribir = new Write();
                                             escribir.execute(msg, 0);
                                             GameContext.setEsMiTurno(false);
-                                            //turno.setVisibility(View.INVISIBLE);
+                                            indicadorTurno.setVisibility(View.INVISIBLE);
                                             System.out.println("tarjetas restantes "+GameContext.getEquipo().getTarjetas().size());
                                         }
                                         else{

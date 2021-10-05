@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dataManagers.DataManager;
 import com.example.objetos.Equipo;
 import com.example.objetos.GameContext;
 import com.example.R;
@@ -27,9 +28,16 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.objetos.ServicioJuego;
+import com.example.objetos.Usuario;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.annotations.NotNull;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
     private WifiManager wifiManager;
@@ -142,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("On click");
-                Intent elegirPlantilla = new Intent(MainActivity.this, com.example.actividades.LoginActivity.class);
+                Intent elegirPlantilla = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(elegirPlantilla);
             }
         });

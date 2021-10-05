@@ -1,11 +1,14 @@
 package com.example.actividades;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +46,16 @@ public class AdministradorActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void handleOnBackPressed() {//Saca la aplicación
+                Intent intent=new Intent(AdministradorActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
 
         cerrarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
