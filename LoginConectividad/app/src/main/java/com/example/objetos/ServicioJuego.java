@@ -151,6 +151,9 @@ public class ServicioJuego extends Service {
                                             Tarjeta tarjetaNueva= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
                                             System.out.println("me llego la tarjeta "+tarjetaNueva.getCategoria());
                                             GameContext.getEquipo().getTarjetas().add(tarjetaNueva);
+                                            intent= new Intent();
+                                            intent.setAction("nuevaTarjeta");
+                                            contexto.sendBroadcast(intent);
                                             break;
 
                                         case "partida_nueva":
@@ -352,6 +355,13 @@ public class ServicioJuego extends Service {
                                                 }
                                                 intent2= new Intent();
                                                 intent2.putExtra("ganador", ganador);
+                                                if(GameContext.getJuego().getMazo().size()<=0) {
+                                                    intent2.putExtra("motivoGanador", "El mazo se ha quedado sin cartas");
+                                                }
+                                                else{
+                                                    intent2.putExtra("motivoGanador", "Juego terminado");
+                                                }
+                                                System.out.println("titulo"+ intent2.getStringExtra("motivoGanador"));
                                                 intent2.setAction("ganador");
                                                 contexto.sendBroadcast(intent2);
                                             }

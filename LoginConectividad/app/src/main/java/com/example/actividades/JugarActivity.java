@@ -56,26 +56,14 @@ import com.example.objetos.Juego;
 import com.example.objetos.Mensaje;
 import com.example.objetos.Partida;
 import com.example.objetos.Tarjeta;
-import com.example.objetos.TarjetaSinCategoria;
 import com.example.objetos.Usuario;
 import com.example.objetos.manejoSockets.Write;
 import com.example.R;
 import com.example.objetos.Plantilla;
-//import com.facebook.internal.ImageRequest;
 import com.google.android.material.snackbar.Snackbar;
-import com.squareup.picasso.Picasso;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Random;
 
-import fi.iki.elonen.NanoHTTPD;
 
 public class JugarActivity extends AppCompatActivity  {
     //    private GameContext context;
@@ -131,7 +119,8 @@ public class JugarActivity extends AppCompatActivity  {
                     View dialog_layout = inflater2.inflate(R.layout.ganador, null);
                     AlertDialog.Builder db = new AlertDialog.Builder(context);
                     db.setView(dialog_layout);
-                    db.setTitle("Juego terminado");
+                    db.setTitle(intent.getStringExtra("motivoGanador"));
+                    System.out.println("titulo"+ intent.getStringExtra("motivoGanador"));
                     db.setMessage("El ganador es: "+intent.getStringExtra("ganador"));
                     db.setPositiveButton("Volver a inicio", null);
                     final AlertDialog a = db.create();
@@ -142,12 +131,15 @@ public class JugarActivity extends AppCompatActivity  {
                         public void onClick(View v) {
                             Intent intent;
                             if (GameContext.getServer()==null){
+                                System.out.println("soy equipo");
                                 intent = new Intent(JugarActivity.this, MainActivity.class);
                             }
                             else if (Usuario.getUsuario().getRol().equals("administrador")){
-                                intent = new Intent(JugarActivity.this, AdminElementosActivity.class);
+                                System.out.println("Admin");
+                                intent = new Intent(JugarActivity.this, AdministradorActivity.class);
                             }
                             else {
+                                System.out.println("Moderador");
                                 intent = new Intent(JugarActivity.this, ModeradorActivity.class);
                             }
                             startActivity(intent);
@@ -195,6 +187,9 @@ public class JugarActivity extends AppCompatActivity  {
                         }
                     }
                     break;
+                case "nuevaTarjeta":
+                    botonVerCartas.performClick();
+                    break;
             }
         }
     };
@@ -213,6 +208,7 @@ public class JugarActivity extends AppCompatActivity  {
         intentFilter.addAction("ganador");
         intentFilter.addAction("mostrarDialog");
         intentFilter.addAction("anularCartaJugar");
+        intentFilter.addAction("nuevaTarjeta");
         registerReceiver(broadcastReceiver,intentFilter);
         juego= GameContext.getJuego();
         partida=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1);
@@ -429,7 +425,7 @@ public class JugarActivity extends AppCompatActivity  {
                     getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                     int width = displayMetrics.widthPixels;
                     int widthCarta = width/6;
-                    int heightCarta = (widthCarta*20)/16;
+                    int heightCarta = (widthCarta*20)/18;
                     int marginCarta = width/60;
 
                     tarjetasHashSet=GameContext.getEquipo().getTarjetas();
@@ -1116,7 +1112,7 @@ public class JugarActivity extends AppCompatActivity  {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(broadcastReceiver);
+//        unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
 }

@@ -29,6 +29,7 @@
             android:ems="10"
             android:inputType="textEmailAddress"
             android:autofillHints=""
+            android:fontFamily="@font/poertsen_one_regular"
             tools:ignore="LabelFor" />
 
         <Button
