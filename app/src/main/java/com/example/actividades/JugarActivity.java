@@ -60,6 +60,7 @@ import com.example.objetos.Usuario;
 import com.example.objetos.manejoSockets.Write;
 import com.example.R;
 import com.example.objetos.Plantilla;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
@@ -81,6 +82,7 @@ public class JugarActivity extends AppCompatActivity  {
     private WifiManager wifiManager;
     private DhcpInfo d;
     private FloatingActionButton indicadorTurno;
+    private Tarjeta tarjetaElegida;
 
 
 
@@ -447,7 +449,7 @@ public class JugarActivity extends AppCompatActivity  {
                             }
                         }
 
-                        CardView carta = crearTarjetaVerCartas(widthCarta, heightCarta, marginCarta, color, nombreCategoria,tarjetaContenido,tarjetaYapa);
+                        MaterialCardView carta = crearTarjetaVerCartas(widthCarta, heightCarta, marginCarta, color, nombreCategoria,tarjetaContenido,tarjetaYapa);
                         contenedorCartas.addView(carta);
 
                         carta.setOnClickListener(new View.OnClickListener() {
@@ -456,13 +458,11 @@ public class JugarActivity extends AppCompatActivity  {
 
                                 GameContext.setTarjetaElegida(tarjetaARevisar);
                                 //poner que le cambie el color del borde en vez de mostrar ese modal
-                                System.out.println("Tarjeta seleccionda: "+tarjetaARevisar.getContenido());
-                                Snackbar snack = Snackbar.make(findViewById(android.R.id.content),"Seleccionaste esa carta", Snackbar.LENGTH_SHORT);
-                                View snackView = snack.getView();
-                                FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
-                                params.gravity = Gravity.TOP;
-                                snackView.setLayoutParams(params);
-                                snack.show();
+                                tarjetaElegida=tarjetaARevisar;
+                                System.out.println(tarjetaARevisar.getContenido());
+                                cambiarColorBordes(contenedorCartas);
+                                carta.setStrokeColor(getResources().getColor(R.color.green_light));
+                                carta.setStrokeWidth(7);
 
                             }
                         });
@@ -531,6 +531,17 @@ public class JugarActivity extends AppCompatActivity  {
 
             }
         });
+    }
+
+    public void cambiarColorBordes(LinearLayout contenedorCartas){
+        int childCount = contenedorCartas.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            if(contenedorCartas.getChildAt(i) instanceof  MaterialCardView){
+                MaterialCardView cartaACambiar = ((MaterialCardView) contenedorCartas.getChildAt(i));
+                cartaACambiar.setStrokeWidth(0);
+                cartaACambiar.invalidate();
+            }
+        }
     }
 
     public void traerImagen(Plantilla plantilla) {
@@ -731,44 +742,23 @@ public class JugarActivity extends AppCompatActivity  {
         a.show();
     }
 
-    public CardView crearTarjetaVerCartas(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
+    public MaterialCardView crearTarjetaVerCartas(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
 
         // Crear la base
-        CardView carta = new CardView(this);
+        MaterialCardView carta = new MaterialCardView(this);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
-        //params.setMargins(0,0,0,0);
+        params.setMargins(5,0,5,0);
         carta.setLayoutParams(params);
         carta.setBackgroundColor(-1644568);
-
-        View lineaHorizontal= new View(this);
-        FrameLayout.LayoutParams paramsBorderHorizontal = new FrameLayout.LayoutParams(width, height/34);
-        lineaHorizontal.setLayoutParams(paramsBorderHorizontal);
-        lineaHorizontal.setId(ViewCompat.generateViewId());
-        lineaHorizontal.setBackgroundColor(Color.GRAY);
-
-
-        View lineaHorizontal2= new View(this);
-        lineaHorizontal2.setLayoutParams(paramsBorderHorizontal);
-        lineaHorizontal2.setId(ViewCompat.generateViewId());
-        lineaHorizontal2.setBackgroundColor(Color.GRAY);
-
-        View lineaVertical= new View(this);
-        FrameLayout.LayoutParams paramsBorderVertical = new FrameLayout.LayoutParams(width/34, height);
-        lineaVertical.setLayoutParams(paramsBorderVertical);
-        lineaVertical.setId(ViewCompat.generateViewId());
-        lineaVertical.setBackgroundColor(Color.GRAY);
+        carta.setRadius(0);
 
         // Crear el constraint layout
         ConstraintLayout constraintLayout = new ConstraintLayout(this);
         params = new FrameLayout.LayoutParams(width, height);
         constraintLayout.setLayoutParams(params);
         constraintLayout.setId(ViewCompat.generateViewId());
-        //constraintLayout.setBackground(AppCompatResources.getDrawable(this,R.drawable.border));
         carta.addView(constraintLayout);
 
-        carta.addView(lineaVertical);
-        carta.addView(lineaHorizontal);
-        carta.addView(lineaHorizontal2);
 
 
         // Crear el borde de arriba
@@ -824,15 +814,7 @@ public class JugarActivity extends AppCompatActivity  {
         ConstraintSet set = new ConstraintSet();
         set.clone(constraintLayout);
         set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
-
-        //set.connect(lineaHorizontal.getId(),ConstraintSet.BOTTOM, bordeTop.getId(), ConstraintSet.TOP);
-
         set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
-
-        //set.connect(lineaVertical.getId(),ConstraintSet.END, constraintLayout.getId(), ConstraintSet.START);
-        //set.connect(lineaVertical.getId(),ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-        //set.connect(lineaHorizontal2.getId(),ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.BOTTOM);
-
         set.connect(textoCategoria.getId(), ConstraintSet.TOP, bordeTop.getId(), ConstraintSet.BOTTOM);
         set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
         set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
@@ -844,8 +826,9 @@ public class JugarActivity extends AppCompatActivity  {
         set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
         set.applyTo(constraintLayout);
 
-        return carta;
 
+
+        return carta;
     }
 
     public CardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){

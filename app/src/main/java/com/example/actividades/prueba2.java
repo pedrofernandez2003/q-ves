@@ -128,18 +128,9 @@ public class prueba2 extends AppCompatActivity {
                         public void onClick(View view) {
                             tarjetaElegida=tarjetaARevisar;
                             System.out.println(tarjetaARevisar.getContenido());
-                            Snackbar snack = Snackbar.make(findViewById(android.R.id.content),"Seleccionaste esa carta", Snackbar.LENGTH_SHORT);
-                            View snackView = snack.getView();
-                            FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
-                            params.gravity = Gravity.TOP;
-                            snackView.setLayoutParams(params);
-                            snack.show();
-
-
-
-                            //Drawable aaa=findViewById(R.drawable.border);
-                            //carta.setBackground(aaa);
-                            //cuando tenga las tarjetas correctas hacer esto de "Seleccionarlas"
+                            cambiarColorBordes(contenedorCartas);
+                            carta.setStrokeColor(getResources().getColor(R.color.green_light));
+                            carta.setStrokeWidth(7);
 
                         }
                     });
@@ -171,10 +162,15 @@ public class prueba2 extends AppCompatActivity {
         });
     }
 
-    public CardView setBordesColoreados(CardView carta){
-
-
-        return carta;
+    public void cambiarColorBordes(LinearLayout contenedorCartas){
+        int childCount = contenedorCartas.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            if(contenedorCartas.getChildAt(i) instanceof  MaterialCardView){
+                MaterialCardView cartaACambiar = ((MaterialCardView) contenedorCartas.getChildAt(i));
+                cartaACambiar.setStrokeWidth(0);
+                cartaACambiar.invalidate();
+            }
+        }
     }
 
     public void insertarTarjetaEnTablero(){
@@ -246,43 +242,18 @@ public class prueba2 extends AppCompatActivity {
         // Crear la base
         MaterialCardView carta = new MaterialCardView(this);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
-        //params.setMargins(0,0,0,0);
+        params.setMargins(5,0,5,0);
         carta.setLayoutParams(params);
         carta.setBackgroundColor(-1644568);
-        carta.setStrokeColor(getResources().getColor(R.color.grey));
-        carta.setStrokeWidth(5);
         carta.setRadius(0);
-
-//        View lineaHorizontal= new View(this);
-//        FrameLayout.LayoutParams paramsBorderHorizontal = new FrameLayout.LayoutParams(width, height/34);
-//        lineaHorizontal.setLayoutParams(paramsBorderHorizontal);
-//        lineaHorizontal.setId(ViewCompat.generateViewId());
-//        lineaHorizontal.setBackgroundColor(Color.GRAY);
-
-
-
-//        View lineaHorizontal2= new View(this);
-//        lineaHorizontal2.setLayoutParams(paramsBorderHorizontal);
-//        lineaHorizontal2.setId(ViewCompat.generateViewId());
-//        lineaHorizontal2.setBackgroundColor(Color.GRAY);
-
-//        View lineaVertical= new View(this);
-//        FrameLayout.LayoutParams paramsBorderVertical = new FrameLayout.LayoutParams(width/34, height);
-//        lineaVertical.setLayoutParams(paramsBorderVertical);
-//        lineaVertical.setId(ViewCompat.generateViewId());
-//        lineaVertical.setBackgroundColor(Color.GRAY);
 
         // Crear el constraint layout
         ConstraintLayout constraintLayout = new ConstraintLayout(this);
         params = new FrameLayout.LayoutParams(width, height);
         constraintLayout.setLayoutParams(params);
         constraintLayout.setId(ViewCompat.generateViewId());
-        //constraintLayout.setBackground(AppCompatResources.getDrawable(this,R.drawable.border));
         carta.addView(constraintLayout);
 
-//        carta.addView(lineaVertical);
-//        carta.addView(lineaHorizontal);
-//        carta.addView(lineaHorizontal2);
 
 
         // Crear el borde de arriba
@@ -338,15 +309,7 @@ public class prueba2 extends AppCompatActivity {
         ConstraintSet set = new ConstraintSet();
         set.clone(constraintLayout);
         set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
-
-        //set.connect(lineaHorizontal.getId(),ConstraintSet.BOTTOM, bordeTop.getId(), ConstraintSet.TOP);
-
         set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
-
-        //set.connect(lineaVertical.getId(),ConstraintSet.END, constraintLayout.getId(), ConstraintSet.START);
-        //set.connect(lineaVertical.getId(),ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-        //set.connect(lineaHorizontal2.getId(),ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.BOTTOM);
-
         set.connect(textoCategoria.getId(), ConstraintSet.TOP, bordeTop.getId(), ConstraintSet.BOTTOM);
         set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
         set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
