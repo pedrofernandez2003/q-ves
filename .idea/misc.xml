@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/build/classes" />
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/layout/activity_administrador.xml" value="0.15942028985507245" />
+        <entry key="app/src/main/res/layout/activity_administrar_elementos.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_administrar_plantillas.xml" value="0.14" />
+        <entry key="app/src/main/res/layout/activity_cargando.xml" value="0.1671875" />
+        <entry key="app/src/main/res/layout/activity_categorias.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_crear_juego.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.1671875" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/activity_moderador.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_registrarse.xml" value="0.1515625" />
+        <entry key="app/src/main/res/layout/activity_tarjetas.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/activity_traer_juegos.xml" value="0.12135176651305683" />
+        <entry key="app/src/main/res/layout/elegir_trabajo.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/ganador.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/tablero_creable.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/tablero_template.xml" value="0.1348314606741573" />
+      </map>
+    </option>
   </component>
-  <component name="ProjectType">
-    <option name="id" value="Android" />
-  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>
