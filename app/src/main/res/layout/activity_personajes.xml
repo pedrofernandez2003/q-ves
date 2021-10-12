@@ -22,7 +22,7 @@
         <!--Button for choosing image from gallery-->
         <Button
             android:id="@+id/btnChoose"
-            android:text="Elegir"
+            android:text="Examinar"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:fontFamily="@font/poertsen_one_regular"
