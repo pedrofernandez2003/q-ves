@@ -30,6 +30,7 @@ import com.example.objetos.Casillero;
 import com.example.objetos.Categoria;
 import com.example.objetos.Tarjeta;
 import com.example.R;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -45,7 +46,6 @@ public class prueba2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablero_template);
         verCartas = findViewById(R.id.verCartas);
-
 
         //ArrayList<Casillero> casilleros=GameContext.getPartidaActual().getCasilleros();
         //ArrayList<Categoria> categorias=GameContext.getJuego().getPlantilla().getCategorias();
@@ -93,7 +93,6 @@ public class prueba2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 LayoutInflater inflater = LayoutInflater.from(prueba2.this);
                 View dialog_layout = inflater.inflate(R.layout.ver_cartas, null);
                 AlertDialog.Builder db = new AlertDialog.Builder(prueba2.this);
@@ -121,7 +120,7 @@ public class prueba2 extends AppCompatActivity {
                         }
                     }
 
-                    CardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria,tarjetaContenido,tarjetaYapa);
+                    MaterialCardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria,tarjetaContenido,tarjetaYapa);
                     contenedorCartas.addView(carta);
 
                     carta.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +134,8 @@ public class prueba2 extends AppCompatActivity {
                             params.gravity = Gravity.TOP;
                             snackView.setLayoutParams(params);
                             snack.show();
+
+
 
                             //Drawable aaa=findViewById(R.drawable.border);
                             //carta.setBackground(aaa);
@@ -168,6 +169,12 @@ public class prueba2 extends AppCompatActivity {
 
             }
         });
+    }
+
+    public CardView setBordesColoreados(CardView carta){
+
+
+        return carta;
     }
 
     public void insertarTarjetaEnTablero(){
@@ -210,9 +217,7 @@ public class prueba2 extends AppCompatActivity {
                 prueba.addView(carta);
 
             }
-            else{
 
-            }
         }
 
 
@@ -236,32 +241,36 @@ public class prueba2 extends AppCompatActivity {
         return espaciosTexto;
     }
 
-    public CardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
+    public MaterialCardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
 
         // Crear la base
-        CardView carta = new CardView(this);
+        MaterialCardView carta = new MaterialCardView(this);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
         //params.setMargins(0,0,0,0);
         carta.setLayoutParams(params);
         carta.setBackgroundColor(-1644568);
+        carta.setStrokeColor(getResources().getColor(R.color.grey));
+        carta.setStrokeWidth(5);
+        carta.setRadius(0);
 
-        View lineaHorizontal= new View(this);
-        FrameLayout.LayoutParams paramsBorderHorizontal = new FrameLayout.LayoutParams(width, height/34);
-        lineaHorizontal.setLayoutParams(paramsBorderHorizontal);
-        lineaHorizontal.setId(ViewCompat.generateViewId());
-        lineaHorizontal.setBackgroundColor(Color.GRAY);
+//        View lineaHorizontal= new View(this);
+//        FrameLayout.LayoutParams paramsBorderHorizontal = new FrameLayout.LayoutParams(width, height/34);
+//        lineaHorizontal.setLayoutParams(paramsBorderHorizontal);
+//        lineaHorizontal.setId(ViewCompat.generateViewId());
+//        lineaHorizontal.setBackgroundColor(Color.GRAY);
 
 
-        View lineaHorizontal2= new View(this);
-        lineaHorizontal2.setLayoutParams(paramsBorderHorizontal);
-        lineaHorizontal2.setId(ViewCompat.generateViewId());
-        lineaHorizontal2.setBackgroundColor(Color.GRAY);
 
-        View lineaVertical= new View(this);
-        FrameLayout.LayoutParams paramsBorderVertical = new FrameLayout.LayoutParams(width/34, height);
-        lineaVertical.setLayoutParams(paramsBorderVertical);
-        lineaVertical.setId(ViewCompat.generateViewId());
-        lineaVertical.setBackgroundColor(Color.GRAY);
+//        View lineaHorizontal2= new View(this);
+//        lineaHorizontal2.setLayoutParams(paramsBorderHorizontal);
+//        lineaHorizontal2.setId(ViewCompat.generateViewId());
+//        lineaHorizontal2.setBackgroundColor(Color.GRAY);
+
+//        View lineaVertical= new View(this);
+//        FrameLayout.LayoutParams paramsBorderVertical = new FrameLayout.LayoutParams(width/34, height);
+//        lineaVertical.setLayoutParams(paramsBorderVertical);
+//        lineaVertical.setId(ViewCompat.generateViewId());
+//        lineaVertical.setBackgroundColor(Color.GRAY);
 
         // Crear el constraint layout
         ConstraintLayout constraintLayout = new ConstraintLayout(this);
@@ -271,9 +280,9 @@ public class prueba2 extends AppCompatActivity {
         //constraintLayout.setBackground(AppCompatResources.getDrawable(this,R.drawable.border));
         carta.addView(constraintLayout);
 
-        carta.addView(lineaVertical);
-        carta.addView(lineaHorizontal);
-        carta.addView(lineaHorizontal2);
+//        carta.addView(lineaVertical);
+//        carta.addView(lineaHorizontal);
+//        carta.addView(lineaHorizontal2);
 
 
         // Crear el borde de arriba
@@ -348,6 +357,8 @@ public class prueba2 extends AppCompatActivity {
         set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
         set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
         set.applyTo(constraintLayout);
+
+
 
         return carta;
 
