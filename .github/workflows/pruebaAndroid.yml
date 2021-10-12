@@ -37,23 +37,16 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Build debug APK
-        run: bash ./gradlew assemble
-      - name: Upload APK
-        uses: actions/upload-artifact@v1
-        with:
-          name: app
-          path: app/build/outputs/apk/release/app-release.apk
-      - uses: r0adkll/sign-android-release@v1
-        name: Sign app APK
-      # ID used to access action output
-        id: sign_app
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: build prod
+        run: ./gradlew app:bundleRelease
         env:
-        # override default build-tools version (29.0.3) -- optional
-         BUILD_TOOLS_VERSION: "30.0.2"
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: App
+          path: app/build/outputs/
