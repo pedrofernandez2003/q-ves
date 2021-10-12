@@ -136,7 +136,7 @@ public class CrearJuegoActivity extends AppCompatActivity  {
                     System.out.println(pruebita);
                 }
                 if (checkedItems==null){
-                    checkedItems=new boolean[12];
+                    checkedItems=new boolean[listItems.size()];
                 }
 
                 mBuilder.setMultiChoiceItems(listItems.toArray(new String[0]), checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
