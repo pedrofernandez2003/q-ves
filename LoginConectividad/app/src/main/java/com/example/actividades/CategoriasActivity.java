@@ -188,6 +188,7 @@ public class CategoriasActivity extends AppCompatActivity {
         Spinner colores = (Spinner) dialog_layout.findViewById(R.id.opcionesColor);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
         R.array.Colores, android.R.layout.simple_spinner_item);
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         colores.setAdapter(adapter);
 
@@ -247,6 +248,7 @@ public class CategoriasActivity extends AppCompatActivity {
         llBotonera.removeAllViews();
         traerCategorias(this.getApplicationContext());
     }
+
     private void modificarCategoria(CategoriaSinTarjetas categoria, String nombreAnterior){
         DataManagerCategoria.modificarDatosCategoria(nombreAnterior, categoria, new onModificarListener() {
             @Override
@@ -308,6 +310,8 @@ public class CategoriasActivity extends AppCompatActivity {
                                 ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(CategoriasActivity.this, R.array.Colores, android.R.layout.simple_spinner_item);
                                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 colores.setAdapter(adapter);
+                                colores.setSelection(adapter.getPosition(categoria.getColor().name()));
+
                                 db.setTitle("Modificar Categoria");
                                 db.setPositiveButton("Aceptar", null);
                                 db.setNegativeButton("Eliminar", null);
