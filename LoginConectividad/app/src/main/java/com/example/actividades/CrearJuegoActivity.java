@@ -57,10 +57,10 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_crear_juego);
         super.onCreate(savedInstanceState);
         segundaVez = false;
+        ArrayList<String> nombresCategoria = new ArrayList<>();
         personajes = (Button) findViewById(R.id.botonPersonajes);
         mOrder = (Button) findViewById(R.id.btnOrder);
         guardarPlantilla = (Button) findViewById(R.id.guardarPlantilla);
-        ArrayList<String> nombresCategoria = new ArrayList<>();
         mItemSelected = (TextView) findViewById(R.id.tvItemSelected);
         personajesElegidos = (TextView) findViewById(R.id.cantidadPersonajesElegidos);
         mRecyclerView = findViewById(R.id.recyclerview);
@@ -108,8 +108,6 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         }
 
 
-
-
         personajes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +128,16 @@ public class CrearJuegoActivity extends AppCompatActivity  {
             public void onClick(View view) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(CrearJuegoActivity.this);
                 mBuilder.setTitle(R.string.dialog_title);
+
+                //System.out.println("Aca miraaa: "+Arrays.toString(listItems.toArray(new String[0])));
+
+                String[] prueba= listItems.toArray(new String[0]);
+                for (String pruebita:prueba) {
+                    System.out.println(pruebita);
+                }
+                if (checkedItems)
+                checkedItems=new boolean[12];
+
                 mBuilder.setMultiChoiceItems(listItems.toArray(new String[0]), checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int position, boolean isChecked) {
@@ -145,7 +153,11 @@ public class CrearJuegoActivity extends AppCompatActivity  {
                 mBuilder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
+                        
                         mItemSelected.setText(escribirCategorias(mUserItems,listItems));
+                        for (Integer item:mUserItems) {
+                            checkedItems[item]=true;
+                        }
                     }
                 });
 
@@ -171,7 +183,6 @@ public class CrearJuegoActivity extends AppCompatActivity  {
                 mDialog.show();
             }
         });
-
 
 
         guardarPlantilla.setOnClickListener(new View.OnClickListener() {
@@ -212,8 +223,6 @@ public class CrearJuegoActivity extends AppCompatActivity  {
             }
         };
         this.getOnBackPressedDispatcher().addCallback(this, callback);
-
-
 
 
 }
@@ -266,7 +275,6 @@ public class CrearJuegoActivity extends AppCompatActivity  {
 
         mRecyclerView.setAdapter(firebaseRecyclerAdapter);
         }
-
 
 
 }
