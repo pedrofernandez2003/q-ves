@@ -14,7 +14,6 @@
         android:layout_gravity="right"
         android:layout_margin="6dp"
         android:backgroundTint="@color/white"
-        android:src="@drawable/turno"
         app:backgroundTint="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
