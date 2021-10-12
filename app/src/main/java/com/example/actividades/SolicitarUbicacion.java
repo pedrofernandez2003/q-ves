@@ -4,21 +4,33 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SolicitarUbicacion extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1 ;
+    FirebaseAuth firebase;
+    private FloatingActionButton cerrarSesion;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        cerrarSesion = findViewById(R.id.fab);
+        firebase = FirebaseAuth.getInstance();
+        if (firebase.getCurrentUser()==null){//si no inicio sesion no muestra el boton
+            cerrarSesion.setVisibility(View.INVISIBLE);
+        }
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
