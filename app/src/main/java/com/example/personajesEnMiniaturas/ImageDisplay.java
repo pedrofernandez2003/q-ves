@@ -1,11 +1,14 @@
 package com.example.personajesEnMiniaturas;
 
 import android.content.Intent;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +39,7 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
     ArrayList<PictureFacer> allpictures;
     ProgressBar load;
     ArrayList<String> personajesElegidos = new ArrayList<>();
+    TextView cantidadPersonajesElegidos;
 
     public void sendMessage(View view) {
         Intent intent = new Intent(ImageDisplay.this, CrearJuegoActivity.class);
@@ -50,6 +54,7 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
 
         allpictures = new ArrayList<>();
         imageRecycler = findViewById(R.id.recycler);
+        cantidadPersonajesElegidos = findViewById(R.id.textView3);
         imageRecycler.addItemDecoration(new MarginDecoration(this));
         imageRecycler.hasFixedSize();
         load = findViewById(R.id.loader);
@@ -63,16 +68,6 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
                 @Override
                 public void traerPersonaje(ArrayList<PictureFacer> datos) {
                     for (PictureFacer personaje : datos) {
-//                        if( getIntent().getExtras() != null)
-//                        {
-//                            personajesElegidos = getIntent().getStringArrayListExtra("personajes");
-//                            if( getIntent().getStringArrayListExtra("personajes").contains(personaje.getPicturePath())){
-//                                System.out.println("Imagen que viene de la clase: "+personaje.getPicturePath());
-//
-//                            }
-//                        }
-                        System.out.println(datos);
-
                         allpictures.add(personaje);
                     }
                     imageRecycler.setAdapter(new PictureAdapter(allpictures,ImageDisplay.this,that));
@@ -111,19 +106,30 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
                 int posicion = browser.getPosition();
                 if(seleccionarPersonaje.getText()=="Seleccionar") {
                     getSupportFragmentManager().popBackStack();
+                    System.out.println(browser.getImage());
+                    ColorMatrix matrix = new ColorMatrix();
+                    matrix.setSaturation(0);
+
+                    ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+                    browser.getImage().setColorFilter(filter);
                     personajesElegidos.add((String) pics.get(posicion).getPicturePath());
                     seleccionarPersonaje.setText("Deseleccionar");
                     seleccionarPersonaje.setVisibility(View.GONE);
+                    cantidadPersonajesElegidos.setText("Personajes seleccionados: " + personajesElegidos.size());
                 }
                 else{
                     personajesElegidos.remove((String) pics.get(posicion).getPicturePath());
                     seleccionarPersonaje.setText("Seleccionar");
                     getSupportFragmentManager().popBackStack();
                     seleccionarPersonaje.setVisibility(View.GONE);
+                    cantidadPersonajesElegidos.setText("Personajes seleccionados: " + personajesElegidos.size());
+
                 }
             }
 
         });
+
+
 
         getSupportFragmentManager()
                 .beginTransaction()

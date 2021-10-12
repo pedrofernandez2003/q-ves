@@ -7,7 +7,8 @@
     tools:context="com.example.personajesEnMiniaturas.ImageDisplay"
     android:id="@+id/displayContainer">
 
-    <RelativeLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,7 +16,8 @@
             android:id="@+id/head"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            >
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/foldername"
@@ -24,8 +26,8 @@
                 android:layout_gravity="center|start"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
-                android:text="Personajes"
                 android:fontFamily="@font/poertsen_one_regular"
+                android:text="Personajes"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -33,34 +35,54 @@
                 android:id="@+id/completarNombreJuego"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:onClick="sendMessage"
                 android:layout_marginLeft="70dp"
-                android:textColor="@color/white"
                 android:backgroundTint="@color/purple_200"
+                android:ems="10"
                 android:fontFamily="@font/poertsen_one_regular"
                 android:inputType="textPersonName"
+                android:onClick="sendMessage"
                 android:text="Aceptar"
-                />
-
+                android:textColor="@color/white" />
 
 
         </LinearLayout>
+
         <com.example.personajesEnMiniaturas.utils.AutoFitRecyclerView
-            android:layout_below="@id/head"
             android:id="@+id/recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/head"
+            android:layout_alignParentStart="true"
             android:background="@color/white"
-            android:columnWidth="@dimen/picture_column_width">
+            android:columnWidth="@dimen/picture_column_width"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/head">
 
         </com.example.personajesEnMiniaturas.utils.AutoFitRecyclerView>
 
+        <LinearLayout
+            android:id="@+id/h"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recycler"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler">
 
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/poertsen_one_regular"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:text="No ha seleccionado ningun personaje" />
+        </LinearLayout>
 
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/loader"
