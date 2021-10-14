@@ -94,6 +94,7 @@ public class JugarActivity extends AppCompatActivity  {
             switch (intent.getAction()){
                 case "turno":
                     puedeAgarrarCarta=true;
+                    indicadorTurno.setVisibility(ImageView.VISIBLE);
                     LayoutInflater inflater=getLayoutInflater();
                     View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
                     TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
@@ -166,7 +167,6 @@ public class JugarActivity extends AppCompatActivity  {
                     // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
                     sacarTarjetaDelTablero();
                     if(GameContext.isEsMiTurno()){
-                        indicadorTurno.setVisibility(View.VISIBLE);
                         inflater=getLayoutInflater();
                         Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
                         text = (TextView) Layout.findViewById(R.id.toastTextView);
@@ -395,7 +395,7 @@ public class JugarActivity extends AppCompatActivity  {
                     Write escribir = new Write();
                     escribir.execute(msg, 0);
                     GameContext.setEsMiTurno(false);
-                    //turno.setVisibility(View.INVISIBLE);
+                    indicadorTurno.setVisibility(View.INVISIBLE);
                 }
                 else{
                     LayoutInflater inflater=getLayoutInflater();
@@ -491,7 +491,7 @@ public class JugarActivity extends AppCompatActivity  {
                                             Write escribir = new Write();
                                             escribir.execute(msg, 0);
                                             GameContext.setEsMiTurno(false);
-                                            indicadorTurno.setVisibility(View.INVISIBLE);
+                                            indicadorTurno.setVisibility(ImageView.INVISIBLE);
                                             System.out.println("tarjetas restantes "+GameContext.getEquipo().getTarjetas().size());
                                         }
                                         else{
