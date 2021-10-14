@@ -79,7 +79,7 @@ public class AdminElementosActivity extends AppCompatActivity  {
 
     }
 
-    protected static File screenshot(View view, String filename) {
+    protected File screenshot(View view, String filename) {
         Date date = new Date();
 
         // Here we are initialising the format of our image name
