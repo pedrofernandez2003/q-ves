@@ -50,6 +50,7 @@ jobs:
 #         with:
 #           name: App
 #           path: app/build/outputs/
+      - run: echo ${{ secrets.KEYSTORE }}
       - name: Build Signed APK
         uses: victorbnl/build-signed-apk@main
         with:
