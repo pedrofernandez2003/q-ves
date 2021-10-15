@@ -50,7 +50,7 @@ jobs:
 #           name: App
 #           path: app/build/outputs/
       - uses: r0adkll/sign-android-release@v1
-      - name: Sign app APK
+        name: Sign app APK
         # ID used to access action output
         id: sign_app
         with:
