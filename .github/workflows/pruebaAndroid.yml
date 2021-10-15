@@ -1,5 +1,4 @@
 # This is a basic workflow to help you get started with Actions
-
 name: despliegueApp
 # Controls when the workflow will run
 on:
@@ -37,8 +36,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
+#       - name: Make gradlew executable
+#         run: chmod +x ./gradlew
 #       - name: build prod
 #         run: ./gradlew app:bundleRelease
 #         env:
@@ -50,12 +49,12 @@ jobs:
 #         with:
 #           name: App
 #           path: app/build/outputs/
- # 2
-      - name: Generate Release APK
+      - name: build release
         run: ./gradlew assembleRelease
-      # 3
-      - name: Sign APK
-        uses: r0adkll/sign-android-release@v1
+#       - name: creamos el directorio
+#         run: mkdir -p app/build/outputs/apk
+      - uses: r0adkll/sign-android-release@v1
+        name: Sign app APK
         # ID used to access action output
         id: sign_app
         with:
@@ -64,13 +63,5 @@ jobs:
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
-      # 4
-      - uses: actions/upload-artifact@master
-        with:
-          name: release.apk
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
-      # 5
-      - uses: actions/upload-artifact@master
-        with:
-          name: mapping.txt
-          path: app/build/outputs/mapping/release/mapping.txt
+        env:
+          BUILD_TOOLS_VERSION: "30.0.2"
