@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         cerrarSesion = findViewById(R.id.fab);
         botonUnirse = (Button) findViewById(R.id.botonUnirse);
-        turno = findViewById(R.id.turno);
         nombreEquipo =  (TextInputEditText) findViewById(R.id.nombreEquipo);
         botonIniciarSesion=(Button)findViewById(R.id.iniciarSesion);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -164,12 +163,7 @@ public class MainActivity extends AppCompatActivity {
                     GameContext.setServer(null);//creo que no hace falta igual
                     empezarJuego();
                     break;
-                case "turno":
-                    System.out.println("modifico el label turno");
-                    setContentView(R.layout.tablero_creable);
-                    turno = findViewById(R.id.turno);
-                    turno.setVisibility(View.VISIBLE);
-                    break;
+
             }
         }
     };

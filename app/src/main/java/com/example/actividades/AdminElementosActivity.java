@@ -41,10 +41,8 @@ public class AdminElementosActivity extends AppCompatActivity  {
         CardView tarjetasYCategorias = (CardView) findViewById(R.id.tarjetasYCategorias);
         CardView personajes = (CardView) findViewById(R.id.personajes);
         CardView plantillas=  findViewById(R.id.adminElementos);
-    System.out.println("window" + getWindow().getDecorView().getRootView());
 
-//    ActivityCompat.requestPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, 1);
-//    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+    ActivityCompat.requestPermissions(this, permissionstorage, 1);
 
     View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
 
@@ -94,6 +92,8 @@ public class AdminElementosActivity extends AppCompatActivity  {
         int width = displayMetrics.widthPixels;
         Bitmap bitmap = Bitmap.createBitmap(width,height, Bitmap.Config.ARGB_8888);
         screenView.setDrawingCacheEnabled(false);
+        Canvas canva = new Canvas(bitmap);
+        screenView.draw(canva);
         return bitmap;
     }
 
