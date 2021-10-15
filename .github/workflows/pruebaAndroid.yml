@@ -37,8 +37,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-#       - name: Make gradlew executable
-#         run: chmod +x ./gradlew
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 #       - name: build prod
 #         run: ./gradlew app:bundleRelease
 #         env:
