@@ -8,13 +8,18 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
@@ -29,24 +34,25 @@ import java.io.OutputStream;
 import java.util.Date;
 
 
-public class AdminElementosActivity extends AppCompatActivity  {
+public class AdminElementosActivity extends AppCompatActivity {
 
     private static final int REQUEST_EXTERNAL_STORAGe = 1;
     private static String[] permissionstorage = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-@Override
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrar_elementos);
         CardView tarjetasYCategorias = (CardView) findViewById(R.id.tarjetasYCategorias);
         CardView personajes = (CardView) findViewById(R.id.personajes);
-        CardView plantillas=  findViewById(R.id.adminElementos);
+        CardView plantillas = findViewById(R.id.adminElementos);
 
-    ActivityCompat.requestPermissions(this, permissionstorage, 1);
+        ActivityCompat.requestPermissions(this, permissionstorage, 1);
 
-    View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+        View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
 
-    tarjetasYCategorias.setOnClickListener(new View.OnClickListener() {
+        tarjetasYCategorias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(AdminElementosActivity.this, CategoriasActivity.class);
@@ -55,75 +61,115 @@ public class AdminElementosActivity extends AppCompatActivity  {
         });
 
         personajes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(AdminElementosActivity.this, PersonajesActivity.class);
-                        startActivity(i);
-                    }
-         });
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AdminElementosActivity.this, PersonajesActivity.class);
+                startActivity(i);
+            }
+        });
 
-    plantillas.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent i = new Intent(AdminElementosActivity.this, AdministrarPlantillasActivity.class);
-            startActivity(i);
-        }
-    });
+        plantillas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent i = new Intent(AdminElementosActivity.this, AdministrarPlantillasActivity.class);
+//                startActivity(i);
+                takeScreenshot();
+            }
+        });
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void handleOnBackPressed() {
-                Intent intent=new Intent(AdminElementosActivity.this,AdministradorActivity.class);
+                Intent intent = new Intent(AdminElementosActivity.this, AdministradorActivity.class);
                 startActivity(intent);
                 finish();
             }
         };
         this.getOnBackPressedDispatcher().addCallback(this, callback);
 
-    store(getScreenShot(rootView),"prueba");
-}
+//        store(getScreenShot(rootView),"prueba");
+//        takeScreenshot();
 
-    public  Bitmap getScreenShot(View view) {
-        View screenView = view.getRootView();
-        screenView.setDrawingCacheEnabled(true);
-        DisplayMetrics displayMetrics = new DisplayMetrics();
+    }
+
+    private void takeScreenshot() {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/Download/" + now + ".jpg";
+
+            // create bitmap screen capture
+            View v1 = getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+                    DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
-        Bitmap bitmap = Bitmap.createBitmap(width,height, Bitmap.Config.ARGB_8888);
-        screenView.setDrawingCacheEnabled(false);
-        Canvas canva = new Canvas(bitmap);
-        screenView.draw(canva);
-        return bitmap;
-    }
+            System.out.println("Ancho: "+width+"Alto"+height);
+            v1.layout(0, 0, width, height);
 
-    public void store(Bitmap bitmap, String filename) {
-        String path = Environment.getExternalStorageDirectory().toString() + "/" + filename;
-        OutputStream out = null;
-        File imageFile = new File(path);
+            v1.buildDrawingCache(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
 
-        try {
-            out = new FileOutputStream(imageFile);
-            // choose JPEG format
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-        } catch (FileNotFoundException e) {
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-
-            try {
-                if (out != null) {
-                    out.close();
-                }
-
-            } catch (Exception exc) {
-                exc.printStackTrace();
-            }
-
-
         }
-    }
+//    }
+//    public  Bitmap getScreenShot(View view) {
+//        View screenView = view.getRootView();
+//        screenView.setDrawingCacheEnabled(true);
+//        DisplayMetrics displayMetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        int height = displayMetrics.heightPixels;
+//        int width = displayMetrics.widthPixels;
+//        Bitmap bitmap = Bitmap.createBitmap(width,height, Bitmap.Config.ARGB_8888);
+//        screenView.setDrawingCacheEnabled(false);
+//        Canvas canva = new Canvas(bitmap);
+//        screenView.draw(canva);
+//        return bitmap;
+//    }
+//
+//    public void store(Bitmap bitmap, String filename) {
+//        String path = Environment.getExternalStorageDirectory().toString() + "/Download/" + filename+".jpg";
+//        OutputStream out = null;
+//        File imageFile = new File(path);
+//        System.out.println("la ruta es:" + path);
+//
+//        try {
+//            out = new FileOutputStream(imageFile);
+//            // choose JPEG format
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+//            out.flush();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//
+//            try {
+//                if (out != null) {
+//                    out.close();
+//                }
+//
+//            } catch (Exception exc) {
+//                exc.printStackTrace();
+//            }
+//
+//
+//        }
+//    }
 
+    }
 }

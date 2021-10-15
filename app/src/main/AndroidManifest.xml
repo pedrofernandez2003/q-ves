@@ -17,6 +17,7 @@
 
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@drawable/logoqves"
