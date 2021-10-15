@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 
 
@@ -78,8 +79,8 @@ public class AdminElementosActivity extends AppCompatActivity  {
         };
         this.getOnBackPressedDispatcher().addCallback(this, callback);
 
-        store(getScreenShot(rootView),"prueba");
-    }
+    store(getScreenShot(rootView),"prueba");
+}
 
     public  Bitmap getScreenShot(View view) {
         View screenView = view.getRootView();
@@ -93,21 +94,31 @@ public class AdminElementosActivity extends AppCompatActivity  {
         return bitmap;
     }
 
-    public static void store(Bitmap bm, String fileName){
-        final String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots";
-        File dir = new File(dirPath);
-        if(!dir.exists())
-            dir.mkdirs();
-        File file = new File(dirPath, fileName);
+    public void store(Bitmap bitmap, String filename) {
+        String path = Environment.getExternalStorageDirectory().toString() + "/" + filename;
+        OutputStream out = null;
+        File imageFile = new File(path);
+
         try {
-            FileOutputStream fOut = new FileOutputStream(file);
-            bm.compress(Bitmap.CompressFormat.PNG, 85, fOut);
-            fOut.flush();
-            fOut.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+            out = new FileOutputStream(imageFile);
+            // choose JPEG format
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+        } catch (FileNotFoundException e) {
+            // manage exception ...
+        } catch (IOException e) {
+            // manage exception ...
+        } finally {
+
+            try {
+                if (out != null) {
+                    out.close();
+                }
+
+            } catch (Exception exc) {
+            }
+
         }
     }
-
 
 }
