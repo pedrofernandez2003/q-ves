@@ -43,6 +43,9 @@ public class AdminElementosActivity extends AppCompatActivity  {
         CardView plantillas=  findViewById(R.id.adminElementos);
     System.out.println("window" + getWindow().getDecorView().getRootView());
 
+//    ActivityCompat.requestPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, 1);
+//    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+
     View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
 
     tarjetasYCategorias.setOnClickListener(new View.OnClickListener() {
