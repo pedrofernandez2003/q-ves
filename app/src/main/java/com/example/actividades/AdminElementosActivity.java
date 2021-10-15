@@ -105,9 +105,9 @@ public class AdminElementosActivity extends AppCompatActivity  {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
         } catch (FileNotFoundException e) {
-            // manage exception ...
+            e.printStackTrace();
         } catch (IOException e) {
-            // manage exception ...
+            e.printStackTrace();
         } finally {
 
             try {
@@ -116,7 +116,9 @@ public class AdminElementosActivity extends AppCompatActivity  {
                 }
 
             } catch (Exception exc) {
+                exc.printStackTrace();
             }
+
 
         }
     }
