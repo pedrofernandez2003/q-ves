@@ -50,15 +50,16 @@ jobs:
 #         with:
 #           name: App
 #           path: app/build/outputs/
-      - name: Build Signed APK
-        uses: victorbnl/build-signed-apk@main
+      - uses: r0adkll/sign-android-release@v1
+      - name: Sign app APK
+        # ID used to access action output
+        id: sign_app
         with:
-          keystore_password: ${{ secrets.KEY_STORE_PASSWORD }}
-          key_alias: ${{ secrets.ALIAS }}
-          key_password: ${{ secrets.KEY_PASSWORD }}
-          keystore: ${{ secrets.KEYSTORE }}
-      - name: Upload
-        uses: actions/upload-artifact@v2
-        with:
-         name: App
-         path: app/build/outputs/apk/release/app-release.apk
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.KEYSTORE }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          # override default build-tools version (29.0.3) -- optional
+          BUILD_TOOLS_VERSION: "30.0.2"
