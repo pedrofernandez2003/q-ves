@@ -49,14 +49,16 @@ jobs:
 #         with:
 #           name: App
 #           path: app/build/outputs/
-      - name: creamos el directorio
-        run: mkdir -p app/build/outputs/apk
+      - name: build release
+        run: ./gradlew assembleRelease
+#       - name: creamos el directorio
+#         run: mkdir -p app/build/outputs/apk
       - uses: r0adkll/sign-android-release@v1
         name: Sign app APK
         # ID used to access action output
         id: sign_app
         with:
-          releaseDirectory: app/build/outputs/apk
+          releaseDirectory: app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.KEYSTORE }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
