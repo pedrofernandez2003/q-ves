@@ -41,9 +41,10 @@ public class AdminElementosActivity extends AppCompatActivity  {
         CardView personajes = (CardView) findViewById(R.id.personajes);
         CardView plantillas=  findViewById(R.id.adminElementos);
     System.out.println("window" + getWindow().getDecorView().getRootView());
-    screenshot(getWindow().getDecorView().findViewById(android.R.id.content), "result");
 
-        tarjetasYCategorias.setOnClickListener(new View.OnClickListener() {
+    View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+
+    tarjetasYCategorias.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(AdminElementosActivity.this, CategoriasActivity.class);
@@ -77,62 +78,34 @@ public class AdminElementosActivity extends AppCompatActivity  {
         };
         this.getOnBackPressedDispatcher().addCallback(this, callback);
 
+        store(getScreenShot(rootView),"prueba");
     }
 
-    protected File screenshot(View view, String filename) {
-        Date date = new Date();
-
-        // Here we are initialising the format of our image name
-        CharSequence format = android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", date);
-        try {
-            // Initialising the directory of storage
-            String dirpath = Environment.getExternalStorageDirectory() + "";
-            File file = new File(dirpath);
-            if (!file.exists()) {
-                boolean mkdir = file.mkdir();
-            }
-
-            // File name
-            String path = dirpath + "/" + filename + "-" + format + ".jpeg";
-            view.setDrawingCacheEnabled(true);
-            Bitmap bitmap = getBitmapFromView(view) ;
-            view.setDrawingCacheEnabled(false);
-            File imageurl = new File(path);
-            FileOutputStream outputStream = new FileOutputStream(imageurl);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
-            outputStream.flush();
-            outputStream.close();
-            return imageurl;
-
-        } catch (FileNotFoundException io) {
-            io.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private Bitmap getBitmapFromView(View view) {
+    public  Bitmap getScreenShot(View view) {
+        View screenView = view.getRootView();
+        screenView.setDrawingCacheEnabled(true);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
-
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
+        int width = displayMetrics.widthPixels;
+        Bitmap bitmap = Bitmap.createBitmap(width,height, Bitmap.Config.ARGB_8888);
+        screenView.setDrawingCacheEnabled(false);
         return bitmap;
     }
 
-
-    // verifying if storage permission is given or not
-    public static void verifystoragepermissions(Activity activity) {
-
-        int permissions = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        // If storage permission is not given then request for External Storage Permission
-        if (permissions != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, permissionstorage, REQUEST_EXTERNAL_STORAGe);
+    public static void store(Bitmap bm, String fileName){
+        final String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots";
+        File dir = new File(dirPath);
+        if(!dir.exists())
+            dir.mkdirs();
+        File file = new File(dirPath, fileName);
+        try {
+            FileOutputStream fOut = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+            fOut.flush();
+            fOut.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
