@@ -71,9 +71,8 @@ public class AdminElementosActivity extends AppCompatActivity {
         plantillas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent i = new Intent(AdminElementosActivity.this, AdministrarPlantillasActivity.class);
-//                startActivity(i);
-                takeScreenshot();
+                Intent i = new Intent(AdminElementosActivity.this, AdministrarPlantillasActivity.class);
+                startActivity(i);
             }
         });
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -87,18 +86,19 @@ public class AdminElementosActivity extends AppCompatActivity {
         };
         this.getOnBackPressedDispatcher().addCallback(this, callback);
 
-//        store(getScreenShot(rootView),"prueba");
-//        takeScreenshot();
 
     }
-
+//
     private void takeScreenshot() {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
         try {
             // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/Download/" + now + ".jpg";
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/qves/" + now + ".jpg";
+            File filebase = new File(Environment.getExternalStorageDirectory().toString(), "qves");
+            filebase.mkdirs();
+
 
             // create bitmap screen capture
             View v1 = getWindow().getDecorView().getRootView();
@@ -126,50 +126,6 @@ public class AdminElementosActivity extends AppCompatActivity {
             // Several error may come out with file handling or DOM
             e.printStackTrace();
         }
-//    }
-//    public  Bitmap getScreenShot(View view) {
-//        View screenView = view.getRootView();
-//        screenView.setDrawingCacheEnabled(true);
-//        DisplayMetrics displayMetrics = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-//        int height = displayMetrics.heightPixels;
-//        int width = displayMetrics.widthPixels;
-//        Bitmap bitmap = Bitmap.createBitmap(width,height, Bitmap.Config.ARGB_8888);
-//        screenView.setDrawingCacheEnabled(false);
-//        Canvas canva = new Canvas(bitmap);
-//        screenView.draw(canva);
-//        return bitmap;
-//    }
-//
-//    public void store(Bitmap bitmap, String filename) {
-//        String path = Environment.getExternalStorageDirectory().toString() + "/Download/" + filename+".jpg";
-//        OutputStream out = null;
-//        File imageFile = new File(path);
-//        System.out.println("la ruta es:" + path);
-//
-//        try {
-//            out = new FileOutputStream(imageFile);
-//            // choose JPEG format
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-//            out.flush();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//
-//            try {
-//                if (out != null) {
-//                    out.close();
-//                }
-//
-//            } catch (Exception exc) {
-//                exc.printStackTrace();
-//            }
-//
-//
-//        }
-//    }
 
     }
 }

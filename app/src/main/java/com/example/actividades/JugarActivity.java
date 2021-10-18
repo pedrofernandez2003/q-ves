@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,6 +26,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.format.Formatter;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -63,7 +66,11 @@ import com.example.objetos.Plantilla;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 
 
@@ -83,6 +90,8 @@ public class JugarActivity extends AppCompatActivity  {
     private DhcpInfo d;
     private FloatingActionButton indicadorTurno;
     private Tarjeta tarjetaElegida;
+//    private static String[] permissionstorage = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+
 
 
 
@@ -107,6 +116,7 @@ public class JugarActivity extends AppCompatActivity  {
                     break;
 
                 case "reiniciar":
+                    takeScreenshot();
                     intent=new Intent(appContext,JugarActivity.class);
                     startActivity(intent);
                     break;
@@ -119,13 +129,12 @@ public class JugarActivity extends AppCompatActivity  {
                     break;
 
                 case "ganador":
-                    System.out.println("llega el ganador");
+                    takeScreenshot();
                     LayoutInflater inflater2 = LayoutInflater.from(JugarActivity.this);
                     View dialog_layout = inflater2.inflate(R.layout.ganador, null);
                     AlertDialog.Builder db = new AlertDialog.Builder(context);
                     db.setView(dialog_layout);
                     db.setTitle(intent.getStringExtra("motivoGanador"));
-                    System.out.println("titulo"+ intent.getStringExtra("motivoGanador"));
                     db.setMessage("El ganador es: "+intent.getStringExtra("ganador"));
                     db.setPositiveButton("Volver", null);
                     final AlertDialog a = db.create();
@@ -136,15 +145,12 @@ public class JugarActivity extends AppCompatActivity  {
                         public void onClick(View v) {
                             Intent intent;
                             if (GameContext.getServer()==null){
-                                System.out.println("soy equipo");
                                 intent = new Intent(JugarActivity.this, MainActivity.class);
                             }
                             else if (Usuario.getUsuario().getRol().equals("administrador")){
-                                System.out.println("Admin");
                                 intent = new Intent(JugarActivity.this, AdministradorActivity.class);
                             }
                             else {
-                                System.out.println("Moderador");
                                 intent = new Intent(JugarActivity.this, ModeradorActivity.class);
                             }
                             startActivity(intent);
@@ -155,13 +161,11 @@ public class JugarActivity extends AppCompatActivity  {
 
                 case "mostrarDialog":
                     //Le sale el alertdialog y si pone que si el boolean es true, si no es false :D
-                    System.out.println("Soy el moderador que va validar la anulacion");
                     ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
                     crearAlertDialogSobreAnulacion();
                     break;
 
                 case "anularCartaJugar":
-                    System.out.println("llegue anularCarta");
                     ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
                     boolean anuladoCorrectamente=intent.getBooleanExtra("anuladoCorrectamente",true);
                     // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
@@ -177,9 +181,7 @@ public class JugarActivity extends AppCompatActivity  {
                         toast.show();
                     }
                     if (GameContext.getServer()==null){
-                        System.out.println("anulado correctamente "+anuladoCorrectamente);
                         if (anuladoCorrectamente && GameContext.getEquipo().getNombre().equals(ultimoEquipoQueTiroCarta)) {
-                            System.out.println("mando agarrar carta");
                             ArrayList<String> datos=new ArrayList<>();
                             datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
                             Mensaje mensaje=new Mensaje("agarrarCarta",datos);
@@ -220,6 +222,8 @@ public class JugarActivity extends AppCompatActivity  {
         ronda=findViewById(R.id.textView2);
         casilleros=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros();
         categorias=GameContext.getJuego().getPlantilla().getCategorias();
+//        ActivityCompat.requestPermissions(this, permissionstorage, 1);
+
 
         System.out.println("ronda: " +GameContext.getRonda());
         ronda.setText("Ronda: "+GameContext.getRonda()+"/"+GameContext.getJuego().getPartidas().size());
@@ -1024,6 +1028,47 @@ public class JugarActivity extends AppCompatActivity  {
         }
     }
 
+    private void takeScreenshot() {
+
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+        try {
+            System.out.println("entre try");
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/qves/" + GameContext.getJuego().getPlantilla().getNombre()+ now + ".jpg";
+            File filebase = new File(Environment.getExternalStorageDirectory().toString(), "qves");
+            filebase.mkdirs();
+
+
+            // create bitmap screen capture
+            View v1 = getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int height = displayMetrics.heightPixels;
+            int width = displayMetrics.widthPixels;
+            System.out.println("Ancho: "+width+"Alto"+height);
+            v1.layout(0, 0, width, height);
+
+            v1.buildDrawingCache(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+        } catch (Throwable e) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace();
+        }
+
+    }
     public ArrayList<CardView> conseguirCardViews() {
         ArrayList<CardView> espaciosCartas = new ArrayList<>();
         espaciosCartas.add(findViewById(R.id.cardView));
