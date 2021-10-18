@@ -65,3 +65,8 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
         env:
           BUILD_TOOLS_VERSION: "30.0.2"
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: App
+          path: app/build/outputs/apk/release
