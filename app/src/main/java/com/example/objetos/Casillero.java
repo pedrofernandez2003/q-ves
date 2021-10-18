@@ -8,11 +8,6 @@ public class Casillero implements Serializable {
     private Tarjeta tarjeta;
     private int id;
 
-    public Casillero(Categoria categoria, Tarjeta tarjeta){
-        this.categoria=categoria;
-        this.tarjeta=tarjeta;
-    }
-
     public Casillero(Categoria categoria){
         this.categoria = categoria;
         this.tarjeta = null;

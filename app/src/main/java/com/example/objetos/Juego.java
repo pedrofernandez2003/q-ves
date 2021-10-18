@@ -12,27 +12,22 @@ public class Juego implements Serializable {
     private Plantilla plantilla;
     private HashSet<Tarjeta> mazo;
 
-    public Juego(Plantilla plantilla){//sacamos el mazo
+    public Juego(Plantilla plantilla){
         this.partidas=new ArrayList<Partida>();
         for (int i=0;i<plantilla.getCantPartidas();i++){
             ArrayList<Casillero> casilleros=new ArrayList<>();
-            System.out.println("cantidad de categorias: "+plantilla.getCategorias().size());
             for (int j=0;j<plantilla.getCategorias().size();j++){
-                System.out.println(plantilla.getCategorias().get(j).getNombre());
                 Casillero casillero=new Casillero(plantilla.getCategorias().get(j));
                 casillero.setId(j+1);
                 casilleros.add(casillero);
             }
             Partida partida=new Partida(plantilla.getPersonajes().get(i),casilleros,0);
-            System.out.println("cantidad de casilleros: "+casilleros.size());
             this.partidas.add(partida);
         }
         this.equipos=new ArrayList<Equipo>();
         this.plantilla=plantilla;
         this.mazo=new HashSet<Tarjeta>();
-//        for(int i=0;i<plantilla.getCantPartidas();i++){
-//            this.getPartidas().get(i).setPersonaje(plantilla.getPersonajes().get(i));
-//        }
+
         for (Categoria categoria:plantilla.getCategorias()) {
             for (Tarjeta tarjeta:categoria.getTarjetas()) {
                 mazo.add(tarjeta);

@@ -21,7 +21,6 @@ public class ThreadedEchoServer extends Thread{
 
         try {
             serverSocket = new ServerSocket(PORT);
-            System.out.println("creo el socket");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -29,7 +28,6 @@ public class ThreadedEchoServer extends Thread{
             try {
                 socket = serverSocket.accept();
             } catch (IOException e) {
-                System.out.println("I/O error: " + e);
             }
             SendReceive nuevoHijo=new SendReceive(socket);
             nuevoHijo.callbackMensaje= new mensajeCallback() {

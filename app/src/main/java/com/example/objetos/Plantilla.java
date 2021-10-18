@@ -84,4 +84,12 @@ public class Plantilla implements Serializable {
         String json = serializador.toJson(this);
         return json;
     }
+
+    public String getMailModerador() {
+        return mailModerador;
+    }
+
+    public void setMailModerador(String mailModerador) {
+        this.mailModerador = mailModerador;
+    }
 }

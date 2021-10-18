@@ -13,10 +13,6 @@ public class Equipo implements Serializable {
         this.nombre=nombre;
         this.tarjetas=tarjetas;
     }
-    public Equipo(String nombre){
-        this.nombre=nombre;
-        this.tarjetas=new HashSet<>();
-    }
 
     public Equipo(){
         this.nombre="prueba";

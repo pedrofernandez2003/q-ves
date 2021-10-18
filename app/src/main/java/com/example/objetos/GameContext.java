@@ -5,7 +5,6 @@ import com.example.objetos.manejoSockets.ThreadedEchoServer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class GameContext{
     private static GameContext context;
@@ -118,5 +117,17 @@ public class GameContext{
 
     public static void setTarjetaElegida(Tarjeta tarjetaElegida) {
         GameContext.tarjetaElegida = tarjetaElegida;
+    }
+
+    public static void setContext(GameContext context) {
+        GameContext.context = context;
+    }
+
+    public static void setHijos(ArrayList<SendReceive> hijos) {
+        GameContext.hijos = hijos;
+    }
+
+    public static void setResultados(HashMap<String, Integer> resultados) {
+        GameContext.resultados = resultados;
     }
 }

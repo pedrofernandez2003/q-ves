@@ -15,10 +15,6 @@ public class CategoriaSinTarjetas {
         this.nombre = nombre;
         this.cantidadTarjetas=cantidadTarjetas;
     }
-    public CategoriaSinTarjetas(){
-
-    }
-
     public int getCantidadTarjetas() {
         return cantidadTarjetas;
     }
@@ -39,5 +35,7 @@ public class CategoriaSinTarjetas {
         this.color = color;
     }
 
-
+    public void setCantidadTarjetas(int cantidadTarjetas) {
+        this.cantidadTarjetas = cantidadTarjetas;
+    }
 }

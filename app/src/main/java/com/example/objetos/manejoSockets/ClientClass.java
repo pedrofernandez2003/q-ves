@@ -20,7 +20,6 @@ public class ClientClass extends Thread{
     @Override
     public void run() {
         try {
-            System.out.println("entre al run client");
             socket.connect(new InetSocketAddress(hostAdd, 7028), 5000);
             SendReceive sendReceive = new SendReceive(socket);
             sendReceive.start();
@@ -34,5 +33,29 @@ public class ClientClass extends Thread{
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    public String getHostAdd() {
+        return hostAdd;
+    }
+
+    public void setHostAdd(String hostAdd) {
+        this.hostAdd = hostAdd;
+    }
+
+    public conectarCallback getCallbackMensaje() {
+        return callbackMensaje;
+    }
+
+    public void setCallbackMensaje(conectarCallback callbackMensaje) {
+        this.callbackMensaje = callbackMensaje;
     }
 }

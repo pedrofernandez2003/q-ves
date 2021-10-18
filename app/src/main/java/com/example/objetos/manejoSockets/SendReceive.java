@@ -16,18 +16,15 @@ public class SendReceive extends Thread {
 
 
     public SendReceive(Socket skt) {
-        System.out.println("entre al constructor");
         socket = skt;
     }
 
     @Override
     public void run() {
         try {
-            System.out.println("se construyo el sendReceive");
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
         } catch (IOException e) {
-            System.out.println("entre al catch");
             e.printStackTrace();
         }
         byte[] buffer = new byte[1];
@@ -64,4 +61,33 @@ public class SendReceive extends Thread {
     public Socket getSocket() {
         return socket;
     }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
+    public OutputStream getOutputStream() {
+        return outputStream;
+    }
+
+    public void setOutputStream(OutputStream outputStream) {
+        this.outputStream = outputStream;
+    }
+
+    public static int getMessageRead() {
+        return MESSAGE_READ;
+    }
+
+    public mensajeCallback getCallbackMensaje() {
+        return callbackMensaje;
+    }
+
+    public void setCallbackMensaje(mensajeCallback callbackMensaje) {
+        this.callbackMensaje = callbackMensaje;
+    }
+
 }

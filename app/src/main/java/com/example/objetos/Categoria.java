@@ -59,4 +59,8 @@ public class Categoria implements Serializable {
         String json = serializador.toJson(this);
         return json;
     }
+
+    public void setCantidadTarjetas(int cantidadTarjetas) {
+        this.cantidadTarjetas = cantidadTarjetas;
+    }
 }
