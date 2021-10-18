@@ -24,6 +24,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import com.example.R;
+import com.example.objetos.GameContext;
 import com.example.objetos.Plantilla;
 
 import java.io.File;
@@ -36,8 +37,6 @@ import java.util.Date;
 
 public class AdminElementosActivity extends AppCompatActivity {
 
-    private static final int REQUEST_EXTERNAL_STORAGe = 1;
-    private static String[] permissionstorage = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +46,6 @@ public class AdminElementosActivity extends AppCompatActivity {
         CardView tarjetasYCategorias = (CardView) findViewById(R.id.tarjetasYCategorias);
         CardView personajes = (CardView) findViewById(R.id.personajes);
         CardView plantillas = findViewById(R.id.adminElementos);
-
-        ActivityCompat.requestPermissions(this, permissionstorage, 1);
-
-        View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
 
         tarjetasYCategorias.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,46 +81,6 @@ public class AdminElementosActivity extends AppCompatActivity {
         };
         this.getOnBackPressedDispatcher().addCallback(this, callback);
 
-
-    }
-//
-    private void takeScreenshot() {
-        Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-
-        try {
-            // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/qves/" + now + ".jpg";
-            File filebase = new File(Environment.getExternalStorageDirectory().toString(), "qves");
-            filebase.mkdirs();
-
-
-            // create bitmap screen capture
-            View v1 = getWindow().getDecorView().getRootView();
-            v1.setDrawingCacheEnabled(true);
-                    DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
-            System.out.println("Ancho: "+width+"Alto"+height);
-            v1.layout(0, 0, width, height);
-
-            v1.buildDrawingCache(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
-
-            File imageFile = new File(mPath);
-
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
-            int quality = 100;
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-            outputStream.flush();
-            outputStream.close();
-
-        } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
-            e.printStackTrace();
-        }
 
     }
 }

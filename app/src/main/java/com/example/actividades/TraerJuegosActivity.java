@@ -472,7 +472,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
         File directory = cw.getDir("personajes", Context.MODE_PRIVATE);
         // Create personajes
         File mypath=new File(directory,nombre+".png");
-        System.out.println(mypath.getAbsolutePath());
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(mypath);
@@ -529,7 +528,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void turnOffHotspot() {
         if (hotspotReservation != null) {
-            System.out.println("apague el hotspot");
             hotspotReservation.close();
         }
     }
@@ -537,7 +535,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onDestroy() {
-        System.out.println("entre onDestroy");
         stopService(new Intent(this, ServicioJuego.class));
         turnOffHotspot();
         super.onDestroy();

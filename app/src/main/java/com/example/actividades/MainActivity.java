@@ -1,5 +1,6 @@
 package com.example.actividades;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,6 +27,7 @@ import com.example.R;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.example.objetos.ServicioJuego;
 import com.example.objetos.Usuario;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView turno;
     private FloatingActionButton cerrarSesion;
     FirebaseAuth firebase;
+    private static String[] permissionstorage = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         botonUnirse = (Button) findViewById(R.id.botonUnirse);
         nombreEquipo =  (TextInputEditText) findViewById(R.id.nombreEquipo);
         botonIniciarSesion=(Button)findViewById(R.id.iniciarSesion);
+        ActivityCompat.requestPermissions(this, permissionstorage, 1);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         Context appContext=this;
         firebase = FirebaseAuth.getInstance();

@@ -68,14 +68,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
 
 public class JugarActivity extends AppCompatActivity  {
-    //    private GameContext context;
     private Juego juego;
     private Partida partida;
     private ArrayList<Casillero> casilleros;
@@ -90,7 +91,6 @@ public class JugarActivity extends AppCompatActivity  {
     private DhcpInfo d;
     private FloatingActionButton indicadorTurno;
     private Tarjeta tarjetaElegida;
-//    private static String[] permissionstorage = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
 
 
@@ -116,7 +116,9 @@ public class JugarActivity extends AppCompatActivity  {
                     break;
 
                 case "reiniciar":
-                    takeScreenshot();
+                    if(GameContext.getServer()!=null){
+                        takeScreenshot();
+                    }
                     intent=new Intent(appContext,JugarActivity.class);
                     startActivity(intent);
                     break;
@@ -124,12 +126,12 @@ public class JugarActivity extends AppCompatActivity  {
                 case "actualizar":
                     insertarTarjetaEnTablero();
                     ultimoEquipoQueTiroCarta=intent.getStringExtra("equipo");
-                    // crear variable que sea jugador que tiro carta y actualizarlo aca con el que jugp
-
                     break;
 
                 case "ganador":
-                    takeScreenshot();
+                    if(GameContext.getServer()!=null){
+                        takeScreenshot();
+                    }
                     LayoutInflater inflater2 = LayoutInflater.from(JugarActivity.this);
                     View dialog_layout = inflater2.inflate(R.layout.ganador, null);
                     AlertDialog.Builder db = new AlertDialog.Builder(context);
@@ -160,7 +162,6 @@ public class JugarActivity extends AppCompatActivity  {
                     break;
 
                 case "mostrarDialog":
-                    //Le sale el alertdialog y si pone que si el boolean es true, si no es false :D
                     ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
                     crearAlertDialogSobreAnulacion();
                     break;
@@ -168,7 +169,6 @@ public class JugarActivity extends AppCompatActivity  {
                 case "anularCartaJugar":
                     ultimoEquipoQueTiroCarta=intent.getStringExtra("equipoDeCartaAnulada");
                     boolean anuladoCorrectamente=intent.getBooleanExtra("anuladoCorrectamente",true);
-                    // en los otros va a sacar la tarjeta del tablero con esta funcion :D sacarTarjetaDelTablero();
                     sacarTarjetaDelTablero();
                     if(GameContext.isEsMiTurno()){
                         inflater=getLayoutInflater();
@@ -186,7 +186,6 @@ public class JugarActivity extends AppCompatActivity  {
                             datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
                             Mensaje mensaje=new Mensaje("agarrarCarta",datos);
                             String msg=mensaje.serializar();
-                            System.out.println("mensaje enviado "+msg);
                             Write escribir = new Write();
                             escribir.execute(msg, 0);
                             puedeAgarrarCarta=false;
@@ -202,6 +201,7 @@ public class JugarActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablero_template);
         wifiManager= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -222,14 +222,10 @@ public class JugarActivity extends AppCompatActivity  {
         ronda=findViewById(R.id.textView2);
         casilleros=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros();
         categorias=GameContext.getJuego().getPlantilla().getCategorias();
-//        ActivityCompat.requestPermissions(this, permissionstorage, 1);
 
 
-        System.out.println("ronda: " +GameContext.getRonda());
         ronda.setText("Ronda: "+GameContext.getRonda()+"/"+GameContext.getJuego().getPartidas().size());
-        System.out.println(GameContext.getHijos().size());
-        if (GameContext.getServer()==null){//para que solo lo hagan los equipos, esta bien?
-//            tarjetasHashSet=GameContext.getEquipo().getTarjetas();
+        if (GameContext.getServer()==null){
             ArrayList<String> datos=new ArrayList<>();
             Mensaje mensaje=new Mensaje("jugarListo",datos);
             String msg=mensaje.serializar();
@@ -244,8 +240,6 @@ public class JugarActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 if (GameContext.getServer()==null && GameContext.isEsMiTurno()){
-                    //hacer que tambien este aca la tarjeta a la izquierda del texto para que este lindo :D
-
                     DisplayMetrics displayMetrics = new DisplayMetrics();
                     getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                     int width = displayMetrics.widthPixels;
@@ -256,26 +250,20 @@ public class JugarActivity extends AppCompatActivity  {
                     int color=0;
 
                     for (Categoria categoria:GameContext.getJuego().getPlantilla().getCategorias()) {
-                        System.out.println("Color de GameContext.getJuego.getPlantilla.getCategorias: "+categoria.getColor().getCodigo());
                         if (categoria.getNombre().equals(GameContext.getTarjetaElegida().getCategoria())){
-                            System.out.println("Entre en el if de Color de GameContext.getJuego.getPlantilla.getCategorias:");
                             color=categoria.getColor().getCodigo();
                         }
                     }
                     for (int j=0; j < GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().size(); j++){
                         Casillero casilleroARevisar=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().get(j);
-                        System.out.println("Color de GameContext.getJuego.getPlantilla.getCategorias: "+casilleroARevisar.getCategoria().getColor().getCodigo());
                         if (casilleroARevisar.getCategoria().getNombre().equals(GameContext.getTarjetaElegida().getCategoria())){
-                            System.out.println("Entre en el if de Color de GameContext.getJuego.getPartidas.get(...)");
                             color=casilleroARevisar.getCategoria().getColor().getCodigo();
                         }
                     }
 
                     for (int j=0; j < categorias.size(); j++){
                         Categoria categoriaARevisar=categorias.get(j);
-                        System.out.println("Color de GameContext.getJuego.getPlantilla.getCategorias: "+categoriaARevisar.getColor().getCodigo());
                         if (categoriaARevisar.getNombre().equals(GameContext.getTarjetaElegida().getCategoria())){
-                            System.out.println("Entre en el if de Color de categorias.get(j)");
                             color=categoriaARevisar.getColor().getCodigo();
                         }
                     }
@@ -306,15 +294,12 @@ public class JugarActivity extends AppCompatActivity  {
                             si.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    System.out.println("Soy el usuario que va a intentar anular");
                                     GameContext.setTarjetaAnulada(GameContext.getTarjetaElegida());
-                                    //MANDARLE AL MODERADOR ESTO DE QUE SE QUIERE DEBIR ESTE TARJETA, QUE ESTA EN GAMECONTEXT.GETTARJETAELEJIDA
                                     ArrayList<String> datos=new ArrayList<>();
                                     datos.add(GameContext.getTarjetaElegida().serializar());
                                     datos.add("{\"idJugador\": \""+ultimoEquipoQueTiroCarta+"\"}");
                                     Mensaje mensaje=new Mensaje("notificarModeradorSobreAnulacion",datos);
                                     String msg=mensaje.serializar();
-                                    System.out.println("mensaje enviado "+msg);
                                     Write escribir = new Write();
                                     escribir.execute(msg, 0);
 
@@ -347,7 +332,6 @@ public class JugarActivity extends AppCompatActivity  {
                         datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
                         Mensaje mensaje=new Mensaje("agarrarCarta",datos);
                         String msg=mensaje.serializar();
-                        System.out.println("mensaje enviado "+msg);
                         Write escribir = new Write();
                         escribir.execute(msg, 0);
                         puedeAgarrarCarta=false;
@@ -395,7 +379,6 @@ public class JugarActivity extends AppCompatActivity  {
                     ArrayList<String> datos=new ArrayList<>();
                     Mensaje mensaje=new Mensaje("pasarTurno",datos);
                     String msg=mensaje.serializar();
-                    System.out.println("mensaje enviado "+msg);
                     Write escribir = new Write();
                     escribir.execute(msg, 0);
                     GameContext.setEsMiTurno(false);
@@ -412,7 +395,6 @@ public class JugarActivity extends AppCompatActivity  {
                     toast.setView(Layout);
                     toast.show();
 
-                    System.out.println("no es tu turno");//poner un toast que diga no es tu turno
                 }
             }
         });
@@ -444,7 +426,7 @@ public class JugarActivity extends AppCompatActivity  {
                         String nombreCategoria=tarjetaARevisar.getCategoria();
                         String tarjetaContenido=tarjetaARevisar.getContenido();
                         String tarjetaYapa=tarjetaARevisar.getYapa();
-                        int color=0; //si o si parece que tenia que iniciarlizarlo
+                        int color=0;
 
                         for (int j=0; j < categorias.size(); j++){
                             Categoria categoriaARevisar=categorias.get(j);
@@ -461,9 +443,7 @@ public class JugarActivity extends AppCompatActivity  {
                             public void onClick(View view) {
 
                                 GameContext.setTarjetaElegida(tarjetaARevisar);
-                                //poner que le cambie el color del borde en vez de mostrar ese modal
                                 tarjetaElegida=tarjetaARevisar;
-                                System.out.println(tarjetaARevisar.getContenido());
                                 cambiarColorBordes(contenedorCartas);
                                 carta.setStrokeColor(getResources().getColor(R.color.green_light));
                                 carta.setStrokeWidth(7);
@@ -484,22 +464,18 @@ public class JugarActivity extends AppCompatActivity  {
                                 public void onClick(View view) {
                                     if (GameContext.isEsMiTurno()){
                                         if (insertarTarjetaEnTablero()){
-//                                            GameContext.setTarjetaAnulada(GameContext.getTarjetaElegida());
                                             ArrayList<String> datos=new ArrayList<>();
-                                            datos.add(GameContext.getTarjetaElegida().serializar());//falta sacar la carta del mazo
+                                            datos.add(GameContext.getTarjetaElegida().serializar());
                                             GameContext.getEquipo().getTarjetas().remove(GameContext.getTarjetaElegida());
                                             datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
                                             Mensaje mensaje=new Mensaje("jugada",datos);
                                             String msg=mensaje.serializar();
-                                            System.out.println("mensaje enviado "+msg);
                                             Write escribir = new Write();
                                             escribir.execute(msg, 0);
                                             GameContext.setEsMiTurno(false);
                                             indicadorTurno.setVisibility(ImageView.INVISIBLE);
-                                            System.out.println("tarjetas restantes "+GameContext.getEquipo().getTarjetas().size());
                                         }
                                         else{
-                                            System.out.println("Casillero ocupado");
                                             LayoutInflater inflater=getLayoutInflater();
                                             View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
                                             TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
@@ -523,7 +499,6 @@ public class JugarActivity extends AppCompatActivity  {
                                         toast.setView(Layout);
                                         toast.show();
 
-                                        System.out.println("no es tu turno");//poner un toast que diga no es tu turno
                                     }
                                     a.dismiss();
                                 }
@@ -549,7 +524,6 @@ public class JugarActivity extends AppCompatActivity  {
     }
 
     public void traerImagen(Plantilla plantilla) {
-        System.out.println("entre a la funcion");
         ImageView imageView = (ImageView) findViewById(R.id.personaje);
         String url="";
         if(GameContext.getServer()==null){// si es el server es su propia direccion
@@ -562,7 +536,6 @@ public class JugarActivity extends AppCompatActivity  {
             @Override
             public void onResponse(Bitmap response) {
                 // Do something with response
-                System.out.println("trajo la imagen "+response.toString());
                 response = Bitmap.createScaledBitmap(response, 400, 400, false);
                 imageView.setImageBitmap(response);
             }
@@ -575,11 +548,9 @@ public class JugarActivity extends AppCompatActivity  {
                     public void onErrorResponse(VolleyError error) {
                         // Do something with error response
                         error.printStackTrace();
-                        System.out.println("error "+error.toString());
                     }
                 }
         );
-        // Add ImageRequest to the RequestQueue
         Volley.newRequestQueue(this).add(imageRequest);
     }
 
@@ -623,8 +594,6 @@ public class JugarActivity extends AppCompatActivity  {
                 casillero.setTarjeta(null);
                 CardView prueba = (CardView) findViewById(casillero.getId());
                 prueba.removeAllViews();
-
-                // deberia funcionar, o eso espero :(
                 LinearLayout categoria=new LinearLayout(JugarActivity.this);
                 categoria.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 categoria.setGravity(Gravity.CENTER);
@@ -633,7 +602,7 @@ public class JugarActivity extends AppCompatActivity  {
                 categoriaTxt.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 categoriaTxt.setGravity(Gravity.CENTER);
                 Typeface typeface = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) { //un miedo esto
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     typeface = getResources().getFont(R.font.poertsen_one_regular);
                 }
                 categoriaTxt.setTypeface(typeface);
@@ -648,9 +617,6 @@ public class JugarActivity extends AppCompatActivity  {
     }
 
     public void crearAlertDialogSobreAnulacion(){
-        System.out.println("cree el dialog");
-
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
@@ -705,7 +671,6 @@ public class JugarActivity extends AppCompatActivity  {
                             datos.add("{\"anuladoCorrectamente\": \""+false+"\",\"idJugador\": \""+ultimoEquipoQueTiroCarta+"\"}");
                             Mensaje mensaje=new Mensaje("actualizacion_tablero_anulacion",datos);
                             String msg=mensaje.serializar();
-                            System.out.println("mensaje enviado "+msg);
                             Write escribir = new Write();
                             escribir.execute(msg, i);
                         }
@@ -714,22 +679,18 @@ public class JugarActivity extends AppCompatActivity  {
                         intent.putExtra("anuladoCorrectamente", false);
                         intent.setAction("anularCartaJugar");
                         appContext.sendBroadcast(intent);
-                        System.out.println("Soy el moderador que rechazo la anulacion");
                         a.dismiss();
                     }
                 });
                 si.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //charlar con pepo si es un msg o un intent
-                        System.out.println("Soy el moderador que avalo la anulacion");
                         for (int i=0;i<GameContext.getHijos().size();i++) {
                             ArrayList<String> datos=new ArrayList<>();
                             datos.add(GameContext.getTarjetaAnulada().serializar());
                             datos.add("{\"anuladoCorrectamente\": \""+true+"\",\"idJugador\": \""+ultimoEquipoQueTiroCarta+"\"}");
                             Mensaje mensaje=new Mensaje("actualizacion_tablero_anulacion",datos);
                             String msg=mensaje.serializar();
-                            System.out.println("mensaje enviado "+msg);
                             Write escribir = new Write();
                             escribir.execute(msg, i);
                         }
@@ -853,23 +814,6 @@ public class JugarActivity extends AppCompatActivity  {
         constraintLayout.setId(ViewCompat.generateViewId());
         carta.addView(constraintLayout);
 
-//        // Crear el borde de arriba
-//        CardView bordeTop = new CardView(this);
-//        params = new FrameLayout.LayoutParams(width, height/8);
-//        bordeTop.setLayoutParams(params);
-//        bordeTop.setBackgroundColor(color);
-//        bordeTop.setId(ViewCompat.generateViewId());
-//        constraintLayout.addView(bordeTop);
-//
-//
-//        // Crear el borde de abajo
-//        CardView bordeBot = new CardView(this);
-//        params = new FrameLayout.LayoutParams(width, (height*3)/50);
-//        bordeBot.setLayoutParams(params);
-//        bordeBot.setBackgroundColor(color);
-//        bordeBot.setId(ViewCompat.generateViewId());
-//        constraintLayout.addView(bordeBot);
-
         //Crear el textview con la categoria
         TextView textoCategoria = new TextView(this);
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -905,8 +849,6 @@ public class JugarActivity extends AppCompatActivity  {
         //Constraints
         ConstraintSet set = new ConstraintSet();
         set.clone(constraintLayout);
-//        set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 0);
-//        set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
         set.connect(textoCategoria.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP,0);
         set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
         set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
@@ -1014,7 +956,6 @@ public class JugarActivity extends AppCompatActivity  {
         ArrayList<Categoria> categorias = plantilla.getCategorias();
         traerImagen(plantilla);
         for (int i = 0; i < 10; i++) {
-            System.out.println(categorias.get(i).getNombre());
             int codigoColor=categorias.get(i).getColor().getCodigo();
             String nombre= categorias.get(i).getNombre();
 
@@ -1034,7 +975,6 @@ public class JugarActivity extends AppCompatActivity  {
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
         try {
-            System.out.println("entre try");
             // image naming and path  to include sd card  appending name you choose for file
             String mPath = Environment.getExternalStorageDirectory().toString() + "/qves/" + GameContext.getJuego().getPlantilla().getNombre()+ now + ".jpg";
             File filebase = new File(Environment.getExternalStorageDirectory().toString(), "qves");
@@ -1048,7 +988,6 @@ public class JugarActivity extends AppCompatActivity  {
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             int height = displayMetrics.heightPixels;
             int width = displayMetrics.widthPixels;
-            System.out.println("Ancho: "+width+"Alto"+height);
             v1.layout(0, 0, width, height);
 
             v1.buildDrawingCache(true);
@@ -1064,7 +1003,6 @@ public class JugarActivity extends AppCompatActivity  {
             outputStream.close();
 
         } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
             e.printStackTrace();
         }
 
@@ -1143,7 +1081,6 @@ public class JugarActivity extends AppCompatActivity  {
 
     @Override
     protected void onDestroy() {
-//        unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
 }
