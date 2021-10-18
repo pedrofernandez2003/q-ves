@@ -1,17 +1,12 @@
-# This is a basic workflow to help you get started with Actions
 name: despliegueApp
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ integracion ]
   pull_request:
     branches: [ integracion ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   test:
     name: Run Unit Tests
@@ -38,24 +33,10 @@ jobs:
           java-version: 1.8
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-#       - name: build prod
-#         run: ./gradlew app:bundleRelease
-#         env:
-#           SIGNING_KEY_ALIAS: ${{ secrets.ALIAS }}
-#           SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-#           SIGNING_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
-#       - name: Upload
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: App
-#           path: app/build/outputs/
       - name: build release
         run: ./gradlew assembleRelease
-#       - name: creamos el directorio
-#         run: mkdir -p app/build/outputs/apk
       - uses: r0adkll/sign-android-release@v1
         name: Sign app APK
-        # ID used to access action output
         id: sign_app
         with:
           releaseDirectory: app/build/outputs/apk/release
