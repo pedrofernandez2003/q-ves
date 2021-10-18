@@ -37,19 +37,10 @@ import java.util.UUID;
 
 public class PersonajesActivity extends AppCompatActivity {
 
-    // views for button
     private Button btnSelect, btnUpload;
-
-    // view for image view
     private ImageView imageView;
-
-    // Uri indicates, where the image will be picked from
     private Uri filePath;
-
-    // request code
     private final int PICK_IMAGE_REQUEST = 22;
-
-    // instance for firebase storage and StorageReference
     FirebaseStorage storage;
     StorageReference storageReference;
 
@@ -58,18 +49,11 @@ public class PersonajesActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personajes);
-
-
-        // initialise views
         btnSelect = findViewById(R.id.btnChoose);
         btnUpload = findViewById(R.id.btnUpload);
         imageView = findViewById(R.id.imgView);
-
-        // get the Firebase  storage reference
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-
-        // on pressing btnSelect SelectImage() is called
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -77,8 +61,6 @@ public class PersonajesActivity extends AppCompatActivity {
                 SelectImage();
             }
         });
-
-        // on pressing btnUpload uploadImage() is called
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -87,12 +69,8 @@ public class PersonajesActivity extends AppCompatActivity {
             }
         });
     }
-
-    // Select Image method
     private void SelectImage()
     {
-
-        // Defining Implicit Intent to mobile gallery
         Intent intent = new Intent();
         intent.setType("image/png");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -102,17 +80,10 @@ public class PersonajesActivity extends AppCompatActivity {
                         "Seleccionar imagen"),
                 PICK_IMAGE_REQUEST);
     }
-
-    // Override onActivityResult method
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // checking request code and result code
-        // if request code is PICK_IMAGE_REQUEST and
-        // resultCode is RESULT_OK
-        // then set image in the image view
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK  && data != null && data.getData() != null) {
 
             // Get the Uri of data
@@ -164,7 +135,6 @@ public class PersonajesActivity extends AppCompatActivity {
                         if (downloadUri == null){
                         }
                         else {
-                            System.out.println("String uri:"+downloadUri.toString());
                             HashMap<String, String> personajeAInsertar = new HashMap<>();
                             personajeAInsertar.put("url", downloadUri.toString());
                             DataManager.getDb().collection("personajes")

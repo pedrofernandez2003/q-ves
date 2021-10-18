@@ -116,7 +116,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
         descargarImagenes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("tocaste descargar");
                 for (Plantilla plantilla:plantillas){
                     for (Personaje personaje:plantilla.getPersonajes()) {
                             Picasso.with(appContext).load(personaje.getFoto()).into(new Target() {
@@ -128,7 +127,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onBitmapFailed(Drawable errorDrawable) {
-                                    System.out.println("fallo");
                                     System.out.println(errorDrawable);
                                 }
 
@@ -166,7 +164,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("accion traer juegos: "+intent.getAction());
             switch (intent.getAction()){
                 case "nuevo equipo":
                     int nuevaCantEquipos= Integer.parseInt((String) cantidadEquiposTextView.getText()) + 1;
@@ -189,7 +186,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
                                     datos.add("\"turno\":"+ i);
                                     Mensaje mensaje=new Mensaje("comenzar",datos);
                                     String msg=mensaje.serializar();
-                                    System.out.println(msg);
                                     Write escribir = new Write();
                                     escribir.execute(msg,i);
                                 }
@@ -205,7 +201,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private HashSet<Tarjeta> tresTarjetasPorCategoria(){
         int cantidadPartidas = juego.getPartidas().size();
         categorias = juego.getPlantilla().getCategorias();
-        System.out.println("Cantidad tarjetas iniciales" +juego.getMazo().size());
         int contador=0;
         HashSet<Tarjeta> tarjetasARepartir = new HashSet<>();
         for (Categoria categoria: categorias) { //Selecciono 3 tarjetas por cada categoria
@@ -213,7 +208,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
                 if(tarjeta.getCategoria().equals(categoria.getNombre())){
                     tarjetasARepartir.add(tarjeta);
                     contador++;
-                    System.out.println("agregue una carte de la categoria: "+ categoria.getNombre());
                 }
                 if(contador==cantidadPartidas){
                     contador=0;
@@ -257,9 +251,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private ArrayList<HashSet<Tarjeta>> repartirTarjetas(){
         ArrayList<HashSet<Tarjeta>> mazoPorEquipo = new ArrayList<>(); //Objeto a retornar
         HashSet<Tarjeta> tarjetasARepartir = tresTarjetasPorCategoria();
-        System.out.println("tarjetas a repartir size: " + tarjetasARepartir.size());
         eliminarTarjetasDelMazo(tarjetasARepartir);
-        System.out.println("Elimine las tarjetas a repartir y el size quedo en : "+juego.getMazo().size());
         tarjetasARepartir = establecerMismaCantidadDeCartas(tarjetasARepartir);
         int tarjetasPorEquipo = tarjetasARepartir.size()/cantidadEquipos;
         int contadorVueltasPorEquipo = 0;//Cuando llegue a la cant de tarjetasPorEquipo se reinicia
@@ -269,7 +261,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
                 tarjetasDeUnEquipo.add(tarjEquipo);
             }
             else{
-                System.out.println("tarjetas De un equipo" + tarjetasDeUnEquipo.size());
                 mazoPorEquipo.add(tarjetasDeUnEquipo);
                 contadorVueltasPorEquipo = 0;
                 tarjetasDeUnEquipo = new HashSet<>();
@@ -278,7 +269,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
             contadorVueltasPorEquipo++;
         }
         mazoPorEquipo.add(tarjetasDeUnEquipo);
-        System.out.println("cantida de mazos que quedaron: "+mazoPorEquipo.size());
         return mazoPorEquipo;
     }
     Context appContext=this;
@@ -291,7 +281,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
         DataManagerPlantillas.traerPlantillas(moderador,new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
-                System.out.println("datos"+datos);
                 if(datos.size()>0) {
                     for (Object PlantillaObject : datos) {
                         Plantilla plantilla = (Plantilla) PlantillaObject;
@@ -466,9 +455,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
     }
 
     private String descargarImagen(Bitmap bitmapImage, String nombre){
-        System.out.println("descargue una imagen");
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        // path to /data/data/yourapp/app_data/personajes
         File directory = cw.getDir("personajes", Context.MODE_PRIVATE);
         // Create personajes
         File mypath=new File(directory,nombre+".png");

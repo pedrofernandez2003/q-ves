@@ -128,13 +128,7 @@ public class CrearJuegoActivity extends AppCompatActivity  {
             public void onClick(View view) {
                 AlertDialog.Builder mBuilder = new AlertDialog.Builder(CrearJuegoActivity.this);
                 mBuilder.setTitle(R.string.dialog_title);
-
-                //System.out.println("Aca miraaa: "+Arrays.toString(listItems.toArray(new String[0])));
-
                 String[] prueba= listItems.toArray(new String[0]);
-                for (String pruebita:prueba) {
-                    System.out.println(pruebita);
-                }
                 if (checkedItems==null){
                     checkedItems=new boolean[listItems.size()];
                 }

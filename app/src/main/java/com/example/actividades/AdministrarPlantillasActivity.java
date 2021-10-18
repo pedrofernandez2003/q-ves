@@ -119,7 +119,6 @@ public class AdministrarPlantillasActivity extends AppCompatActivity {
         DataManagerPlantillas.traerPlantillas(moderador, new onTraerDatosListener() {
             @Override
             public void traerDatos(ArrayList<Object> datos) {
-                System.out.println("datos" + datos);
                 if (datos.size() > 0) {
                     for (Object PlantillaObject : datos) {
                         Plantilla plantilla = (Plantilla) PlantillaObject;

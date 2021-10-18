@@ -261,10 +261,7 @@ public class TarjetasActivity extends AppCompatActivity {
         int widthCarta = (width*9)/20;
         int heightCarta = (widthCarta*7)/5;
         int marginCarta = width/50;
-
-       System.out.println("entre?");
         GridLayout gridCartas = findViewById(R.id.gridBotonera2);
-
         DataManagerCategoria.traerIdCategoria(nombreCategoria, new onTraerDatoListener() {
             @Override
             public void traer(Object dato) {

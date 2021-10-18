@@ -193,8 +193,6 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-
-                        // ...
                     }
                 });
     }
@@ -222,7 +220,6 @@ public class LoginActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                // ...
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
@@ -235,7 +232,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()){
                     boolean estaEnLaBase=false;
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        System.out.println(document.getData().get("UID"));
                         if (document.getData().get("UID").equals(user.getUid())){
                             estaEnLaBase=true;
                             if (document.getData().get("ocupacion").equals("Administrador")){

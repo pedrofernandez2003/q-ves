@@ -40,7 +40,6 @@ public class DataManagerPlantillas extends DataManager {
                 String TAG = "";
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-//                        HashMap<String, String> colorInfo = (HashMap<String, String>) document.getData().get("colorcolor");
                         int cantPartidas= Integer.parseInt((String) document.getData().get("cantPartidas"));
                         int cantEquipos= Integer.parseInt((String) document.getData().get("cantEquipos"));
                         ArrayList<String>categoriasBase= (ArrayList<String>) document.getData().get("categorias");
@@ -123,7 +122,6 @@ public class DataManagerPlantillas extends DataManager {
     }
 
     public static void eliminarPlantilla(String nombre, onEliminarListener listener) {
-        System.out.println("pla");
         traerIdPlantilla(nombre, new onTraerDatoListener() {
             @Override
             public void traer(Object dato) {

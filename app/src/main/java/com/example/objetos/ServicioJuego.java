@@ -54,7 +54,6 @@ public class ServicioJuego extends Service {
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("accion: "+intent.getAction());
             switch (intent.getAction()){
                 case "unirse":
                     ClientClass clientClass = new ClientClass(intent.getStringExtra("codigo"));
@@ -63,7 +62,6 @@ public class ServicioJuego extends Service {
                         @Override
                         public void conectar(int estado, String buffer) {
                             if (estado==1){
-                                System.out.println("mensaje recibido "+buffer);
                                 try {
                                     Gson json = new Gson();
                                     Mensaje mensaje = json.fromJson(buffer, Mensaje.class);
@@ -84,7 +82,6 @@ public class ServicioJuego extends Service {
                                             break;
 
                                         case "conectar":
-                                            System.out.println("me llego conectar");
                                             ArrayList<String> datos=new ArrayList<>();
                                             datos.add(GameContext.getNombresEquipos().get(0));
                                             mensaje=new Mensaje("conectado",datos);
@@ -96,7 +93,7 @@ public class ServicioJuego extends Service {
                                         case "turno":
                                             HashMap<String, String> mapDatos=new HashMap<>();
                                             try {
-                                                mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
+                                                mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);
                                             } catch (JsonSyntaxException e) {
                                                 e.printStackTrace();
                                             }
@@ -124,11 +121,9 @@ public class ServicioJuego extends Service {
                                             intent.putExtra("equipo", mapDatos.get("idJugador"));
                                             intent.setAction("actualizar");
                                             contexto.sendBroadcast(intent);
-                                            System.out.println(mapDatos.get("idJugador")+" tiro esta carta "+tarjeta.getContenido());
                                             break;
 
                                         case "actualizacion_tablero_anulacion":
-                                            System.out.println("entre actualizacion_tablero_anulacion");
                                             mapDatos=new HashMap<>();
                                             try {
                                                 mapDatos = json.fromJson(mensaje.getDatos().get(1),HashMap.class);
@@ -138,7 +133,6 @@ public class ServicioJuego extends Service {
                                             tarjeta= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
                                             GameContext.setTarjetaAnulada(tarjeta);
                                             String equipo=mapDatos.get("idJugador");
-                                            System.out.println("se seteo la tarjeta anulada "+tarjeta.getCategoria());
                                             Boolean anuladoCorrectamente=Boolean.parseBoolean(mapDatos.get("anuladoCorrectamente"));
                                             intent= new Intent();
                                             intent.putExtra("equipoDeCartaAnulada", equipo);
@@ -149,7 +143,6 @@ public class ServicioJuego extends Service {
 
                                         case "tarjetaMazo":
                                             Tarjeta tarjetaNueva= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
-                                            System.out.println("me llego la tarjeta "+tarjetaNueva.getCategoria());
                                             GameContext.getEquipo().getTarjetas().add(tarjetaNueva);
                                             intent= new Intent();
                                             intent.setAction("nuevaTarjeta");
@@ -201,7 +194,6 @@ public class ServicioJuego extends Service {
                     };
                     break;
                 case "crear server":
-                    System.out.println("IP mod: " + getIPAddress(true));
                     try {
                         httpServer=new HTTPServer();
                     } catch (IOException e) {
@@ -214,14 +206,12 @@ public class ServicioJuego extends Service {
                         @Override
                         public void conectar(int estado, String buffer) {
                             if (estado==1){
-                                System.out.println("mensaje recibido "+buffer);
                                 try {
                                     Gson json = new Gson();
                                     Mensaje mensaje = json.fromJson(buffer, Mensaje.class);
                                     switch (mensaje.getAccion()){
                                         case "conectado":
                                             GameContext.getNombresEquipos().add(mensaje.getDatos().get(0));
-                                            System.out.println(mensaje.getAccion()+" "+mensaje.getDatos());
                                             Intent intent2= new Intent();
                                             intent2.setAction("nuevo equipo");
                                             contexto.sendBroadcast(intent2);
@@ -238,7 +228,6 @@ public class ServicioJuego extends Service {
                                             break;
 
                                         case "jugada":
-                                            System.out.println("buffer "+buffer +"\n mensaje"+mensaje.getDatos().get(0));
                                             Tarjeta tarjeta= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
                                             HashMap<String, String> mapDatos=new HashMap<>();
                                             try {
@@ -263,23 +252,18 @@ public class ServicioJuego extends Service {
                                                     datos.add(tarjeta.serializar());
                                                     datos.add("{\"idJugador\": \""+nombreEquipo+"\"}");
                                                     mensaje=new Mensaje("actualizacion_tablero",datos);
-                                                    System.out.println("mande actualizacion");
                                                     String msg=mensaje.serializar();
                                                     Write escribir = new Write();
                                                     escribir.execute(msg, i);
                                                 }
                                             }
                                             boolean terminarPartida=true;
-                                            System.out.println("casilleros "+GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().size());
                                             for (Casillero casillero:GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros()) {
                                                 if(casillero.getTarjeta()==null){
                                                     terminarPartida=false;
                                                     break;
                                                 }
                                             }
-                                            System.out.println("condicion terminar part: "+ GameContext.getRonda() + " " + GameContext.getJuego().getPartidas().size()+1);
-                                            System.out.println(GameContext.getJuego().getPartidas().size()+1);
-                                            System.out.println("terminar partida: "+terminarPartida);
                                             if (!terminarPartida){
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {
                                                     ArrayList<String> datos=new ArrayList<>();
@@ -298,14 +282,12 @@ public class ServicioJuego extends Service {
                                                     Write escribir = new Write();
                                                     escribir.execute(msg, i);
                                                 }
-                                                System.out.println("termina la ronda");
                                                 GameContext.setRonda(GameContext.getRonda()+1);
                                                 intent= new Intent();
                                                 intent.setAction("reiniciar");
                                                 contexto.sendBroadcast(intent);
                                             }
                                             else{
-                                                System.out.println("deberia terminar el juego");
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {
                                                     ArrayList<String> datos=new ArrayList<>();
                                                     mensaje=new Mensaje("terminar_juego",datos);
@@ -313,13 +295,10 @@ public class ServicioJuego extends Service {
                                                     Write escribir = new Write();
                                                     escribir.execute(msg, i);
                                                 }
-                                                System.out.println("termina el juego");
                                             }
                                             break;
 
                                         case "notificarModeradorSobreAnulacion":
-                                            //deberia estar bien, creo
-                                            System.out.println("Soy Servicio que le avisa al moderador");
                                             Tarjeta tarjetaAnulada= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
                                             mapDatos=new HashMap<>();
                                             try {
@@ -337,7 +316,6 @@ public class ServicioJuego extends Service {
                                             break;
 
                                         case "misCartas":
-                                            System.out.println("me llegaron cartas");
                                             mapDatos=new HashMap<>();
                                             try {
                                                 mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
@@ -351,7 +329,6 @@ public class ServicioJuego extends Service {
                                             GameContext.setCantMensajesRecibidos(GameContext.getCantMensajesRecibidos()+1);
                                             if(GameContext.getCantMensajesRecibidos()==GameContext.getJuego().getEquipos().size()){
                                                 String ganador= obtenerGanador();
-                                                //ver esto
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {//le manda a todos quien es el ganador
                                                     ArrayList<String> datos=new ArrayList<>();
                                                     datos.add("{\"ganador\": \"" + ganador + "\",\"mazoVacio\":\"" + (GameContext.getJuego().getMazo().size() <= 0) + "\"}");
@@ -368,7 +345,6 @@ public class ServicioJuego extends Service {
                                                 else{
                                                     intent2.putExtra("motivoGanador", "Juego terminado");
                                                 }
-                                                System.out.println("titulo servicio"+ intent2.getStringExtra("motivoGanador"));
                                                 intent2.setAction("ganador");
                                                 contexto.sendBroadcast(intent2);
                                             }
@@ -379,7 +355,7 @@ public class ServicioJuego extends Service {
                                                 GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).setTurno(0);
                                             }
                                             else{
-                                                GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).setTurno(GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno()+1);//no se si esta bien aca
+                                                GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).setTurno(GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno()+1);
                                             }
                                             for (int i=0;i<GameContext.getHijos().size();i++) {
                                                 ArrayList<String> datos=new ArrayList<>();
@@ -399,7 +375,6 @@ public class ServicioJuego extends Service {
                                                 e.printStackTrace();
                                             }
                                             nombreEquipo= mapDatos.get("idJugador");
-                                            System.out.println("nombre equipo "+nombreEquipo);
                                             Tarjeta tarjetaARepartir=conseguirCarta();
                                             if (tarjetaARepartir.getContenido().equals("")){
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {
@@ -409,7 +384,6 @@ public class ServicioJuego extends Service {
                                                     Write escribir = new Write();
                                                     escribir.execute(msg, i);
                                                 }
-                                                System.out.println("termina el juego");
                                             }
                                             else{
                                                 for (int i=0;i<GameContext.getHijos().size();i++){
@@ -417,7 +391,6 @@ public class ServicioJuego extends Service {
                                                         ArrayList<String> datos=new ArrayList<>();
                                                         datos.add(tarjetaARepartir.serializar());
                                                         mensaje=new Mensaje("tarjetaMazo",datos);
-                                                        System.out.println("mande una tarjeta del mazo");
                                                         String msg=mensaje.serializar();
                                                         Write escribir = new Write();
                                                         escribir.execute(msg, i);
@@ -462,45 +435,14 @@ public class ServicioJuego extends Service {
         String nombreEquipo = (String) nombreEquipos[0];
         Integer cartas = (Integer) cantidadDeCartas[0];
         for(Map.Entry<String, Integer> equipo: GameContext.getResultados().entrySet()){
-            System.out.println("entre al for");
             if(equipo.getValue()<cartas){
-                System.out.println("entre al if");
                 nombreEquipo = equipo.getKey();
                 cartas = equipo.getValue();
             }
 
         }
-        System.out.println("el ganador es: "+nombreEquipo);
         return nombreEquipo;
     }
-
-    public static String getIPAddress(boolean useIPv4) {
-        try {
-            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces) {
-                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-                for (InetAddress addr : addrs) {
-                    if (!addr.isLoopbackAddress()) {
-                        String sAddr = addr.getHostAddress();
-                        boolean isIPv4 = sAddr.indexOf(':') < 0;
-
-                        if (useIPv4) {
-                            if (isIPv4)
-                                return sAddr;
-                        } else {
-                            if (!isIPv4) {
-                                int delim = sAddr.indexOf('%');
-                                return delim < 0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception ex) {
-        }
-        return "";
-    }
-
 
     @Override
     public void onDestroy() {

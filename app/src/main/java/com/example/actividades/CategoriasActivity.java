@@ -61,7 +61,6 @@ public class CategoriasActivity extends AppCompatActivity {
         aniadirCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("on click nueva categoria");
                 aniadirCategoria();
             }
         });
@@ -158,8 +157,6 @@ public class CategoriasActivity extends AppCompatActivity {
         set.connect(cartitas.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP);
         set.connect(cartitas.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
         set.connect(cartitas.getId(), ConstraintSet.RIGHT, cantCartas.getId(), ConstraintSet.LEFT);
-//        set.connect(cartitas.getId(), ConstraintSet.LEFT, categoria.getId(), ConstraintSet.RIGHT);
-//
         set.connect(cantCartas.getId(), ConstraintSet.TOP, cartitas.getId(), ConstraintSet.TOP);
         set.connect(cantCartas.getId(), ConstraintSet.BOTTOM, cartitas.getId(), ConstraintSet.BOTTOM);
         set.connect(cantCartas.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
@@ -172,7 +169,6 @@ public class CategoriasActivity extends AppCompatActivity {
 
     }
 
-    //modificar
     public void aniadirCategoria() {
 
         //Las primeas cuatro lineas crean la alerta que te sale ya con el xml que preparamos adentro
@@ -216,8 +212,6 @@ public class CategoriasActivity extends AppCompatActivity {
                             }
                         }
                         if (sePuedeCrear){
-                            CategoriaSinTarjetas categoriaNueva = new CategoriaSinTarjetas(nombreCategoria, colorCategoria, 0);
-                            System.out.println("Se puede crear");
                             CategoriaSinTarjetas categoria=new CategoriaSinTarjetas(nombreCategoria,colorCategoria,0);
                             insertarCategoria(categoria);
                             a.dismiss();
@@ -360,7 +354,6 @@ public class CategoriasActivity extends AppCompatActivity {
                                                         }
                                                     }
                                                 if (sePuedeModificar){
-                                                    System.out.println("Se puede modificar");
                                                     DataManagerCategoria.traerIdCategoria(categoria.getNombre(), new onTraerDatoListener() {
                                                         @Override
                                                         public void traer(Object dato) {

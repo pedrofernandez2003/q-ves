@@ -10,5 +10,4 @@ public interface itemClickListener {
 
 
     void onPicClicked(PicHolder holder, int position, ArrayList<PictureFacer> pics);
-    void onPicClicked(String pictureFolderPath,String folderName);
 }

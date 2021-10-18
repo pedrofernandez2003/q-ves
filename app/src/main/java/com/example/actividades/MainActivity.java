@@ -152,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
         botonIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("On click");
                 Intent elegirPlantilla = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(elegirPlantilla);
             }
@@ -163,8 +162,7 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()){
                 case "comenzar":
-                    System.out.println("comienza");
-                    GameContext.setServer(null);//creo que no hace falta igual
+                    GameContext.setServer(null);
                     empezarJuego();
                     break;
 
