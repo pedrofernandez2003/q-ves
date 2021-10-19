@@ -139,7 +139,7 @@ public class ImageDisplay extends AppCompatActivity implements itemClickListener
     }
 
 
-    @Override
+    //@Override
     public void onPicClicked(String pictureFolderPath, String folderName) {
 
     }
