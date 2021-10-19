@@ -1,0 +1,57 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<hudson.model.FreeStyleProject>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@4.9.0">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/pedrofernandez2003/q-ves</url>
+        <credentialsId>3e115869-4dc8-41ca-9d18-d42f1674426d</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/integracion</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="java.util.Collections$EmptyList"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.plugins.gradle.Gradle plugin="gradle@1.37.1">
+      <switches></switches>
+      <tasks>clean build --stacktrace</tasks>
+      <rootBuildScriptDir></rootBuildScriptDir>
+      <buildFile></buildFile>
+      <gradleName>(Default)</gradleName>
+      <useWrapper>true</useWrapper>
+      <makeExecutable>true</makeExecutable>
+      <useWorkspaceAsHome>false</useWorkspaceAsHome>
+      <wrapperLocation>${workspace}/</wrapperLocation>
+      <passAllAsSystemProperties>false</passAllAsSystemProperties>
+      <projectProperties></projectProperties>
+      <passAllAsProjectProperties>false</passAllAsProjectProperties>
+    </hudson.plugins.gradle.Gradle>
+    <org.jenkinsci.plugins.androidsigning.SignApksBuilder plugin="android-signing@2.2.5">
+      <keyStoreId>0d38a446-028b-4fd6-93c7-309db2320570</keyStoreId>
+      <keyAlias>key0</keyAlias>
+      <apksToSign>app/build/**/*-release-unsigned.apk</apksToSign>
+      <signedApkMapping class="org.jenkinsci.plugins.androidsigning.SignedApkMappingStrategy$UnsignedApkSiblingMapping"/>
+      <archiveSignedApks>true</archiveSignedApks>
+      <archiveUnsignedApks>false</archiveUnsignedApks>
+      <skipZipalign>false</skipZipalign>
+    </org.jenkinsci.plugins.androidsigning.SignApksBuilder>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</hudson.model.FreeStyleProject>
