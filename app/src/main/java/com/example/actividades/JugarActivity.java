@@ -1,5 +1,6 @@
 package com.example.actividades;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -510,6 +511,20 @@ public class JugarActivity extends AppCompatActivity  {
 
             }
         });
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void handleOnBackPressed() {
+                ArrayList<String> datos=new ArrayList<>();
+                datos.add(GameContext.getEquipo().serializar());
+                Mensaje mensaje=new Mensaje("salir",datos);
+                String msg=mensaje.serializar();
+                Write escribir = new Write();
+                escribir.execute(msg, 0);
+            }
+        };
+
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     public void cambiarColorBordes(LinearLayout contenedorCartas){
