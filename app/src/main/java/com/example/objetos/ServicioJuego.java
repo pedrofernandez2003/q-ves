@@ -399,18 +399,19 @@ public class ServicioJuego extends Service {
                                             }
                                             break;
                                         case "salir":
-                                            System.out.println(mensaje.getDatos().get(0));
-                                            HashSet<Tarjeta> tarjetas=new HashSet<>();
-                                            mapDatos=new HashMap<>();
-                                            Equipo equipo=new Equipo();
-                                            try {
-                                                equipo=json.fromJson(mensaje.getDatos().get(0),Equipo.class);
+                                            //deberia pausarse la partida
+                                            System.out.println(mensaje.serializar());
+//                                            HashSet<Tarjeta> tarjetas=new HashSet<>();
+//                                            mapDatos=new HashMap<>();
+//                                            Equipo equipo=new Equipo();
+//                                            try {
+//                                                equipo=json.fromJson(mensaje.getDatos().get(0),Equipo.class);
 //                                                mapDatos = json.fromJson(mensaje.getDatos().get(1),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
-                                            } catch (JsonSyntaxException e) {
-                                                e.printStackTrace();
-                                            }
-                                            tarjetas=equipo.getTarjetas();
-                                            break;
+//                                            } catch (JsonSyntaxException e) {
+//                                                e.printStackTrace();
+//                                            }
+//                                            tarjetas=equipo.getTarjetas();
+//                                            break;
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -461,6 +462,7 @@ public class ServicioJuego extends Service {
     public void onDestroy() {
         unregisterReceiver(broadcastReceiver);
         try {
+            server.detener();
             httpServer.stop();
             httpServer.closeAllConnections();
         } catch (Exception e) {

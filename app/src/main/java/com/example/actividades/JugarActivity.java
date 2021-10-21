@@ -515,12 +515,12 @@ public class JugarActivity extends AppCompatActivity  {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void handleOnBackPressed() {
-                ArrayList<String> datos=new ArrayList<>();
-                datos.add(GameContext.getEquipo().serializar());
-                Mensaje mensaje=new Mensaje("salir",datos);
-                String msg=mensaje.serializar();
-                Write escribir = new Write();
-                escribir.execute(msg, 0);
+//                ArrayList<String> datos=new ArrayList<>();
+//                datos.add(GameContext.getEquipo().serializar());
+//                Mensaje mensaje=new Mensaje("salir",datos);
+//                String msg=mensaje.serializar();
+//                Write escribir = new Write();
+//                escribir.execute(msg, 0);
             }
         };
 
@@ -1081,21 +1081,26 @@ public class JugarActivity extends AppCompatActivity  {
     // except for the ones that make the content appear under the system bars.
     private void showSystemUI() {
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
 
     @Override
     protected void onPause() {
-        unregisterReceiver(broadcastReceiver);
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
+        System.out.println("me voy");
+        ArrayList<String> datos=new ArrayList<>();
+        datos.add(GameContext.getJuego().serializar());
+        datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+        Mensaje mensaje=new Mensaje("salir",datos);
+        String msg=mensaje.serializar();
+        Write escribir = new Write();
+        escribir.execute(msg, 0);
+        unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
 }

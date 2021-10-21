@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent elegirPlantilla = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(elegirPlantilla);
+                finish();
             }
         });
     }
@@ -192,11 +193,11 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(broadcastReceiver);
         Intent partida = new Intent(this, JugarActivity.class);
         startActivity(partida);
+        finish();
     }
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
 }

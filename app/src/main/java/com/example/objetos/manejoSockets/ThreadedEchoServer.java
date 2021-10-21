@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class ThreadedEchoServer extends Thread{
     static final int PORT = 7028;
     public conectarCallback callbackMensaje;
+    private boolean ejecutar = true;
 
     public void run() {
         ServerSocket serverSocket = null;
@@ -24,7 +25,7 @@ public class ThreadedEchoServer extends Thread{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        while (true) {
+        while (ejecutar) {
             try {
                 socket = serverSocket.accept();
             } catch (IOException e) {
@@ -44,6 +45,10 @@ public class ThreadedEchoServer extends Thread{
             Write escribir = new Write();
             escribir.execute(msg, GameContext.getHijos().size()-1);
         }
+    }
+    public void detener() throws InterruptedException {
+        System.out.println("entre a detener");
+        ejecutar = false;
     }
 }
 
