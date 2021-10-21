@@ -6,11 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
-
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,18 +15,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.DhcpInfo;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.format.Formatter;
-import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -37,21 +29,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.objetos.Casillero;
 import com.example.objetos.Categoria;
@@ -66,12 +51,8 @@ import com.example.R;
 import com.example.objetos.Plantilla;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -91,10 +72,6 @@ public class JugarActivity extends AppCompatActivity  {
     private WifiManager wifiManager;
     private DhcpInfo d;
     private FloatingActionButton indicadorTurno;
-    private Tarjeta tarjetaElegida;
-
-
-
 
     Context appContext=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -116,7 +93,7 @@ public class JugarActivity extends AppCompatActivity  {
                     toast.show();
                     break;
 
-                case "reiniciar":
+                case "reiniciar":// vuelve a cargar la actividad
                     if(GameContext.getServer()!=null){
                         takeScreenshot();
                     }
@@ -202,7 +179,6 @@ public class JugarActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablero_template);
         wifiManager= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -223,10 +199,9 @@ public class JugarActivity extends AppCompatActivity  {
         ronda=findViewById(R.id.textView2);
         casilleros=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros();
         categorias=GameContext.getJuego().getPlantilla().getCategorias();
-
-
         ronda.setText("Ronda: "+GameContext.getRonda()+"/"+GameContext.getJuego().getPartidas().size());
-        if (GameContext.getServer()==null){
+
+        if (GameContext.getServer()==null){//si no es el server
             ArrayList<String> datos=new ArrayList<>();
             Mensaje mensaje=new Mensaje("jugarListo",datos);
             String msg=mensaje.serializar();
@@ -442,9 +417,7 @@ public class JugarActivity extends AppCompatActivity  {
                         carta.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-
                                 GameContext.setTarjetaElegida(tarjetaARevisar);
-                                tarjetaElegida=tarjetaARevisar;
                                 cambiarColorBordes(contenedorCartas);
                                 carta.setStrokeColor(getResources().getColor(R.color.green_light));
                                 carta.setStrokeWidth(7);
@@ -515,12 +488,6 @@ public class JugarActivity extends AppCompatActivity  {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void handleOnBackPressed() {
-//                ArrayList<String> datos=new ArrayList<>();
-//                datos.add(GameContext.getEquipo().serializar());
-//                Mensaje mensaje=new Mensaje("salir",datos);
-//                String msg=mensaje.serializar();
-//                Write escribir = new Write();
-//                escribir.execute(msg, 0);
             }
         };
 
@@ -645,21 +612,6 @@ public class JugarActivity extends AppCompatActivity  {
                 color=categoria.getColor().getCodigo();
             }
         }
-        /*
-        for (int j=0; j < GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().size(); j++){
-            Casillero casilleroARevisar=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().get(j);
-            if (casilleroARevisar.getCategoria().getNombre().equals(GameContext.getTarjetaAnulada().getCategoria())){
-                color=casilleroARevisar.getCategoria().getColor().getCodigo();
-            }
-        }*/
-        /* DEBERIA FUNCIONAR PERO CREO QUE YA LO PROBAMOS Y NO FUNCIONO :(
-        for (int j=0; j < categorias.size(); j++){
-            Categoria categoriaARevisar=categorias.get(j);
-            if (categoriaARevisar.getNombre().equals(tarjetaARevisar.getCategoria())){
-                color=categoriaARevisar.getColor().getCodigo();
-            }
-        }*/
-
 
         LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
         View dialog_layout = inflater.inflate(R.layout.anular_carta, null);
@@ -723,7 +675,6 @@ public class JugarActivity extends AppCompatActivity  {
     }
 
     public MaterialCardView crearTarjetaVerCartas(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
-
         // Crear la base
         MaterialCardView carta = new MaterialCardView(this);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
@@ -880,7 +831,6 @@ public class JugarActivity extends AppCompatActivity  {
     }
 
     public CardView crearTarjetaAnular(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
-
         // Crear la base
         CardView carta = new CardView(this);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
@@ -964,7 +914,6 @@ public class JugarActivity extends AppCompatActivity  {
 
     }
 
-
     public void mostrarPlantillaEnXml(Plantilla plantilla, Context context) {
         ArrayList<CardView> espacioCartas = conseguirCardViews();
         ArrayList<TextView> espaciosTextos = conseguirTextViews();
@@ -1022,6 +971,7 @@ public class JugarActivity extends AppCompatActivity  {
         }
 
     }
+
     public ArrayList<CardView> conseguirCardViews() {
         ArrayList<CardView> espaciosCartas = new ArrayList<>();
         espaciosCartas.add(findViewById(R.id.cardView));
@@ -1063,27 +1013,16 @@ public class JugarActivity extends AppCompatActivity  {
         }
     }
 
-    private void hideSystemUI() {
+    private void hideSystemUI() {//para poner full screen
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE
-                        // Set the content to appear under the system bars so that the
-                        // content doesn't resize when the system bars hide and show.
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        // Hide the nav bar and status bar
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+                View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
-    // Shows the system bars by removing all the flags
-    // except for the ones that make the content appear under the system bars.
-    private void showSystemUI() {
+    private void showSystemUI() {//para sacar el full screen
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
-
 
     @Override
     protected void onPause() {

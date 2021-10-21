@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private DhcpInfo dhcpInfo;
     private Button botonUnirse, botonIniciarSesion;
     private TextInputEditText nombreEquipo;
-    private TextView turno;
     private FloatingActionButton cerrarSesion;
     FirebaseAuth firebase;
     private static String[] permissionstorage = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -60,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(broadcastReceiver,intentFilter);
         startService(new Intent(this, ServicioJuego.class));
         setContentView(R.layout.activity_main);
+
         cerrarSesion = findViewById(R.id.fab);
         botonUnirse = (Button) findViewById(R.id.botonUnirse);
         nombreEquipo =  (TextInputEditText) findViewById(R.id.nombreEquipo);
@@ -84,12 +84,13 @@ public class MainActivity extends AppCompatActivity {
         };
 
         this.getOnBackPressedDispatcher().addCallback(this, callback);
+
         botonUnirse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dhcpInfo=wifiManager.getDhcpInfo();
                 String codigo = formatIP(dhcpInfo.gateway);
-                if (!codigo.equals("0.0.0.0")){
+                if (!codigo.equals("0.0.0.0")){ //si no es el server
                     Intent intent= new Intent();
                     intent.setAction("unirse");
                     intent.putExtra("codigo",codigo);
@@ -105,12 +106,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         cerrarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
-
                 View dialog_layout = inflater.inflate(R.layout.confirmacion_accion, null);
                 TextView seleccionado = dialog_layout.findViewById(R.id.confirmarSelección);
                 seleccionado.setText("¿Quiere cerrar la sesión?");
@@ -143,10 +142,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 a.show();
-
             }
-
-
         });
 
         botonIniciarSesion.setOnClickListener(new View.OnClickListener() {
@@ -158,15 +154,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()){
                 case "comenzar":
-                    GameContext.setServer(null);
+                    GameContext.setServer(null); //esto despues lo usamos para diferenciar entre server y cliente
                     empezarJuego();
                     break;
-
             }
         }
     };
@@ -175,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         return Formatter.formatIpAddress(IpAddress);
     }
 
-    public void volverAtras() {
+    public void volverAtras() {//para que cuando vayamos para atras se quede en la app
             OnBackPressedCallback callback = new OnBackPressedCallback(true) {
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override

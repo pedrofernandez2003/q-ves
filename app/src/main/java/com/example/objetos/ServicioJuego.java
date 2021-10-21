@@ -66,7 +66,7 @@ public class ServicioJuego extends Service {
                                     Gson json = new Gson();
                                     Mensaje mensaje = json.fromJson(buffer, Mensaje.class);
                                     switch (mensaje.getAccion()){
-                                        case "comenzar":
+                                        case "comenzar"://setea el juego, el equipo y manda el intent
                                             try {
                                                 Juego juego = json.fromJson(mensaje.getDatos().get(0), Juego.class);
                                                 GameContext.setJuego(juego);
@@ -81,7 +81,7 @@ public class ServicioJuego extends Service {
                                             contexto.sendBroadcast(intent2);
                                             break;
 
-                                        case "conectar":
+                                        case "conectar": //para avisarle que ya esta conectado
                                             ArrayList<String> datos=new ArrayList<>();
                                             datos.add(GameContext.getNombresEquipos().get(0));
                                             mensaje=new Mensaje("conectado",datos);
@@ -90,7 +90,7 @@ public class ServicioJuego extends Service {
                                             escribir.execute(msg, 0);
                                             break;
 
-                                        case "turno":
+                                        case "turno": //llega el turno y chequea que sea suyo
                                             HashMap<String, String> mapDatos=new HashMap<>();
                                             try {
                                                 mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);
@@ -108,11 +108,11 @@ public class ServicioJuego extends Service {
                                             }
                                             break;
 
-                                        case "actualizacion_tablero":
+                                        case "actualizacion_tablero": //setea la tarjeta para despues actualizar el tablero
                                             Tarjeta tarjeta= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
                                             mapDatos=new HashMap<>();
                                             try {
-                                                mapDatos = json.fromJson(mensaje.getDatos().get(1),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
+                                                mapDatos = json.fromJson(mensaje.getDatos().get(1),HashMap.class);
                                             } catch (JsonSyntaxException e) {
                                                 e.printStackTrace();
                                             }
@@ -123,7 +123,7 @@ public class ServicioJuego extends Service {
                                             contexto.sendBroadcast(intent);
                                             break;
 
-                                        case "actualizacion_tablero_anulacion":
+                                        case "actualizacion_tablero_anulacion": //setea la tarjeta que se va a anular
                                             mapDatos=new HashMap<>();
                                             try {
                                                 mapDatos = json.fromJson(mensaje.getDatos().get(1),HashMap.class);
@@ -141,7 +141,7 @@ public class ServicioJuego extends Service {
                                             contexto.sendBroadcast(intent);
                                             break;
 
-                                        case "tarjetaMazo":
+                                        case "tarjetaMazo": //le agrega una tarjeta al mazo
                                             Tarjeta tarjetaNueva= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
                                             GameContext.getEquipo().getTarjetas().add(tarjetaNueva);
                                             intent= new Intent();
@@ -149,14 +149,14 @@ public class ServicioJuego extends Service {
                                             contexto.sendBroadcast(intent);
                                             break;
 
-                                        case "partida_nueva":
+                                        case "partida_nueva": //incrementamos la ronda y reiniciamos la actividad
                                             GameContext.setRonda(GameContext.getRonda()+1);
                                             intent= new Intent();
                                             intent.setAction("reiniciar");
                                             contexto.sendBroadcast(intent);
                                             break;
 
-                                        case "terminar_juego":
+                                        case "terminar_juego": //enviamos la cantidad de cartas restantes
                                             datos=new ArrayList<>();
                                             datos.add("{\"cantidadTarjetas\": \""+GameContext.getEquipo().getTarjetas().size()+"\",\"idJugador\": \""+GameContext.getNombresEquipos().get(0)+"\"}");
                                             mensaje=new Mensaje("misCartas",datos);
@@ -165,7 +165,7 @@ public class ServicioJuego extends Service {
                                             escribir.execute(msg, 0);
                                             break;
 
-                                        case "ganador":
+                                        case "ganador"://envio por intent el ganador
                                             mapDatos=new HashMap<>();
                                             try {
                                                 mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);
@@ -217,7 +217,7 @@ public class ServicioJuego extends Service {
                                             contexto.sendBroadcast(intent2);
                                             break;
                                         case "jugarListo":
-                                            for (int i=0;i<GameContext.getHijos().size();i++) {
+                                            for (int i=0;i<GameContext.getHijos().size();i++) {//manda el turno a todos
                                                 ArrayList<String> datos=new ArrayList<>();
                                                 datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno())+"\"}");
                                                 mensaje=new Mensaje("turno",datos);
@@ -227,7 +227,7 @@ public class ServicioJuego extends Service {
                                             }
                                             break;
 
-                                        case "jugada":
+                                        case "jugada"://cuando el equipo tira una carta
                                             Tarjeta tarjeta= json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
                                             HashMap<String, String> mapDatos=new HashMap<>();
                                             try {
@@ -258,14 +258,14 @@ public class ServicioJuego extends Service {
                                                 }
                                             }
                                             boolean terminarPartida=true;
-                                            for (Casillero casillero:GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros()) {
+                                            for (Casillero casillero:GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros()) {//recorre todos los casilleros para ver que haya al menos uno vacio
                                                 if(casillero.getTarjeta()==null){
                                                     terminarPartida=false;
                                                     break;
                                                 }
                                             }
                                             if (!terminarPartida){
-                                                for (int i=0;i<GameContext.getHijos().size();i++) {
+                                                for (int i=0;i<GameContext.getHijos().size();i++) {//envia el turno si no termino la partida
                                                     ArrayList<String> datos=new ArrayList<>();
                                                     datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getTurno())+"\"}");
                                                     mensaje=new Mensaje("turno",datos);
@@ -274,7 +274,7 @@ public class ServicioJuego extends Service {
                                                     escribir.execute(msg, i);
                                                 }
                                             }
-                                            else if (GameContext.getRonda()<GameContext.getJuego().getPartidas().size()){
+                                            else if (GameContext.getRonda()<GameContext.getJuego().getPartidas().size()){//si se termino la partida
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {
                                                     ArrayList<String> datos=new ArrayList<>();
                                                     mensaje=new Mensaje("partida_nueva",datos);
@@ -287,7 +287,7 @@ public class ServicioJuego extends Service {
                                                 intent.setAction("reiniciar");
                                                 contexto.sendBroadcast(intent);
                                             }
-                                            else{
+                                            else{//si ya se jugaron todas las partidas
                                                 for (int i=0;i<GameContext.getHijos().size();i++) {
                                                     ArrayList<String> datos=new ArrayList<>();
                                                     mensaje=new Mensaje("terminar_juego",datos);
@@ -315,7 +315,7 @@ public class ServicioJuego extends Service {
                                             contexto.sendBroadcast(intent);
                                             break;
 
-                                        case "misCartas":
+                                        case "misCartas"://cuando los equipos mandan la cantidad de tarjetas
                                             mapDatos=new HashMap<>();
                                             try {
                                                 mapDatos = json.fromJson(mensaje.getDatos().get(0),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
