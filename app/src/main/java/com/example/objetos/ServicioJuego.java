@@ -463,6 +463,7 @@ public class ServicioJuego extends Service {
         unregisterReceiver(broadcastReceiver);
         try {
             server.detener();
+            server.join();
             httpServer.stop();
             httpServer.closeAllConnections();
         } catch (Exception e) {
