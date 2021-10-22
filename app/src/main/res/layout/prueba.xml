@@ -1,22 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<com.google.android.material.card.MaterialCardView xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tarjeta"
+    android:layout_height="500dp"
+    android:layout_width="350dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/lightgrey">
 
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
+        android:layout_height="match_parent" >
 
-        <Button
-            android:id="@+id/todomal"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/parteArriba"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/categoria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="..." />
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginTop="15dp"
+            android:text="Caracteristicas"
+            android:textSize="40sp"
+            android:fontFamily="@font/poertsen_one_regular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/parteArriba" />
+
+        <TextView
+            android:id="@+id/contenido"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="de realizar las tareas domesticas y es alto gobernado lolazo xd lol lmaoo too many bottles "
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textColor="@color/texto_primary"
+            app:layout_constraintBottom_toTopOf="@id/yapa"
+            app:layout_constraintEnd_toStartOf="@id/guideline5"
+            app:layout_constraintStart_toStartOf="@+id/guideline4"
+            app:layout_constraintTop_toTopOf="@+id/categoria" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yapa para discutir en grupo:"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/yapa"
+            app:layout_constraintEnd_toEndOf="@+id/yapa"
+            app:layout_constraintStart_toStartOf="@+id/yapa" />
+
+        <TextView
+            android:id="@+id/yapa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="se suele decir que los varones que realizan tareas domesticas son 'Hombres modernos', 'estan dominados' o 'los tienen bien enseniados'. ?Que opinan? "
+            app:layout_constraintBottom_toTopOf="@+id/parteAbajo"
+            app:layout_constraintEnd_toStartOf="@id/guideline5"
+            android:textAlignment="center"
+            android:textColor="@color/texto_primary"
+            app:layout_constraintStart_toStartOf="@id/guideline4"
+            app:layout_constraintTop_toBottomOf="@+id/contenido" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/parteAbajo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.07"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.07"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.93" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

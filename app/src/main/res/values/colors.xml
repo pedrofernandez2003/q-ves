@@ -21,4 +21,5 @@
     <color name="naranja_intenso">#d64700</color>
     <color name="naranja_claro">#ff9931</color>
     <color name="agarrarCarta">#23BAC4</color>
+    <color name="texto_primary">#757575</color>
 </resources>
