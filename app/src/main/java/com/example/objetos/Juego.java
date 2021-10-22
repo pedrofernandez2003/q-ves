@@ -12,7 +12,7 @@ public class Juego implements Serializable {
     private Plantilla plantilla;
     private HashSet<Tarjeta> mazo;
 
-    public Juego(Plantilla plantilla){
+    public Juego(Plantilla plantilla){//creamos el juego a partir de la plantilla
         this.partidas=new ArrayList<Partida>();
         for (int i=0;i<plantilla.getCantPartidas();i++){
             ArrayList<Casillero> casilleros=new ArrayList<>();

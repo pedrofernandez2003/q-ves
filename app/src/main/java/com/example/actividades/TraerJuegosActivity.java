@@ -76,7 +76,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private static final String TAG = "";
     private int cantidadEquipos;
     private TextView textoCargando, nombreRed, claveRed, cantidadEquiposTextView;
-
     private Button descargarImagenes;
     private WifiManager wifiManager;
     private WifiConfiguration currentConfig;
@@ -112,7 +111,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
         juego=new Juego();
         mostrarPlantillas(firebaseAuth.getCurrentUser().getEmail(), this.getApplicationContext());
 
-
         descargarImagenes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +145,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
                 turnOffHotspot();
                 Intent intent;
                 if(Usuario.getUsuario().getRol().equals("administrador")){
-
                     intent=new Intent(TraerJuegosActivity.this,AdministradorActivity.class);
                 }
                 else{
@@ -165,7 +162,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()){
-                case "nuevo equipo":
+                case "nuevo equipo"://cada vez que se conecta un equipo incrementa un contador
                     int nuevaCantEquipos= Integer.parseInt((String) cantidadEquiposTextView.getText()) + 1;
                     cantidadEquiposTextView.setText(String.valueOf(nuevaCantEquipos));
                     if(GameContext.getHijos().size() >= cantidadEquipos){
@@ -271,6 +268,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
         mazoPorEquipo.add(tarjetasDeUnEquipo);
         return mazoPorEquipo;
     }
+
     Context appContext=this;
     private void mostrarPlantillas(String moderador,Context appCcontext)  {
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -421,7 +419,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
                                         });
                                         si.setOnClickListener(new View.OnClickListener() {
                                             @Override
-                                            public void onClick (View view){
+                                            public void onClick (View view){//se abre el hotspot, se crea el juego y el server
                                                 turnOnHotspot();
                                                 juego = new Juego(plantilla);
                                                 cantidadEquipos = plantilla.getCantEquipos();
@@ -439,7 +437,6 @@ public class TraerJuegosActivity extends AppCompatActivity {
                                     }
                                 });
                                 a.show();
-
                             }
                         });
                     }
@@ -457,12 +454,11 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private String descargarImagen(Bitmap bitmapImage, String nombre){
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir("personajes", Context.MODE_PRIVATE);
-        // Create personajes
+        // creamos el directorio personajes
         File mypath=new File(directory,nombre+".png");
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(mypath);
-            // Use the compress method on the BitMap object to write image to the OutputStream
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
         } catch (Exception e) {
             e.printStackTrace();
