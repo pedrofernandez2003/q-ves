@@ -4,7 +4,7 @@ Atias, Simón-Barbieri, Martin-Blum, Damian-Cristobo, Magali-Fernandez, Pedro
 
 ## Descripcion
 
-Juego de basado en el proyecto [Q’ ves](https://lasotrasvoces.org.ar/blog/2018/02/27/q-ves-un-juego-sobre-estereotipos-de-genero/) de la empresa Las Otras Voces.
+Juego basado en el proyecto [Q’ ves](https://lasotrasvoces.org.ar/blog/2018/02/27/q-ves-un-juego-sobre-estereotipos-de-genero/) de la empresa Las Otras Voces.
 
 ## Uso
 
