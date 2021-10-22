@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class ThreadedEchoServer extends Thread{
     static final int PORT = 7028;
     public conectarCallback callbackMensaje;
-    private boolean ejecutar = true;
+    volatile boolean ejecutar = true;
 
     public void run() {
         ServerSocket serverSocket = null;
@@ -25,30 +25,38 @@ public class ThreadedEchoServer extends Thread{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        while (ejecutar) {
-            try {
-                socket = serverSocket.accept();
-            } catch (IOException e) {
-            }
-            SendReceive nuevoHijo=new SendReceive(socket);
-            nuevoHijo.callbackMensaje= new mensajeCallback() {
-                @Override
-                public void mensajeRecibido(int estado, String buffer) {
-                    callbackMensaje.conectar(estado,buffer);
+        try {
+            System.out.println(ejecutar);
+            while (true) {
+                try {
+                    socket = serverSocket.accept();
+                } catch (IOException e) {
                 }
-            };
-            GameContext.agregarHijo(nuevoHijo);
-            nuevoHijo.start();
-            ArrayList<String> datos=new ArrayList<>();
-            Mensaje mensaje=new Mensaje("conectar",datos);
-            String msg=mensaje.serializar();
-            Write escribir = new Write();
-            escribir.execute(msg, GameContext.getHijos().size()-1);
+                SendReceive nuevoHijo = new SendReceive(socket);
+                nuevoHijo.callbackMensaje = new mensajeCallback() {
+                    @Override
+                    public void mensajeRecibido(int estado, String buffer) {
+                        callbackMensaje.conectar(estado, buffer);
+                    }
+                };
+                GameContext.agregarHijo(nuevoHijo);
+                nuevoHijo.start();
+                ArrayList<String> datos = new ArrayList<>();
+                Mensaje mensaje = new Mensaje("conectar", datos);
+                String msg = mensaje.serializar();
+                Write escribir = new Write();
+                escribir.execute(msg, GameContext.getHijos().size() - 1);
+            }
+        } finally {
+
         }
+
     }
-    public void detener() throws InterruptedException {
-        System.out.println("entre a detener");
-        ejecutar = false;
-    }
+//    public void detener() throws InterruptedException {
+//        System.out.println("entre a detener");
+////        currentThread().interrupt();
+////        System.out.println("cambio estado:" + );
+//        ejecutar = false;
+//    }
 }
 

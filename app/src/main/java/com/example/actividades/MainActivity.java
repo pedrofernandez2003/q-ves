@@ -11,6 +11,7 @@ import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.format.Formatter;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.objetos.Juego;
 import com.example.objetos.ServicioJuego;
 import com.example.objetos.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,6 +42,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     private WifiManager wifiManager;
@@ -60,6 +64,46 @@ public class MainActivity extends AppCompatActivity {
         startService(new Intent(this, ServicioJuego.class));
         setContentView(R.layout.activity_main);
 
+        if(reanudarPartida()){
+            LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+
+            View dialog_layout = inflater.inflate(R.layout.confirmacion_accion, null);
+            TextView seleccionado = dialog_layout.findViewById(R.id.confirmarSelección);
+
+            AlertDialog.Builder db = new AlertDialog.Builder(MainActivity.this);
+            db.setView(dialog_layout);
+            db.setTitle("reanudar partida");
+            db.setPositiveButton("Sí", null);
+            db.setNegativeButton("No", null);
+            final AlertDialog a = db.create();
+
+            a.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    Button si = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                    Button no = a.getButton(AlertDialog.BUTTON_NEGATIVE);
+                    no.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //q borre al archivo
+                            a.dismiss();
+                        }
+                    });
+                    si.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick (View view){//se abre el hotspot, se crea el juego y el server
+                            //chequear hotspot
+                            Intent intent = new Intent(MainActivity.this, JugarActivity.class);
+                            intent.putExtra("reanudar",true);
+                            startActivity(intent);
+                            finish();
+                            a.dismiss();
+                        }
+                    });
+                }
+            });
+            a.show();
+        }
         cerrarSesion = findViewById(R.id.fab);
         botonUnirse = (Button) findViewById(R.id.botonUnirse);
         nombreEquipo =  (TextInputEditText) findViewById(R.id.nombreEquipo);
@@ -188,8 +232,14 @@ public class MainActivity extends AppCompatActivity {
     private void empezarJuego(){
         unregisterReceiver(broadcastReceiver);
         Intent partida = new Intent(this, JugarActivity.class);
+        partida.putExtra("reanudar", false);
         startActivity(partida);
         finish();
+    }
+
+    private boolean reanudarPartida(){
+        File file = new File(Environment.getExternalStorageDirectory().toString()+"/plantillas/Autoguardado.qves");
+        return file.exists();
     }
 
     @Override

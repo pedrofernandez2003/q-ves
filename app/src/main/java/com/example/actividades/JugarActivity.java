@@ -51,6 +51,8 @@ import com.example.R;
 import com.example.objetos.Plantilla;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -179,6 +181,13 @@ public class JugarActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(getIntent().getBooleanExtra("reanudar",false)){
+            File file = new File(Environment.getExternalStorageDirectory().toString()+"/plantillas/Autoguardado.qves");
+            Gson json = new Gson();
+
+            Juego juego = json.fromJson(file.toString(), Juego.class);
+            GameContext.setJuego(juego);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablero_template);
         wifiManager= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -1041,5 +1050,26 @@ public class JugarActivity extends AppCompatActivity  {
         escribir.execute(msg, 0);
         unregisterReceiver(broadcastReceiver);
         super.onDestroy();
+
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/plantillas/Autoguardado.qves";
+            File filebase = new File(Environment.getExternalStorageDirectory().toString(), "plantillas");
+            filebase.mkdirs();
+
+
+            File imageFile = new File(mPath);
+
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            outputStream.write(juego.serializar().getBytes());
+            System.out.println("escribo json");
+
+            outputStream.flush();
+            outputStream.close();
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
     }
 }
