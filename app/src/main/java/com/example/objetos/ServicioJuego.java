@@ -8,10 +8,6 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.toolbox.StringRequest;
 import com.example.interfaces.conectarCallback;
 import com.example.objetos.manejoSockets.ClientClass;
 import com.example.objetos.manejoSockets.HTTPServer;
@@ -21,13 +17,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -192,12 +184,12 @@ public class ServicioJuego extends Service {
                     };
                     break;
                 case "crear server":
-                    try {
-                        httpServer = new HTTPServer();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    if (server != null) {
+                    if (server == null) {
+                        try {
+                            httpServer = new HTTPServer();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         server = new ThreadedEchoServer();
                         server.start();
                         GameContext.setServer(server);
@@ -437,11 +429,6 @@ public class ServicioJuego extends Service {
         return new Tarjeta();
     }
 
-    public static void apagarServer(){
-
-    }
-
-
     public String obtenerGanador(){
         Object[] nombreEquipos = GameContext.getResultados().keySet().toArray();
         Object[] cantidadDeCartas = GameContext.getResultados().values().toArray();
@@ -457,20 +444,13 @@ public class ServicioJuego extends Service {
         return nombreEquipo;
     }
 
-
-
     @Override
     public void onDestroy() {
         unregisterReceiver(broadcastReceiver);
         try {
             System.out.println("Entre al try");
-//            server.detener();
-//            server.interrupt();
-//            server.join();
             httpServer.stop();
             httpServer.closeAllConnections();
-            stopForeground(true);
-            stopSelf();
         } catch (Exception e) {
             e.printStackTrace();
         }

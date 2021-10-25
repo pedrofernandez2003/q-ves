@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
+import android.util.JsonReader;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -52,11 +53,24 @@ import com.example.objetos.Plantilla;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 
 
@@ -183,10 +197,52 @@ public class JugarActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         if(getIntent().getBooleanExtra("reanudar",false)){
             File file = new File(Environment.getExternalStorageDirectory().toString()+"/plantillas/Autoguardado.qves");
-            Gson json = new Gson();
+            FileInputStream fin = null;
+            Gson gson=new Gson();
+            Juego mensaje=null;
+            try {
+                fin = new FileInputStream(file);
+                Reader reader = new BufferedReader(new InputStreamReader(fin, "UTF-8"));
+                Writer writer = new StringWriter();
+                int size;
+                char[] buffer = new char[30000];
+                // read the whole file to a writer.
+                while ((size = reader.read(buffer)) >= 0) {
+                    writer.write(buffer, 0, size);
+                }
+                // now we have the string
+                String json = writer.toString();
+                mensaje = gson.fromJson(json, Juego.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            FileInputStream fin = null;
+//            String ret=null;
+//            try {
+//                fin = new FileInputStream(file);
+//                ret = convertStreamToString(fin);
+//                System.out.println(ret);
+//                System.out.println("largo recibido "+ret.length());
+//                fin.close();
+//                Gson json = new Gson();
+//                Mensaje mensaje=json.fromJson(ret, Mensaje.class);
+//                HashMap<String,String>mapDatos = new HashMap<>();
+//                try {
+//                    System.out.println("datos "+mensaje.getDatos().get(0));
+//                    mapDatos = json.fromJson(mensaje.getDatos().get(0), HashMap.class);
+//                } catch (JsonSyntaxException e) {
+//                    e.printStackTrace();
+//                }
+//                GameContext.setRonda(Integer.parseInt(mapDatos.get("ronda")));
+//                Juego juego = json.fromJson(mapDatos.get("juego"), Juego.class);
+//                GameContext.setJuego(juego);
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+            GameContext.setJuego(mensaje);
+            System.out.println(mensaje.getPlantilla().getNombre());
 
-            Juego juego = json.fromJson(file.toString(), Juego.class);
-            GameContext.setJuego(juego);
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablero_template);
@@ -1032,6 +1088,17 @@ public class JugarActivity extends AppCompatActivity  {
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
+    public static String convertStreamToString(InputStream is) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        reader.close();
+        return sb.toString();
+    }
+
 
     @Override
     protected void onPause() {
@@ -1061,7 +1128,13 @@ public class JugarActivity extends AppCompatActivity  {
             File imageFile = new File(mPath);
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
-            outputStream.write(juego.serializar().getBytes());
+            datos=new ArrayList<>();
+//            datos.add("{\"ronda\": \"" +GameContext.getRonda()+ "\",\"juego\":\"" +juego.serializar()+"\"}");
+            datos.add(juego.serializar());
+            mensaje=new Mensaje("reanudar",datos);
+            msg=mensaje.serializar();
+            System.out.println("largo: "+msg.length());
+            outputStream.write(msg.getBytes());
             System.out.println("escribo json");
 
             outputStream.flush();

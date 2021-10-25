@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class ThreadedEchoServer extends Thread{
     static final int PORT = 7028;
     public conectarCallback callbackMensaje;
-    volatile boolean ejecutar = true;
 
     public void run() {
         ServerSocket serverSocket = null;
@@ -26,7 +25,6 @@ public class ThreadedEchoServer extends Thread{
             e.printStackTrace();
         }
         try {
-            System.out.println(ejecutar);
             while (true) {
                 try {
                     socket = serverSocket.accept();
@@ -52,11 +50,5 @@ public class ThreadedEchoServer extends Thread{
         }
 
     }
-//    public void detener() throws InterruptedException {
-//        System.out.println("entre a detener");
-////        currentThread().interrupt();
-////        System.out.println("cambio estado:" + );
-//        ejecutar = false;
-//    }
 }
 

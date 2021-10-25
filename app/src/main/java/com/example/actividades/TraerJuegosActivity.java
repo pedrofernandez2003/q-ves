@@ -518,7 +518,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onDestroy() {
-        stopService(new Intent(this, ServicioJuego.class));
+//        stopService(new Intent(this, ServicioJuego.class));
         turnOffHotspot();
         super.onDestroy();
     }
