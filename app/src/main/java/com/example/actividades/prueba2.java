@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -103,15 +104,22 @@ public class prueba2 extends AppCompatActivity {
                 LayoutInflater inflater = LayoutInflater.from(prueba2.this);
                 View dialog_layout = inflater.inflate(R.layout.ver_cartas, null);
                 AlertDialog.Builder db = new AlertDialog.Builder(prueba2.this);
-                db.setView(dialog_layout);
                 LinearLayout contenedorCartas=(LinearLayout) dialog_layout.findViewById(R.id.contenedorCartas);
 
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int width = displayMetrics.widthPixels;
+                int height = displayMetrics.heightPixels;
                 int widthCarta = width/6;
                 int heightCarta = (widthCarta*20)/16;
                 int marginCarta = width/60;
+
+//                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//                lp.copyFrom(db.getWindow().getAttributes());
+//                lp.width = (width*8)/10;
+//                lp.height = (height*8)/10;
+//                db.getWindow().setAttributes(lp);
+//                db.setView(dialog_layout);
 
                 for (Tarjeta tarjetaARevisar:tarjetasHashSet) {
 
@@ -497,7 +505,7 @@ public class prueba2 extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     LayoutInflater inflater = LayoutInflater.from(prueba2.this);
-                    View dialog_layout = inflater.inflate(R.layout.tarjeta, null);
+                    View dialog_layout = inflater.inflate(R.layout.prueba, null);
                     final Dialog dialog= new Dialog(prueba2.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setCancelable(true);
