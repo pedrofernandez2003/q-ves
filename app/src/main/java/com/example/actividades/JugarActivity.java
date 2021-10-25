@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.ViewCompat;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,6 +30,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -623,7 +625,7 @@ public class JugarActivity extends AppCompatActivity  {
                 String tarjetaContenido = GameContext.getTarjetaElegida().getContenido();
                 String tarjetaYapa = GameContext.getTarjetaElegida().getYapa();
 
-                CardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjetaContenido, tarjetaYapa);
+                CardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjetaContenido, tarjetaYapa,true);
 
                 prueba.addView(carta);
 
@@ -827,11 +829,11 @@ public class JugarActivity extends AppCompatActivity  {
         return carta;
     }
 
-    public CardView crearTarjeta(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
+    public CardView crearTarjeta(int widthCartaGrande, int height, int margin, int color, String categoria, String contenido, String yapaContenido, boolean hacerCartaGrande){
 
         // Crear la base
         CardView carta = new CardView(this);
-        width = findViewById(R.id.cardView).getWidth() - 20;
+        int width = findViewById(R.id.cardView).getWidth() - 20;
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
         params.setMargins( 0,margin, 0,margin);
         params.gravity = Gravity.CENTER_HORIZONTAL;
@@ -860,7 +862,12 @@ public class JugarActivity extends AppCompatActivity  {
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(margin, margin, margin, margin);
         textoContenido.setLayoutParams(params);
-        textoContenido.setText(contenido);
+        if (contenido.length()>60){
+            textoContenido.setText("...");
+        }
+        else{
+            textoContenido.setText(contenido);
+        }
         textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/8));
         textoContenido.setGravity(Gravity.CENTER);
         textoContenido.setId(ViewCompat.generateViewId());
@@ -871,8 +878,8 @@ public class JugarActivity extends AppCompatActivity  {
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(margin, margin, margin, margin);
         yapa.setLayoutParams(params);
-        yapa.setText(yapaContenido);
-        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/10));
+        yapa.setText("Yapa para discutir en grupo: ...");
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/8));
         yapa.setGravity(Gravity.CENTER);
         yapa.setId(ViewCompat.generateViewId());
         constraintLayout.addView(yapa);
@@ -890,6 +897,44 @@ public class JugarActivity extends AppCompatActivity  {
         set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
         set.connect(yapa.getId(), ConstraintSet.BOTTOM,  constraintLayout.getId(), ConstraintSet.BOTTOM,0);
         set.applyTo(constraintLayout);
+
+        if (hacerCartaGrande){
+            carta.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
+                    View dialog_layout = inflater.inflate(R.layout.prueba, null);
+                    final Dialog dialog= new Dialog(JugarActivity.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setCancelable(true);
+                    dialog.setContentView(dialog_layout);
+
+                    MaterialCardView tarjeta=(MaterialCardView) dialog.findViewById(R.id.tarjeta);
+                    TextView categoriaView = (TextView) dialog.findViewById(R.id.categoria);
+                    TextView contenidoView = (TextView) dialog.findViewById(R.id.contenido);
+                    TextView yapaView = (TextView) dialog.findViewById(R.id.yapa);
+                    CardView parteAbajoView = (CardView) dialog.findViewById(R.id.parteAbajo);
+                    CardView parteArribaView = (CardView) dialog.findViewById(R.id.parteArriba);
+
+                    categoriaView.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/5);
+                    categoriaView.setText(categoria);
+                    contenidoView.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/6);
+                    contenidoView.setText(contenido);
+                    yapaView.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/16)*2);
+                    yapaView.setText(yapaContenido);
+
+                    tarjeta.setCardBackgroundColor(-1644568);
+                    //categoriaView.setTextColor(color);
+                    parteArribaView.setBackgroundColor(color);
+                    parteAbajoView.setBackgroundColor(color);
+
+                    MaterialCardView.LayoutParams params = new MaterialCardView.LayoutParams((width*5)/2, height*3);
+                    tarjeta.setLayoutParams(params);
+
+                    dialog.show();
+                }
+            });
+        }
 
         return carta;
 
