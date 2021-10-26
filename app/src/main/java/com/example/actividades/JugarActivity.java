@@ -43,6 +43,7 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.objetos.Casillero;
 import com.example.objetos.Categoria;
+import com.example.objetos.DatosPartida;
 import com.example.objetos.GameContext;
 import com.example.objetos.Juego;
 import com.example.objetos.Mensaje;
@@ -200,50 +201,23 @@ public class JugarActivity extends AppCompatActivity  {
         if(getIntent().getBooleanExtra("reanudar",false)){
             File file = new File(Environment.getExternalStorageDirectory().toString()+"/plantillas/Autoguardado.qves");
             FileInputStream fin = null;
-            Gson gson=new Gson();
-            Juego mensaje=null;
+            String ret=null;
             try {
                 fin = new FileInputStream(file);
-                Reader reader = new BufferedReader(new InputStreamReader(fin, "UTF-8"));
-                Writer writer = new StringWriter();
-                int size;
-                char[] buffer = new char[30000];
-                // read the whole file to a writer.
-                while ((size = reader.read(buffer)) >= 0) {
-                    writer.write(buffer, 0, size);
-                }
-                // now we have the string
-                String json = writer.toString();
-                mensaje = gson.fromJson(json, Juego.class);
-            } catch (IOException e) {
+                ret = convertStreamToString(fin);
+                System.out.println(ret);
+                System.out.println("largo recibido "+ret.length());
+                fin.close();
+                Gson json = new Gson();
+                DatosPartida mensaje=json.fromJson(ret, DatosPartida.class);
+
+                GameContext.setRonda(Integer.parseInt(mensaje.getRonda()));
+                Juego juego = json.fromJson(mensaje.getJuego(),Juego.class);
+                GameContext.setJuego(juego);
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-//            FileInputStream fin = null;
-//            String ret=null;
-//            try {
-//                fin = new FileInputStream(file);
-//                ret = convertStreamToString(fin);
-//                System.out.println(ret);
-//                System.out.println("largo recibido "+ret.length());
-//                fin.close();
-//                Gson json = new Gson();
-//                Mensaje mensaje=json.fromJson(ret, Mensaje.class);
-//                HashMap<String,String>mapDatos = new HashMap<>();
-//                try {
-//                    System.out.println("datos "+mensaje.getDatos().get(0));
-//                    mapDatos = json.fromJson(mensaje.getDatos().get(0), HashMap.class);
-//                } catch (JsonSyntaxException e) {
-//                    e.printStackTrace();
-//                }
-//                GameContext.setRonda(Integer.parseInt(mapDatos.get("ronda")));
-//                Juego juego = json.fromJson(mapDatos.get("juego"), Juego.class);
-//                GameContext.setJuego(juego);
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-            GameContext.setJuego(mensaje);
-            System.out.println(mensaje.getPlantilla().getNombre());
 
         }
         super.onCreate(savedInstanceState);
@@ -1173,11 +1147,12 @@ public class JugarActivity extends AppCompatActivity  {
             File imageFile = new File(mPath);
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
-            datos=new ArrayList<>();
+            DatosPartida datosPartida= new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar());
+
 //            datos.add("{\"ronda\": \"" +GameContext.getRonda()+ "\",\"juego\":\"" +juego.serializar()+"\"}");
-            datos.add(juego.serializar());
-            mensaje=new Mensaje("reanudar",datos);
-            msg=mensaje.serializar();
+//            datos.add(juego.serializar());
+//            mensaje=new Mensaje("reanudar",datos);
+            msg=datosPartida.serializar();
             System.out.println("largo: "+msg.length());
             outputStream.write(msg.getBytes());
             System.out.println("escribo json");
