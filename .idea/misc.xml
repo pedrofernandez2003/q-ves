@@ -3,9 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Escuela/q-ves/app/src/main/res/layout/anular_carta.xml" value="0.36666666666666664" />
-        <entry key="..\:/Escuela/q-ves/app/src/main/res/layout/prueba.xml" value="0.36666666666666664" />
-        <entry key="..\:/Escuela/q-ves/app/src/main/res/layout/tablero_template.xml" value="0.22418478260869565" />
+        <entry key="..\:/simi/q-ves/app/src/main/res/layout/tarjeta.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_administrador.xml" value="0.15942028985507245" />
         <entry key="app/src/main/res/layout/activity_administrar_elementos.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_administrar_plantillas.xml" value="0.14" />

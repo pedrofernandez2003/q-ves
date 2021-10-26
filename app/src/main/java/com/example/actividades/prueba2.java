@@ -153,6 +153,8 @@ public class prueba2 extends AppCompatActivity {
 
                 db.setPositiveButton("Enviar al tablero", null);
                 db.setNegativeButton("Atras", null);
+//                AlertDialog ad = ;
+//                ad.getWindow().setLayout((width*8)/10, (height*8)/10);
                 final AlertDialog a = db.create();
                 a.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
