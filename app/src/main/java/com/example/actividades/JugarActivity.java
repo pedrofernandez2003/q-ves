@@ -44,6 +44,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.objetos.Casillero;
 import com.example.objetos.Categoria;
 import com.example.objetos.DatosPartida;
+import com.example.objetos.Equipo;
 import com.example.objetos.GameContext;
 import com.example.objetos.Juego;
 import com.example.objetos.Mensaje;
@@ -56,24 +57,15 @@ import com.example.objetos.Plantilla;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 
 
@@ -198,6 +190,10 @@ public class JugarActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.tablero_template);
+        wifiManager= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        d=wifiManager.getDhcpInfo();
         if(getIntent().getBooleanExtra("reanudar",false)){
             File file = new File(Environment.getExternalStorageDirectory().toString()+"/plantillas/Autoguardado.qves");
             FileInputStream fin = null;
@@ -205,25 +201,32 @@ public class JugarActivity extends AppCompatActivity  {
             try {
                 fin = new FileInputStream(file);
                 ret = convertStreamToString(fin);
-                System.out.println(ret);
-                System.out.println("largo recibido "+ret.length());
                 fin.close();
                 Gson json = new Gson();
-                DatosPartida mensaje=json.fromJson(ret, DatosPartida.class);
-
-                GameContext.setRonda(Integer.parseInt(mensaje.getRonda()));
-                Juego juego = json.fromJson(mensaje.getJuego(),Juego.class);
+                DatosPartida datosPartida=json.fromJson(ret, DatosPartida.class);
+                GameContext.setRonda(Integer.parseInt(datosPartida.getRonda()));
+                Juego juego = json.fromJson(datosPartida.getJuego(),Juego.class);
                 GameContext.setJuego(juego);
+                Intent intent= new Intent();
+                intent.setAction("unirse");
+                intent.putExtra("codigo", Formatter.formatIpAddress(d.gateway));
+                appContext.sendBroadcast(intent);
+                GameContext.setEquipo(new Equipo());
+                GameContext.getNombresEquipos().add(juego.getEquipos().get(0).getNombre()); //ver esto
+                GameContext.getEquipo().setTarjetas(juego.getMazo());
+                ArrayList<String> datos=new ArrayList<>();
+                datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+                Mensaje mensaje=new Mensaje("volvi",datos);
+                String msg=mensaje.serializar();
+                Write escribir = new Write();
+                escribir.execute(msg, 0);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.tablero_template);
-        wifiManager= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        d=wifiManager.getDhcpInfo();
+
         mostrarPlantillaEnXml(GameContext.getJuego().getPlantilla(), this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("turno");
@@ -1126,9 +1129,7 @@ public class JugarActivity extends AppCompatActivity  {
 
     @Override
     protected void onDestroy() {
-        System.out.println("me voy");
         ArrayList<String> datos=new ArrayList<>();
-        datos.add(GameContext.getJuego().serializar());
         datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
         Mensaje mensaje=new Mensaje("salir",datos);
         String msg=mensaje.serializar();
@@ -1136,27 +1137,16 @@ public class JugarActivity extends AppCompatActivity  {
         escribir.execute(msg, 0);
         unregisterReceiver(broadcastReceiver);
         super.onDestroy();
-
         try {
             // image naming and path  to include sd card  appending name you choose for file
             String mPath = Environment.getExternalStorageDirectory().toString() + "/plantillas/Autoguardado.qves";
             File filebase = new File(Environment.getExternalStorageDirectory().toString(), "plantillas");
             filebase.mkdirs();
-
-
             File imageFile = new File(mPath);
-
             FileOutputStream outputStream = new FileOutputStream(imageFile);
-            DatosPartida datosPartida= new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar());
-
-//            datos.add("{\"ronda\": \"" +GameContext.getRonda()+ "\",\"juego\":\"" +juego.serializar()+"\"}");
-//            datos.add(juego.serializar());
-//            mensaje=new Mensaje("reanudar",datos);
+            DatosPartida datosPartida= new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar());;
             msg=datosPartida.serializar();
-            System.out.println("largo: "+msg.length());
             outputStream.write(msg.getBytes());
-            System.out.println("escribo json");
-
             outputStream.flush();
             outputStream.close();
 
