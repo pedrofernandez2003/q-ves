@@ -25,6 +25,7 @@ import android.os.Environment;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.util.JsonReader;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -44,6 +45,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.objetos.Casillero;
 import com.example.objetos.Categoria;
 import com.example.objetos.DatosPartida;
+import com.example.objetos.Equipo;
 import com.example.objetos.GameContext;
 import com.example.objetos.Juego;
 import com.example.objetos.Mensaje;
@@ -56,24 +58,15 @@ import com.example.objetos.Plantilla;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 
 
@@ -91,6 +84,7 @@ public class JugarActivity extends AppCompatActivity  {
     private WifiManager wifiManager;
     private DhcpInfo d;
     private FloatingActionButton indicadorTurno;
+    private boolean partidaReaunudada = false;
 
     Context appContext=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -138,6 +132,9 @@ public class JugarActivity extends AppCompatActivity  {
                     db.setPositiveButton("Volver", null);
                     final AlertDialog a = db.create();
                     a.show();
+                    if (partidaReaunudada){
+                        System.out.println("se borro "+borrarAutoguardado()); //no esta tan bueno porque se lo va a borrar a todos
+                    }
                     Button volverAInicio = a.getButton(AlertDialog.BUTTON_POSITIVE);
                     volverAInicio.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -198,6 +195,10 @@ public class JugarActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.tablero_template);
+        wifiManager= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        d=wifiManager.getDhcpInfo();
         if(getIntent().getBooleanExtra("reanudar",false)){
             File file = new File(Environment.getExternalStorageDirectory().toString()+"/plantillas/Autoguardado.qves");
             FileInputStream fin = null;
@@ -205,25 +206,32 @@ public class JugarActivity extends AppCompatActivity  {
             try {
                 fin = new FileInputStream(file);
                 ret = convertStreamToString(fin);
-                System.out.println(ret);
-                System.out.println("largo recibido "+ret.length());
                 fin.close();
                 Gson json = new Gson();
-                DatosPartida mensaje=json.fromJson(ret, DatosPartida.class);
-
-                GameContext.setRonda(Integer.parseInt(mensaje.getRonda()));
-                Juego juego = json.fromJson(mensaje.getJuego(),Juego.class);
+                DatosPartida datosPartida=json.fromJson(ret, DatosPartida.class);
+                GameContext.setRonda(Integer.parseInt(datosPartida.getRonda()));
+                Juego juego = json.fromJson(datosPartida.getJuego(),Juego.class);
                 GameContext.setJuego(juego);
+                Intent intent= new Intent();
+                intent.setAction("unirse");
+                intent.putExtra("codigo", Formatter.formatIpAddress(d.gateway));
+                appContext.sendBroadcast(intent);
+                GameContext.setEquipo(new Equipo());
+                GameContext.getNombresEquipos().add(juego.getEquipos().get(0).getNombre()); //ver esto
+                GameContext.getEquipo().setTarjetas(juego.getMazo());
+                ArrayList<String> datos=new ArrayList<>();
+                datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+                Mensaje mensaje=new Mensaje("volvi",datos);
+                String msg=mensaje.serializar();
+                Write escribir = new Write();
+                escribir.execute(msg, 0);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            partidaReaunudada=true;
         }
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.tablero_template);
-        wifiManager= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        d=wifiManager.getDhcpInfo();
+
         mostrarPlantillaEnXml(GameContext.getJuego().getPlantilla(), this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("turno");
@@ -293,7 +301,7 @@ public class JugarActivity extends AppCompatActivity  {
                     db.setPositiveButton("Enviar propuesta", null);
                     db.setNegativeButton("Atras", null);
                     LinearLayout prueba=(LinearLayout) dialog_layout.findViewById(R.id.carta);
-                    prueba.addView(crearTarjetaAnular(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
+                    prueba.addView(crearTarjetaVerCartas(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
                     final AlertDialog a = db.create();
 
 
@@ -432,8 +440,11 @@ public class JugarActivity extends AppCompatActivity  {
                     DisplayMetrics displayMetrics = new DisplayMetrics();
                     getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                     int width = displayMetrics.widthPixels;
-                    int widthCarta = width/6;
-                    int heightCarta = (widthCarta*20)/18;
+                    int widthDialog = (width*9)/10;
+                    int height = displayMetrics.heightPixels;
+                    int heightDialog = (height*9)/10;
+                    int heightCarta = (heightDialog*8)/10;
+                    int widthCarta = (heightCarta*16)/20;
                     int marginCarta = width/60;
 
                     tarjetasHashSet=GameContext.getEquipo().getTarjetas();
@@ -521,6 +532,7 @@ public class JugarActivity extends AppCompatActivity  {
                         }
                     });
                     a.show();
+                    a.getWindow().setLayout((width*9)/10, (height*19)/20);
                 }
 
             }
@@ -662,7 +674,7 @@ public class JugarActivity extends AppCompatActivity  {
         db.setPositiveButton("Aceptar propuesta", null);
         db.setNegativeButton("Rechazar propuesta", null);
         LinearLayout prueba=(LinearLayout) dialog_layout.findViewById(R.id.carta);
-        prueba.addView(crearTarjetaAnular(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
+        prueba.addView(crearTarjetaVerCartas(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
         final AlertDialog a = db.create();
 
         a.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -750,12 +762,28 @@ public class JugarActivity extends AppCompatActivity  {
         bordeBot.setId(ViewCompat.generateViewId());
         constraintLayout.addView(bordeBot);
 
+
+        //TextView "Yapa para discutir en grupo"
+        TextView yapaParaDiscutirEnGrupo = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        yapaParaDiscutirEnGrupo.setLayoutParams(params);
+        yapaParaDiscutirEnGrupo.setText(getResources().getString(R.string.mensaje_yapa));
+        yapaParaDiscutirEnGrupo.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/16));
+        yapaParaDiscutirEnGrupo.setTypeface(Typeface.DEFAULT_BOLD);
+        yapaParaDiscutirEnGrupo.setId(ViewCompat.generateViewId());
+        yapaParaDiscutirEnGrupo.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        yapaParaDiscutirEnGrupo.setTextColor(getResources().getColor(R.color.texto_primary));
+        constraintLayout.addView(yapaParaDiscutirEnGrupo);
+
+
+
         //Crear el textview con la categoria
         TextView textoCategoria = new TextView(this);
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         textoCategoria.setLayoutParams(params);
+        textoCategoria.setTextColor(getResources().getColor(R.color.texto_primary));
         textoCategoria.setText(categoria);
-        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/8);
+        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/10);
         textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
         textoCategoria.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoCategoria);
@@ -763,10 +791,11 @@ public class JugarActivity extends AppCompatActivity  {
         //Crear el textview para el contenido
         TextView textoContenido = new TextView(this);
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(margin, margin, margin, margin);
+        params.setMargins(7, 7, 7, 7);
         textoContenido.setLayoutParams(params);
         textoContenido.setText(contenido);
-        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/12));
+        textoContenido.setTextColor(getResources().getColor(R.color.texto_primary));
+        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/17));
         textoContenido.setGravity(Gravity.CENTER);
         textoContenido.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoContenido);
@@ -777,7 +806,8 @@ public class JugarActivity extends AppCompatActivity  {
         params.setMargins(margin, margin, margin, margin);
         yapa.setLayoutParams(params);
         yapa.setText(yapaContenido);
-        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/15));
+        yapa.setTextColor(getResources().getColor(R.color.texto_primary));
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/17));
         yapa.setGravity(Gravity.CENTER);
         yapa.setId(ViewCompat.generateViewId());
         constraintLayout.addView(yapa);
@@ -796,6 +826,9 @@ public class JugarActivity extends AppCompatActivity  {
         set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
         set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
         set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
+        set.connect(yapaParaDiscutirEnGrupo.getId(), ConstraintSet.BOTTOM, yapa.getId(), ConstraintSet.TOP);
+        set.connect(yapaParaDiscutirEnGrupo.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
+        set.connect(yapaParaDiscutirEnGrupo.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT);
         set.applyTo(constraintLayout);
 
 
@@ -1118,6 +1151,21 @@ public class JugarActivity extends AppCompatActivity  {
         return sb.toString();
     }
 
+    private boolean borrarAutoguardado(){//no funciona
+        String fullPath = Environment.getExternalStorageDirectory().toString()+"/plantillas/";
+        try {
+            File file = new File(fullPath, "Autoguardado.qves");
+            if(file.exists()) {
+                file.delete();
+                return true;
+            }
+        }
+        catch (Exception e) {
+            Log.e("App", "Exception while deleting file " + e.getMessage());
+        }
+        return false;
+    }
+
 
     @Override
     protected void onPause() {
@@ -1126,9 +1174,7 @@ public class JugarActivity extends AppCompatActivity  {
 
     @Override
     protected void onDestroy() {
-        System.out.println("me voy");
         ArrayList<String> datos=new ArrayList<>();
-        datos.add(GameContext.getJuego().serializar());
         datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
         Mensaje mensaje=new Mensaje("salir",datos);
         String msg=mensaje.serializar();
@@ -1136,27 +1182,16 @@ public class JugarActivity extends AppCompatActivity  {
         escribir.execute(msg, 0);
         unregisterReceiver(broadcastReceiver);
         super.onDestroy();
-
         try {
             // image naming and path  to include sd card  appending name you choose for file
             String mPath = Environment.getExternalStorageDirectory().toString() + "/plantillas/Autoguardado.qves";
             File filebase = new File(Environment.getExternalStorageDirectory().toString(), "plantillas");
             filebase.mkdirs();
-
-
             File imageFile = new File(mPath);
-
             FileOutputStream outputStream = new FileOutputStream(imageFile);
-            DatosPartida datosPartida= new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar());
-
-//            datos.add("{\"ronda\": \"" +GameContext.getRonda()+ "\",\"juego\":\"" +juego.serializar()+"\"}");
-//            datos.add(juego.serializar());
-//            mensaje=new Mensaje("reanudar",datos);
+            DatosPartida datosPartida= new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar());;
             msg=datosPartida.serializar();
-            System.out.println("largo: "+msg.length());
             outputStream.write(msg.getBytes());
-            System.out.println("escribo json");
-
             outputStream.flush();
             outputStream.close();
 

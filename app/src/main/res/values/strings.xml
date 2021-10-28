@@ -78,5 +78,6 @@
     <string name="title_activity_cargando">Cargando</string>
     <string name="cantidadEquipos">0</string>
     <string name="desea_intentar_anular_la_tarjeta_jugada_por_el_ltimo_equipo">¿Desea intentar anular la tarjeta jugada por el último equipo?</string>
+    <string name="mensaje_yapa">Yapa para discutir en grupo: </string>
 
 </resources>
