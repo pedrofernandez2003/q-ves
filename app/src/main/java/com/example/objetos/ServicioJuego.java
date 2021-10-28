@@ -203,9 +203,25 @@ public class ServicioJuego extends Service {
                                         switch (mensaje.getAccion()) {
                                             case "conectado":
                                                 GameContext.getNombresEquipos().add(mensaje.getDatos().get(0));
-                                                Intent intent2 = new Intent();
-                                                intent2.setAction("nuevo equipo");
-                                                contexto.sendBroadcast(intent2);
+                                                if(GameContext.getEquiposRetirados().size()==0){
+                                                    Intent intent2 = new Intent();
+                                                    intent2.setAction("nuevo equipo");
+                                                    contexto.sendBroadcast(intent2);
+                                                }
+                                                else{
+                                                    for (int i = 0; i < GameContext.getHijos().size(); i++) {
+                                                        if (GameContext.getNombresEquipos().get(i).equals(mensaje.getDatos().get(0))){
+                                                            ArrayList<String> datos = new ArrayList<>();
+                                                            datos.add("{\"idJugador\": \"" + GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).getTurno()) + "\"}");
+                                                            mensaje = new Mensaje("turno", datos);
+                                                            String msg = mensaje.serializar();
+                                                            Write escribir = new Write();
+                                                            escribir.execute(msg, i);
+                                                        }
+
+                                                    }
+                                                }
+
                                                 break;
                                             case "jugarListo":
                                                 for (int i = 0; i < GameContext.getHijos().size(); i++) {//manda el turno a todos
@@ -222,7 +238,7 @@ public class ServicioJuego extends Service {
                                                 Tarjeta tarjeta = json.fromJson(mensaje.getDatos().get(0), Tarjeta.class);
                                                 HashMap<String, String> mapDatos = new HashMap<>();
                                                 try {
-                                                    mapDatos = json.fromJson(mensaje.getDatos().get(1), HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
+                                                    mapDatos = json.fromJson(mensaje.getDatos().get(1), HashMap.class);
                                                 } catch (JsonSyntaxException e) {
                                                     e.printStackTrace();
                                                 }
@@ -325,15 +341,15 @@ public class ServicioJuego extends Service {
                                                         Write escribir = new Write();
                                                         escribir.execute(msg, i);
                                                     }
-                                                    intent2 = new Intent();
-                                                    intent2.putExtra("ganador", ganador);
+                                                    intent = new Intent();
+                                                    intent.putExtra("ganador", ganador);
                                                     if (GameContext.getJuego().getMazo().size() <= 0) {
-                                                        intent2.putExtra("motivoGanador", "El mazo se ha quedado sin cartas");
+                                                        intent.putExtra("motivoGanador", "El mazo se ha quedado sin cartas");
                                                     } else {
-                                                        intent2.putExtra("motivoGanador", "Juego terminado");
+                                                        intent.putExtra("motivoGanador", "Juego terminado");
                                                     }
-                                                    intent2.setAction("ganador");
-                                                    contexto.sendBroadcast(intent2);
+                                                    intent.setAction("ganador");
+                                                    contexto.sendBroadcast(intent);
                                                 }
                                                 break;
 
@@ -385,18 +401,41 @@ public class ServicioJuego extends Service {
                                                 break;
                                             case "salir":
                                                 //deberia pausarse la partida
-                                                System.out.println(mensaje.serializar());
-//                                            HashSet<Tarjeta> tarjetas=new HashSet<>();
-//                                            mapDatos=new HashMap<>();
-//                                            Equipo equipo=new Equipo();
-//                                            try {
-//                                                equipo=json.fromJson(mensaje.getDatos().get(0),Equipo.class);
-//                                                mapDatos = json.fromJson(mensaje.getDatos().get(1),HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
-//                                            } catch (JsonSyntaxException e) {
-//                                                e.printStackTrace();
-//                                            }
-//                                            tarjetas=equipo.getTarjetas();
-//                                            break;
+                                                mapDatos = new HashMap<>();
+                                                try {
+                                                    mapDatos = json.fromJson(mensaje.getDatos().get(0), HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
+                                                } catch (JsonSyntaxException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                nombreEquipo = mapDatos.get("idJugador");
+                                                for (int i = 0; i < GameContext.getHijos().size(); i++) {
+                                                    if (GameContext.getNombresEquipos().get(i).equals(nombreEquipo)) { //lo sacamos de los hijos porque se va de la partida
+                                                        GameContext.getEquiposRetirados().add(GameContext.getNombresEquipos().get(i));
+                                                        GameContext.getHijos().remove(i);
+                                                       GameContext.getNombresEquipos().remove(i);
+                                                    }
+                                                }
+                                            break;
+                                            case "volvi":
+                                                mapDatos = new HashMap<>();
+                                                try {
+                                                    mapDatos = json.fromJson(mensaje.getDatos().get(0), HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
+                                                } catch (JsonSyntaxException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                nombreEquipo = mapDatos.get("idJugador");
+                                                for (int i = 0; i < GameContext.getHijos().size(); i++) {
+                                                    if (GameContext.getNombresEquipos().get(i).equals(nombreEquipo)) { //para que no se lo mande al que jugo
+                                                        ArrayList<String> datos = new ArrayList<>();
+                                                        datos.add("{\"idJugador\": \"" + GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).getTurno()) + "\"}");
+                                                        mensaje = new Mensaje("turno", datos);
+                                                        String msg = mensaje.serializar();
+                                                        Write escribir = new Write();
+                                                        escribir.execute(msg, i);
+                                                    }
+                                                }
+                                            break;
                                         }
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -448,7 +487,6 @@ public class ServicioJuego extends Service {
     public void onDestroy() {
         unregisterReceiver(broadcastReceiver);
         try {
-            System.out.println("Entre al try");
             httpServer.stop();
             httpServer.closeAllConnections();
         } catch (Exception e) {

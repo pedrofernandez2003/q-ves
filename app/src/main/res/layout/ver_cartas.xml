@@ -18,7 +18,7 @@
         <LinearLayout
             android:id="@+id/contenedorCartas"
             android:layout_width="match_parent"
-            android:layout_height="70pt"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:useDefaultMargins="true" >
 
