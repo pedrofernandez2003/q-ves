@@ -133,7 +133,7 @@ public class JugarActivity extends AppCompatActivity  {
                     final AlertDialog a = db.create();
                     a.show();
                     if (partidaReaunudada){
-                        System.out.println("se borro "+borrarAutoguardado()); //no esta tan bueno porque se lo va a borrar a todos
+                        System.out.println("se borro "+borrarAutoguardado());
                     }
                     Button volverAInicio = a.getButton(AlertDialog.BUTTON_POSITIVE);
                     volverAInicio.setOnClickListener(new View.OnClickListener() {
@@ -218,6 +218,7 @@ public class JugarActivity extends AppCompatActivity  {
                 appContext.sendBroadcast(intent);
                 GameContext.setEquipo(new Equipo());
                 GameContext.getNombresEquipos().add(juego.getEquipos().get(0).getNombre()); //ver esto
+                System.out.println("Entre");
                 GameContext.getEquipo().setTarjetas(juego.getMazo());
                 ArrayList<String> datos=new ArrayList<>();
                 datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
@@ -249,7 +250,17 @@ public class JugarActivity extends AppCompatActivity  {
         casilleros=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros();
         categorias=GameContext.getJuego().getPlantilla().getCategorias();
         ronda.setText("Ronda: "+GameContext.getRonda()+"/"+GameContext.getJuego().getPartidas().size());
-
+        ArrayList<Tarjeta> cartasTiradas=new ArrayList<>();
+        for (Casillero casillero: casilleros){// tenemos que vaciar el tablero por como esta hecha la funcion
+            if (casillero.getTarjeta()!=null){
+                cartasTiradas.add(casillero.getTarjeta());
+                casillero.setTarjeta(null);
+            }
+        }
+        for (Tarjeta tarjeta:cartasTiradas){//insertamos las tarjetas viejas en el tablero
+            GameContext.setTarjetaElegida(tarjeta);
+            insertarTarjetaEnTablero();
+        }
         if (GameContext.getServer()==null){//si no es el server
             ArrayList<String> datos=new ArrayList<>();
             Mensaje mensaje=new Mensaje("jugarListo",datos);
@@ -590,9 +601,7 @@ public class JugarActivity extends AppCompatActivity  {
     }
 
     public boolean insertarTarjetaEnTablero() {
-
         boolean insertoLaTarjeta=false;
-
         for (Casillero casillero : casilleros) {
             if (casillero.getTarjeta() == null && casillero.getCategoria().getNombre().equals(GameContext.getTarjetaElegida().getCategoria())) {
                 casillero.setTarjeta(GameContext.getTarjetaElegida());
@@ -610,13 +619,9 @@ public class JugarActivity extends AppCompatActivity  {
                 String nombreCategoria = casillero.getCategoria().getNombre();
                 String tarjetaContenido = GameContext.getTarjetaElegida().getContenido();
                 String tarjetaYapa = GameContext.getTarjetaElegida().getYapa();
-
                 CardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjetaContenido, tarjetaYapa,true);
-
                 prueba.addView(carta);
-
                 insertoLaTarjeta=true;
-
             }
 
         }
@@ -1151,13 +1156,12 @@ public class JugarActivity extends AppCompatActivity  {
         return sb.toString();
     }
 
-    private boolean borrarAutoguardado(){//no funciona
-        String fullPath = Environment.getExternalStorageDirectory().toString()+"/plantillas/";
+    private boolean borrarAutoguardado(){//funciona?
+        String fullPath = Environment.getExternalStorageDirectory().toString()+"/plantillas";
         try {
             File file = new File(fullPath, "Autoguardado.qves");
             if(file.exists()) {
-                file.delete();
-                return true;
+                 return file.delete();
             }
         }
         catch (Exception e) {
@@ -1174,6 +1178,7 @@ public class JugarActivity extends AppCompatActivity  {
 
     @Override
     protected void onDestroy() {
+        String tarjetas="[";
         ArrayList<String> datos=new ArrayList<>();
         datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
         Mensaje mensaje=new Mensaje("salir",datos);
@@ -1182,6 +1187,12 @@ public class JugarActivity extends AppCompatActivity  {
         escribir.execute(msg, 0);
         unregisterReceiver(broadcastReceiver);
         super.onDestroy();
+        for (Casillero casillero:casilleros){
+            if (casillero.getTarjeta()!=null){
+                tarjetas+=casillero.getTarjeta().serializar();
+            }
+        }
+        tarjetas+="]";
         try {
             // image naming and path  to include sd card  appending name you choose for file
             String mPath = Environment.getExternalStorageDirectory().toString() + "/plantillas/Autoguardado.qves";
@@ -1189,7 +1200,7 @@ public class JugarActivity extends AppCompatActivity  {
             filebase.mkdirs();
             File imageFile = new File(mPath);
             FileOutputStream outputStream = new FileOutputStream(imageFile);
-            DatosPartida datosPartida= new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar());;
+            DatosPartida datosPartida= new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar(),tarjetas);
             msg=datosPartida.serializar();
             outputStream.write(msg.getBytes());
             outputStream.flush();

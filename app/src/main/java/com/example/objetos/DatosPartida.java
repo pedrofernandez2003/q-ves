@@ -6,10 +6,12 @@ import com.google.gson.Gson;
 public class DatosPartida implements Serializable {
     private String ronda;
     private String juego;
+    private String tarjetas;
 
-    public DatosPartida(String ronda, String juego) {
+    public DatosPartida(String ronda, String juego, String tarjetas) {
         this.ronda = ronda;
         this.juego = juego;
+        this.tarjetas=tarjetas;
     }
 
     public String getRonda() {
@@ -26,6 +28,14 @@ public class DatosPartida implements Serializable {
 
     public void setJuego(String juego) {
         this.juego = juego;
+    }
+
+    public String getTarjetas() {
+        return tarjetas;
+    }
+
+    public void setTarjetas(String tarjetas) {
+        this.tarjetas = tarjetas;
     }
 
     @Override
