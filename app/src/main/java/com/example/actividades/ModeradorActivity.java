@@ -77,7 +77,7 @@ public class ModeradorActivity extends AppCompatActivity {
                 a.show();
 
             }
-
+//
 
         });
         iniciarJuego.setOnClickListener(new View.OnClickListener() {
