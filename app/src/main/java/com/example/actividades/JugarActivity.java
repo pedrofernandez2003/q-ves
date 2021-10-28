@@ -25,6 +25,7 @@ import android.os.Environment;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.util.JsonReader;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -83,6 +84,7 @@ public class JugarActivity extends AppCompatActivity  {
     private WifiManager wifiManager;
     private DhcpInfo d;
     private FloatingActionButton indicadorTurno;
+    private boolean partidaReaunudada = false;
 
     Context appContext=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -130,6 +132,9 @@ public class JugarActivity extends AppCompatActivity  {
                     db.setPositiveButton("Volver", null);
                     final AlertDialog a = db.create();
                     a.show();
+                    if (partidaReaunudada){
+                        System.out.println("se borro "+borrarAutoguardado()); //no esta tan bueno porque se lo va a borrar a todos
+                    }
                     Button volverAInicio = a.getButton(AlertDialog.BUTTON_POSITIVE);
                     volverAInicio.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -224,7 +229,7 @@ public class JugarActivity extends AppCompatActivity  {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            partidaReaunudada=true;
         }
 
         mostrarPlantillaEnXml(GameContext.getJuego().getPlantilla(), this);
@@ -296,7 +301,7 @@ public class JugarActivity extends AppCompatActivity  {
                     db.setPositiveButton("Enviar propuesta", null);
                     db.setNegativeButton("Atras", null);
                     LinearLayout prueba=(LinearLayout) dialog_layout.findViewById(R.id.carta);
-                    prueba.addView(crearTarjetaAnular(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
+                    prueba.addView(crearTarjetaVerCartas(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
                     final AlertDialog a = db.create();
 
 
@@ -669,7 +674,7 @@ public class JugarActivity extends AppCompatActivity  {
         db.setPositiveButton("Aceptar propuesta", null);
         db.setNegativeButton("Rechazar propuesta", null);
         LinearLayout prueba=(LinearLayout) dialog_layout.findViewById(R.id.carta);
-        prueba.addView(crearTarjetaAnular(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
+        prueba.addView(crearTarjetaVerCartas(widthCarta, heightCarta, marginCarta,color, GameContext.getTarjetaElegida().getCategoria(), GameContext.getTarjetaElegida().getContenido(), GameContext.getTarjetaElegida().getYapa()));
         final AlertDialog a = db.create();
 
         a.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -1144,6 +1149,21 @@ public class JugarActivity extends AppCompatActivity  {
         }
         reader.close();
         return sb.toString();
+    }
+
+    private boolean borrarAutoguardado(){//no funciona
+        String fullPath = Environment.getExternalStorageDirectory().toString()+"/plantillas/";
+        try {
+            File file = new File(fullPath, "Autoguardado.qves");
+            if(file.exists()) {
+                file.delete();
+                return true;
+            }
+        }
+        catch (Exception e) {
+            Log.e("App", "Exception while deleting file " + e.getMessage());
+        }
+        return false;
     }
 
 
