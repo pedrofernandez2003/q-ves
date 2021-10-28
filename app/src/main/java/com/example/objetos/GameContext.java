@@ -19,7 +19,6 @@ public class GameContext{
     private static int cantMensajesRecibidos=0; //los jugadores empiezan a mandar la cantidad de cartas que les quedan
     private static Tarjeta tarjetaElegida;
     private static Tarjeta tarjetaAnulada;
-    private static ArrayList<String> equiposRetirados= new ArrayList<>();
 
 
     private GameContext(){}
@@ -130,13 +129,5 @@ public class GameContext{
 
     public static void setResultados(HashMap<String, Integer> resultados) {
         GameContext.resultados = resultados;
-    }
-
-    public static ArrayList<String> getEquiposRetirados() {
-        return equiposRetirados;
-    }
-
-    public static void setEquiposRetirados(ArrayList<String> equiposRetirados) {
-        GameContext.equiposRetirados = equiposRetirados;
     }
 }
