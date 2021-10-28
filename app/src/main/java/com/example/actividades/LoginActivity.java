@@ -235,13 +235,13 @@ public class LoginActivity extends AppCompatActivity {
                         if (document.getData().get("UID").equals(user.getUid())){
                             estaEnLaBase=true;
                             if (document.getData().get("ocupacion").equals("Administrador")){
-                                usuario.setRol("administrador");
+                                usuario.setRol("Administrador");
                                 Intent intent = new Intent(getApplicationContext(), AdministradorActivity.class);
                                 startActivity(intent);
                                 LoginActivity.this.finish();
                             }
                             else{
-                                usuario.setRol("moderador");
+                                usuario.setRol("Moderador");
                                 Intent intent = new Intent(getApplicationContext(), ModeradorActivity.class);
                                 startActivity(intent);
                                 LoginActivity.this.finish();
