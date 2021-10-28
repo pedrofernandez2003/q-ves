@@ -67,13 +67,14 @@
             android:screenOrientation="landscape">
         </activity>
         <activity android:name="com.example.actividades.SolicitarUbicacion">
+
+        </activity>
+
+        <activity android:name="com.example.actividades.prueba2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity android:name="com.example.actividades.prueba2">
         </activity>
 
         <activity android:name="com.example.actividades.TraerJuegosActivity">

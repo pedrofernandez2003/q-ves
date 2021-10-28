@@ -21,10 +21,8 @@ import com.example.R;
 import com.example.listeners.onInsertarListener;
 import com.example.listeners.onTraerDatosListener;
 import com.example.objetos.CategoriaSinTarjetas;
-import com.example.objetos.GameContext;
 import com.example.objetos.Member;
 import com.example.objetos.PlantillaNueva;
-import com.example.objetos.Usuario;
 import com.example.objetos.ViewHolder;
 import com.example.dataManagers.DataManagerCategoria;
 import com.example.dataManagers.DataManagerPlantillas;
@@ -213,14 +211,8 @@ public class CrearJuegoActivity extends AppCompatActivity  {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
-            public void handleOnBackPressed() {
-                Intent intent;
-                if (Usuario.getUsuario().getRol().equals("administrador")){
-                    intent = new Intent(CrearJuegoActivity.this, AdministradorActivity.class);
-                }
-                else {
-                    intent = new Intent(CrearJuegoActivity.this, ModeradorActivity.class);
-                }
+            public void handleOnBackPressed() {//que apague el hotspot y despues vaya para atras
+                Intent intent=new Intent(CrearJuegoActivity.this,AdminElementosActivity.class);
                 startActivity(intent);
                 finish();
             }
