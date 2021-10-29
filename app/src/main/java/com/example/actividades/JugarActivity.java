@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
-import android.util.JsonReader;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -58,7 +57,6 @@ import com.example.objetos.Plantilla;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -216,7 +214,7 @@ public class JugarActivity extends AppCompatActivity  {
                 intent.setAction("unirse");
                 intent.putExtra("codigo", Formatter.formatIpAddress(d.gateway));
                 appContext.sendBroadcast(intent);
-                GameContext.setEquipo(new Equipo());
+                GameContext.setEquipo(new Equipo(juego.getMazo(),juego.getEquipos().get(0).getNombre()));
                 GameContext.getNombresEquipos().add(juego.getEquipos().get(0).getNombre()); //ver esto
                 System.out.println("Entre");
                 GameContext.getEquipo().setTarjetas(juego.getMazo());
@@ -250,17 +248,6 @@ public class JugarActivity extends AppCompatActivity  {
         casilleros=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros();
         categorias=GameContext.getJuego().getPlantilla().getCategorias();
         ronda.setText("Ronda: "+GameContext.getRonda()+"/"+GameContext.getJuego().getPartidas().size());
-        ArrayList<Tarjeta> cartasTiradas=new ArrayList<>();
-        for (Casillero casillero: casilleros){// tenemos que vaciar el tablero por como esta hecha la funcion
-            if (casillero.getTarjeta()!=null){
-                cartasTiradas.add(casillero.getTarjeta());
-                casillero.setTarjeta(null);
-            }
-        }
-        for (Tarjeta tarjeta:cartasTiradas){//insertamos las tarjetas viejas en el tablero
-            GameContext.setTarjetaElegida(tarjeta);
-            insertarTarjetaEnTablero();
-        }
         if (GameContext.getServer()==null){//si no es el server
             ArrayList<String> datos=new ArrayList<>();
             Mensaje mensaje=new Mensaje("jugarListo",datos);
@@ -438,9 +425,7 @@ public class JugarActivity extends AppCompatActivity  {
         botonVerCartas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (GameContext.getServer()==null){
-
                     hideSystemUI();
                     LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
                     View dialog_layout = inflater.inflate(R.layout.ver_cartas, null);
@@ -461,7 +446,6 @@ public class JugarActivity extends AppCompatActivity  {
                     tarjetasHashSet=GameContext.getEquipo().getTarjetas();
 
                     for (Tarjeta tarjetaARevisar:tarjetasHashSet) {
-
                         String nombreCategoria=tarjetaARevisar.getCategoria();
                         String tarjetaContenido=tarjetaARevisar.getContenido();
                         String tarjetaYapa=tarjetaARevisar.getYapa();
@@ -556,6 +540,22 @@ public class JugarActivity extends AppCompatActivity  {
         };
 
         this.getOnBackPressedDispatcher().addCallback(this, callback);
+        rellenarTablero();
+    }
+
+    public void rellenarTablero(){
+        HashSet<Tarjeta> cartasTiradas=new HashSet<>();
+        for (Casillero casillero: casilleros){// tenemos que vaciar el tablero por como esta hecha la funcion
+            System.out.println("id casillero "+casillero.getId());
+            if (casillero.getTarjeta()!=null){
+                cartasTiradas.add(casillero.getTarjeta());
+                casillero.setTarjeta(null);
+            }
+        }
+        for (Tarjeta tarjeta:cartasTiradas){//insertamos las tarjetas viejas en el tablero
+            GameContext.setTarjetaElegida(tarjeta);
+            insertarTarjetaEnTablero();
+        }
     }
 
     public void cambiarColorBordes(LinearLayout contenedorCartas){
@@ -608,10 +608,13 @@ public class JugarActivity extends AppCompatActivity  {
 
                 CardView prueba = (CardView) findViewById(casillero.getId());
                 prueba.removeAllViews();
+                System.out.println("width cardView prueba "+prueba.getWidth());//esto da 0 cuando inserta las viejas y 388 con las nuevas
+
 
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int width = displayMetrics.widthPixels;
+                System.out.println("width "+width);
                 int widthCarta = width / 7;
                 int heightCarta = widthCarta;
                 int marginCarta = width / 45;
@@ -623,7 +626,6 @@ public class JugarActivity extends AppCompatActivity  {
                 prueba.addView(carta);
                 insertoLaTarjeta=true;
             }
-
         }
         return insertoLaTarjeta;
     }
@@ -835,17 +837,15 @@ public class JugarActivity extends AppCompatActivity  {
         set.connect(yapaParaDiscutirEnGrupo.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
         set.connect(yapaParaDiscutirEnGrupo.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT);
         set.applyTo(constraintLayout);
-
-
-
         return carta;
     }
 
     public CardView crearTarjeta(int widthCartaGrande, int height, int margin, int color, String categoria, String contenido, String yapaContenido, boolean hacerCartaGrande){
-
         // Crear la base
         CardView carta = new CardView(this);
         int width = findViewById(R.id.cardView).getWidth() - 20;
+        System.out.println("width crearTarjeta "+width);
+        System.out.println("width cardView "+findViewById(R.id.cardView).getWidth());
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
         params.setMargins( 0,margin, 0,margin);
         params.gravity = Gravity.CENTER_HORIZONTAL;
@@ -915,7 +915,7 @@ public class JugarActivity extends AppCompatActivity  {
                 @Override
                 public void onClick(View v) {
                     LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
-                    View dialog_layout = inflater.inflate(R.layout.prueba, null);
+                    View dialog_layout = inflater.inflate(R.layout.tarjeta, null);
                     final Dialog dialog= new Dialog(JugarActivity.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setCancelable(true);
@@ -940,7 +940,7 @@ public class JugarActivity extends AppCompatActivity  {
                     parteArribaView.setBackgroundColor(color);
                     parteAbajoView.setBackgroundColor(color);
 
-                    MaterialCardView.LayoutParams params = new MaterialCardView.LayoutParams((width*5)/2, height*3);
+                    MaterialCardView.LayoutParams params = new MaterialCardView.LayoutParams((widthCartaGrande*5)/2, height*3);
                     tarjeta.setLayoutParams(params);
 
                     dialog.show();
@@ -1044,13 +1044,10 @@ public class JugarActivity extends AppCompatActivity  {
         for (int i = 0; i < 10; i++) {
             int codigoColor=categorias.get(i).getColor().getCodigo();
             String nombre= categorias.get(i).getNombre();
-
             CardView espacioCarta= espacioCartas.get(i);
             espacioCarta.setCardBackgroundColor(codigoColor);
-
             TextView espacioTexto = espaciosTextos.get(i);
             espacioTexto.setText(nombre);
-
             GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros().get(i).setId(espacioCarta.getId());
         }
     }
@@ -1145,6 +1142,7 @@ public class JugarActivity extends AppCompatActivity  {
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
+
     public static String convertStreamToString(InputStream is) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
@@ -1169,7 +1167,6 @@ public class JugarActivity extends AppCompatActivity  {
         }
         return false;
     }
-
 
     @Override
     protected void onPause() {

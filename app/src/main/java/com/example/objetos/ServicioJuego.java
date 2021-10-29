@@ -419,7 +419,7 @@ public class ServicioJuego extends Service {
                                             case "volvi":
                                                 mapDatos = new HashMap<>();
                                                 try {
-                                                    mapDatos = json.fromJson(mensaje.getDatos().get(0), HashMap.class);//ponemos 0 porque sabemos que solo llega 1, modificarlo para los demas
+                                                    mapDatos = json.fromJson(mensaje.getDatos().get(0), HashMap.class);
                                                 } catch (JsonSyntaxException e) {
                                                     e.printStackTrace();
                                                 }
