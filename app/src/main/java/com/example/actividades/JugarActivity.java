@@ -218,13 +218,6 @@ public class JugarActivity extends AppCompatActivity  {
                 GameContext.getNombresEquipos().add(juego.getEquipos().get(0).getNombre()); //ver esto
                 System.out.println("Entre");
                 GameContext.getEquipo().setTarjetas(juego.getMazo());
-                ArrayList<String> datos=new ArrayList<>();
-                datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
-                Mensaje mensaje=new Mensaje("volvi",datos);
-                String msg=mensaje.serializar();
-                Write escribir = new Write();
-                escribir.execute(msg, 0);
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -248,7 +241,7 @@ public class JugarActivity extends AppCompatActivity  {
         casilleros=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros();
         categorias=GameContext.getJuego().getPlantilla().getCategorias();
         ronda.setText("Ronda: "+GameContext.getRonda()+"/"+GameContext.getJuego().getPartidas().size());
-        if (GameContext.getServer()==null){//si no es el server
+        if (GameContext.getServer()==null && !partidaReaunudada){//si no es el server
             ArrayList<String> datos=new ArrayList<>();
             Mensaje mensaje=new Mensaje("jugarListo",datos);
             String msg=mensaje.serializar();
@@ -1162,7 +1155,7 @@ public class JugarActivity extends AppCompatActivity  {
         try {
             File file = new File(fullPath, "Autoguardado.qves");
             if(file.exists()) {
-                 return file.delete();
+                return file.delete();
             }
         }
         catch (Exception e) {
