@@ -445,6 +445,9 @@ public class JugarActivity extends AppCompatActivity  {
 
                     tarjetasHashSet=GameContext.getEquipo().getTarjetas();
 
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, (heightDialog*8)/10);
+                    contenedorCartas.setLayoutParams(params);
+
                     for (Tarjeta tarjetaARevisar:tarjetasHashSet) {
                         String nombreCategoria=tarjetaARevisar.getCategoria();
                         String tarjetaContenido=tarjetaARevisar.getContenido();

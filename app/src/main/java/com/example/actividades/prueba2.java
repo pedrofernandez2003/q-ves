@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.style.TtsSpan;
 import android.util.DisplayMetrics;
@@ -19,7 +20,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,13 +84,13 @@ public class prueba2 extends AppCompatActivity {
         categorias.add(categoria2);
         categorias.add(categoria3);
 
-        tarjetasHashSet.add(tarjeta1);
-        tarjetasHashSet.add(tarjeta2);
-        tarjetasHashSet.add(tarjeta3);
-        tarjetasHashSet.add(tarjeta4);
-        tarjetasHashSet.add(tarjeta5);
-        tarjetasHashSet.add(tarjeta6);
-        tarjetasHashSet.add(tarjeta6);
+//        tarjetasHashSet.add(tarjeta1);
+//        tarjetasHashSet.add(tarjeta2);
+//        tarjetasHashSet.add(tarjeta3);
+//        tarjetasHashSet.add(tarjeta4);
+//        tarjetasHashSet.add(tarjeta5);
+//        tarjetasHashSet.add(tarjeta6);
+//        tarjetasHashSet.add(tarjeta6);
 
         Casillero casillero1=new Casillero(categoria1);
         Casillero casillero2=new Casillero(categoria2);
@@ -118,6 +121,13 @@ public class prueba2 extends AppCompatActivity {
                 int heightCarta = (heightDialog*8)/10;
                 int widthCarta = (heightCarta*16)/20;
                 int marginCarta = width/60;
+
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, (heightDialog*8)/10);
+                contenedorCartas.setLayoutParams(params);
+
+                TextView noCartas = new TextView(prueba2.this);
+                noCartas.setText("No hay mas cartas en tu mazo");
+
 
 
                 for (Tarjeta tarjetaARevisar:tarjetasHashSet) {
@@ -150,12 +160,10 @@ public class prueba2 extends AppCompatActivity {
                     });
                 }
 
+
                 db.setPositiveButton("Enviar al tablero", null);
                 db.setNegativeButton("Atras", null);
-//                AlertDialog ad = ;
-//                ad.getWindow().setLayout((width*8)/10, (height*8)/10);
                 final AlertDialog a = db.create();
-
                 a.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {

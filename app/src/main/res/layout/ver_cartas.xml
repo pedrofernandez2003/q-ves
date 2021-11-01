@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <HorizontalScrollView
+        android:id="@+id/scrollViewVerCartas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
@@ -18,7 +19,7 @@
         <LinearLayout
             android:id="@+id/contenedorCartas"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
             android:useDefaultMargins="true" >
 
