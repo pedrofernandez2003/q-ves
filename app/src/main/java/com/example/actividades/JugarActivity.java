@@ -30,6 +30,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -540,18 +541,24 @@ public class JugarActivity extends AppCompatActivity  {
     }
 
     public void rellenarTablero(){
-        HashSet<Tarjeta> cartasTiradas=new HashSet<>();
-        for (Casillero casillero: casilleros){// tenemos que vaciar el tablero por como esta hecha la funcion
-            System.out.println("id casillero "+casillero.getId());
-            if (casillero.getTarjeta()!=null){
-                cartasTiradas.add(casillero.getTarjeta());
-                casillero.setTarjeta(null);
+        CardView cardView = findViewById(R.id.cardView);
+        cardView.post(new Runnable() {
+            @Override
+            public void run() {
+                HashSet<Tarjeta> cartasTiradas=new HashSet<>();
+                for (Casillero casillero: casilleros){// tenemos que vaciar el tablero por como esta hecha la funcion
+                    System.out.println("id casillero "+casillero.getId());
+                    if (casillero.getTarjeta()!=null){
+                        cartasTiradas.add(casillero.getTarjeta());
+                        casillero.setTarjeta(null);
+                    }
+                }
+                for (Tarjeta tarjeta:cartasTiradas){//insertamos las tarjetas viejas en el tablero
+                    GameContext.setTarjetaElegida(tarjeta);
+                    insertarTarjetaEnTablero();
+                }
             }
-        }
-        for (Tarjeta tarjeta:cartasTiradas){//insertamos las tarjetas viejas en el tablero
-            GameContext.setTarjetaElegida(tarjeta);
-            insertarTarjetaEnTablero();
-        }
+        });
     }
 
     public void cambiarColorBordes(LinearLayout contenedorCartas){
@@ -943,9 +950,7 @@ public class JugarActivity extends AppCompatActivity  {
                 }
             });
         }
-
         return carta;
-
     }
 
     public CardView crearTarjetaAnular(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
@@ -1130,8 +1135,7 @@ public class JugarActivity extends AppCompatActivity  {
 
     private void hideSystemUI() {//para poner full screen
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
     private void showSystemUI() {//para sacar el full screen
@@ -1171,37 +1175,38 @@ public class JugarActivity extends AppCompatActivity  {
 
     @Override
     protected void onDestroy() {
-        String tarjetas="[";
-        ArrayList<String> datos=new ArrayList<>();
-        datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
-        Mensaje mensaje=new Mensaje("salir",datos);
-        String msg=mensaje.serializar();
-        Write escribir = new Write();
-        escribir.execute(msg, 0);
-        unregisterReceiver(broadcastReceiver);
-        super.onDestroy();
-        for (Casillero casillero:casilleros){
-            if (casillero.getTarjeta()!=null){
-                tarjetas+=casillero.getTarjeta().serializar();
+        if (GameContext.getServer()==null){
+            String tarjetas="[";
+            ArrayList<String> datos=new ArrayList<>();
+            datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+            Mensaje mensaje=new Mensaje("salir",datos);
+            String msg=mensaje.serializar();
+            Write escribir = new Write();
+            escribir.execute(msg, 0);
+            for (Casillero casillero:casilleros){
+                if (casillero.getTarjeta()!=null){
+                    tarjetas+=casillero.getTarjeta().serializar();
+                }
+            }
+            tarjetas+="]";
+            try {
+                // image naming and path  to include sd card  appending name you choose for file
+                String mPath = Environment.getExternalStorageDirectory().toString() + "/plantillas/Autoguardado.qves";
+                File filebase = new File(Environment.getExternalStorageDirectory().toString(), "plantillas");
+                filebase.mkdirs();
+                File imageFile = new File(mPath);
+                FileOutputStream outputStream = new FileOutputStream(imageFile);
+                DatosPartida datosPartida= new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar(),tarjetas);
+                msg=datosPartida.serializar();
+                outputStream.write(msg.getBytes());
+                outputStream.flush();
+                outputStream.close();
+
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
         }
-        tarjetas+="]";
-        try {
-            // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/plantillas/Autoguardado.qves";
-            File filebase = new File(Environment.getExternalStorageDirectory().toString(), "plantillas");
-            filebase.mkdirs();
-            File imageFile = new File(mPath);
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
-            DatosPartida datosPartida= new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar(),tarjetas);
-            msg=datosPartida.serializar();
-            outputStream.write(msg.getBytes());
-            outputStream.flush();
-            outputStream.close();
-
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
+        unregisterReceiver(broadcastReceiver);
+        super.onDestroy();
     }
 }
