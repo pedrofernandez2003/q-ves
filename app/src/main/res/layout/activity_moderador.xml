@@ -50,7 +50,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:fontFamily="@font/poertsen_one_regular"
-                    android:text="Crear plantilla"
+                    android:text="Crear juego"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:textSize="37sp" />
@@ -191,7 +191,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:fontFamily="@font/poertsen_one_regular"
-                    android:text="Administrar plantillas"
+                    android:text="Administrar juegos"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:textSize="30sp" />

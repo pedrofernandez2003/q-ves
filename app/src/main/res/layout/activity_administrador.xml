@@ -22,8 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_margin="6dp"
-            android:src="@drawable/descarga"
             android:backgroundTint="@color/white"
+            android:src="@drawable/descarga"
             app:backgroundTint="@color/white" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,7 +61,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="4"
                     android:fontFamily="@font/poertsen_one_regular"
-                    android:text="Crear plantilla"
+                    android:text="Crear juego"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:textSize="37sp" />
@@ -79,7 +79,6 @@
 
 
     </androidx.cardview.widget.CardView>
-
 
 
     <androidx.cardview.widget.CardView
@@ -112,9 +111,9 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="4"
                 android:baselineAligned="false"
                 android:gravity="center"
-                android:layout_weight="4"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline11"
