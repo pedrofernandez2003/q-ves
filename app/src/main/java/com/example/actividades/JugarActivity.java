@@ -848,6 +848,32 @@ public class JugarActivity extends AppCompatActivity  {
         textoContenido.setGravity(Gravity.CENTER);
         textoContenido.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoContenido);
+        //TextView "Yapa para discutir en grupo"
+        TextView yapaParaDiscutirEnGrupo = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        yapaParaDiscutirEnGrupo.setLayoutParams(params);
+        yapaParaDiscutirEnGrupo.setText(getResources().getString(R.string.mensaje_yapa));
+        yapaParaDiscutirEnGrupo.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/16));
+        yapaParaDiscutirEnGrupo.setTypeface(Typeface.DEFAULT_BOLD);
+        yapaParaDiscutirEnGrupo.setId(ViewCompat.generateViewId());
+        yapaParaDiscutirEnGrupo.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        yapaParaDiscutirEnGrupo.setTextColor(getResources().getColor(R.color.texto_primary));
+        constraintLayout.addView(yapaParaDiscutirEnGrupo);
+
+        if (yapaContenido.equals("")) {
+            yapaParaDiscutirEnGrupo.setText("");
+        }
+        //Crear la yapa
+        TextView yapa = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(margin, margin, margin, margin);
+        yapa.setLayoutParams(params);
+        yapa.setText(yapaContenido);
+        yapa.setTextColor(getResources().getColor(R.color.texto_primary));
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/17));
+        yapa.setGravity(Gravity.CENTER);
+        yapa.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(yapa);
 
         //Constraints
         ConstraintSet set = new ConstraintSet();
@@ -860,42 +886,12 @@ public class JugarActivity extends AppCompatActivity  {
         set.connect(textoContenido.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
         set.connect(textoContenido.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
         set.connect(textoContenido.getId(), ConstraintSet.TOP, textoCategoria.getId(), ConstraintSet.BOTTOM,height/50);
-        if (!yapaContenido.equals("")) {
-
-            //TextView "Yapa para discutir en grupo"
-            TextView yapaParaDiscutirEnGrupo = new TextView(this);
-            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            yapaParaDiscutirEnGrupo.setLayoutParams(params);
-            yapaParaDiscutirEnGrupo.setText(getResources().getString(R.string.mensaje_yapa));
-            yapaParaDiscutirEnGrupo.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/16));
-            yapaParaDiscutirEnGrupo.setTypeface(Typeface.DEFAULT_BOLD);
-            yapaParaDiscutirEnGrupo.setId(ViewCompat.generateViewId());
-            yapaParaDiscutirEnGrupo.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            yapaParaDiscutirEnGrupo.setTextColor(getResources().getColor(R.color.texto_primary));
-            constraintLayout.addView(yapaParaDiscutirEnGrupo);
-
-
-            //Crear la yapa
-            TextView yapa = new TextView(this);
-            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(margin, margin, margin, margin);
-            yapa.setLayoutParams(params);
-            yapa.setText(yapaContenido);
-            yapa.setTextColor(getResources().getColor(R.color.texto_primary));
-            yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/17));
-            yapa.setGravity(Gravity.CENTER);
-            yapa.setId(ViewCompat.generateViewId());
-            constraintLayout.addView(yapa);
-
-            set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-            set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-            set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
-            set.connect(yapaParaDiscutirEnGrupo.getId(), ConstraintSet.BOTTOM, yapa.getId(), ConstraintSet.TOP);
-            set.connect(yapaParaDiscutirEnGrupo.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
-            set.connect(yapaParaDiscutirEnGrupo.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT);
-        }
-
-
+        set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
+        set.connect(yapaParaDiscutirEnGrupo.getId(), ConstraintSet.BOTTOM, yapa.getId(), ConstraintSet.TOP);
+        set.connect(yapaParaDiscutirEnGrupo.getId(), ConstraintSet.RIGHT, constraintLayout.getId(), ConstraintSet.RIGHT);
+        set.connect(yapaParaDiscutirEnGrupo.getId(), ConstraintSet.LEFT, constraintLayout.getId(), ConstraintSet.LEFT);
         set.applyTo(constraintLayout);
         return carta;
     }
@@ -989,8 +985,8 @@ public class JugarActivity extends AppCompatActivity  {
                     dialog.setCancelable(true);
                     dialog.setContentView(dialog_layout);
 
-                    if (!yapaContenido.equals("")){
-                       TextView yapaParaDiscutirEnGrupo =(TextView) dialog.findViewById(R.id.yapaParaDiscutirEnGrupo);
+                    if (yapaContenido.equals("")){
+                        TextView yapaParaDiscutirEnGrupo =(TextView) dialog.findViewById(R.id.yapaParaDiscutirEnGrupo);
                         yapaParaDiscutirEnGrupo.setText(" ");
                     }
 
