@@ -50,4 +50,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: App
-          path: app/build/outputs/apk/release
+          path: app/build/outputs/apk/release/app-release-unsigned-signed.apk
