@@ -32,10 +32,16 @@ public class CambiarContraseniaActivity extends AppCompatActivity {
         botonConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseAuth.sendPasswordResetEmail( mail.getText().toString() );
-                Toast.makeText(CambiarContraseniaActivity.this,"Ya le mandamos un mail",Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(CambiarContraseniaActivity.this, LoginActivity.class);
-                startActivity(i);
+                if(!mail.getText().toString().matches("")) {
+                    firebaseAuth.sendPasswordResetEmail(mail.getText().toString());
+                    Toast.makeText(CambiarContraseniaActivity.this, "Ya le mandamos un mail", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(CambiarContraseniaActivity.this, LoginActivity.class);
+                    startActivity(i);
+                }
+                else{
+                    Toast.makeText(CambiarContraseniaActivity.this, "Ingrese un mail", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
