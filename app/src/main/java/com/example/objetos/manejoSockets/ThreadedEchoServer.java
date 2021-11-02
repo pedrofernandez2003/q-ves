@@ -24,31 +24,27 @@ public class ThreadedEchoServer extends Thread{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            while (true) {
-                try {
-                    socket = serverSocket.accept();
-                } catch (IOException e) {
-                }
-                SendReceive nuevoHijo = new SendReceive(socket);
-                nuevoHijo.callbackMensaje = new mensajeCallback() {
-                    @Override
-                    public void mensajeRecibido(int estado, String buffer) {
-                        callbackMensaje.conectar(estado, buffer);
-                    }
-                };
-                GameContext.agregarHijo(nuevoHijo);
-                nuevoHijo.start();
-                ArrayList<String> datos = new ArrayList<>();
-                Mensaje mensaje = new Mensaje("conectar", datos);
-                String msg = mensaje.serializar();
-                Write escribir = new Write();
-                escribir.execute(msg, GameContext.getHijos().size() - 1);
+        while (true) {
+            try {
+                socket = serverSocket.accept();
+            } catch (IOException e) {
             }
-        } finally {
-
+            SendReceive nuevoHijo = new SendReceive(socket);
+            nuevoHijo.callbackMensaje = new mensajeCallback() {
+                @Override
+                public void mensajeRecibido(int estado, String buffer) {
+                    callbackMensaje.conectar(estado, buffer);
+                }
+            };
+            GameContext.agregarHijo(nuevoHijo);
+            nuevoHijo.start();
+            ArrayList<String> datos = new ArrayList<>();
+            Mensaje mensaje = new Mensaje("conectar", datos);
+            System.out.println("mando a conectar");
+            String msg = mensaje.serializar();
+            Write escribir = new Write();
+            escribir.execute(msg, GameContext.getHijos().size() - 1);
         }
-
     }
 }
 

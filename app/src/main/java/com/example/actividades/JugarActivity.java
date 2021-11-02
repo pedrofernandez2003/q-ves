@@ -1178,7 +1178,8 @@ public class JugarActivity extends AppCompatActivity  {
         if (GameContext.getServer()==null){
             String tarjetas="[";
             ArrayList<String> datos=new ArrayList<>();
-            datos.add("{\"idJugador\": \""+GameContext.getEquipo().getNombre()+"\"}");
+            System.out.println("mi nombre es "+GameContext.getNombresEquipos().get(0));
+            datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(0)+"\"}");
             Mensaje mensaje=new Mensaje("salir",datos);
             String msg=mensaje.serializar();
             Write escribir = new Write();
