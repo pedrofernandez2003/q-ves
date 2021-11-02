@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
                     intent.setAction("unirse");
                     intent.putExtra("codigo",codigo);
                     appContext.sendBroadcast(intent);
-                    GameContext.setEquipo(new Equipo());
                     GameContext.getNombresEquipos().add(nombreEquipo.getText().toString());
                     setContentView(R.layout.cargando);
                     volverAtras();

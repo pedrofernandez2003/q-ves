@@ -1,5 +1,4 @@
 package com.example.actividades;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -220,7 +219,6 @@ public class JugarActivity extends AppCompatActivity  {
                 appContext.sendBroadcast(intent);
                 GameContext.setEquipo(new Equipo(juego.getMazo(),juego.getEquipos().get(0).getNombre()));
                 GameContext.getNombresEquipos().add(juego.getEquipos().get(0).getNombre()); //ver esto
-                System.out.println("Entre");
                 GameContext.getEquipo().setTarjetas(juego.getMazo());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -243,7 +241,6 @@ public class JugarActivity extends AppCompatActivity  {
         partida=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1);
         ronda=findViewById(R.id.textView2);
         casilleros=GameContext.getJuego().getPartidas().get(GameContext.getRonda()-1).getCasilleros();
-
         categorias=GameContext.getJuego().getPlantilla().getCategorias();
         ronda.setText("Ronda: "+GameContext.getRonda()+"/"+GameContext.getJuego().getPartidas().size());
         if (GameContext.getServer()==null && !partidaReaunudada){//si no es el server
@@ -260,7 +257,7 @@ public class JugarActivity extends AppCompatActivity  {
         botonAnularCarta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (GameContext.getServer()==null && GameContext.isEsMiTurno()){
+                if (GameContext.getServer()==null && GameContext.isEsMiTurno() && !GameContext.estaPausado()){
                     DisplayMetrics displayMetrics = new DisplayMetrics();
                     getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                     int width = displayMetrics.widthPixels;
@@ -331,14 +328,35 @@ public class JugarActivity extends AppCompatActivity  {
                     });
                     a.show();
                 }
+                else if (!GameContext.isEsMiTurno()){
+                    LayoutInflater inflater=getLayoutInflater();
+                    View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                    TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                    text.setText("No es tu turno");
+                    Toast toast= new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.BOTTOM,0,0);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(Layout);
+                    toast.show();
+                }
+                else if (GameContext.estaPausado()){
+                    LayoutInflater inflater=getLayoutInflater();
+                    View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                    TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                    text.setText("El juego esta pausado");
+                    Toast toast= new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.BOTTOM,0,0);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(Layout);
+                    toast.show();
+                }
             }
         });
 
         botonAgarrarCarta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (GameContext.getServer()==null && GameContext.isEsMiTurno()){
+                if (GameContext.getServer()==null && GameContext.isEsMiTurno() && !GameContext.estaPausado()){
                     if (puedeAgarrarCarta){
                         LayoutInflater inflater=getLayoutInflater();
                         View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
@@ -370,11 +388,22 @@ public class JugarActivity extends AppCompatActivity  {
                     }
 
                 }
-                else{
+                else if (!GameContext.isEsMiTurno()){
                     LayoutInflater inflater=getLayoutInflater();
                     View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
                     TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
                     text.setText("No es tu turno");
+                    Toast toast= new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.BOTTOM,0,0);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(Layout);
+                    toast.show();
+                }
+                else if (GameContext.estaPausado()){
+                    LayoutInflater inflater=getLayoutInflater();
+                    View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                    TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                    text.setText("El juego esta pausado");
                     Toast toast= new Toast(getApplicationContext());
                     toast.setGravity(Gravity.BOTTOM,0,0);
                     toast.setDuration(Toast.LENGTH_LONG);
@@ -387,7 +416,7 @@ public class JugarActivity extends AppCompatActivity  {
         botonPasarTurno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (GameContext.isEsMiTurno()){
+                if (GameContext.getServer()==null && GameContext.isEsMiTurno() && !GameContext.estaPausado()){
                     LayoutInflater inflater=getLayoutInflater();
                     View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
                     TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
@@ -405,7 +434,7 @@ public class JugarActivity extends AppCompatActivity  {
                     GameContext.setEsMiTurno(false);
                     indicadorTurno.setVisibility(View.INVISIBLE);
                 }
-                else{
+                else if (!GameContext.isEsMiTurno()){
                     LayoutInflater inflater=getLayoutInflater();
                     View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
                     TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
@@ -415,7 +444,17 @@ public class JugarActivity extends AppCompatActivity  {
                     toast.setDuration(Toast.LENGTH_LONG);
                     toast.setView(Layout);
                     toast.show();
-
+                }
+                else if (GameContext.estaPausado()){
+                    LayoutInflater inflater=getLayoutInflater();
+                    View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                    TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                    text.setText("El juego esta pausado");
+                    Toast toast= new Toast(getApplicationContext());
+                    toast.setGravity(Gravity.BOTTOM,0,0);
+                    toast.setDuration(Toast.LENGTH_LONG);
+                    toast.setView(Layout);
+                    toast.show();
                 }
             }
         });
@@ -484,7 +523,7 @@ public class JugarActivity extends AppCompatActivity  {
                             b.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    if (GameContext.isEsMiTurno()){
+                                    if (GameContext.isEsMiTurno() && !GameContext.estaPausado()){
                                         if (insertarTarjetaEnTablero()){
                                             ArrayList<String> datos=new ArrayList<>();
                                             datos.add(GameContext.getTarjetaElegida().serializar());
@@ -509,8 +548,7 @@ public class JugarActivity extends AppCompatActivity  {
                                             toast.show();
                                         }
                                     }
-                                    else{
-
+                                    else if (!GameContext.isEsMiTurno()){
                                         LayoutInflater inflater=getLayoutInflater();
                                         View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
                                         TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
@@ -521,6 +559,17 @@ public class JugarActivity extends AppCompatActivity  {
                                         toast.setView(Layout);
                                         toast.show();
 
+                                    }
+                                    else if (GameContext.estaPausado()){
+                                        LayoutInflater inflater=getLayoutInflater();
+                                        View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                                        TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                                        text.setText("El juego esta pausado");
+                                        Toast toast= new Toast(getApplicationContext());
+                                        toast.setGravity(Gravity.BOTTOM,0,0);
+                                        toast.setDuration(Toast.LENGTH_LONG);
+                                        toast.setView(Layout);
+                                        toast.show();
                                     }
                                     a.dismiss();
                                 }
@@ -974,90 +1023,6 @@ public class JugarActivity extends AppCompatActivity  {
         return carta;
     }
 
-    public CardView crearTarjetaAnular(int width, int height, int margin, int color, String categoria, String contenido, String yapaContenido){
-        // Crear la base
-        CardView carta = new CardView(this);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
-        params.setMargins(margin,margin,margin,margin);
-        carta.setLayoutParams(params);
-        carta.setBackgroundColor(-1644568);
-
-        // Crear el constraint layout
-        ConstraintLayout constraintLayout = new ConstraintLayout(this);
-        params = new FrameLayout.LayoutParams(width, height);
-        constraintLayout.setLayoutParams(params);
-        constraintLayout.setId(ViewCompat.generateViewId());
-        carta.addView(constraintLayout);
-
-        // Crear el borde de arriba
-        CardView bordeTop = new CardView(this);
-        params = new FrameLayout.LayoutParams(width, height/8);
-        bordeTop.setLayoutParams(params);
-        bordeTop.setBackgroundColor(color);
-        bordeTop.setId(ViewCompat.generateViewId());
-        constraintLayout.addView(bordeTop);
-
-
-        // Crear el borde de abajo
-        CardView bordeBot = new CardView(this);
-        params = new FrameLayout.LayoutParams(width, (height*3)/50);
-        bordeBot.setLayoutParams(params);
-        bordeBot.setBackgroundColor(color);
-        bordeBot.setId(ViewCompat.generateViewId());
-        constraintLayout.addView(bordeBot);
-
-        //Crear el textview con la categoria
-        TextView textoCategoria = new TextView(this);
-        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        textoCategoria.setLayoutParams(params);
-        textoCategoria.setText(categoria);
-        textoCategoria.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/6);
-        textoCategoria.setTypeface(ResourcesCompat.getFont(this, R.font.poertsen_one_regular));
-        textoCategoria.setId(ViewCompat.generateViewId());
-        constraintLayout.addView(textoCategoria);
-
-        //Crear el textview para el contenido
-        TextView textoContenido = new TextView(this);
-        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(margin, margin, margin, margin);
-        textoContenido.setLayoutParams(params);
-        textoContenido.setText(contenido);
-        textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/8));
-        textoContenido.setGravity(Gravity.CENTER);
-        textoContenido.setId(ViewCompat.generateViewId());
-        constraintLayout.addView(textoContenido);
-
-        //Crear la yapa
-        TextView yapa = new TextView(this);
-        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(margin, margin, margin, margin);
-        yapa.setLayoutParams(params);
-        yapa.setText(yapaContenido);
-        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/10));
-        yapa.setGravity(Gravity.CENTER);
-        yapa.setId(ViewCompat.generateViewId());
-        constraintLayout.addView(yapa);
-
-        //Constraints
-        ConstraintSet set = new ConstraintSet();
-        set.clone(constraintLayout);
-        set.connect(bordeTop.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 0);
-        set.connect(bordeBot.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM);
-        set.connect(textoCategoria.getId(), ConstraintSet.TOP, bordeTop.getId(), ConstraintSet.BOTTOM);
-        set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-        set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-        set.connect(textoContenido.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-        set.connect(textoContenido.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-        set.connect(textoContenido.getId(), ConstraintSet.TOP, textoCategoria.getId(), ConstraintSet.BOTTOM,height/50);
-        set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-        set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-        set.connect(yapa.getId(), ConstraintSet.BOTTOM, bordeBot.getId(), ConstraintSet.TOP);
-        set.applyTo(constraintLayout);
-
-        return carta;
-
-    }
-
     public void mostrarPlantillaEnXml(Plantilla plantilla, Context context) {
         ArrayList<CardView> espacioCartas = conseguirCardViews();
         ArrayList<TextView> espaciosTextos = conseguirTextViews();
@@ -1075,7 +1040,6 @@ public class JugarActivity extends AppCompatActivity  {
     }
 
     private void takeScreenshot() {
-
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 

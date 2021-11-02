@@ -20,6 +20,7 @@ public class GameContext{
     private static Tarjeta tarjetaElegida;
     private static Tarjeta tarjetaAnulada;
     private static ArrayList<String> equiposRetirados= new ArrayList<>();
+    private static boolean pausa = false;
 
 
     private GameContext(){}
@@ -28,6 +29,14 @@ public class GameContext{
             context = new GameContext();
         }
         return context;
+    }
+
+    public static boolean estaPausado() {
+        return pausa;
+    }
+
+    public static void setPausa(boolean pausa) {
+        GameContext.pausa = pausa;
     }
 
     public static Tarjeta getTarjetaAnulada() {
