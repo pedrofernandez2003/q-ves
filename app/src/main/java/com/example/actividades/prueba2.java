@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -44,7 +43,7 @@ import com.example.R;
 import com.example.objetos.manejoSockets.Write;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
-
+import com.example.objetos.Color;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -60,6 +59,8 @@ public class prueba2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tablero_template);
         verCartas = findViewById(R.id.verCartas);
+
+
 
         //ArrayList<Casillero> casilleros=GameContext.getPartidaActual().getCasilleros();
         //ArrayList<Categoria> categorias=GameContext.getJuego().getPlantilla().getCategorias();
@@ -206,7 +207,7 @@ public class prueba2 extends AppCompatActivity {
             tarjetaYapa="...";
         }
 
-        CardView carta = crearTarjeta2(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjetaContenido, tarjetaYapa,tarjeta2.getYapa());
+        CardView carta = crearTarjeta2(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjetaContenido, tarjetaYapa,"");
 
         prueba.addView(carta);
     }
@@ -543,11 +544,16 @@ public class prueba2 extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     LayoutInflater inflater = LayoutInflater.from(prueba2.this);
-                    View dialog_layout = inflater.inflate(R.layout.prueba, null);
+                    View dialog_layout = inflater.inflate(R.layout.tarjeta, null);
                     final Dialog dialog= new Dialog(prueba2.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setCancelable(true);
                     dialog.setContentView(dialog_layout);
+
+                    if (!yapaContenido.equals("")){
+                        TextView yapaParaDiscutirEnGrupo =(TextView) dialog.findViewById(R.id.yapaParaDiscutirEnGrupo);
+                        yapaParaDiscutirEnGrupo.setText(" ");
+                    }
 
                     MaterialCardView tarjeta=(MaterialCardView) dialog.findViewById(R.id.tarjeta);
                     TextView categoriaView = (TextView) dialog.findViewById(R.id.categoria);
@@ -559,12 +565,12 @@ public class prueba2 extends AppCompatActivity {
                     categoriaView.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/5);
                     categoriaView.setText(categoria);
                     contenidoView.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/6);
-                    contenidoView.setText(contenido);
+                    contenidoView.setText("111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
                     yapaView.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/16)*2);
                     yapaView.setText(yapaPosta);
 
                     tarjeta.setCardBackgroundColor(-1644568);
-                    categoriaView.setTextColor(color);
+                    //categoriaView.setTextColor(color);
                     parteArribaView.setBackgroundColor(color);
                     parteAbajoView.setBackgroundColor(color);
 

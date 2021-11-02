@@ -43,6 +43,7 @@
             app:layout_constraintTop_toTopOf="@+id/categoria" />
 
         <TextView
+            android:id="@+id/yapaParaDiscutirEnGrupo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Yapa para discutir en grupo:"
