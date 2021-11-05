@@ -16,17 +16,26 @@ public class SendReceive extends Thread {
 
 
     public SendReceive(Socket skt) {
+        System.out.println("se construyo el sendReceive");
         socket = skt;
-    }
-
-    @Override
-    public void run() {
-        try {
+        try {//ver que no rompa nada
+            System.out.println("se crean los stream");
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void run() {
+//        try {
+//            System.out.println("se crean los stream");
+//            inputStream = socket.getInputStream();
+//            outputStream = socket.getOutputStream();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         byte[] buffer = new byte[1];
         int bytes;
         String bufferAcumulado="";

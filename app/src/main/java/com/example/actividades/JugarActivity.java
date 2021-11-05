@@ -86,6 +86,7 @@ public class JugarActivity extends AppCompatActivity  {
     private DhcpInfo d;
     private FloatingActionButton indicadorTurno;
     private boolean partidaReaunudada = false;
+    private boolean partidaTerminada = false;
 
     Context appContext=this;
     BroadcastReceiver broadcastReceiver=new BroadcastReceiver() {
@@ -121,6 +122,7 @@ public class JugarActivity extends AppCompatActivity  {
                     break;
 
                 case "ganador":
+                    partidaTerminada=true;
                     if(GameContext.getServer()!=null){
                         takeScreenshot();
                     }
@@ -134,7 +136,7 @@ public class JugarActivity extends AppCompatActivity  {
                     final AlertDialog a = db.create();
                     a.show();
                     if (partidaReaunudada){
-                        System.out.println("se borro "+borrarAutoguardado());
+                        borrarAutoguardado();
                     }
                     Button volverAInicio = a.getButton(AlertDialog.BUTTON_POSITIVE);
                     volverAInicio.setOnClickListener(new View.OnClickListener() {
@@ -213,12 +215,12 @@ public class JugarActivity extends AppCompatActivity  {
                 GameContext.setRonda(Integer.parseInt(datosPartida.getRonda()));
                 Juego juego = json.fromJson(datosPartida.getJuego(),Juego.class);
                 GameContext.setJuego(juego);
+                GameContext.getNombresEquipos().add(juego.getEquipos().get(0).getNombre()); //ver esto
                 Intent intent= new Intent();
                 intent.setAction("unirse");
                 intent.putExtra("codigo", Formatter.formatIpAddress(d.gateway));
                 appContext.sendBroadcast(intent);
                 GameContext.setEquipo(new Equipo(juego.getMazo(),juego.getEquipos().get(0).getNombre()));
-                GameContext.getNombresEquipos().add(juego.getEquipos().get(0).getNombre()); //ver esto
                 GameContext.getEquipo().setTarjetas(juego.getMazo());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1156,36 +1158,38 @@ public class JugarActivity extends AppCompatActivity  {
 
     @Override
     protected void onDestroy() {
-        if (GameContext.getServer()==null){
-            String tarjetas="[";
-            ArrayList<String> datos=new ArrayList<>();
-            System.out.println("mi nombre es "+GameContext.getNombresEquipos().get(0));
-            datos.add("{\"idJugador\": \""+GameContext.getNombresEquipos().get(0)+"\"}");
-            Mensaje mensaje=new Mensaje("salir",datos);
-            String msg=mensaje.serializar();
-            Write escribir = new Write();
-            escribir.execute(msg, 0);
-            for (Casillero casillero:casilleros){
-                if (casillero.getTarjeta()!=null){
-                    tarjetas+=casillero.getTarjeta().serializar();
+        if (!partidaTerminada) {
+            if (GameContext.getServer() == null) {
+                String tarjetas = "[";
+                ArrayList<String> datos = new ArrayList<>();
+                System.out.println("mi nombre es " + GameContext.getNombresEquipos().get(0));
+                datos.add("{\"idJugador\": \"" + GameContext.getNombresEquipos().get(0) + "\"}");
+                Mensaje mensaje = new Mensaje("salir", datos);
+                String msg = mensaje.serializar();
+                Write escribir = new Write();
+                escribir.execute(msg, 0);
+                for (Casillero casillero : casilleros) {
+                    if (casillero.getTarjeta() != null) {
+                        tarjetas += casillero.getTarjeta().serializar();
+                    }
                 }
-            }
-            tarjetas+="]";
-            try {
-                // image naming and path  to include sd card  appending name you choose for file
-                String mPath = Environment.getExternalStorageDirectory().toString() + "/plantillas/Autoguardado.qves";
-                File filebase = new File(Environment.getExternalStorageDirectory().toString(), "plantillas");
-                filebase.mkdirs();
-                File imageFile = new File(mPath);
-                FileOutputStream outputStream = new FileOutputStream(imageFile);
-                DatosPartida datosPartida= new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar(),tarjetas);
-                msg=datosPartida.serializar();
-                outputStream.write(msg.getBytes());
-                outputStream.flush();
-                outputStream.close();
+                tarjetas += "]";
+                try {
+                    // image naming and path  to include sd card  appending name you choose for file
+                    String mPath = Environment.getExternalStorageDirectory().toString() + "/plantillas/Autoguardado.qves";
+                    File filebase = new File(Environment.getExternalStorageDirectory().toString(), "plantillas");
+                    filebase.mkdirs();
+                    File imageFile = new File(mPath);
+                    FileOutputStream outputStream = new FileOutputStream(imageFile);
+                    DatosPartida datosPartida = new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar(), tarjetas);
+                    msg = datosPartida.serializar();
+                    outputStream.write(msg.getBytes());
+                    outputStream.flush();
+                    outputStream.close();
 
-            } catch (Throwable e) {
-                e.printStackTrace();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
         }
         unregisterReceiver(broadcastReceiver);

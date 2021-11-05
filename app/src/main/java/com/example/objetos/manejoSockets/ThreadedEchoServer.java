@@ -40,7 +40,6 @@ public class ThreadedEchoServer extends Thread{
             nuevoHijo.start();
             ArrayList<String> datos = new ArrayList<>();
             Mensaje mensaje = new Mensaje("conectar", datos);
-            System.out.println("mando a conectar");
             String msg = mensaje.serializar();
             Write escribir = new Write();
             escribir.execute(msg, GameContext.getHijos().size() - 1);
