@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             db.setTitle("reanudar partida");
             db.setPositiveButton("Sí", null);
             db.setNegativeButton("No", null);
+            db.setNeutralButton("Borrar", null);
             final AlertDialog a = db.create();
 
             a.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onShow(DialogInterface dialog) {
                     Button si = a.getButton(AlertDialog.BUTTON_POSITIVE);
                     Button no = a.getButton(AlertDialog.BUTTON_NEGATIVE);
+                    Button borrar = a.getButton(AlertDialog.BUTTON_NEUTRAL);
                     no.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -85,6 +88,13 @@ public class MainActivity extends AppCompatActivity {
                             intent.putExtra("reanudar",true);
                             startActivity(intent);
                             finish();
+                            a.dismiss();
+                        }
+                    });
+                    borrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            borrarAutoguardado();
                             a.dismiss();
                         }
                     });
@@ -223,9 +233,22 @@ public class MainActivity extends AppCompatActivity {
         startActivity(partida);
         finish();
     }
+    private boolean borrarAutoguardado(){
+        String fullPath = "data/user/0/com.example.login_crud/app_personajes/plantillas";
+        try {
+            File file = new File(fullPath, "Autoguardado.qves");
+            if(file.exists()) {
+                return file.delete();
+            }
+        }
+        catch (Exception e) {
+            Log.e("App", "Exception while deleting file " + e.getMessage());
+        }
+        return false;
+    }
 
     private boolean reanudarPartida(){
-        File file = new File(Environment.getExternalStorageDirectory().toString()+"/plantillas/Autoguardado.qves");
+        File file = new File("data/user/0/com.example.login_crud/app_personajes/plantillas/Autoguardado.qves");
         return file.exists();
     }
 

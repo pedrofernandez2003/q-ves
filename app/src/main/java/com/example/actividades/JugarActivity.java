@@ -203,7 +203,7 @@ public class JugarActivity extends AppCompatActivity  {
         wifiManager= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         d=wifiManager.getDhcpInfo();
         if(getIntent().getBooleanExtra("reanudar",false)){
-            File file = new File(Environment.getExternalStorageDirectory().toString()+"/plantillas/Autoguardado.qves");
+            File file = new File("data/user/0/com.example.login_crud/app_personajes/plantillas/Autoguardado.qves");
             FileInputStream fin = null;
             String ret=null;
             try {
@@ -1137,8 +1137,8 @@ public class JugarActivity extends AppCompatActivity  {
         return sb.toString();
     }
 
-    private boolean borrarAutoguardado(){//funciona?
-        String fullPath = Environment.getExternalStorageDirectory().toString()+"/plantillas";
+    private boolean borrarAutoguardado(){
+        String fullPath ="data/user/0/com.example.login_crud/app_personajes/plantillas";
         try {
             File file = new File(fullPath, "Autoguardado.qves");
             if(file.exists()) {
@@ -1176,8 +1176,8 @@ public class JugarActivity extends AppCompatActivity  {
                 tarjetas += "]";
                 try {
                     // image naming and path  to include sd card  appending name you choose for file
-                    String mPath = Environment.getExternalStorageDirectory().toString() + "/plantillas/Autoguardado.qves";
-                    File filebase = new File(Environment.getExternalStorageDirectory().toString(), "plantillas");
+                    String mPath = "data/user/0/com.example.login_crud/app_personajes/plantillas/Autoguardado.qves";
+                    File filebase = new File("data/user/0/com.example.login_crud/app_personajes/", "plantillas");
                     filebase.mkdirs();
                     File imageFile = new File(mPath);
                     FileOutputStream outputStream = new FileOutputStream(imageFile);
