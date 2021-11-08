@@ -214,7 +214,6 @@ public class ServicioJuego extends Service {
                                     try {
                                         Gson json = new Gson();
                                         Mensaje mensaje = json.fromJson(buffer, Mensaje.class);
-                                        System.out.println("entro al try");
                                         switch (mensaje.getAccion()) {
                                             case "conectado":
                                                 String nombreEquipo=mensaje.getDatos().get(0);
@@ -227,22 +226,25 @@ public class ServicioJuego extends Service {
                                                 else{
                                                     System.out.println("volvio "+nombreEquipo);
                                                     GameContext.getEquiposRetirados().remove(nombreEquipo);//ya entro asi que lo sacamos de los retirados
-                                                    for (int i = 0; i < GameContext.getHijos().size(); i++) {
-                                                        if (GameContext.getNombresEquipos().get(i).equals(nombreEquipo)) { //para que no se lo mande al que jugo
-                                                            System.out.println("le mando el turno "+GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).getTurno())+" a "+nombreEquipo);
-                                                            ArrayList<String> datos = new ArrayList<>();
-                                                            datos.add("{\"idJugador\": \"" + GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).getTurno()) + "\"}");
-                                                            mensaje = new Mensaje("turno", datos);
-                                                            String msg = mensaje.serializar();
-                                                            Write escribir = new Write();
-                                                            escribir.execute(msg, i);
-                                                        }
-                                                        else if(GameContext.getEquiposRetirados().size()==0){
-                                                            ArrayList<String> datos = new ArrayList<>();
-                                                            mensaje = new Mensaje("reaundarPartida", datos);
-                                                            String msg = mensaje.serializar();
-                                                            Write escribir = new Write();
-                                                            escribir.execute(msg, i);
+                                                    System.out.println("faltan :"+GameContext.getEquiposRetirados().size());
+                                                    if (GameContext.getEquiposRetirados().size()==0){
+                                                        for (int i = 0; i < GameContext.getHijos().size(); i++) {
+                                                            if (GameContext.getNombresEquipos().get(i).equals(nombreEquipo)) {
+                                                                System.out.println("le mando el turno "+GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).getTurno())+" a "+nombreEquipo);
+                                                                ArrayList<String> datos = new ArrayList<>();
+                                                                datos.add("{\"idJugador\": \"" + GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).getTurno()) + "\"}");
+                                                                mensaje = new Mensaje("turno", datos);
+                                                                String msg = mensaje.serializar();
+                                                                Write escribir = new Write();
+                                                                escribir.execute(msg, i);
+                                                            }
+                                                            else {
+                                                                ArrayList<String> datos = new ArrayList<>();
+                                                                mensaje = new Mensaje("reaundarPartida", datos);
+                                                                String msg = mensaje.serializar();
+                                                                Write escribir = new Write();
+                                                                escribir.execute(msg, i);
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -433,8 +435,8 @@ public class ServicioJuego extends Service {
                                                     e.printStackTrace();
                                                 }
                                                 nombreEquipo = mapDatos.get("idJugador");
-                                                System.out.println("es el turno de: "+GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).getTurno()));
-                                                if (GameContext.getNombresEquipos().get(GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).getTurno()).equals(nombreEquipo)) {//si es el turno del que se fue
+                                                System.out.println("es mi turno "+GameContext.isEsMiTurno());
+                                                if (GameContext.isEsMiTurno()) {//si es el turno del que se fue
                                                     GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).setTurno(GameContext.getHijos().size()-1);
                                                 } else if(GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).getTurno()>GameContext.getNombresEquipos().indexOf(nombreEquipo)){
                                                     GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).setTurno(GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).getTurno() - 1);
