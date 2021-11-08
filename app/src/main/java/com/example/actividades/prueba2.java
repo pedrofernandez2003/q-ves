@@ -203,11 +203,8 @@ public class prueba2 extends AppCompatActivity {
         String nombreCategoria = categoria1.getNombre();
         String tarjetaContenido = tarjeta2.getContenido();
         String tarjetaYapa = tarjeta2.getYapa();
-        if (tarjetaYapa.length()>15){
-            tarjetaYapa="...";
-        }
 
-        CardView carta = crearTarjeta2(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjetaContenido, tarjetaYapa,"");
+        CardView carta = crearTarjeta2(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjetaContenido, tarjetaYapa,true);
 
         prueba.addView(carta);
     }
@@ -490,11 +487,12 @@ public class prueba2 extends AppCompatActivity {
 
     }
 
-    public CardView crearTarjeta2(int width2, int height, int margin, int color, String categoria, String contenido, String yapaContenido, String yapaPosta){
-        int width=0;
-        // Crear la base
+    public CardView crearTarjeta2(int widthCartaGrande, int height, int margin, int color, String categoria, String contenido, String yapaContenido, boolean hacerCartaGrande){
+// Crear la base
         CardView carta = new CardView(this);
-        width = findViewById(R.id.cardView).getWidth() - 20;
+        int width = findViewById(R.id.cardView).getWidth() - 20;
+        System.out.println("width crearTarjeta "+width);
+        System.out.println("width cardView "+findViewById(R.id.cardView).getWidth());
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
         params.setMargins( 0,margin, 0,margin);
         params.gravity = Gravity.CENTER_HORIZONTAL;
@@ -523,24 +521,57 @@ public class prueba2 extends AppCompatActivity {
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(margin, margin, margin, margin);
         textoContenido.setLayoutParams(params);
-        textoContenido.setText(contenido);
+        if (contenido.length()>60){
+            textoContenido.setText("Contenido: ...");
+        }
+        else{
+            textoContenido.setText(contenido);
+        }
         textoContenido.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/8));
         textoContenido.setGravity(Gravity.CENTER);
         textoContenido.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoContenido);
 
         //Crear la yapa
+        System.out.println("Entre :D");
         TextView yapa = new TextView(this);
         params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(margin, margin, margin, margin);
         yapa.setLayoutParams(params);
-        yapa.setText(yapaContenido);
-        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/10));
+
+        if (!yapaContenido.equals("")){
+            yapa.setText("Yapa: ...");
+        }
+        else{
+            yapa.setText("No hay yapa wacho");
+        }
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/8));
         yapa.setGravity(Gravity.CENTER);
         yapa.setId(ViewCompat.generateViewId());
         constraintLayout.addView(yapa);
-        if (yapa.getText().equals("...")){
-            yapa.setOnClickListener(new View.OnClickListener() {
+
+        //Constraints
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
+        set.connect(textoCategoria.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP,0);
+        set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(textoContenido.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(textoContenido.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(textoContenido.getId(), ConstraintSet.TOP, textoCategoria.getId(), ConstraintSet.BOTTOM,height/50);
+
+        set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(yapa.getId(), ConstraintSet.BOTTOM,  constraintLayout.getId(), ConstraintSet.BOTTOM,0);
+
+
+
+
+
+        set.applyTo(constraintLayout);
+
+        if (hacerCartaGrande){
+            carta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     LayoutInflater inflater = LayoutInflater.from(prueba2.this);
@@ -550,7 +581,7 @@ public class prueba2 extends AppCompatActivity {
                     dialog.setCancelable(true);
                     dialog.setContentView(dialog_layout);
 
-                    if (!yapaContenido.equals("")){
+                    if (yapaContenido.equals("")){
                         TextView yapaParaDiscutirEnGrupo =(TextView) dialog.findViewById(R.id.yapaParaDiscutirEnGrupo);
                         yapaParaDiscutirEnGrupo.setText(" ");
                     }
@@ -565,37 +596,22 @@ public class prueba2 extends AppCompatActivity {
                     categoriaView.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/5);
                     categoriaView.setText(categoria);
                     contenidoView.setTextSize(TypedValue.COMPLEX_UNIT_PX, height/6);
-                    contenidoView.setText("111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
+                    contenidoView.setText(contenido);
                     yapaView.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/16)*2);
-                    yapaView.setText(yapaPosta);
+                    yapaView.setText(yapaContenido);
 
                     tarjeta.setCardBackgroundColor(-1644568);
                     //categoriaView.setTextColor(color);
                     parteArribaView.setBackgroundColor(color);
                     parteAbajoView.setBackgroundColor(color);
 
-                    MaterialCardView.LayoutParams params = new MaterialCardView.LayoutParams((width2*5)/2, height*3);
+                    MaterialCardView.LayoutParams params = new MaterialCardView.LayoutParams((widthCartaGrande*5)/2, height*3);
                     tarjeta.setLayoutParams(params);
 
                     dialog.show();
                 }
             });
         }
-
-        //Constraints
-        ConstraintSet set = new ConstraintSet();
-        set.clone(constraintLayout);
-        set.connect(textoCategoria.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP,0);
-        set.connect(textoCategoria.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-        set.connect(textoCategoria.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-        set.connect(textoContenido.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-        set.connect(textoContenido.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-        set.connect(textoContenido.getId(), ConstraintSet.TOP, textoCategoria.getId(), ConstraintSet.BOTTOM,height/50);
-        set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-        set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-        set.connect(yapa.getId(), ConstraintSet.BOTTOM,  constraintLayout.getId(), ConstraintSet.BOTTOM,0);
-        set.applyTo(constraintLayout);
-
         return carta;
 
     }

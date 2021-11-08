@@ -933,7 +933,7 @@ public class JugarActivity extends AppCompatActivity  {
         params.setMargins(margin, margin, margin, margin);
         textoContenido.setLayoutParams(params);
         if (contenido.length()>60){
-            textoContenido.setText("...");
+            textoContenido.setText("Contenido: ...");
         }
         else{
             textoContenido.setText(contenido);
@@ -943,6 +943,21 @@ public class JugarActivity extends AppCompatActivity  {
         textoContenido.setId(ViewCompat.generateViewId());
         constraintLayout.addView(textoContenido);
 
+        //Crear la yapa
+        TextView yapa = new TextView(this);
+        params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(margin, margin, margin, margin);
+        yapa.setLayoutParams(params);
+        if (!yapaContenido.equals("")){
+            yapa.setText("Yapa:...");
+        }
+        else{
+            yapa.setText("");
+        }
+        yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/8));
+        yapa.setGravity(Gravity.CENTER);
+        yapa.setId(ViewCompat.generateViewId());
+        constraintLayout.addView(yapa);
 
 
         //Constraints
@@ -954,24 +969,10 @@ public class JugarActivity extends AppCompatActivity  {
         set.connect(textoContenido.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
         set.connect(textoContenido.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
         set.connect(textoContenido.getId(), ConstraintSet.TOP, textoCategoria.getId(), ConstraintSet.BOTTOM,height/50);
+        set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
+        set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
+        set.connect(yapa.getId(), ConstraintSet.BOTTOM,  constraintLayout.getId(), ConstraintSet.BOTTOM,0);
 
-        if (!yapaContenido.equals("")){
-            //Crear la yapa
-            TextView yapa = new TextView(this);
-            params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(margin, margin, margin, margin);
-            yapa.setLayoutParams(params);
-            yapa.setText("Yapa para discutir en grupo: ...");
-            yapa.setTextSize(TypedValue.COMPLEX_UNIT_PX, (height/8));
-            yapa.setGravity(Gravity.CENTER);
-            yapa.setId(ViewCompat.generateViewId());
-            constraintLayout.addView(yapa);
-
-            set.connect(yapa.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START);
-            set.connect(yapa.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END);
-            set.connect(yapa.getId(), ConstraintSet.BOTTOM,  constraintLayout.getId(), ConstraintSet.BOTTOM,0);
-
-        }
 
 
         set.applyTo(constraintLayout);
