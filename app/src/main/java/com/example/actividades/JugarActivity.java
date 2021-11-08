@@ -192,6 +192,21 @@ public class JugarActivity extends AppCompatActivity  {
                 case "nuevaTarjeta":
                     botonVerCartas.performClick();
                     break;
+                case "pausa":
+                    findViewById(R.id.pausa).setVisibility(View.VISIBLE);
+                    botonVerCartas.setEnabled(false);
+                    botonAnularCarta.setEnabled(false);
+                    botonPasarTurno.setEnabled(false);
+                    botonAgarrarCarta.setEnabled(false);
+                    break;
+
+                case "reanudar":
+                    findViewById(R.id.pausa).setVisibility(View.GONE);
+                    botonVerCartas.setEnabled(true);
+                    botonAnularCarta.setEnabled(true);
+                    botonPasarTurno.setEnabled(true);
+                    botonAgarrarCarta.setEnabled(true);
+                    break;
             }
         }
     };
@@ -237,6 +252,8 @@ public class JugarActivity extends AppCompatActivity  {
         intentFilter.addAction("mostrarDialog");
         intentFilter.addAction("anularCartaJugar");
         intentFilter.addAction("nuevaTarjeta");
+        intentFilter.addAction("pausa");
+        intentFilter.addAction("reanudar");
         registerReceiver(broadcastReceiver,intentFilter);
         indicadorTurno= findViewById(R.id.indicadorTurno);
         juego= GameContext.getJuego();
@@ -602,7 +619,6 @@ public class JugarActivity extends AppCompatActivity  {
             public void run() {
                 HashSet<Tarjeta> cartasTiradas=new HashSet<>();
                 for (Casillero casillero: casilleros){// tenemos que vaciar el tablero por como esta hecha la funcion
-                    System.out.println("id casillero "+casillero.getId());
                     if (casillero.getTarjeta()!=null){
                         cartasTiradas.add(casillero.getTarjeta());
                         casillero.setTarjeta(null);
@@ -666,13 +682,11 @@ public class JugarActivity extends AppCompatActivity  {
 
                 CardView prueba = (CardView) findViewById(casillero.getId());
                 prueba.removeAllViews();
-                System.out.println("width cardView prueba "+prueba.getWidth());//esto da 0 cuando inserta las viejas y 388 con las nuevas
 
 
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int width = displayMetrics.widthPixels;
-                System.out.println("width "+width);
                 int widthCarta = width / 7;
                 int heightCarta = widthCarta;
                 int marginCarta = width / 45;
@@ -902,8 +916,6 @@ public class JugarActivity extends AppCompatActivity  {
         // Crear la base
         CardView carta = new CardView(this);
         int width = findViewById(R.id.cardView).getWidth() - 20;
-        System.out.println("width crearTarjeta "+width);
-        System.out.println("width cardView "+findViewById(R.id.cardView).getWidth());
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
         params.setMargins( 0,margin, 0,margin);
         params.gravity = Gravity.CENTER_HORIZONTAL;
@@ -1163,7 +1175,6 @@ public class JugarActivity extends AppCompatActivity  {
             if (GameContext.getServer() == null) {
                 String tarjetas = "[";
                 ArrayList<String> datos = new ArrayList<>();
-                System.out.println("mi nombre es " + GameContext.getNombresEquipos().get(0));
                 datos.add("{\"idJugador\": \"" + GameContext.getNombresEquipos().get(0) + "\"}");
                 Mensaje mensaje = new Mensaje("salir", datos);
                 String msg = mensaje.serializar();
@@ -1176,7 +1187,6 @@ public class JugarActivity extends AppCompatActivity  {
                 }
                 tarjetas += "]";
                 try {
-                    // image naming and path  to include sd card  appending name you choose for file
                     String mPath = "data/user/0/com.example.login_crud/app_personajes/plantillas/Autoguardado.qves";
                     File filebase = new File("data/user/0/com.example.login_crud/app_personajes/", "plantillas");
                     filebase.mkdirs();
