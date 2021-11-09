@@ -509,9 +509,6 @@ public class JugarActivity extends AppCompatActivity  {
                         String tarjetaContenido=tarjetaARevisar.getContenido();
                         String tarjetaYapa=tarjetaARevisar.getYapa();
                         int color=0;
-                        System.out.println("tarj contenido"+ tarjetaContenido);
-                        System.out.println("yapi"+tarjetaYapa);
-
                         for (int j=0; j < categorias.size(); j++){
                             Categoria categoriaARevisar=categorias.get(j);
                             if (categoriaARevisar.getNombre().equals(tarjetaARevisar.getCategoria())){
@@ -544,7 +541,7 @@ public class JugarActivity extends AppCompatActivity  {
                             b.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    if (GameContext.isEsMiTurno() && !GameContext.estaPausado()){
+                                    if (GameContext.isEsMiTurno() && !GameContext.estaPausado() && GameContext.getTarjetaElegida()!=null){
                                         if (insertarTarjetaEnTablero()){
                                             ArrayList<String> datos=new ArrayList<>();
                                             datos.add(GameContext.getTarjetaElegida().serializar());
@@ -592,6 +589,17 @@ public class JugarActivity extends AppCompatActivity  {
                                         toast.setView(Layout);
                                         toast.show();
                                     }
+                                    else {
+                                        LayoutInflater inflater=getLayoutInflater();
+                                        View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
+                                        TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
+                                        text.setText("Seleccione una tarjeta");
+                                        Toast toast= new Toast(getApplicationContext());
+                                        toast.setGravity(Gravity.BOTTOM,0,0);
+                                        toast.setDuration(Toast.LENGTH_LONG);
+                                        toast.setView(Layout);
+                                        toast.show();
+                                    }
                                     a.dismiss();
                                 }
                             });
@@ -612,18 +620,6 @@ public class JugarActivity extends AppCompatActivity  {
 
         this.getOnBackPressedDispatcher().addCallback(this, callback);
         rellenarTablero();
-
-        //Para probar
-        System.out.println("Tarjetas que tiene el jugador:");
-//        for (Tarjeta tarjeta:tarjetasHashSet) {
-//            System.out.println("contenido:"+tarjeta.getContenido()+" yapa: "+tarjeta.getYapa());
-//        }
-        System.out.println("Tarjetas del mazo");
-//        for (Tarjeta tarjeta:GameContext.getJuego().getMazo()) {
-//            System.out.println("Contenido"+tarjeta.getContenido()+" Yapa:"+tarjeta.getYapa());
-//        }
-
-
     }
 
     public void rellenarTablero(){

@@ -1,17 +1,12 @@
 package com.example.objetos.manejoSockets;
-
 import android.os.Build;
-
 import androidx.annotation.RequiresApi;
-
 import com.example.interfaces.mensajeCallback;
-import com.google.android.gms.common.util.ArrayUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -22,12 +17,9 @@ public class SendReceive extends Thread {
     static final int MESSAGE_READ=1;
     public mensajeCallback callbackMensaje;
 
-
     public SendReceive(Socket skt) {
-        System.out.println("se construyo el sendReceive");
         socket = skt;
-        try {//ver que no rompa nada
-            System.out.println("se crean los stream");
+        try {
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
         } catch (IOException e) {
@@ -38,16 +30,8 @@ public class SendReceive extends Thread {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void run() {
-//        try {
-//            System.out.println("se crean los stream");
-//            inputStream = socket.getInputStream();
-//            outputStream = socket.getOutputStream();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         byte[] buffer = new byte[1];
         ArrayList<Byte>arregloBytes=new ArrayList<>();
-        //byte[] bufferBytes = new byte[2048];
         int bytes;
         int contador=0;
         String bufferAcumulado="";
@@ -67,11 +51,6 @@ public class SendReceive extends Thread {
                     }
                     else{
                         arregloBytes.add(buffer[0]);
-//                        byte[] destination= new byte[buffer.length+bufferBytes.length];
-//                        System.arraycopy(buffer,0,destination,0,buffer.length);
-//                        System.arraycopy(bufferBytes,0,destination,0,buffer.length);
-//                        bufferBytes[contador]=buffer[0];
-//                        bufferAcumulado+=(char)buffer[0];
                         contador++;
                     }
                 }
@@ -86,7 +65,6 @@ public class SendReceive extends Thread {
         try {
             msg=msg+">";
             byte[] bytesMsg = msg.getBytes(StandardCharsets.UTF_8);
-            System.out.println("mensaje "+bytesMsg.toString());
             outputStream.write(bytesMsg);
         } catch (IOException e) {
             e.printStackTrace();
