@@ -56,6 +56,7 @@ public class ServicioJuego extends Service {
                             if (estado == 1) {
                                 try {
                                     Gson json = new Gson();
+                                    System.out.println(buffer);
                                     Mensaje mensaje = json.fromJson(buffer, Mensaje.class);
                                     switch (mensaje.getAccion()) {
                                         case "comenzar"://setea el juego, el equipo y manda el intent

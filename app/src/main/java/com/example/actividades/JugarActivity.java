@@ -619,9 +619,9 @@ public class JugarActivity extends AppCompatActivity  {
 //            System.out.println("contenido:"+tarjeta.getContenido()+" yapa: "+tarjeta.getYapa());
 //        }
         System.out.println("Tarjetas del mazo");
-        for (Tarjeta tarjeta:GameContext.getJuego().getMazo()) {
-            System.out.println("Contenido"+tarjeta.getContenido()+" Yapa:"+tarjeta.getYapa());
-        }
+//        for (Tarjeta tarjeta:GameContext.getJuego().getMazo()) {
+//            System.out.println("Contenido"+tarjeta.getContenido()+" Yapa:"+tarjeta.getYapa());
+//        }
 
 
     }

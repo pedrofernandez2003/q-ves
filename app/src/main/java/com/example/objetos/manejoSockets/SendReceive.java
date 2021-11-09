@@ -1,11 +1,19 @@
 package com.example.objetos.manejoSockets;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.interfaces.mensajeCallback;
+import com.google.android.gms.common.util.ArrayUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class SendReceive extends Thread {
     private Socket socket;
@@ -27,6 +35,7 @@ public class SendReceive extends Thread {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void run() {
 //        try {
@@ -37,18 +46,33 @@ public class SendReceive extends Thread {
 //            e.printStackTrace();
 //        }
         byte[] buffer = new byte[1];
+        ArrayList<Byte>arregloBytes=new ArrayList<>();
+        //byte[] bufferBytes = new byte[2048];
         int bytes;
+        int contador=0;
         String bufferAcumulado="";
         while (socket != null) {
             try {
                 bytes = inputStream.read(buffer);
                 if (bytes > 0) {
                     if ((byte)'>'== buffer[0]){
-                        callbackMensaje.mensajeRecibido(MESSAGE_READ, bufferAcumulado);//no funciona
-                        bufferAcumulado="";
+                        byte[] bufferBytes=new byte[arregloBytes.size()];
+                        for (int i=0;i<arregloBytes.size();i++){
+                            bufferBytes[i]=arregloBytes.get(i);
+                        }
+                        contador=0;
+                        bufferAcumulado= new String(bufferBytes,StandardCharsets.UTF_8);
+                        callbackMensaje.mensajeRecibido(MESSAGE_READ, bufferAcumulado);
+                        arregloBytes=new ArrayList<>();
                     }
-                    else   {
-                        bufferAcumulado+=(char)buffer[0];
+                    else{
+                        arregloBytes.add(buffer[0]);
+//                        byte[] destination= new byte[buffer.length+bufferBytes.length];
+//                        System.arraycopy(buffer,0,destination,0,buffer.length);
+//                        System.arraycopy(bufferBytes,0,destination,0,buffer.length);
+//                        bufferBytes[contador]=buffer[0];
+//                        bufferAcumulado+=(char)buffer[0];
+                        contador++;
                     }
                 }
             } catch (IOException e) {
@@ -57,10 +81,12 @@ public class SendReceive extends Thread {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void write(String msg) {
         try {
             msg=msg+">";
-            byte[] bytesMsg = msg.getBytes();
+            byte[] bytesMsg = msg.getBytes(StandardCharsets.UTF_8);
+            System.out.println("mensaje "+bytesMsg.toString());
             outputStream.write(bytesMsg);
         } catch (IOException e) {
             e.printStackTrace();
