@@ -7,11 +7,21 @@ public class DatosPartida implements Serializable {
     private String ronda;
     private String juego;
     private String tarjetas;
+    private Tarjeta ultTarjeta;
 
-    public DatosPartida(String ronda, String juego, String tarjetas) {
+    public DatosPartida(String ronda, String juego, String tarjetas,Tarjeta ultTarjeta) {
         this.ronda = ronda;
         this.juego = juego;
         this.tarjetas=tarjetas;
+        this.ultTarjeta=ultTarjeta;
+    }
+
+    public Tarjeta getUltTarjeta() {
+        return ultTarjeta;
+    }
+
+    public void setUltTarjeta(Tarjeta ultTarjeta) {
+        this.ultTarjeta = ultTarjeta;
     }
 
     public String getRonda() {

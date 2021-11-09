@@ -230,6 +230,7 @@ public class JugarActivity extends AppCompatActivity  {
                 GameContext.setRonda(Integer.parseInt(datosPartida.getRonda()));
                 Juego juego = json.fromJson(datosPartida.getJuego(),Juego.class);
                 GameContext.setJuego(juego);
+                GameContext.setTarjetaElegida(datosPartida.getUltTarjeta());
                 GameContext.getNombresEquipos().add(juego.getEquipos().get(0).getNombre()); //ver esto
                 Intent intent= new Intent();
                 intent.setAction("unirse");
@@ -1202,7 +1203,7 @@ public class JugarActivity extends AppCompatActivity  {
                     filebase.mkdirs();
                     File imageFile = new File(mPath);
                     FileOutputStream outputStream = new FileOutputStream(imageFile);
-                    DatosPartida datosPartida = new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar(), tarjetas);
+                    DatosPartida datosPartida = new DatosPartida(String.valueOf(GameContext.getRonda()), juego.serializar(), tarjetas,GameContext.getTarjetaElegida());
                     msg = datosPartida.serializar();
                     outputStream.write(msg.getBytes());
                     outputStream.flush();
