@@ -21,6 +21,8 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -95,6 +97,14 @@ public class JugarActivity extends AppCompatActivity  {
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()){
                 case "turno":
+                    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    // Vibrate for 500 milliseconds
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                    } else {
+                        //deprecated in API 26
+                        v.vibrate(500);
+                    }
                     puedeAgarrarCarta=true;
                     indicadorTurno.setVisibility(ImageView.VISIBLE);
                     LayoutInflater inflater=getLayoutInflater();
@@ -559,7 +569,7 @@ public class JugarActivity extends AppCompatActivity  {
                                             LayoutInflater inflater=getLayoutInflater();
                                             View Layout= inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast));
                                             TextView text = (TextView) Layout.findViewById(R.id.toastTextView);
-                                            text.setText("Casillero ocupado");
+                                            text.setText("Seleccione otra carta");
                                             Toast toast= new Toast(getApplicationContext());
                                             toast.setGravity(Gravity.BOTTOM,0,0);
                                             toast.setDuration(Toast.LENGTH_LONG);
