@@ -204,7 +204,7 @@ public class prueba2 extends AppCompatActivity {
         String tarjetaContenido = tarjeta2.getContenido();
         String tarjetaYapa = tarjeta2.getYapa();
 
-        CardView carta = crearTarjeta2(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjetaContenido, tarjetaYapa,true);
+        CardView carta = crearTarjeta2(widthCarta, heightCarta, marginCarta, color, nombreCategoria, "ñññññññ dóóoooooóóóó", tarjetaYapa,true);
 
         prueba.addView(carta);
     }

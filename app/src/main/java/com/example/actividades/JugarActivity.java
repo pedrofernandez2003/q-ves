@@ -610,6 +610,18 @@ public class JugarActivity extends AppCompatActivity  {
 
         this.getOnBackPressedDispatcher().addCallback(this, callback);
         rellenarTablero();
+
+        //Para probar
+        System.out.println("Tarjetas que tiene el jugador:");
+        for (Tarjeta tarjeta:tarjetasHashSet) {
+            System.out.println("contenido:"+tarjeta.getContenido()+" yapa: "+tarjeta.getYapa());
+        }
+        System.out.println("Tarjetas del mazo");
+        for (Tarjeta tarjeta:GameContext.getJuego().getMazo()) {
+            System.out.println("Contenido"+tarjeta.getContenido()+" Yapa:"+tarjeta.getYapa());
+        }
+
+
     }
 
     public void rellenarTablero(){
