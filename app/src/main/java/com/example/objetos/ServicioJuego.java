@@ -449,19 +449,21 @@ public class ServicioJuego extends Service {
                                                     GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).setTurno(GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).getTurno() - 1);
                                                 }
                                                 System.out.println("el turno paso a: "+GameContext.getJuego().getPartidas().get(GameContext.getRonda() - 1).getTurno());
-                                                for (int i = 0; i < GameContext.getHijos().size(); i++) {
-                                                    if (!GameContext.getNombresEquipos().get(i).equals(nombreEquipo)) {
-                                                        System.out.println("mando pausar a"+GameContext.getNombresEquipos().get(i));
-                                                        ArrayList<String> datos = new ArrayList<>();
-                                                        mensaje = new Mensaje("pausar", datos);
-                                                        String msg = mensaje.serializar();
-                                                        Write escribir = new Write();
-                                                        escribir.execute(msg, i);
-                                                    }
-                                                }
                                                 GameContext.getEquiposRetirados().add(nombreEquipo);
                                                 GameContext.getHijos().remove(GameContext.getHijos().get(GameContext.getNombresEquipos().indexOf(nombreEquipo)));//lo sacamos de los hijos porque se va de la partida
                                                 GameContext.getNombresEquipos().remove(nombreEquipo);
+                                                for (int i = 0; i < GameContext.getHijos().size(); i++) {
+                                                    System.out.println("tamaño"+GameContext.getHijos().size());
+                                                    System.out.println("mando pausar a"+GameContext.getNombresEquipos().get(i));
+                                                    ArrayList<String> datos = new ArrayList<>();
+                                                    mensaje = new Mensaje("pausar", datos);
+                                                    String msg = mensaje.serializar();
+                                                    Write escribir = new Write();
+                                                    escribir.execute(msg, i);
+
+
+                                                }
+
                                             break;
                                         }
                                     } catch (Exception e) {

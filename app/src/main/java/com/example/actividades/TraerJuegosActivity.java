@@ -201,7 +201,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
         int contador=0;
         HashSet<Tarjeta> tarjetasARepartir = new HashSet<>();
         for (Categoria categoria: categorias) { //Selecciono 3 tarjetas por cada categoria
-            for (Tarjeta tarjeta: juego.getMazo()){ //creo que es totalmente aleatorio, chequear eso
+            for (Tarjeta tarjeta: juego.getMazo()){
                 if(tarjeta.getCategoria().equals(categoria.getNombre())){
                     tarjetasARepartir.add(tarjeta);
                     contador++;

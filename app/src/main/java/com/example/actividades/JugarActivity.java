@@ -509,6 +509,8 @@ public class JugarActivity extends AppCompatActivity  {
                         String tarjetaContenido=tarjetaARevisar.getContenido();
                         String tarjetaYapa=tarjetaARevisar.getYapa();
                         int color=0;
+                        System.out.println("tarj contenido"+ tarjetaContenido);
+                        System.out.println("yapi"+tarjetaYapa);
 
                         for (int j=0; j < categorias.size(); j++){
                             Categoria categoriaARevisar=categorias.get(j);
@@ -613,9 +615,9 @@ public class JugarActivity extends AppCompatActivity  {
 
         //Para probar
         System.out.println("Tarjetas que tiene el jugador:");
-        for (Tarjeta tarjeta:tarjetasHashSet) {
-            System.out.println("contenido:"+tarjeta.getContenido()+" yapa: "+tarjeta.getYapa());
-        }
+//        for (Tarjeta tarjeta:tarjetasHashSet) {
+//            System.out.println("contenido:"+tarjeta.getContenido()+" yapa: "+tarjeta.getYapa());
+//        }
         System.out.println("Tarjetas del mazo");
         for (Tarjeta tarjeta:GameContext.getJuego().getMazo()) {
             System.out.println("Contenido"+tarjeta.getContenido()+" Yapa:"+tarjeta.getYapa());
