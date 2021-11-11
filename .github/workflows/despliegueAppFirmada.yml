@@ -1,9 +1,9 @@
 name: despliegueApp
 on:
   push:
-    branches: [ integracion ]
+    branches: [ main ]
   pull_request:
-    branches: [ integracion ]
+    branches: [ main ]
 
   workflow_dispatch:
 
