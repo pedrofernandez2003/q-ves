@@ -217,6 +217,12 @@ public class JugarActivity extends AppCompatActivity  {
                     botonPasarTurno.setEnabled(true);
                     botonAgarrarCarta.setEnabled(true);
                     break;
+                case "finalizar":
+                    System.out.println("me llega finalizar");
+                    intent = new Intent(JugarActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                    break;
             }
         }
     };
@@ -265,6 +271,7 @@ public class JugarActivity extends AppCompatActivity  {
         intentFilter.addAction("nuevaTarjeta");
         intentFilter.addAction("pausa");
         intentFilter.addAction("reanudar");
+        intentFilter.addAction("finalizar");
         registerReceiver(broadcastReceiver,intentFilter);
         indicadorTurno= findViewById(R.id.indicadorTurno);
         juego= GameContext.getJuego();
@@ -626,6 +633,54 @@ public class JugarActivity extends AppCompatActivity  {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void handleOnBackPressed() {
+                LayoutInflater inflater = LayoutInflater.from(JugarActivity.this);
+
+                View dialog_layout = inflater.inflate(R.layout.confirmacion_accion, null);
+                TextView seleccionado = dialog_layout.findViewById(R.id.confirmarSelección);
+
+                AlertDialog.Builder db = new AlertDialog.Builder(JugarActivity.this);
+                db.setView(dialog_layout);
+                db.setTitle("¿Desea abandonar la partida?");
+                db.setPositiveButton("Sí", null);
+                db.setNegativeButton("No", null);
+                final AlertDialog a = db.create();
+
+                a.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        Button si = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                        Button no = a.getButton(AlertDialog.BUTTON_NEGATIVE);
+                        no.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                a.dismiss();
+                            }
+                        });
+                        si.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick (View view){//se abre el hotspot, se crea el juego y el server
+                                Intent intent;
+                                if (GameContext.getServer()==null){
+                                    intent = new Intent(JugarActivity.this, MainActivity.class);
+                                }
+                                else{
+                                    for (int i = 0; i < GameContext.getHijos().size(); i++) {
+                                        ArrayList<String> datos = new ArrayList<>();
+                                        Mensaje mensaje = new Mensaje("finalizar", datos);
+                                        String msg = mensaje.serializar();
+                                        Write escribir = new Write();
+                                        escribir.execute(msg, i);
+                                    }
+                                    intent = new Intent(JugarActivity.this, TraerJuegosActivity.class);
+                                }
+                                startActivity(intent);
+                                finish();
+                                a.dismiss();
+                            }
+                        });
+                    }
+                });
+                a.show();
             }
         };
 

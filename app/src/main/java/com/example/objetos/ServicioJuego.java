@@ -189,7 +189,12 @@ public class ServicioJuego extends Service {
                                             intent.setAction("reanudar");
                                             contexto.sendBroadcast(intent);
                                             GameContext.setPausa(false);
-                                        break;
+                                            break;
+                                        case "finalizar":
+                                            intent = new Intent();
+                                            intent.setAction("finalizar");
+                                            contexto.sendBroadcast(intent);
+                                            break;
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();

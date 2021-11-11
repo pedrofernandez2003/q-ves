@@ -491,6 +491,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
         try {
             bitmap = qrgEncoder.encodeAsBitmap();
             qrImage.setImageBitmap(bitmap);
+            qrImage.setImageBitmap(bitmap);
         } catch (WriterException e) {
             System.out.println(e.toString());
         }
