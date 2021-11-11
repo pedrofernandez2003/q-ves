@@ -2,6 +2,7 @@ package com.example.actividades;
 import android.Manifest;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
@@ -10,7 +11,9 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.graphics.drawable.Drawable;
@@ -80,6 +83,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
     private static final String TAG = "";
     private int cantidadEquipos;
     private TextView textoCargando, nombreRed, claveRed, cantidadEquiposTextView;
+    public ImageView qr;
     private Button descargarImagenes;
     private WifiManager wifiManager;
     private WifiConfiguration currentConfig;
@@ -110,6 +114,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
         botonComenzarPartida = findViewById(R.id.botonComenzarPartida);
         nombreRed = findViewById(R.id.nombreRed);
         claveRed = findViewById(R.id.claveRed);
+        qr = findViewById(R.id.QR_Image);
         wifiManager=(WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         currentConfig=new WifiConfiguration();
         juego=new Juego();
@@ -141,7 +146,23 @@ public class TraerJuegosActivity extends AppCompatActivity {
                 }
             }
         });
-
+        qr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (qr.getDrawable()!=null){
+                    Bitmap bitmap = ((BitmapDrawable)qr.getDrawable()).getBitmap();
+                    LayoutInflater inflater = LayoutInflater.from(TraerJuegosActivity.this);
+                    View dialog_layout = inflater.inflate(R.layout.codigo_qr, null);
+                    final Dialog dialog= new Dialog(TraerJuegosActivity.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setCancelable(true);
+                    dialog.setContentView(dialog_layout);
+                    ImageView codigo_qr=(ImageView) dialog.findViewById(R.id.QR_Image);
+                    codigo_qr.setImageBitmap(bitmap);
+                    dialog.show();
+                }
+            }
+        });
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
