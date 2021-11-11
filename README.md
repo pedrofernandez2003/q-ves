@@ -16,4 +16,4 @@ Hay dos formas para convertir la aplicación en un apk y así instalarla en cual
   
 - **Jenkins** 
 
-  Programa que utilizamos para realizar la automatización de forma local en el ámbito de una computadora o máquina virtual. Es necesario descargarlo como una [imagen docker](https://hub.docker.com/r/jenkins/jenkins) o por [si mismo](https://www.jenkins.io/download/). Finalmente, se deberá pasar el archivo *config.xml* que tenemos en main hacia Jenkins.
+  Programa que utilizamos para realizar la automatización de forma local en el ámbito de una computadora o máquina virtual. Es necesario descargarlo como una [imagen docker](https://hub.docker.com/r/jenkins/jenkins) o por [sí mismo](https://www.jenkins.io/download/). Finalmente, se deberá pasar el archivo *config.xml* que tenemos en main hacia Jenkins.
