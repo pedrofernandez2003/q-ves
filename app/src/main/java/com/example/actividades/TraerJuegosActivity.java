@@ -60,6 +60,7 @@ import com.example.dataManagers.DataManagerPlantillas;
 import com.example.objetos.Plantilla;
 import com.example.objetos.ServicioJuego;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.zxing.WriterException;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -71,6 +72,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
+
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
 
 public class TraerJuegosActivity extends AppCompatActivity {
     private static final String TAG = "";
@@ -477,6 +481,21 @@ public class TraerJuegosActivity extends AppCompatActivity {
                 R.string.hotspot_ssid_label) + " " + currentConfig.SSID + "\n" + this.getApplicationContext().getString(
                 R.string.hotspot_pass_label) + " " + currentConfig.preSharedKey);
     }
+    public void generarQr(){
+        Bitmap bitmap;
+        System.out.println("ssid "+currentConfig.SSID);
+        System.out.println("clave "+currentConfig.preSharedKey);
+        ImageView qrImage = (ImageView) findViewById(R.id.QR_Image);
+        String inputValue = "WIFI:T:WPA;S:"+currentConfig.SSID+";P:"+claveRed.getText()+";;";
+        QRGEncoder qrgEncoder = new QRGEncoder(inputValue, null, QRGContents.Type.TEXT, 300);
+        try {
+            bitmap = qrgEncoder.encodeAsBitmap();
+            qrImage.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            System.out.println(e.toString());
+        }
+
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void turnOnHotspot() {
@@ -491,6 +510,7 @@ public class TraerJuegosActivity extends AppCompatActivity {
                     hotspotDetailsDialog();
                     nombreRed.setText(currentConfig.SSID);
                     claveRed.setText(currentConfig.preSharedKey);
+                    generarQr();
                 }
 
                 @Override

@@ -26,8 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:orientation="vertical">
-            </LinearLayout>
+                android:orientation="vertical"></LinearLayout>
 
 
         </ScrollView>
@@ -38,10 +37,10 @@
         android:id="@+id/textoCargando"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="15dp"
         android:fontFamily="@font/nunito_extra_bold"
         android:text="Esperando jugadores..."
         android:textColor="#d64700"
-        android:layout_margin="15dp"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/plantillas"
         app:layout_constraintTop_toBottomOf="@+id/plantillas" />
@@ -74,9 +73,9 @@
             android:textAlignment="center"
             android:textColor="#ff9931"
             android:textSize="20sp"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="339dp"
-            android:visibility="invisible"/>
+            tools:layout_editor_absoluteY="339dp" />
 
     </LinearLayout>
 
@@ -111,8 +110,8 @@
         android:layout_marginStart="7dp"
         android:layout_marginLeft="7dp"
         android:text=""
-        android:visibility="invisible"
         android:textSize="22sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/claveRed"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/textoCargando">
@@ -125,8 +124,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:text=""
-        android:visibility="invisible"
         android:textSize="22sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@id/imageView"
         app:layout_constraintStart_toStartOf="@+id/nombreRed"
         app:layout_constraintTop_toBottomOf="@+id/nombreRed">
@@ -149,11 +148,19 @@
         android:id="@+id/descargarImagenes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#5f9b89"
         android:fontFamily="@font/poertsen_one_regular"
         android:text="Descargar imagenes"
-        android:backgroundTint="#5f9b89"
         app:layout_constraintStart_toStartOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/botonComenzarPartida" />
 
+    <ImageView
+        android:id="@+id/QR_Image"
+        android:layout_width="89dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonComenzarPartida"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
