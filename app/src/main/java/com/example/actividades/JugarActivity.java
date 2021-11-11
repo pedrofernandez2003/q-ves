@@ -519,6 +519,7 @@ public class JugarActivity extends AppCompatActivity  {
                         String nombreCategoria=tarjetaARevisar.getCategoria();
                         String tarjetaContenido=tarjetaARevisar.getContenido();
                         String tarjetaYapa=tarjetaARevisar.getYapa();
+                        System.out.println(tarjetaContenido+", "+tarjetaYapa);
                         int color=0;
                         for (int j=0; j < categorias.size(); j++){
                             Categoria categoriaARevisar=categorias.get(j);

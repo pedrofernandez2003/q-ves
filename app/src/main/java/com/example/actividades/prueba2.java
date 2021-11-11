@@ -69,8 +69,8 @@ public class prueba2 extends AppCompatActivity {
         HashSet<Tarjeta> tarjetasHashSet= new HashSet<>();
         ArrayList<Tarjeta> ejemploParaRellenar= new ArrayList<>();
 
-        Tarjeta tarjeta1=new Tarjeta("Sufre mucho cuando blablabla ","probandoooooo 12312312312312312 12312312 123123 1231231 123123 1231 123 1231231 23 12312 312312 312 312 312 312 3123","Calle");
-        Tarjeta tarjeta2=new Tarjeta("Besos por celular","probandoooooo 12312312312312312 12312312 123123 1231231 123123 1231 123 1231231 23 12312 312312 312 312 312 312 3123","Calle");
+        Tarjeta tarjeta1=new Tarjeta("ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑóóó´ ","probandoooooo 12312312312312312 12312312 123123 1231231 123123 1231 123 1231231 23 12312 312312 312 312 312 312 3123","Calle");
+        Tarjeta tarjeta2=new Tarjeta("Besos por celular","ÑÑÑÑÑÑÑÑÑÑ óoooooóóóóó´ 12312312312312312 12312312 123123 1231231 123123 1231 123 1231231 23 12312 312312 312 312 312 312 3123","Calle");
         Tarjeta tarjeta3=new Tarjeta("Las momias de este amor","probandoooooo 12312312312312312 12312312 123123 1231231 123123 1231 123 1231231 23 12312 312312 312 312 312 312 3123","Sentimietos");
         Tarjeta tarjeta4=new Tarjeta("Remontar el barrilete  en esta tempestad","probandoooooo 12312312312312312 12312312 123123 1231231 123123 1231 123 1231231 23 12312 312312 312 312 312 312 3123","Sentimietos");
         Tarjeta tarjeta5=new Tarjeta("Solo habra entender que ayer no es hoy","probandoooooo 12312312312312312 12312312 123123 1231231 123123 1231 123 1231231 23 12312 312312 312 312 312 312 3123","Sexualidad");
@@ -85,13 +85,13 @@ public class prueba2 extends AppCompatActivity {
         categorias.add(categoria2);
         categorias.add(categoria3);
 
-//        tarjetasHashSet.add(tarjeta1);
-//        tarjetasHashSet.add(tarjeta2);
-//        tarjetasHashSet.add(tarjeta3);
-//        tarjetasHashSet.add(tarjeta4);
-//        tarjetasHashSet.add(tarjeta5);
-//        tarjetasHashSet.add(tarjeta6);
-//        tarjetasHashSet.add(tarjeta6);
+        tarjetasHashSet.add(tarjeta1);
+        tarjetasHashSet.add(tarjeta2);
+        tarjetasHashSet.add(tarjeta3);
+        tarjetasHashSet.add(tarjeta4);
+        tarjetasHashSet.add(tarjeta5);
+        tarjetasHashSet.add(tarjeta6);
+        tarjetasHashSet.add(tarjeta6);
 
         Casillero casillero1=new Casillero(categoria1);
         Casillero casillero2=new Casillero(categoria2);
