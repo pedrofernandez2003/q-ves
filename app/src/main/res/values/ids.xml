@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="personaje" type="id" />
+    <item name="constraint_layout0" type="id" />
+    <item name="constraint_layout3" type="id" />
+    <item name="constraint_layout2" type="id" />
+    <item name="cardView" type="id" />
+    <item name="cardView2" type="id" />
+    <item name="icon_name_1" type="id" />
+    <item name="cardView3" type="id" />
+    <item name="icon_name_2" type="id" />
+    <item name="cardView4" type="id" />
+    <item name="icon_name_3" type="id" />
+    <item name="icon_name_4" type="id" />
+    <item name="constraint_layout4" type="id" />
+    <item name="cardView5" type="id" />
+    <item name="cardView6" type="id" />
+    <item name="icon_name_5" type="id" />
+    <item name="cardView7" type="id" />
+    <item name="icon_name_6" type="id" />
+    <item name="cardView8" type="id" />
+    <item name="icon_name_7" type="id" />
+    <item name="icon_name_8" type="id" />
+    <item name="cardView10" type="id" />
+    <item name="cardView9" type="id" />
+    <item name="cardView11" type="id" />
+    <item name="icon_name_10" type="id" />
+    <item name="icon_name_9" type="id" />
+    <item name="cardView12" type="id" />
+</resources>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.13"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/aniadirTarjeta"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:background="@color/white"
+            app:backgroundTint="@color/black"
+            android:layout_weight="1"
+            app:cardBackgroundColor="#FF5765" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Añadir tarjeta"
+                android:textSize="23sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/poertsen_one_regular"
+                android:textAlignment="center"
+                android:layout_gravity="center"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/modificarTarjeta"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:background="@color/white"
+            app:backgroundTint="@color/black"
+            android:layout_weight="1"
+            app:cardBackgroundColor="#A8E10C" >
+
+            <TextView
+                android:id="@+id/textoModificarTarjeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Modificar tarjeta"
+                android:textAlignment="center"
+                android:fontFamily="@font/poertsen_one_regular"
+                android:textColor="@color/white"
+                android:textSize="23sp"
+                android:layout_gravity="center"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <GridLayout
+            android:id="@+id/gridBotonera2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:orientation="horizontal"
+            android:useDefaultMargins="true" >
+
+        </GridLayout>
+
+    </ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/simi/q-ves/app/src/main/res/layout/tarjeta.xml" value="0.22" />
+        <entry key="..\:/simi/q-ves/app/src/main/res/layout/ver_cartas.xml" value="0.2246376811594203" />
+        <entry key="app/src/main/res/layout/activity_administrador.xml" value="0.15942028985507245" />
+        <entry key="app/src/main/res/layout/activity_administrar_elementos.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_administrar_plantillas.xml" value="0.14" />
+        <entry key="app/src/main/res/layout/activity_cargando.xml" value="0.1671875" />
+        <entry key="app/src/main/res/layout/activity_categorias.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_crear_juego.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_image_display.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.1671875" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/activity_moderador.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_personajes.xml" value="0.19322916666666667" />
+        <entry key="app/src/main/res/layout/activity_registrarse.xml" value="0.1515625" />
+        <entry key="app/src/main/res/layout/activity_tarjetas.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/activity_traer_juegos.xml" value="0.12135176651305683" />
+        <entry key="app/src/main/res/layout/elegir_trabajo.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/ganador.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/indicator_holder.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/pic_holder_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/picture_browser.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/picture_browser_pager.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/picture_folder_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/tablero_creable.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/tablero_template.xml" value="0.17" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+</project>
