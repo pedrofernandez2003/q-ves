@@ -271,7 +271,6 @@ public class TarjetasActivity extends AppCompatActivity {
                         for (Object tarjetaObject:datos) {
                             TarjetaSinCategoria tarjeta= (TarjetaSinCategoria) tarjetaObject;
                             CardView carta = crearTarjeta(widthCarta, heightCarta, marginCarta, color, nombreCategoria, tarjeta.getContenido(), tarjeta.getYapa());
-                            System.out.println(tarjeta.getContenido()+" "+tarjeta.getYapa());
                             gridCartas.addView(carta);
 
                             carta.setOnClickListener(new View.OnClickListener() {

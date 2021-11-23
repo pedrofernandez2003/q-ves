@@ -218,7 +218,6 @@ public class JugarActivity extends AppCompatActivity  {
                     botonAgarrarCarta.setEnabled(true);
                     break;
                 case "finalizar":
-                    System.out.println("me llega finalizar");
                     intent = new Intent(JugarActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();

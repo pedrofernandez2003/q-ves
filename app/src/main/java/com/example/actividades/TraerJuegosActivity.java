@@ -46,6 +46,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.listeners.onTraerDatosListener;
 import com.example.objetos.Categoria;
@@ -522,31 +523,68 @@ public class TraerJuegosActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void turnOnHotspot() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
-                @Override
-                public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
-                    super.onStarted(reservation);
-                    hotspotReservation = reservation;
-                    currentConfig = hotspotReservation.getWifiConfiguration();
-                    Log.v("DANG", "THE PASSWORD IS: " + currentConfig.preSharedKey + " \n SSID is : " + currentConfig.SSID);
-                    hotspotDetailsDialog();
-                    nombreRed.setText(currentConfig.SSID);
-                    claveRed.setText(currentConfig.preSharedKey);
-                    generarQr();
-                }
+            try {
+                wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
+                    @Override
+                    public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
+                        super.onStarted(reservation);
+                        hotspotReservation = reservation;
+                        currentConfig = hotspotReservation.getWifiConfiguration();
+                        Log.v("DANG", "THE PASSWORD IS: " + currentConfig.preSharedKey + " \n SSID is : " + currentConfig.SSID);
+                        hotspotDetailsDialog();
+                        nombreRed.setText(currentConfig.SSID);
+                        claveRed.setText(currentConfig.preSharedKey);
+                        generarQr();
+                    }
 
-                @Override
-                public void onStopped() {
-                    super.onStopped();
-                    Log.v("DANG", "Local Hotspot Stopped");
-                }
+                    @Override
+                    public void onStopped() {
+                        super.onStopped();
+                        Log.v("DANG", "Local Hotspot Stopped");
+                    }
 
-                @Override
-                public void onFailed(int reason) {
-                    super.onFailed(reason);
-                    Log.v("DANG", "Local Hotspot failed to start");
-                }
-            }, new Handler());
+                    @Override
+                    public void onFailed(int reason) {
+                        super.onFailed(reason);
+                        Log.v("DANG", "Local Hotspot failed to start");
+                    }
+                }, new Handler());
+            }
+            catch (Exception error){
+
+
+
+
+
+
+                LayoutInflater inflater = LayoutInflater.from(TraerJuegosActivity.this);
+                View dialog_layout = inflater.inflate(R.layout.texto, null);
+                AlertDialog.Builder db = new AlertDialog.Builder(TraerJuegosActivity.this);
+
+                db.setView(dialog_layout);
+                db.setTitle("Hubo un problema");
+                db.setPositiveButton("Ok", null);
+                final AlertDialog a = db.create();
+
+                a.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        TextView textoUbicacion=a.findViewById(R.id.textoUbicacion);
+                        textoUbicacion.setText("habilite la ubicación del telefono para poder continuar");
+                        Button si = a.getButton(AlertDialog.BUTTON_POSITIVE);
+                        si.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick (View view){
+                                a.dismiss();
+                                finish();
+                            }
+                        });
+                    }
+                });
+                a.show();
+            }
+
+
         }
     }
 
